@@ -88,9 +88,9 @@ const GridCellCheckboxForwardRef = React.forwardRef<HTMLInputElement, GridRender
 
     const isSelectable = apiRef.current.isRowSelectable(id);
 
-    const checkboxPropsSelector = getCheckboxPropsSelector(
-      id,
-      rootProps.rowSelectionPropagation?.parents ?? false,
+    const checkboxPropsSelector = React.useMemo(
+      () => getCheckboxPropsSelector(id, rootProps.rowSelectionPropagation?.parents ?? false),
+      [id, rootProps.rowSelectionPropagation?.parents],
     );
     const { isIndeterminate, isChecked } = useGridSelector(apiRef, checkboxPropsSelector);
 

@@ -27,9 +27,10 @@ interface GridColumnGroupHeaderProps {
   hasFocus?: boolean;
   tabIndex: 0 | -1;
   pinnedPosition?: GridPinnedColumnPosition;
+  pinnedOffset?: number;
   style?: React.CSSProperties;
   indexInSection: number;
-  sectionLength: number;
+  isLastVisibleInSection: boolean;
   gridHasFiller: boolean;
 }
 
@@ -92,9 +93,9 @@ function GridColumnGroupHeader(props: GridColumnGroupHeaderProps) {
     tabIndex,
     isLastColumn,
     pinnedPosition,
-    style,
+    pinnedOffset,
     indexInSection,
-    sectionLength,
+    isLastVisibleInSection,
     gridHasFiller,
   } = props;
 
@@ -132,7 +133,7 @@ function GridColumnGroupHeader(props: GridColumnGroupHeaderProps) {
   const showRightBorder = shouldCellShowRightBorder(
     pinnedPosition,
     indexInSection,
-    sectionLength,
+    isLastVisibleInSection,
     rootProps.showColumnVerticalBorder,
     gridHasFiller,
   );
@@ -188,6 +189,11 @@ function GridColumnGroupHeader(props: GridColumnGroupHeaderProps) {
     typeof group.headerClassName === 'function'
       ? group.headerClassName(renderParams)
       : group.headerClassName;
+
+  let style = props.style;
+  if (pinnedPosition) {
+    style = { ...style, [pinnedPosition]: pinnedOffset };
+  }
 
   return (
     <GridGenericColumnHeaderItem

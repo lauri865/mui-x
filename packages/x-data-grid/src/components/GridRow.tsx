@@ -2,7 +2,6 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { unstable_useForkRef as useForkRef } from '@mui/utils';
-import { fastMemo } from '@mui/x-internals/fastMemo';
 import { GridRowEventLookup } from '../models/events';
 import { GridRowId, GridRowModel } from '../models/gridRows';
 import { GridEditModes, GridRowModes, GridCellModes } from '../models/gridEditRowModel';
@@ -29,6 +28,7 @@ import { GridScrollbarFillerCell as ScrollbarFiller } from './GridScrollbarFille
 import { getPinnedCellOffset } from '../internals/utils/getPinnedCellOffset';
 import { useGridConfiguration } from '../hooks/utils/useGridConfiguration';
 import { useGridPrivateApiContext } from '../hooks/utils/useGridPrivateApiContext';
+import { fastObjectShallowCompare } from '@mui/x-internals/fastObjectShallowCompare';
 
 export interface GridRowProps extends React.HTMLAttributes<HTMLDivElement> {
   row: GridRowModel;
@@ -43,7 +43,8 @@ export interface GridRowProps extends React.HTMLAttributes<HTMLDivElement> {
   offsetTop: number | undefined;
   offsetLeft: number;
   dimensions: GridDimensions;
-  renderContext: GridRenderContext;
+  firstColumnIndex: number;
+  lastColumnIndex: number;
   visibleColumns: GridStateColDef[];
   pinnedColumns: GridPinnedColumns;
   /**
@@ -59,6 +60,7 @@ export interface GridRowProps extends React.HTMLAttributes<HTMLDivElement> {
   isFirstVisible: boolean;
   isLastVisible: boolean;
   isNotVisible: boolean;
+  isContentVisible: boolean;
   showBottomBorder: boolean;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   onDoubleClick?: React.MouseEventHandler<HTMLDivElement>;
@@ -81,8 +83,10 @@ const GridRow = React.forwardRef<HTMLDivElement, GridRowProps>(function GridRow(
     offsetTop,
     offsetLeft,
     dimensions,
-    renderContext,
+    firstColumnIndex,
+    lastColumnIndex,
     focusedColumnIndex,
+    isContentVisible,
     isFirstVisible,
     isLastVisible,
     isNotVisible,
@@ -116,11 +120,11 @@ const GridRow = React.forwardRef<HTMLDivElement, GridRowProps>(function GridRow(
   const hasVirtualFocusCellLeft =
     hasFocusCell &&
     focusedColumnIndex >= pinnedColumns.left.length &&
-    focusedColumnIndex < renderContext.firstColumnIndex;
+    focusedColumnIndex < firstColumnIndex;
   const hasVirtualFocusCellRight =
     hasFocusCell &&
     focusedColumnIndex < visibleColumns.length - pinnedColumns.right.length &&
-    focusedColumnIndex >= renderContext.lastColumnIndex;
+    focusedColumnIndex >= lastColumnIndex;
 
   const classes = composeGridClasses(rootProps.classes, {
     root: [
@@ -259,8 +263,12 @@ const GridRow = React.forwardRef<HTMLDivElement, GridRowProps>(function GridRow(
       rowStyle[property] = propertyValue;
     }
 
+    if (!isContentVisible) {
+      rowStyle.contentVisibility = 'hidden';
+    }
+
     return rowStyle;
-  }, [isNotVisible, rowHeight, styleProp, heightEntry, rootProps.rowSpacingType]);
+  }, [isContentVisible, isNotVisible, rowHeight, styleProp, heightEntry, rootProps.rowSpacingType]);
 
   const rowClassNames = apiRef.current.unstable_applyPipeProcessors('rowClassName', [], rowId);
   const ariaAttributes = rowNode ? getRowAriaAttributes(rowNode, index) : undefined;
@@ -397,7 +405,7 @@ const GridRow = React.forwardRef<HTMLDivElement, GridRowProps>(function GridRow(
     );
   }
 
-  for (let i = renderContext.firstColumnIndex; i < renderContext.lastColumnIndex; i += 1) {
+  for (let i = firstColumnIndex; i < lastColumnIndex; i += 1) {
     const column = visibleColumns[i];
     const indexInSection = i - pinnedColumns.left.length;
 
@@ -509,6 +517,7 @@ GridRow.propTypes = {
    * If some rows above have expanded children, this index also take those children into account.
    */
   index: PropTypes.number.isRequired,
+  isContentVisible: PropTypes.bool.isRequired,
   isFirstVisible: PropTypes.bool.isRequired,
   isLastVisible: PropTypes.bool.isRequired,
   isNotVisible: PropTypes.bool.isRequired,
@@ -538,6 +547,11 @@ GridRow.propTypes = {
   visibleColumns: PropTypes.arrayOf(PropTypes.object).isRequired,
 } as any;
 
-const MemoizedGridRow = fastMemo(GridRow);
+const MemoizedGridRow = React.memo(GridRow, (a, b) => {
+  if (a.isContentVisible === false && b.isContentVisible === false) {
+    return true;
+  }
+  return fastObjectShallowCompare(a, b);
+});
 
 export { MemoizedGridRow as GridRow };

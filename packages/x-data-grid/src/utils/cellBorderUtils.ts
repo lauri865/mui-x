@@ -3,13 +3,11 @@ import { GridPinnedColumnPosition } from '../hooks/features/columns/gridColumnsI
 export const shouldCellShowRightBorder = (
   pinnedPosition: GridPinnedColumnPosition | undefined,
   indexInSection: number,
-  sectionLength: number,
+  isLastVisibleInSection: boolean,
   showCellVerticalBorderRootProp: boolean,
   gridHasFiller: boolean,
 ) => {
-  const isSectionLastCell = indexInSection === sectionLength - 1;
-
-  if (pinnedPosition === GridPinnedColumnPosition.LEFT && isSectionLastCell) {
+  if (pinnedPosition === GridPinnedColumnPosition.LEFT && isLastVisibleInSection) {
     return true;
   }
   if (showCellVerticalBorderRootProp) {
@@ -17,10 +15,10 @@ export const shouldCellShowRightBorder = (
       return true;
     }
     if (pinnedPosition === GridPinnedColumnPosition.RIGHT) {
-      return !isSectionLastCell;
+      return !isLastVisibleInSection;
     }
     // pinnedPosition === undefined, middle section
-    return !isSectionLastCell || gridHasFiller;
+    return !isLastVisibleInSection || gridHasFiller;
   }
   return false;
 };

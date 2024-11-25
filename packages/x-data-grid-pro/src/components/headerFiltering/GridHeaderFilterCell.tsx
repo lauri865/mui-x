@@ -55,9 +55,10 @@ export interface GridHeaderFilterCellProps extends Pick<GridStateColDef, 'header
   showClearIcon?: boolean;
   InputComponentProps: GridFilterOperator['InputComponentProps'];
   pinnedPosition?: GridPinnedColumnPosition;
+  pinnedOffset?: number;
   style?: React.CSSProperties;
   indexInSection: number;
-  sectionLength: number;
+  isLastVisibleInSection: boolean;
   gridHasFiller: boolean;
 }
 
@@ -115,9 +116,10 @@ const GridHeaderFilterCell = React.forwardRef<HTMLDivElement, GridHeaderFilterCe
       InputComponentProps,
       showClearIcon = true,
       pinnedPosition,
+      pinnedOffset,
       style: styleProp,
       indexInSection,
-      sectionLength,
+      isLastVisibleInSection,
       gridHasFiller,
       ...other
     } = props;
@@ -297,7 +299,7 @@ const GridHeaderFilterCell = React.forwardRef<HTMLDivElement, GridHeaderFilterCe
     const showRightBorder = shouldCellShowRightBorder(
       pinnedPosition,
       indexInSection,
-      sectionLength,
+      isLastVisibleInSection,
       rootProps.showCellVerticalBorder,
       gridHasFiller,
     );
@@ -323,6 +325,7 @@ const GridHeaderFilterCell = React.forwardRef<HTMLDivElement, GridHeaderFilterCe
       );
 
     const isFilterActive = isApplied || hasFocus;
+    const pinnedStyle = pinnedPosition ? { [pinnedPosition]: pinnedOffset } : undefined;
 
     return (
       <div
@@ -332,6 +335,7 @@ const GridHeaderFilterCell = React.forwardRef<HTMLDivElement, GridHeaderFilterCe
           height,
           width,
           ...styleProp,
+          ...pinnedStyle,
         }}
         role="columnheader"
         aria-colindex={colIndex + 1}

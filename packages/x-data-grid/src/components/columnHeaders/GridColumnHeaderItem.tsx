@@ -34,9 +34,10 @@ interface GridColumnHeaderItemProps {
   disableReorder?: boolean;
   separatorSide?: GridColumnHeaderSeparatorProps['side'];
   pinnedPosition?: GridPinnedColumnPosition;
+  pinnedOffset?: number;
   style?: React.CSSProperties;
   indexInSection: number;
-  sectionLength: number;
+  isLastVisibleInSection: boolean;
   gridHasFiller: boolean;
   isLastUnpinned: boolean;
   isSiblingFocused: boolean;
@@ -111,10 +112,10 @@ function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
     tabIndex,
     disableReorder,
     separatorSide,
-    style,
     pinnedPosition,
+    pinnedOffset,
     indexInSection,
-    sectionLength,
+    isLastVisibleInSection,
     gridHasFiller,
   } = props;
   const apiRef = useGridPrivateApiContext();
@@ -139,7 +140,7 @@ function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
   const showRightBorder = shouldCellShowRightBorder(
     pinnedPosition,
     indexInSection,
-    sectionLength,
+    isLastVisibleInSection,
     rootProps.showColumnVerticalBorder,
     gridHasFiller,
   );
@@ -287,6 +288,11 @@ function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
 
   const label = colDef.headerName ?? colDef.field;
 
+  let style = props.style;
+  if (pinnedPosition) {
+    style = { ...style, [pinnedPosition]: pinnedOffset };
+  }
+
   return (
     <GridGenericColumnHeaderItem
       ref={headerCellRef}
@@ -336,10 +342,11 @@ GridColumnHeaderItem.propTypes = {
   isDragging: PropTypes.bool.isRequired,
   isLast: PropTypes.bool.isRequired,
   isLastUnpinned: PropTypes.bool.isRequired,
+  isLastVisibleInSection: PropTypes.bool.isRequired,
   isResizing: PropTypes.bool.isRequired,
   isSiblingFocused: PropTypes.bool.isRequired,
+  pinnedOffset: PropTypes.number,
   pinnedPosition: PropTypes.oneOf(['left', 'right']),
-  sectionLength: PropTypes.number.isRequired,
   separatorSide: PropTypes.oneOf(['left', 'right']),
   sortDirection: PropTypes.oneOf(['asc', 'desc']),
   sortIndex: PropTypes.number,

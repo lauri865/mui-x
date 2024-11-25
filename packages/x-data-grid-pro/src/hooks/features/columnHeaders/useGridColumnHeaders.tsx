@@ -8,6 +8,7 @@ import {
   GridFilterItem,
   GridPinnedColumnPosition,
   gridDimensionsSelector,
+  gridColumnPositionsSelector,
 } from '@mui/x-data-grid';
 import {
   useGridColumnHeaders as useGridColumnHeadersCommunity,
@@ -19,6 +20,7 @@ import {
   GridColumnHeaderRow,
 } from '@mui/x-data-grid/internals';
 import composeClasses from '@mui/utils/composeClasses';
+import { getPinnedCellOffset } from '@mui/x-data-grid/internals/utils/getPinnedCellOffset';
 import { useGridRootProps } from '../../utils/useGridRootProps';
 import { DataGridProProcessedProps } from '../../../models/dataGridProProps';
 
@@ -51,7 +53,6 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
     rightRenderContext,
     pinnedColumns,
     visibleColumns,
-    getCellOffsetStyle,
     ...otherProps
   } = useGridColumnHeadersCommunity({
     ...props,
@@ -68,6 +69,7 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
   const disableHeaderFiltering = !rootProps.headerFilters;
   const dimensions = useGridSelector(apiRef, gridDimensionsSelector);
   const filterModel = useGridSelector(apiRef, gridFilterModelSelector);
+  const columnPositions = useGridSelector(apiRef, gridColumnPositionsSelector);
   const gridHasFiller = dimensions.columnsTotalWidth < dimensions.viewportOuterSize.width;
 
   const columnHeaderFilterFocus = useGridSelector(apiRef, gridFocusColumnHeaderFilterSelector);
@@ -117,11 +119,17 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
       const item = getFilterItem(colDef);
 
       const pinnedPosition = params?.position;
-      const style = getCellOffsetStyle({
-        pinnedPosition,
-        columnIndex,
-        computedWidth: colDef.computedWidth,
-      });
+      const pinnedOffset = pinnedPosition
+        ? getPinnedCellOffset(
+            pinnedPosition,
+            colDef.computedWidth,
+            columnIndex,
+            columnPositions,
+            dimensions,
+          )
+        : undefined;
+
+      const isLastVisibleInSection = i === renderedColumns.length - 1;
 
       filters.push(
         <rootProps.slots.headerFilterCell
@@ -137,9 +145,9 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
           data-field={colDef.field}
           item={item}
           pinnedPosition={pinnedPosition}
-          style={style}
+          pinnedOffset={pinnedOffset}
           indexInSection={i}
-          sectionLength={renderedColumns.length}
+          isLastVisibleInSection={isLastVisibleInSection}
           gridHasFiller={gridHasFiller}
           {...rootProps.slotProps?.headerFilterCell}
         />,

@@ -5,6 +5,8 @@ export interface GridColumnsRenderContext {
 export interface GridRenderContext extends GridColumnsRenderContext {
   firstRowIndex: number;
   lastRowIndex: number;
+  firstBufferedRowIndex: number;
+  lastBufferedRowIndex: number;
 }
 
 export interface GridScrollParams {

@@ -4,7 +4,7 @@ import { gridFilteredRowsLookupSelector } from '../filter/gridFilterSelector';
 import { gridSortedRowIdsSelector } from '../sorting/gridSortingSelector';
 import { selectedIdsLookupSelector } from './gridRowSelectionSelector';
 import { gridRowTreeSelector } from '../rows/gridRowsSelector';
-import { createSelector } from '../../../utils/createSelector';
+import { createSelector, createSelectorMemoized } from '../../../utils/createSelector';
 import type { GridGroupNode, GridRowId, GridRowTreeConfig } from '../../../models/gridRows';
 import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import type {
@@ -48,7 +48,7 @@ function getGridRowGroupSelectableDescendants(
 
 // TODO v8: Use `createSelectorV8`
 export function getCheckboxPropsSelector(groupId: GridRowId, autoSelectParents: boolean) {
-  return createSelector(
+  return createSelectorMemoized(
     gridRowTreeSelector,
     gridSortedRowIdsSelector,
     gridFilteredRowsLookupSelector,

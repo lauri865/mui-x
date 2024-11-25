@@ -48,6 +48,10 @@ import { gridListColumnSelector } from '../listView/gridListViewSelectors';
 import { minimalContentHeight } from '../rows/gridRowsUtils';
 
 const MINIMUM_COLUMN_WIDTH = 50;
+let SUPPORTS_CONTENT_VISIBILITY =
+  typeof window !== 'undefined' ? CSS.supports('content-visibility', 'auto') : false;
+
+const MAX_BUFFER_SIZE = 50;
 
 interface PrivateApiWithInfiniteLoader
   extends GridPrivateApiCommunity,
@@ -133,6 +137,9 @@ export const useGridVirtualScroller = () => {
   const contentHeight = dimensions.contentSize.height;
   const columnsTotalWidth = dimensions.columnsTotalWidth;
   const hasColSpan = useGridSelector(apiRef, gridHasColSpanSelector);
+
+  const minFirstRowIndexRef = React.useRef(Infinity);
+  const maxLastRowIndexRef = React.useRef(0);
 
   const mainRefCallback = React.useCallback(
     (node: HTMLDivElement | null) => {
@@ -316,7 +323,13 @@ export const useGridVirtualScroller = () => {
     );
 
     const inputs = inputsSelector(apiRef, rootProps, enabledForRows, enabledForColumns);
-    const nextRenderContext = computeRenderContext(inputs, scrollPosition.current, scrollCache);
+    const nextRenderContext = computeRenderContext(
+      inputs,
+      scrollPosition.current,
+      scrollCache,
+      minFirstRowIndexRef,
+      maxLastRowIndexRef,
+    );
 
     // Prevents batching render context changes
     ReactDOM.flushSync(() => {
@@ -330,7 +343,13 @@ export const useGridVirtualScroller = () => {
 
   const forceUpdateRenderContext = () => {
     const inputs = inputsSelector(apiRef, rootProps, enabledForRows, enabledForColumns);
-    const nextRenderContext = computeRenderContext(inputs, scrollPosition.current, scrollCache);
+    const nextRenderContext = computeRenderContext(
+      inputs,
+      scrollPosition.current,
+      scrollCache,
+      minFirstRowIndexRef,
+      maxLastRowIndexRef,
+    );
     // Reset the frozen context when the render context changes, see the illustration in https://github.com/mui/mui-x/pull/12353
     frozenContext.current = undefined;
     updateRenderContext(nextRenderContext);
@@ -409,19 +428,25 @@ export const useGridVirtualScroller = () => {
     const firstRowToRender = baseRenderContext.firstRowIndex;
     const lastRowToRender = Math.min(baseRenderContext.lastRowIndex, rowModels.length);
 
+    const firstBufferedRow = baseRenderContext.firstBufferedRowIndex;
+    const lastBufferedRow = Math.min(baseRenderContext.lastBufferedRowIndex, rowModels.length);
+
     const rowIndexes = params.rows
       ? range(0, params.rows.length)
-      : range(firstRowToRender, lastRowToRender);
+      : range(firstBufferedRow, lastBufferedRow);
 
     let virtualRowIndex = -1;
-    if (!isPinnedSection && focusedCell.rowIndex !== -1) {
-      if (focusedCell.rowIndex < firstRowToRender) {
-        virtualRowIndex = focusedCell.rowIndex;
-        rowIndexes.unshift(virtualRowIndex);
-      }
-      if (focusedCell.rowIndex >= lastRowToRender) {
-        virtualRowIndex = focusedCell.rowIndex;
-        rowIndexes.push(virtualRowIndex);
+    const focusedRowIndex = focusedCell.rowIndex;
+    if (!SUPPORTS_CONTENT_VISIBILITY) {
+      if (!isPinnedSection && focusedRowIndex !== -1) {
+        if (focusedRowIndex < firstRowToRender) {
+          virtualRowIndex = focusedRowIndex;
+          rowIndexes.unshift(virtualRowIndex);
+        }
+        if (focusedRowIndex >= lastRowToRender) {
+          virtualRowIndex = focusedRowIndex;
+          rowIndexes.push(virtualRowIndex);
+        }
       }
     }
 
@@ -523,6 +548,10 @@ export const useGridVirtualScroller = () => {
       );
       const showBottomBorder = isLastVisibleInSection && params.position === 'top';
 
+      const isContentVisible =
+        (rowIndex >= firstRowToRender && rowIndex <= lastRowToRender) ||
+        rowIndex === focusedRowIndex;
+
       rows.push(
         <rootProps.slots.row
           key={id}
@@ -537,11 +566,13 @@ export const useGridVirtualScroller = () => {
           tabbableCell={tabbableCell}
           pinnedColumns={pinnedColumns}
           visibleColumns={visibleColumns}
-          renderContext={currentRenderContext}
+          firstColumnIndex={currentRenderContext.firstColumnIndex}
+          lastColumnIndex={currentRenderContext.lastColumnIndex}
           focusedColumnIndex={hasFocus ? focusedCell.columnIndex : undefined}
           isFirstVisible={isFirstVisible}
           isLastVisible={isLastVisible}
           isNotVisible={isNotVisible}
+          isContentVisible={isContentVisible}
           showBottomBorder={showBottomBorder}
           {...rowProps}
         />,
@@ -610,7 +641,13 @@ export const useGridVirtualScroller = () => {
   useRunOnce(outerSize.width !== 0, () => {
     const inputs = inputsSelector(apiRef, rootProps, enabledForRows, enabledForColumns);
 
-    const initialRenderContext = computeRenderContext(inputs, scrollPosition.current, scrollCache);
+    const initialRenderContext = computeRenderContext(
+      inputs,
+      scrollPosition.current,
+      scrollCache,
+      minFirstRowIndexRef,
+      maxLastRowIndexRef,
+    );
     updateRenderContext(initialRenderContext);
 
     apiRef.current.publishEvent('scrollPositionChange', {
@@ -721,12 +758,16 @@ function computeRenderContext(
   inputs: RenderContextInputs,
   scrollPosition: ScrollPosition,
   scrollCache: ScrollCache,
+  minFirstRowIndexRef: React.MutableRefObject<number>,
+  maxLastRowIndexRef: React.MutableRefObject<number>,
 ) {
   const renderContext: GridRenderContext = {
     firstRowIndex: 0,
     lastRowIndex: inputs.rows.length,
     firstColumnIndex: 0,
     lastColumnIndex: inputs.visibleColumns.length,
+    firstBufferedRowIndex: 0,
+    lastBufferedRowIndex: inputs.rows.length,
   };
 
   const { top, left } = scrollPosition;
@@ -795,6 +836,23 @@ function computeRenderContext(
   }
 
   const actualRenderContext = deriveRenderContext(inputs, renderContext, scrollCache);
+
+  minFirstRowIndexRef.current = Math.max(
+    Math.min(minFirstRowIndexRef.current, actualRenderContext.firstRowIndex),
+    actualRenderContext.firstRowIndex - MAX_BUFFER_SIZE,
+  );
+  maxLastRowIndexRef.current = Math.min(
+    Math.max(maxLastRowIndexRef.current, actualRenderContext.lastRowIndex),
+    actualRenderContext.lastRowIndex + MAX_BUFFER_SIZE,
+  );
+
+  if (SUPPORTS_CONTENT_VISIBILITY) {
+    actualRenderContext.firstBufferedRowIndex = minFirstRowIndexRef.current;
+    actualRenderContext.lastBufferedRowIndex = maxLastRowIndexRef.current;
+  } else {
+    actualRenderContext.firstBufferedRowIndex = actualRenderContext.firstRowIndex;
+    actualRenderContext.lastBufferedRowIndex = actualRenderContext.lastRowIndex;
+  }
 
   return actualRenderContext;
 }
@@ -883,7 +941,7 @@ function deriveRenderContext(
     lastRowIndex: lastRowToRender,
     firstColumnIndex: firstColumnToRender,
     lastColumnIndex: lastColumnToRender,
-  };
+  } as GridRenderContext;
 }
 
 type SearchOptions = {
@@ -994,7 +1052,9 @@ export function areRenderContextsEqual(context1: GridRenderContext, context2: Gr
     context1.firstRowIndex === context2.firstRowIndex &&
     context1.lastRowIndex === context2.lastRowIndex &&
     context1.firstColumnIndex === context2.firstColumnIndex &&
-    context1.lastColumnIndex === context2.lastColumnIndex
+    context1.lastColumnIndex === context2.lastColumnIndex &&
+    context1.firstBufferedRowIndex === context2.firstBufferedRowIndex &&
+    context1.lastBufferedRowIndex === context2.lastBufferedRowIndex
   );
 }
 

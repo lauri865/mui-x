@@ -213,46 +213,6 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
     );
   };
 
-  const getCellOffsetStyle = ({
-    pinnedPosition,
-    columnIndex,
-    computedWidth,
-  }: {
-    pinnedPosition?: GridPinnedColumnPosition;
-    columnIndex: number;
-    computedWidth: number;
-  }) => {
-    let style: React.CSSProperties | undefined;
-
-    const isLeftPinned = pinnedPosition === GridPinnedColumnPosition.LEFT;
-    const isRightPinned = pinnedPosition === GridPinnedColumnPosition.RIGHT;
-
-    if (isLeftPinned || isRightPinned) {
-      const pinnedOffset = getPinnedCellOffset(
-        pinnedPosition,
-        computedWidth,
-        columnIndex,
-        columnPositions,
-        dimensions,
-      );
-      let side = isLeftPinned ? 'left' : 'right';
-
-      if (isRtl) {
-        side = isLeftPinned ? 'right' : 'left';
-      }
-
-      if (pinnedPosition === 'left') {
-        style = { [side]: pinnedOffset };
-      }
-
-      if (pinnedPosition === 'right') {
-        style = { [side]: pinnedOffset };
-      }
-    }
-
-    return style;
-  };
-
   const getColumnHeaders = (params?: GetHeadersParams, other = {}) => {
     const { renderedColumns, firstColumnToRender } = getColumnsToRender(params);
 
@@ -270,12 +230,15 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
       const hasFocus = columnHeaderFocus !== null && columnHeaderFocus.field === colDef.field;
       const open = columnMenuState.open && columnMenuState.field === colDef.field;
       const pinnedPosition = params?.position;
-
-      const style = getCellOffsetStyle({
-        pinnedPosition,
-        columnIndex,
-        computedWidth: colDef.computedWidth,
-      });
+      const pinnedOffset = pinnedPosition
+        ? getPinnedCellOffset(
+            pinnedPosition,
+            colDef.computedWidth,
+            columnIndex,
+            columnPositions,
+            dimensions,
+          )
+        : undefined;
 
       const siblingWithBorderingSeparator =
         pinnedPosition === GridPinnedColumnPosition.RIGHT
@@ -287,6 +250,7 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
         : false;
       const isLastUnpinned =
         columnIndex + 1 === columnPositions.length - pinnedColumns.right.length;
+      const isLastVisibleInSection = i === renderedColumns.length - 1;
 
       columns.push(
         <GridColumnHeaderItem
@@ -305,9 +269,9 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
           hasFocus={hasFocus}
           tabIndex={tabIndex}
           pinnedPosition={pinnedPosition}
-          style={style}
+          pinnedOffset={pinnedOffset}
           indexInSection={i}
-          sectionLength={renderedColumns.length}
+          isLastVisibleInSection={isLastVisibleInSection}
           gridHasFiller={gridHasFiller}
           isLastUnpinned={isLastUnpinned}
           isSiblingFocused={isSiblingFocused}
@@ -434,11 +398,15 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
       };
 
       const pinnedPosition = params.position;
-      const style = getCellOffsetStyle({
-        pinnedPosition,
-        columnIndex,
-        computedWidth: headerInfo.width,
-      });
+      const pinnedOffset = pinnedPosition
+        ? getPinnedCellOffset(
+            pinnedPosition,
+            headerInfo.width,
+            columnIndex,
+            columnPositions,
+            dimensions,
+          )
+        : undefined;
 
       columnIndex += columnFields.length;
 
@@ -447,6 +415,7 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
         // Group headers can expand to multiple columns, we need to adjust the index
         indexInSection = columnIndex - 1;
       }
+      const isLastVisibleInSection = index === visibleColumnGroupHeader.length - 1;
 
       return (
         <GridColumnGroupHeader
@@ -462,9 +431,9 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
           hasFocus={hasFocus}
           tabIndex={tabIndex}
           pinnedPosition={pinnedPosition}
-          style={style}
+          pinnedOffset={pinnedOffset}
           indexInSection={indexInSection}
-          sectionLength={visibleColumnGroupHeader.length}
+          isLastVisibleInSection={isLastVisibleInSection}
           gridHasFiller={gridHasFiller}
         />
       );
@@ -520,7 +489,6 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
     rightRenderContext,
     pinnedColumns,
     visibleColumns,
-    getCellOffsetStyle,
     getFillers,
     getColumnHeadersRow,
     getColumnsToRender,
