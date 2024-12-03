@@ -153,6 +153,15 @@ export function useGridApiInitialization<
 
     return () => {
       api.publishEvent('unmount');
+
+      if (process.env.NODE_ENV === 'test') {
+        // @ts-ignore
+        api.publishEvent('testUnmount', {
+          privateApi: new WeakRef(api),
+          publicApi: new WeakRef(publicApiRef.current),
+          instanceId: new WeakRef(api?.instanceId),
+        } as any);
+      }
     };
   }, [privateApiRef]);
 

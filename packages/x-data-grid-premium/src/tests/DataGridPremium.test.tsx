@@ -8,7 +8,8 @@ import {
   GridToolbar,
   useGridApiRef,
 } from '@mui/x-data-grid-premium';
-import { getColumnValues } from 'test/utils/helperFn';
+import { getColumnValues, sleep } from 'test/utils/helperFn';
+import { spy } from 'sinon';
 
 const isJSDOM = /jsdom/.test(window.navigator.userAgent);
 
@@ -104,5 +105,72 @@ describe('<DataGrid /> - Quick filter', () => {
     });
 
     expect(getColumnValues(0)).to.deep.equal(['20th Century Fox (1)', '']);
+  });
+});
+
+describe('<DataGrid /> - unmount cleanup', () => {
+  const { render } = createRenderer();
+
+  const baselineProps = {
+    autoHeight: isJSDOM,
+    disableVirtualization: true,
+    rows: [
+      {
+        id: 0,
+        brand: 'Nike',
+      },
+      {
+        id: 1,
+        brand: 'Adidas',
+      },
+      {
+        id: 2,
+        brand: 'Puma',
+      },
+    ],
+    columns: [{ field: 'brand' }],
+  };
+
+  let apiRef: React.MutableRefObject<GridApi>;
+
+  function Test({
+    onUnmount,
+    ...props
+  }: Partial<DataGridProps> & {
+    onUnmount?: (params: any) => void;
+  }) {
+    apiRef = useGridApiRef();
+
+    React.useEffect(() => {
+      // @ts-ignore
+      return apiRef.current.subscribeEvent('testUnmount', onUnmount);
+    }, []);
+
+    return (
+      <div style={{ width: 300, height: 300 }}>
+        <DataGrid {...baselineProps} apiRef={apiRef} {...props} />
+      </div>
+    );
+  }
+
+  it('should cleanup the apiRef when unmounting', async () => {
+    const onUnmount = spy();
+    const { setProps, unmount } = render(<Test onUnmount={onUnmount} />);
+
+    expect(apiRef.current).to.not.equal(undefined);
+    unmount();
+    expect(apiRef.current).to.equal(null);
+    expect(onUnmount.callCount).to.equal(1);
+
+    const params = onUnmount.args[0][0];
+    const publicApiWeakRef = params.publicApi;
+    const privateApiWeakRef = params.privateApi;
+    const instanceIdWeakRef = params.instanceId;
+
+    await sleep(1000);
+
+    expect(instanceIdWeakRef.deref()).to.equal(undefined);
+    expect(publicApiWeakRef.deref()).to.equal(undefined);
+    expect(privateApiWeakRef.deref()).to.equal(undefined);
   });
 });
