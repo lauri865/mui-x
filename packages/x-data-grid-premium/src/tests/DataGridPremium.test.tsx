@@ -167,7 +167,7 @@ describe('<DataGrid /> - unmount cleanup', () => {
     const privateApiWeakRef = params.privateApi;
     const instanceIdWeakRef = params.instanceId;
 
-    await sleep(1500);
+    await sleep(100);
 
     expect(instanceIdWeakRef.deref()).to.equal(undefined);
     expect(publicApiWeakRef.deref()).to.equal(undefined);
