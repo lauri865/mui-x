@@ -150,9 +150,20 @@ export function useGridApiInitialization<
 
   React.useEffect(() => {
     const api = privateApiRef.current;
+    const publicApi = publicApiRef.current;
+    const instanceId = privateApiRef.current?.instanceId;
 
     return () => {
       api.publishEvent('unmount');
+
+      if (process.env.NODE_ENV === 'test') {
+        // @ts-ignore
+        api.publishEvent('testUnmount', {
+          privateApi: new WeakRef(api),
+          publicApi: new WeakRef(publicApi),
+          instanceId: new WeakRef(instanceId),
+        } as any);
+      }
     };
   }, [privateApiRef]);
 
