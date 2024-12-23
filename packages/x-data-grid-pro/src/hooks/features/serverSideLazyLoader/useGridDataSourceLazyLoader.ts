@@ -2,7 +2,6 @@ import * as React from 'react';
 import { throttle } from '@mui/x-internals/throttle';
 import {
   useGridApiEventHandler,
-  useGridSelector,
   gridSortModelSelector,
   gridFilterModelSelector,
   GridEventListener,
