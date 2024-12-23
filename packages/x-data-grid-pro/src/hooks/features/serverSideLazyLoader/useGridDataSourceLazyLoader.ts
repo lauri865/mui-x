@@ -67,12 +67,12 @@ export const useGridDataSourceLazyLoader = (
 
   const [lazyLoadingRowsUpdateStrategyActive, setLazyLoadingRowsUpdateStrategyActive] =
     React.useState(false);
-  const sortModel = useGridSelector(privateApiRef, gridSortModelSelector);
-  const filterModel = useGridSelector(privateApiRef, gridFilterModelSelector);
-  const paginationModel = useGridSelector(privateApiRef, gridPaginationModelSelector);
-  const filteredSortedRowIds = useGridSelector(privateApiRef, gridFilteredSortedRowIdsSelector);
-  const dimensions = useGridSelector(privateApiRef, gridDimensionsSelector);
-  const renderContext = useGridSelector(privateApiRef, gridRenderContextSelector);
+  const sortModel = gridSortModelSelector(privateApiRef);
+  const filterModel = gridFilterModelSelector(privateApiRef);
+  const paginationModel = gridPaginationModelSelector(privateApiRef);
+  const filteredSortedRowIds = gridFilteredSortedRowIdsSelector(privateApiRef);
+  const dimensions = gridDimensionsSelector(privateApiRef.current.state);
+  const renderContext = gridRenderContextSelector(privateApiRef);
   const renderedRowsIntervalCache = React.useRef(INTERVAL_CACHE_INITIAL_STATE);
   const previousLastRowIndex = React.useRef(0);
   const loadingTrigger = React.useRef<LoadingTrigger | null>(null);

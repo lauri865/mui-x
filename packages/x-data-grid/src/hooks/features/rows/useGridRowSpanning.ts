@@ -4,7 +4,6 @@ import { GRID_DETAIL_PANEL_TOGGLE_FIELD } from '../../../internals/constants';
 import { gridVisibleColumnDefinitionsSelector } from '../columns/gridColumnsSelector';
 import { useGridVisibleRows } from '../../utils/useGridVisibleRows';
 import { gridRenderContextSelector } from '../virtualization/gridVirtualizationSelectors';
-import { useGridSelector } from '../../utils/useGridSelector';
 import { gridRowTreeSelector } from './gridRowsSelector';
 import type { GridColDef } from '../../../models/colDef';
 import type { GridRowId, GridValidRowModel, GridRowEntry } from '../../../models/gridRows';
@@ -225,9 +224,9 @@ export const useGridRowSpanning = (
   props: Pick<DataGridProcessedProps, 'rowSpanning' | 'pagination' | 'paginationMode'>,
 ): void => {
   const { range, rows: visibleRows } = useGridVisibleRows(apiRef, props);
-  const renderContext = useGridSelector(apiRef, gridRenderContextSelector);
-  const colDefs = useGridSelector(apiRef, gridVisibleColumnDefinitionsSelector);
-  const tree = useGridSelector(apiRef, gridRowTreeSelector);
+  const renderContext = gridRenderContextSelector(apiRef);
+  const colDefs = gridVisibleColumnDefinitionsSelector(apiRef);
+  const tree = gridRowTreeSelector(apiRef);
   const processedRange = useLazyRef<RowRange, void>(() => {
     return Object.keys(apiRef.current.state.rowSpanning.spannedCells).length > 0
       ? {
