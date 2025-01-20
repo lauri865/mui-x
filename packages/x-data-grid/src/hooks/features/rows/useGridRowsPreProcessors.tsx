@@ -44,7 +44,7 @@ const updateFlatRowTree = ({
   previousTree: GridRowTreeConfig;
   actions: { [action in GridRowsPartialUpdateAction]: GridRowId[] };
 }): GridRowTreeCreationValue => {
-  const tree: GridRowTreeConfig = { ...previousTree };
+  let tree: GridRowTreeConfig = previousTree;
   const idsToRemoveFromRootGroup: Record<GridRowId, true> = {};
 
   for (let i = 0; i < actions.remove.length; i += 1) {
@@ -64,10 +64,21 @@ const updateFlatRowTree = ({
     };
   }
 
+  for (let i = 0; i < actions.modify.length; i += 1) {
+    const idToModify = actions.modify[i];
+    tree[idToModify] = {
+      ...tree[idToModify],
+    };
+  }
+
   // TODO rows v6: Support row unpinning
 
   const rootGroup = tree[GRID_ROOT_GROUP_ID] as GridGroupNode;
-  let rootGroupChildren = [...rootGroup.children, ...actions.insert];
+  let rootGroupChildren = rootGroup.children;
+
+  if (actions.insert.length) {
+    rootGroupChildren = [...rootGroupChildren, ...actions.insert];
+  }
   if (Object.values(idsToRemoveFromRootGroup).length) {
     rootGroupChildren = rootGroupChildren.filter((id) => !idsToRemoveFromRootGroup[id]);
   }
@@ -76,6 +87,10 @@ const updateFlatRowTree = ({
     ...rootGroup,
     children: rootGroupChildren,
   };
+
+  if (actions.insert.length || actions.remove.length) {
+    tree = { ...tree };
+  }
 
   return {
     groupingName: GRID_DEFAULT_STRATEGY,

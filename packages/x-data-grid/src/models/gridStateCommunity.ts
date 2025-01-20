@@ -37,6 +37,7 @@ export interface GridStateCommunity {
   rows: GridRowsState;
   visibleRowsLookup: GridVisibleRowsLookupState;
   rowsMeta: GridRowsMetaState;
+  rowsUpdatedAt?: number;
   editRows: GridEditingState;
   headerFiltering: GridHeaderFilteringState;
   pagination: GridPaginationState;

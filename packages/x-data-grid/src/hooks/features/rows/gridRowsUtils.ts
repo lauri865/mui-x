@@ -273,7 +273,7 @@ export const updateCacheWithNewRows = ({
     idToActionLookup: { ...previousCache.updates.idToActionLookup },
     groupKeys,
   };
-  const dataRowIdToModelLookup = { ...previousCache.dataRowIdToModelLookup };
+  let dataRowIdToModelLookup = previousCache.dataRowIdToModelLookup;
 
   const alreadyAppliedActionsToRemove: Record<
     GridRowsPartialUpdateAction,
@@ -359,6 +359,13 @@ export const updateCacheWithNewRows = ({
         (id) => !idsToRemove[id],
       );
     }
+  }
+
+  if (
+    partialUpdates.type === 'partial' &&
+    (partialUpdates.actions.insert.length > 0 || partialUpdates.actions.remove.length > 0)
+  ) {
+    dataRowIdToModelLookup = { ...dataRowIdToModelLookup };
   }
 
   return {

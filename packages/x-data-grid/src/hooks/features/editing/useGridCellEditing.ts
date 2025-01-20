@@ -260,6 +260,26 @@ export const useGridCellEditing = (
     [apiRef],
   );
 
+  const processNewCellModesModel = (cellModesModel: GridCellModesModel) => {
+    const rowsLookup = gridRowsLookupSelector(apiRef);
+
+    // Update the ref here because updateStateToStopCellEditMode may change it later
+    const copyOfPrevCellModes = prevCellModesModel.current;
+    prevCellModesModel.current = deepClone(cellModesModel); // Do a deep-clone because the attributes might be changed later
+
+    Object.entries(cellModesModel).forEach(([id, fields]) => {
+      Object.entries(fields).forEach(([field, params]) => {
+        const prevMode = copyOfPrevCellModes[id]?.[field]?.mode || GridCellModes.View;
+        const originalId = apiRef.current.getRowId(rowsLookup[id]) ?? id;
+        if (params.mode === GridCellModes.Edit && prevMode === GridCellModes.View) {
+          updateStateToStartCellEditMode({ id: originalId, field, ...params });
+        } else if (params.mode === GridCellModes.View && prevMode === GridCellModes.Edit) {
+          updateStateToStopCellEditMode({ id: originalId, field, ...params });
+        }
+      });
+    });
+  };
+
   const updateCellModesModel = useEventCallback((newModel: GridCellModesModel) => {
     const isNewModelDifferentFromProp = newModel !== props.cellModesModel;
 
@@ -268,6 +288,8 @@ export const useGridCellEditing = (
         api: apiRef.current,
       });
     }
+
+    processNewCellModesModel(newModel);
 
     if (props.cellModesModel && isNewModelDifferentFromProp) {
       return; // The prop always win
@@ -315,7 +337,6 @@ export const useGridCellEditing = (
 
         return { ...state, editRows: newEditingState };
       });
-      apiRef.current.forceUpdate();
     },
     [apiRef],
   );
@@ -406,13 +427,13 @@ export const useGridCellEditing = (
         }
       };
 
-      if (ignoreModifications) {
+      const editingState = gridEditRowsStateSelector(apiRef.current.state);
+      const { error, isProcessingProps, changeReason } = editingState[id][field];
+
+      if (ignoreModifications || !changeReason) {
         finishCellEditMode();
         return;
       }
-
-      const editingState = gridEditRowsStateSelector(apiRef.current.state);
-      const { error, isProcessingProps } = editingState[id][field];
 
       if (error || isProcessingProps) {
         // Attempt to change cell mode to "view" was not successful
@@ -457,8 +478,8 @@ export const useGridCellEditing = (
           handleError(errorThrown);
         }
       } else {
-        apiRef.current.updateRows([rowUpdate]);
         finishCellEditMode();
+        apiRef.current.updateRows([rowUpdate]);
       }
     },
   ) as GridCellEditingApi['stopCellEditMode'];
@@ -557,25 +578,4 @@ export const useGridCellEditing = (
       updateCellModesModel(cellModesModelProp);
     }
   }, [cellModesModelProp, updateCellModesModel]);
-
-  // Run this effect synchronously so that the keyboard event can impact the yet-to-be-rendered input.
-  useEnhancedEffect(() => {
-    const rowsLookup = gridRowsLookupSelector(apiRef);
-
-    // Update the ref here because updateStateToStopCellEditMode may change it later
-    const copyOfPrevCellModes = prevCellModesModel.current;
-    prevCellModesModel.current = deepClone(cellModesModel); // Do a deep-clone because the attributes might be changed later
-
-    Object.entries(cellModesModel).forEach(([id, fields]) => {
-      Object.entries(fields).forEach(([field, params]) => {
-        const prevMode = copyOfPrevCellModes[id]?.[field]?.mode || GridCellModes.View;
-        const originalId = apiRef.current.getRowId(rowsLookup[id]) ?? id;
-        if (params.mode === GridCellModes.Edit && prevMode === GridCellModes.View) {
-          updateStateToStartCellEditMode({ id: originalId, field, ...params });
-        } else if (params.mode === GridCellModes.View && prevMode === GridCellModes.Edit) {
-          updateStateToStopCellEditMode({ id: originalId, field, ...params });
-        }
-      });
-    });
-  }, [apiRef, cellModesModel, updateStateToStartCellEditMode, updateStateToStopCellEditMode]);
 };

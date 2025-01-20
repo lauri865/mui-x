@@ -138,19 +138,33 @@ export const useGridRows = (
     ({ cache, throttle }: { cache: GridRowsInternalCache; throttle: boolean }) => {
       const run = () => {
         lastUpdateMs.current = Date.now();
+        const isPartialModification =
+          cache.updates.type === 'partial' &&
+          cache.updates.actions.insert.length === 0 &&
+          cache.updates.actions.remove.length === 0 &&
+          cache.updates.actions.modify.length > 0;
+
+        const newRows = getRowsStateFromCache({
+          apiRef,
+          rowCountProp: props.rowCount,
+          loadingProp: props.loading,
+          previousTree: gridRowTreeSelector(apiRef),
+          previousTreeDepths: gridRowTreeDepthsSelector(apiRef),
+          previousGroupsToFetch: gridRowGroupsToFetchSelector(apiRef),
+        });
+
         apiRef.current.setState((state) => ({
           ...state,
-          rows: getRowsStateFromCache({
-            apiRef,
-            rowCountProp: props.rowCount,
-            loadingProp: props.loading,
-            previousTree: gridRowTreeSelector(apiRef),
-            previousTreeDepths: gridRowTreeDepthsSelector(apiRef),
-            previousGroupsToFetch: gridRowGroupsToFetchSelector(apiRef),
-          }),
+          rows: newRows,
+          rowsUpdatedAt: Date.now(),
         }));
-        apiRef.current.publishEvent('rowsSet');
-        apiRef.current.forceUpdate();
+
+        console.log('cache', cache);
+        if (!isPartialModification) {
+          apiRef.current.publishEvent('rowsSet');
+        } else {
+          console.log('only modified rows');
+        }
       };
 
       timeout.clear();
@@ -545,6 +559,7 @@ export const useGridRows = (
         return;
       }
       if (methodName === 'rowTreeCreation') {
+        console.log('group');
         groupRows();
       }
     },
