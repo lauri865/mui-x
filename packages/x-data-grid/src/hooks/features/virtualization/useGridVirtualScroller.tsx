@@ -250,7 +250,7 @@ export const useGridVirtualScroller = () => {
     [apiRef, dimensions.isReady],
   );
 
-  const triggerUpdateRenderContext = useEventCallback((scroll?: ScrollPosition) => {
+  const triggerUpdateRenderContext = useEventCallback(() => {
     const scroller = scrollerRef.current;
     if (!scroller) {
       return undefined;
@@ -274,10 +274,10 @@ export const useGridVirtualScroller = () => {
 
     // Clamp the scroll position to the viewport to avoid re-calculating the render context for scroll bounce
     const newScroll = {
-      top: clamp(scroll?.top ?? scroller.scrollTop, 0, maxScrollTop),
+      top: clamp(scroller.scrollTop, 0, maxScrollTop),
       left: isRtl
-        ? clamp(scroll?.left ?? scroller.scrollLeft, -maxScrollLeft, 0)
-        : clamp(scroll?.left ?? scroller.scrollLeft, 0, maxScrollLeft),
+        ? clamp(scroller.scrollLeft, -maxScrollLeft, 0)
+        : clamp(scroller.scrollLeft, 0, maxScrollLeft),
     };
 
     const dx = newScroll.left - scrollPosition.current.left;
@@ -340,7 +340,7 @@ export const useGridVirtualScroller = () => {
       updateRenderContext(nextRenderContext);
     });
 
-    scrollTimeout.start(1000, () => triggerUpdateRenderContext(scrollPosition.current));
+    scrollTimeout.start(1000, triggerUpdateRenderContext);
 
     return nextRenderContext;
   });
@@ -353,13 +353,13 @@ export const useGridVirtualScroller = () => {
     updateRenderContext(nextRenderContext);
   };
 
-  const handleScroll = useEventCallback((_, scroll?: ScrollPosition) => {
+  const handleScroll = useEventCallback(() => {
     if (ignoreNextScrollEvent.current && !scroll) {
       ignoreNextScrollEvent.current = false;
       return;
     }
 
-    const nextRenderContext = triggerUpdateRenderContext(scroll);
+    const nextRenderContext = triggerUpdateRenderContext();
 
     apiRef.current.publishEvent('scrollPositionChange', {
       top: scrollPosition.current.top,
@@ -692,9 +692,7 @@ export const useGridVirtualScroller = () => {
 
   React.useEffect(() => {
     const scroller = scrollerRef.current;
-    const scrollerContent = scrollerContentRef.current;
-    const topContainer = scroller?.querySelector('.MuiDataGrid-topContainer') as HTMLElement | null;
-    if (!scroller || !scrollerContent || !topContainer) {
+    if (!scroller) {
       return undefined;
     }
 
@@ -730,14 +728,13 @@ export const useGridVirtualScroller = () => {
     const momentumThreshold = 300; // milliseconds
     const momentumOffsetThreshold = 15; // pixels
 
+    let animationFrame: number | null = null;
     let direction: 'vertical' | 'horizontal' | null = null;
-    let isTouchScrollEnabled = false;
+    let isScrolling = false;
     let maxScrollTop = getMaxScrollTop();
     let maxScrollLeft = getMaxScrollLeft();
-    let offsetY = scrollPosition.current.top * -1;
-    let offsetX = scrollPosition.current.left * -1;
-    let isScrolling = false;
-    let duration = 0;
+    let offsetY = scrollPosition.current.top;
+    let offsetX = scrollPosition.current.left;
     let startY = 0;
     let startX = 0;
     let startOffsetY = offsetY;
@@ -747,63 +744,25 @@ export const useGridVirtualScroller = () => {
     let startTime = 0;
     let updateInterval: number | null = null;
 
-    const getComputedOffset = () => {
-      const matrix = window
-        .getComputedStyle(scrollerContentRef.current!)
-        .getPropertyValue('transform');
-      if (matrix === 'none') {
-        return {};
+    const scheduleUpdate = (callback: (...args: any) => void) => {
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+        animationFrame = null;
       }
-      return {
-        top: parseInt(matrix.split(',')[5]),
-        left: parseInt(matrix.split(',')[4]),
-      };
-    };
-
-    const updateRenderContext = () => {
-      scrollPosition.current = { top: offsetY * -1, left: offsetX * -1 };
-      handleScroll(undefined, scrollPosition.current);
+      animationFrame = requestAnimationFrame(callback);
     };
 
     const stop = () => {
-      direction = null;
-      duration = 0;
-
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+        animationFrame = null;
+      }
       if (updateInterval) {
         clearInterval(updateInterval);
         updateInterval = null;
       }
 
-      const { top, left } = getComputedOffset();
-      let shouldUpdate = false;
-      if (top !== undefined && top !== offsetY) {
-        offsetY = top;
-        shouldUpdate = true;
-      }
-
-      if (left !== undefined && left !== offsetX) {
-        offsetX = left;
-        shouldUpdate = true;
-      }
-
-      if (!isTouchScrollEnabled) {
-        return;
-      }
-
-      if (shouldUpdate) {
-        updateRenderContext();
-        applyScroll();
-      }
-    };
-
-    const applyScroll = () => {
-      scrollerContent.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0)`;
-      scrollerContent.style.transitionDuration = `${duration}ms`;
-      scrollerContent.style.transitionTimingFunction = 'cubic-bezier(0, 0, 0.2, 1)';
-
-      topContainer.style.transform = `translate3d(${offsetX}px, 0, 0)`;
-      topContainer.style.transitionDuration = `${duration}ms`;
-      topContainer.style.transitionTimingFunction = 'cubic-bezier(0, 0, 0.2, 1)';
+      scroller.style.willChange = '';
     };
 
     const handleTouchStart = (event: TouchEvent) => {
@@ -817,17 +776,8 @@ export const useGridVirtualScroller = () => {
         return;
       }
 
-      if (!isTouchScrollEnabled) {
-        isTouchScrollEnabled = true;
-        offsetX = scrollPosition.current.left * -1;
-        offsetY = scrollPosition.current.top * -1;
-
-        if (scroller.scrollTop !== 0 || scroller.scrollLeft !== 0) {
-          scroller.scrollTop = 0;
-          scroller.scrollLeft = 0;
-        }
-      }
-
+      scroller.style.willChange = 'scroll-position';
+      direction = null;
       maxScrollTop = getMaxScrollTop();
       maxScrollLeft = getMaxScrollLeft();
       isScrolling = true;
@@ -836,12 +786,12 @@ export const useGridVirtualScroller = () => {
       startTime = Date.now();
       isScrolling = true;
 
+      offsetX = scroller.scrollLeft;
+      offsetY = scroller.scrollTop;
       momentumStartY = offsetY;
       momentumStartX = offsetX;
       startOffsetY = offsetY;
       startOffsetX = offsetX;
-
-      applyScroll();
     };
 
     const handleTouchMove = (event: TouchEvent) => {
@@ -850,8 +800,10 @@ export const useGridVirtualScroller = () => {
       }
 
       const touch = event.touches[0];
-      const dy = touch.pageY - startY;
-      const dx = touch.pageX - startX;
+      const dy = startY - touch.pageY;
+      const dx = startX - touch.pageX;
+
+      console.log('dy', dy, 'dx', dx);
 
       if (!direction) {
         direction = Math.abs(dy) > Math.abs(dx) ? 'vertical' : 'horizontal';
@@ -868,9 +820,13 @@ export const useGridVirtualScroller = () => {
       event.preventDefault();
 
       if (direction === 'vertical') {
-        offsetY = clamp(startOffsetY + dy, -maxScrollTop, 0);
+        offsetY = clamp(startOffsetY + dy, 0, maxScrollTop);
+
+        scroller.scrollTop = offsetY;
       } else if (direction === 'horizontal') {
-        offsetX = clamp(startOffsetX + dx, -maxScrollLeft, 0);
+        offsetX = clamp(startOffsetX + dx, 0, maxScrollLeft);
+
+        scroller.scrollLeft = offsetX;
       }
 
       const now = Date.now();
@@ -882,31 +838,76 @@ export const useGridVirtualScroller = () => {
         }
         startTime = now;
       }
-
-      applyScroll();
-      updateRenderContext();
     };
 
-    const momentum = (current: number, start: number, duration: number) => {
-      const deceleration = 0.002;
+    function cubicBezierEaseOut(t: number) {
+      // `cubic-bezier(0, 0, 0.2, 1)` simplified
+      return 3 * 0.2 * (1 - t) * (1 - t) * t + 3 * (1 - t) * t * t + t * t * t;
+    }
 
+    const animateScrollTo = (
+      direction: 'vertical' | 'horizontal',
+      from: number,
+      to: number,
+      duration: number,
+    ) => {
+      const distance = to - from;
+      const startTime = performance.now() - 1000 / 60;
+
+      function step(currentTime: number) {
+        if (!scroller) {
+          stop();
+          return;
+        }
+        const elapsedTime = currentTime - startTime;
+        const t = Math.min(elapsedTime / duration, 1);
+        const easedTime = cubicBezierEaseOut(t);
+        const currentPosition = from + distance * easedTime;
+
+        scroller[direction === 'vertical' ? 'scrollTop' : 'scrollLeft'] = currentPosition;
+
+        if (t < 1) {
+          scheduleUpdate(step);
+        }
+      }
+
+      scheduleUpdate(step);
+    };
+
+    const applyMomentum = () => {
+      if (!direction) {
+        return;
+      }
+      const deceleration = 0.004;
+
+      const current = direction === 'vertical' ? offsetY : offsetX;
+      const start = direction === 'vertical' ? momentumStartY : momentumStartX;
+
+      const duration = Date.now() - startTime;
       const distance = current - start;
+
+      if (Math.abs(distance) < momentumOffsetThreshold || duration > momentumThreshold) {
+        return;
+      }
+
       const speed = (1 * Math.abs(distance)) / duration;
 
       let destination = Math.round(current + (speed / deceleration) * Math.sign(distance));
 
       if (direction === 'vertical') {
-        destination = clamp(destination, -maxScrollTop, 0);
+        destination = clamp(destination, 0, maxScrollTop);
       } else if (direction === 'horizontal') {
-        destination = clamp(destination, -maxScrollLeft, 0);
+        destination = clamp(destination, 0, maxScrollLeft);
       }
 
-      const dynamicDuration = clamp(Math.abs(destination - current) / (speed * 0.5), 300, 1000);
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+        animationFrame = null;
+      }
 
-      return {
-        destination,
-        duration: dynamicDuration,
-      };
+      const dynamicDuration = clamp(Math.abs(destination - current) / speed, 300, 1000);
+
+      animateScrollTo(direction, current, destination, 600);
     };
 
     const handleTouchEnd = (event: TouchEvent) => {
@@ -915,106 +916,17 @@ export const useGridVirtualScroller = () => {
       }
       isScrolling = false;
 
-      const dy = Math.abs(offsetY - momentumStartY);
-      const dx = Math.abs(offsetX - momentumStartX);
-      const delta = Date.now() - startTime;
-
-      if (
-        (delta < momentumThreshold && direction === 'vertical' && dy > momentumOffsetThreshold) ||
-        (direction === 'horizontal' && dx > momentumOffsetThreshold)
-      ) {
-        if (direction === 'vertical') {
-          const m = momentum(offsetY, momentumStartY, delta);
-          if (offsetY === m.destination) {
-            return;
-          }
-          offsetY = m.destination;
-          duration = m.duration;
-        } else if (direction === 'horizontal') {
-          const m = momentum(offsetX, momentumStartX, delta);
-          if (offsetX === m.destination) {
-            return;
-          }
-          offsetX = m.destination;
-          duration = m.duration;
-        }
-
-        applyScroll();
-
-        updateInterval = window.setInterval(() => {
-          const { top, left } = getComputedOffset();
-          if (top === undefined || left === undefined || (top === offsetY && left === offsetX)) {
-            stop();
-            return;
-          }
-
-          console.log('top', top, 'left', left);
-
-          if (direction === 'vertical' && top !== offsetY) {
-            scrollPosition.current = { top: top * -1, left: left * -1 };
-            handleScroll(undefined, scrollPosition.current);
-          } else if (direction === 'horizontal' && left !== offsetX) {
-            scrollPosition.current = { top: top * -1, left: left * -1 };
-            handleScroll(undefined, scrollPosition.current);
-          }
-        }, 1000 / 30);
-      }
-    };
-
-    const onTransitionEnd = () => {
-      stop();
-    };
-
-    const handleWheel = (event: WheelEvent) => {
-      if (isTouchScrollEnabled) {
-        isTouchScrollEnabled = false;
-        stop();
-
-        scrollPosition.current = { top: offsetY * -1, left: offsetX * -1 };
-
-        scroller.scrollTop = scrollPosition.current.top;
-        scroller.scrollLeft = scrollPosition.current.left;
-
-        scrollerContent.style.transform = '';
-        scrollerContent.style.transitionDuration = '';
-        scrollerContent.style.transitionTimingFunction = '';
-      }
-    };
-
-    const interceptScroll = (event: Event) => {
-      if (isTouchScrollEnabled) {
-        event.preventDefault();
-        event.stopPropagation();
-        const { scrollTop, scrollLeft } = scroller;
-        offsetY = scrollTop * -1;
-        offsetX = scrollLeft * -1;
-        scrollPosition.current = { top: scrollTop, left: scrollLeft };
-
-        applyScroll();
-        updateRenderContext();
-      }
+      applyMomentum();
     };
 
     scroller.addEventListener('touchstart', handleTouchStart);
     scroller.addEventListener('touchmove', handleTouchMove, { passive: false });
     scroller.addEventListener('touchend', handleTouchEnd);
-    scroller.addEventListener('wheel', handleWheel);
-    scroller.addEventListener('scroll', interceptScroll, {
-      capture: true,
-      passive: false,
-    });
-
-    scrollerContent.addEventListener('transitionend', onTransitionEnd);
 
     return () => {
       scroller.removeEventListener('touchstart', handleTouchStart);
       scroller.removeEventListener('touchmove', handleTouchMove);
       scroller.removeEventListener('touchend', handleTouchEnd);
-      scroller.removeEventListener('wheel', handleWheel);
-      scroller.removeEventListener('scroll', interceptScroll, {
-        capture: true,
-      });
-      scrollerContent.removeEventListener('transitionend', onTransitionEnd);
     };
   }, []);
 
