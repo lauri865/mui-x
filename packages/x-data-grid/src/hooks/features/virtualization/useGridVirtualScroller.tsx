@@ -375,6 +375,70 @@ export const useGridVirtualScroller = () => {
     apiRef.current.publishEvent('virtualScrollerTouchMove', {}, event);
   });
 
+  const stickyRows = React.useMemo(() => {
+    const getStickyPosition = rootProps.unstable_getRowStickyPosition;
+    const positions: {
+      firstTopIndex: number | undefined;
+      top: Set<number>;
+      lastBottomIndex: number | undefined;
+      bottom: Set<number>;
+      pinnedTop: Set<number>;
+      pinnedBottom: Set<number>;
+    } = {
+      firstTopIndex: undefined,
+      top: new Set<number>(),
+      lastBottomIndex: undefined,
+      bottom: new Set<number>(),
+      pinnedTop: new Set<number>(),
+      pinnedBottom: new Set<number>(),
+    };
+    if (!getStickyPosition) {
+      return positions;
+    }
+    for (let i = 0; i < currentPage.rows.length; i += 1) {
+      const position = getStickyPosition(currentPage.rows[i]);
+      if (position === GridRowStickyPosition.top) {
+        if (positions.firstTopIndex === undefined) {
+          positions.firstTopIndex = i;
+        }
+        positions.top.add(i);
+      } else if (position === GridRowStickyPosition.bottom) {
+        positions.bottom.add(i);
+        positions.lastBottomIndex = i;
+      } else if (position === GridRowStickyPosition.pinnedTop) {
+        positions.pinnedTop.add(i);
+      } else if (position === GridRowStickyPosition.pinnedBottom) {
+        positions.pinnedBottom.add(i);
+      }
+    }
+    return positions;
+  }, [currentPage.rows, rootProps.unstable_getRowStickyPosition]);
+
+  const stickyRowsOutsideRenderContext = React.useMemo(() => {
+    if (!stickyRows.top.size && !stickyRows.bottom.size) {
+      return {
+        top: [],
+        bottom: [],
+      };
+    }
+    const { top, firstTopIndex, lastBottomIndex, bottom, pinnedTop, pinnedBottom } = stickyRows;
+    const { firstRowIndex, lastRowIndex } = renderContext;
+
+    const stickyRowsForRenderContext = {
+      top:
+        firstTopIndex && firstTopIndex < firstRowIndex
+          ? [findClosestSticky(Array.from(top), firstRowIndex, true, firstTopIndex)]
+          : [],
+      bottom:
+        lastBottomIndex && lastBottomIndex > lastRowIndex
+          ? [findClosestSticky(Array.from(bottom), lastRowIndex, false, lastBottomIndex)]
+          : [],
+    };
+    return stickyRowsForRenderContext;
+  }, [stickyRows, stickyRows, renderContext.firstRowIndex, renderContext.lastRowIndex]);
+
+  console.log(stickyRowsOutsideRenderContext);
+
   const getRows = (
     params: {
       rows?: GridRowEntry[];
@@ -418,7 +482,11 @@ export const useGridVirtualScroller = () => {
       : range(firstRowToRender, lastRowToRender);
 
     let virtualRowIndex = -1;
-    if (!isPinnedSection && focusedVirtualCell) {
+    const focusedVirtualCellIsSticky =
+      focusedVirtualCell?.rowIndex !== undefined &&
+      (stickyRowsOutsideRenderContext.top.includes(focusedVirtualCell.rowIndex) ||
+        stickyRowsOutsideRenderContext.bottom.includes(focusedVirtualCell.rowIndex));
+    if (!isPinnedSection && focusedVirtualCell && !focusedVirtualCellIsSticky) {
       if (focusedVirtualCell.rowIndex < firstRowToRender) {
         rowIndexes.unshift(focusedVirtualCell.rowIndex);
         virtualRowIndex = focusedVirtualCell.rowIndex;
@@ -432,6 +500,13 @@ export const useGridVirtualScroller = () => {
     const rows: React.ReactNode[] = [];
     const rowProps = rootProps.slotProps?.row;
     const columnPositions = gridColumnPositionsSelector(apiRef);
+
+    if (stickyRowsOutsideRenderContext.top.length) {
+      rowIndexes.unshift(...stickyRowsOutsideRenderContext.top);
+    }
+    if (stickyRowsOutsideRenderContext.bottom.length) {
+      rowIndexes.push(...stickyRowsOutsideRenderContext.bottom);
+    }
 
     rowIndexes.forEach((rowIndexInPage) => {
       const { id, model } = rowModels[rowIndexInPage];
@@ -543,6 +618,20 @@ export const useGridVirtualScroller = () => {
           showBottomBorder={showBottomBorder}
           scrollbarWidth={dimensions.hasScrollY ? dimensions.scrollbarSize : 0}
           gridHasFiller={dimensions.columnsTotalWidth < dimensions.viewportOuterSize.width}
+          style={
+            stickyRows.top.has(rowIndexInPage)
+              ? {
+                  position: 'sticky',
+                  top:
+                    56 -
+                    (gridRowsMetaSelector(apiRef.current.state).positions[
+                      renderContext.firstRowIndex
+                    ] ?? 0),
+                  background: '#ff000080',
+                  zIndex: 6,
+                }
+              : undefined
+          }
           {...rowProps}
         />,
       );
@@ -676,78 +765,6 @@ export const useGridVirtualScroller = () => {
 
     return undefined;
   });
-
-  const stickyRows = React.useMemo(() => {
-    const getStickyPosition = rootProps.unstable_getRowStickyPosition;
-    const positions: {
-      firstTopIndex: number | undefined;
-      top: Set<number>;
-      lastBottomIndex: number | undefined;
-      bottom: Set<number>;
-      pinnedTop: Set<number>;
-      pinnedBottom: Set<number>;
-    } = {
-      firstTopIndex: undefined,
-      top: new Set<number>(),
-      lastBottomIndex: undefined,
-      bottom: new Set<number>(),
-      pinnedTop: new Set<number>(),
-      pinnedBottom: new Set<number>(),
-    };
-    if (!getStickyPosition) {
-      return positions;
-    }
-    for (let i = 0; i < currentPage.rows.length; i += 1) {
-      const position = getStickyPosition(currentPage.rows[i]);
-      if (position === GridRowStickyPosition.top) {
-        if (positions.firstTopIndex === undefined) {
-          positions.firstTopIndex = i;
-        }
-        positions.top.add(i);
-      } else if (position === GridRowStickyPosition.bottom) {
-        positions.bottom.add(i);
-        positions.lastBottomIndex = i;
-      } else if (position === GridRowStickyPosition.pinnedTop) {
-        positions.pinnedTop.add(i);
-      } else if (position === GridRowStickyPosition.pinnedBottom) {
-        positions.pinnedBottom.add(i);
-      }
-    }
-    return positions;
-  }, [currentPage.rows, rootProps.unstable_getRowStickyPosition]);
-
-  const stickyRowsOutsideRenderContext = React.useMemo(() => {
-    if (!stickyRows.top.size && !stickyRows.bottom.size) {
-      return {
-        top: [],
-        bottom: [],
-      };
-    }
-    const { top, firstTopIndex, lastBottomIndex, bottom, pinnedTop, pinnedBottom } = stickyRows;
-    const { firstRowIndex, lastRowIndex } = renderContext;
-
-    console.log('firstTopIndex', firstTopIndex);
-
-    const stickyRowsForRenderContext = {
-      top:
-        firstTopIndex && firstTopIndex < firstRowIndex
-          ? [binarySearch(firstRowIndex, Array.from(top), undefined, firstRowIndex, firstTopIndex)]
-          : [],
-      bottom:
-        lastBottomIndex && lastBottomIndex > lastRowIndex
-          ? [
-              binarySearch(
-                lastRowIndex,
-                Array.from(bottom),
-                undefined,
-                lastRowIndex,
-                lastBottomIndex,
-              ),
-            ]
-          : [],
-    };
-    return stickyRowsForRenderContext;
-  }, [stickyRows, stickyRows, renderContext.firstRowIndex, renderContext.lastRowIndex]);
 
   apiRef.current.register('private', {
     updateRenderContext: forceUpdateRenderContext,
@@ -1039,6 +1056,42 @@ type SearchOptions = {
   atStart: boolean;
   lastPosition: number;
 };
+
+function findClosestSticky(
+  stickyRows: number[],
+  target: number,
+  isTop: boolean,
+  bound: number | null = null,
+) {
+  let lo = 0,
+    hi = stickyRows.length - 1;
+  let closest = undefined;
+
+  while (lo <= hi) {
+    let mid = (lo + hi) >> 1;
+    let value = stickyRows[mid];
+
+    if (isTop) {
+      // Searching for the closest sticky row ≤ target, within minBound
+      if (value <= target && (bound === null || value >= bound)) {
+        closest = value; // Valid candidate
+        lo = mid + 1; // Search right for a closer match
+      } else {
+        hi = mid - 1; // Search left
+      }
+    } else {
+      // Searching for the closest sticky row ≥ target, within maxBound
+      if (value >= target && (bound === null || value <= bound)) {
+        closest = value; // Valid candidate
+        hi = mid - 1; // Search left for a closer match
+      } else {
+        lo = mid + 1; // Search right
+      }
+    }
+  }
+
+  return closest as number;
+}
 
 /**
  * Use binary search to avoid looping through all possible positions.

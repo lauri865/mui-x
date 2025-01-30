@@ -125,6 +125,7 @@ export const useGridScroll = (
           elementSize: targetOffsetHeight,
           elementOffset: rowsMeta.positions[elementIndex],
         });
+        console.log('scrollCoordinates.top', scrollCoordinates.top);
       }
 
       scrollCoordinates = apiRef.current.unstable_applyPipeProcessors(
