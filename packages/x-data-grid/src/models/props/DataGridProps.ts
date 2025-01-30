@@ -26,6 +26,7 @@ import {
 import { GridCellParams } from '../params/gridCellParams';
 import { GridFilterModel } from '../gridFilterModel';
 import { GridInputRowSelectionModel, GridRowSelectionModel } from '../gridRowSelectionModel';
+import type { GridRowStickyPosition } from '../gridRowStickyPosition';
 import { GridInitialStateCommunity } from '../gridStateCommunity';
 import { GridSlotsComponentsProps } from '../gridSlotsComponentsProps';
 import { GridColumnVisibilityModel } from '../../hooks/features/columns/gridColumnsInterfaces';
@@ -463,6 +464,12 @@ export interface DataGridPropsWithoutDefaultValue<R extends GridValidRowModel = 
    * @returns {GridRowSpacing} The row spacing values.
    */
   getRowSpacing?: (params: GridRowSpacingParams) => GridRowSpacing;
+  /**
+   * Function that allows to specify which rows are sticky.
+   * @param {GridRowIdGetter<R>} row The row object.
+   * @returns {GridRowStickyPosition} The position of the row.
+   */
+  unstable_getRowStickyPosition?: (row: R) => GridRowStickyPosition | undefined;
   /**
    * Function that returns the element to render in row detail.
    * @param {GridRowParams} params With all properties from [[GridRowParams]].

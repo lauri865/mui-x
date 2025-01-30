@@ -10,6 +10,7 @@ export * from './gridPaginationProps';
 export * from './gridRenderContextProps';
 export * from './gridRows';
 export * from './gridRowSelectionModel';
+export * from './gridRowStickyPosition';
 export * from './params';
 export * from './gridCellClass';
 export * from './gridCell';

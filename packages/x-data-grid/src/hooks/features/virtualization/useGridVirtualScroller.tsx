@@ -32,6 +32,7 @@ import {
   type GridColumnsRenderContext,
   type GridRowEntry,
   type GridRowId,
+  GridRowStickyPosition,
 } from '../../../models';
 import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { selectedIdsLookupSelector } from '../rowSelection/gridRowSelectionSelector';
@@ -675,6 +676,78 @@ export const useGridVirtualScroller = () => {
 
     return undefined;
   });
+
+  const stickyRows = React.useMemo(() => {
+    const getStickyPosition = rootProps.unstable_getRowStickyPosition;
+    const positions: {
+      firstTopIndex: number | undefined;
+      top: Set<number>;
+      lastBottomIndex: number | undefined;
+      bottom: Set<number>;
+      pinnedTop: Set<number>;
+      pinnedBottom: Set<number>;
+    } = {
+      firstTopIndex: undefined,
+      top: new Set<number>(),
+      lastBottomIndex: undefined,
+      bottom: new Set<number>(),
+      pinnedTop: new Set<number>(),
+      pinnedBottom: new Set<number>(),
+    };
+    if (!getStickyPosition) {
+      return positions;
+    }
+    for (let i = 0; i < currentPage.rows.length; i += 1) {
+      const position = getStickyPosition(currentPage.rows[i]);
+      if (position === GridRowStickyPosition.top) {
+        if (positions.firstTopIndex === undefined) {
+          positions.firstTopIndex = i;
+        }
+        positions.top.add(i);
+      } else if (position === GridRowStickyPosition.bottom) {
+        positions.bottom.add(i);
+        positions.lastBottomIndex = i;
+      } else if (position === GridRowStickyPosition.pinnedTop) {
+        positions.pinnedTop.add(i);
+      } else if (position === GridRowStickyPosition.pinnedBottom) {
+        positions.pinnedBottom.add(i);
+      }
+    }
+    return positions;
+  }, [currentPage.rows, rootProps.unstable_getRowStickyPosition]);
+
+  const stickyRowsOutsideRenderContext = React.useMemo(() => {
+    if (!stickyRows.top.size && !stickyRows.bottom.size) {
+      return {
+        top: [],
+        bottom: [],
+      };
+    }
+    const { top, firstTopIndex, lastBottomIndex, bottom, pinnedTop, pinnedBottom } = stickyRows;
+    const { firstRowIndex, lastRowIndex } = renderContext;
+
+    console.log('firstTopIndex', firstTopIndex);
+
+    const stickyRowsForRenderContext = {
+      top:
+        firstTopIndex && firstTopIndex < firstRowIndex
+          ? [binarySearch(firstRowIndex, Array.from(top), undefined, firstRowIndex, firstTopIndex)]
+          : [],
+      bottom:
+        lastBottomIndex && lastBottomIndex > lastRowIndex
+          ? [
+              binarySearch(
+                lastRowIndex,
+                Array.from(bottom),
+                undefined,
+                lastRowIndex,
+                lastBottomIndex,
+              ),
+            ]
+          : [],
+    };
+    return stickyRowsForRenderContext;
+  }, [stickyRows, stickyRows, renderContext.firstRowIndex, renderContext.lastRowIndex]);
 
   apiRef.current.register('private', {
     updateRenderContext: forceUpdateRenderContext,
