@@ -6,7 +6,10 @@ import { useGridSelector } from '../../utils';
 import { useGridRootProps } from '../../utils/useGridRootProps';
 import { useGridPrivateApiContext } from '../../utils/useGridPrivateApiContext';
 import type { GridColumnsRenderContext } from '../../../models/params/gridScrollParams';
-import { useGridApiEventHandler } from '../../utils/useGridApiEventHandler';
+import {
+  useGridApiEventHandler,
+  useGridApiOptionHandler,
+} from '../../utils/useGridApiEventHandler';
 import { GridEventListener } from '../../../models/events';
 import { GridColumnHeaderItem } from '../../../components/columnHeaders/GridColumnHeaderItem';
 import {
@@ -107,7 +110,19 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
   const rootProps = useGridRootProps();
   const columnGroupsModel = useGridSelector(apiRef, gridColumnGroupsUnwrappedModelSelector);
   const columnPositions = useGridSelector(apiRef, gridColumnPositionsSelector);
-  const renderContext = useGridSelector(apiRef, gridRenderContextColumnsSelector);
+  const [renderContext, setRenderContext] = React.useState<GridColumnsRenderContext>({
+    firstColumnIndex: 0,
+    lastColumnIndex: 0,
+  });
+  const handleRenderContextChange = React.useCallback((newRenderContext) => {
+    if (
+      newRenderContext.firstColumnIndex !== renderContext.firstColumnIndex ||
+      newRenderContext.lastColumnIndex !== renderContext.lastColumnIndex
+    ) {
+      setRenderContext(newRenderContext);
+    }
+  }, []);
+  useGridApiOptionHandler(apiRef, 'renderedRowsIntervalChange', handleRenderContextChange);
   const pinnedColumns = useGridSelector(apiRef, gridVisiblePinnedColumnDefinitionsSelector);
   const columnsLookup = useGridSelector(apiRef, gridColumnLookupSelector);
   const offsetLeft = computeOffsetLeft(columnPositions, renderContext, pinnedColumns.left.length);

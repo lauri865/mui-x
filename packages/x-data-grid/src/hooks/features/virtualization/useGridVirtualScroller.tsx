@@ -104,11 +104,7 @@ export const useGridVirtualScroller = () => {
   const apiRef = useGridPrivateApiContext() as RefObject<PrivateApiWithInfiniteLoader>;
   const rootProps = useGridRootProps();
   const { unstable_listView: listView } = rootProps;
-  const visibleColumns = useGridSelector(apiRef, () =>
-    listView
-      ? [gridListColumnSelector(apiRef.current.state)!]
-      : gridVisibleColumnDefinitionsSelector(apiRef),
-  );
+  const visibleColumns = useGridSelector(apiRef, gridVisibleColumnDefinitionsSelector);
   const enabledForRows = useGridSelector(apiRef, gridVirtualizationRowEnabledSelector) && !isJSDOM;
   const enabledForColumns =
     useGridSelector(apiRef, gridVirtualizationColumnEnabledSelector) && !isJSDOM;
@@ -218,7 +214,7 @@ export const useGridVirtualScroller = () => {
   const ignoreNextScrollEvent = React.useRef(false);
   const previousContextScrollPosition = React.useRef(EMPTY_SCROLL_POSITION);
   const previousRowContext = React.useRef(EMPTY_RENDER_CONTEXT);
-  const renderContext = useGridSelector(apiRef, gridRenderContextSelector);
+  const [renderContext, setRenderContext] = React.useState(EMPTY_RENDER_CONTEXT);
 
   const focusedVirtualCell = useGridSelector(apiRef, gridFocusedVirtualCellSelector);
 
@@ -236,9 +232,7 @@ export const useGridVirtualScroller = () => {
 
   const updateRenderContext = React.useCallback(
     (nextRenderContext: GridRenderContext) => {
-      if (
-        areRenderContextsEqual(nextRenderContext, apiRef.current.state.virtualization.renderContext)
-      ) {
+      if (areRenderContextsEqual(nextRenderContext, renderContext)) {
         return;
       }
 
@@ -246,15 +240,7 @@ export const useGridVirtualScroller = () => {
         nextRenderContext.firstRowIndex !== previousRowContext.current.firstRowIndex ||
         nextRenderContext.lastRowIndex !== previousRowContext.current.lastRowIndex;
 
-      apiRef.current.setState((state) => {
-        return {
-          ...state,
-          virtualization: {
-            ...state.virtualization,
-            renderContext: nextRenderContext,
-          },
-        };
-      });
+      setRenderContext(nextRenderContext);
 
       // The lazy-loading hook is listening to `renderedRowsIntervalChange`,
       // but only does something if we already have a render context, because
