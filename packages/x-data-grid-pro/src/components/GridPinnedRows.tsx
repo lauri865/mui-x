@@ -45,7 +45,15 @@ export function GridPinnedRows({ position, virtualScroller }: GridPinnedRowsProp
   });
 
   return (
-    <div className={clsx(classes.root, gridClasses[`pinnedRows--${position}`])} role="presentation">
+    <div
+      className={clsx(classes.root, gridClasses[`pinnedRows--${position}`])}
+      role="presentation"
+      style={{
+        position: 'sticky',
+        top: 56,
+        zIndex: 2,
+      }}
+    >
       {pinnedRows}
     </div>
   );

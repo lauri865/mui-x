@@ -426,18 +426,23 @@ export const useGridVirtualScroller = () => {
 
     const stickyRowsForRenderContext = {
       top:
-        firstTopIndex && firstTopIndex < firstRowIndex
+        firstTopIndex !== undefined && firstTopIndex < firstRowIndex
           ? [findClosestSticky(Array.from(top), firstRowIndex, true, firstTopIndex)]
           : [],
       bottom:
-        lastBottomIndex && lastBottomIndex > lastRowIndex
+        lastBottomIndex !== undefined && lastBottomIndex > lastRowIndex
           ? [findClosestSticky(Array.from(bottom), lastRowIndex, false, lastBottomIndex)]
           : [],
     };
     return stickyRowsForRenderContext;
   }, [stickyRows, stickyRows, renderContext.firstRowIndex, renderContext.lastRowIndex]);
 
-  console.log(stickyRowsOutsideRenderContext);
+  console.log(
+    stickyRows.firstTopIndex,
+    stickyRowsOutsideRenderContext,
+    stickyRows.top.size,
+    renderContext.firstRowIndex,
+  );
 
   const getRows = (
     params: {
@@ -484,7 +489,7 @@ export const useGridVirtualScroller = () => {
     let virtualRowIndex = -1;
     const focusedVirtualCellIsSticky =
       focusedVirtualCell?.rowIndex !== undefined &&
-      (stickyRowsOutsideRenderContext.top.includes(focusedVirtualCell.rowIndex) ||
+      (stickyRows.top.has(focusedVirtualCell.rowIndex) ||
         stickyRowsOutsideRenderContext.bottom.includes(focusedVirtualCell.rowIndex));
     if (!isPinnedSection && focusedVirtualCell && !focusedVirtualCellIsSticky) {
       if (focusedVirtualCell.rowIndex < firstRowToRender) {
@@ -507,6 +512,8 @@ export const useGridVirtualScroller = () => {
     if (stickyRowsOutsideRenderContext.bottom.length) {
       rowIndexes.push(...stickyRowsOutsideRenderContext.bottom);
     }
+
+    apiRef.current.state.virtualization.renderContext.stickyRows = stickyRowsOutsideRenderContext;
 
     rowIndexes.forEach((rowIndexInPage) => {
       const { id, model } = rowModels[rowIndexInPage];
@@ -584,7 +591,9 @@ export const useGridVirtualScroller = () => {
         currentRenderContext = frozenContext.current;
       }
 
-      const isVirtualFocusRow = rowIndexInPage === virtualRowIndex;
+      const isStickyRow =
+        stickyRows.top.has(rowIndexInPage) || stickyRows.bottom.has(rowIndexInPage);
+      const isVirtualFocusRow = !isStickyRow && rowIndexInPage === virtualRowIndex;
       const isVirtualFocusColumn = focusedVirtualCell?.rowIndex === rowIndex;
 
       const offsetLeft = computeOffsetLeft(
@@ -622,12 +631,16 @@ export const useGridVirtualScroller = () => {
             stickyRows.top.has(rowIndexInPage)
               ? {
                   position: 'sticky',
-                  top:
-                    56 -
-                    (gridRowsMetaSelector(apiRef.current.state).positions[
-                      renderContext.firstRowIndex
-                    ] ?? 0),
-                  background: '#ff000080',
+
+                  top: !stickyRowsOutsideRenderContext.top.includes(rowIndex)
+                    ? dimensions.headerHeight -
+                      (gridRowsMetaSelector(apiRef.current.state).positions[
+                        renderContext.firstRowIndex
+                      ] ?? 0)
+                    : undefined,
+                  background: 'red',
+                  // Hack: should ideally be done at the GridVirtualScrollerRenderZone level
+
                   zIndex: 6,
                 }
               : undefined
@@ -1073,7 +1086,7 @@ function findClosestSticky(
 
     if (isTop) {
       // Searching for the closest sticky row ≤ target, within minBound
-      if (value <= target && (bound === null || value >= bound)) {
+      if (value < target && (bound === null || value >= bound)) {
         closest = value; // Valid candidate
         lo = mid + 1; // Search right for a closer match
       } else {
@@ -1081,7 +1094,7 @@ function findClosestSticky(
       }
     } else {
       // Searching for the closest sticky row ≥ target, within maxBound
-      if (value >= target && (bound === null || value <= bound)) {
+      if (value > target && (bound === null || value <= bound)) {
         closest = value; // Valid candidate
         hi = mid - 1; // Search left for a closer match
       } else {

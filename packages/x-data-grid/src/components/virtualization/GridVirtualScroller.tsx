@@ -103,14 +103,21 @@ function GridVirtualScroller(props: GridVirtualScrollerProps) {
       <GridScrollArea scrollDirection="left" />
       <GridScrollArea scrollDirection="right" />
       <Scroller className={classes.scroller} {...getScrollerProps()} ownerState={ownerState}>
-        <TopContainer>
-          {!rootProps.unstable_listView && <GridHeaders />}
-          <rootProps.slots.pinnedRows position="top" virtualScroller={virtualScroller} />
-        </TopContainer>
+        <TopContainer>{!rootProps.unstable_listView && <GridHeaders />}</TopContainer>
+        <div
+          id="sticky"
+          style={{
+            position: 'sticky',
+            top: 56,
+            height: 0,
+            zIndex: 1,
+          }}
+        ></div>
 
         {getOverlay()}
 
         <Content {...getContentProps()}>
+          <rootProps.slots.pinnedRows position="top" virtualScroller={virtualScroller} />
           <RenderZone {...getRenderZoneProps()}>
             {rows}
             {<rootProps.slots.detailPanels virtualScroller={virtualScroller} />}

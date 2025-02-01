@@ -27,20 +27,27 @@ function scrollIntoView(dimensions: {
   scrollPosition: number;
   elementSize: number;
   elementOffset: number;
+  stickyOffset?: number;
 }) {
-  const { containerSize, scrollPosition, elementSize, elementOffset } = dimensions;
+  const {
+    containerSize,
+    scrollPosition,
+    elementSize,
+    elementOffset,
+    stickyOffset = 0,
+  } = dimensions;
 
-  const elementEnd = elementOffset + elementSize;
+  const elementEnd = elementOffset + elementSize + stickyOffset;
   // Always scroll to top when cell is higher than viewport to avoid scroll jump
   // See https://github.com/mui/mui-x/issues/4513 and https://github.com/mui/mui-x/issues/4514
   if (elementSize > containerSize) {
-    return elementOffset;
+    return elementOffset + stickyOffset;
   }
   if (elementEnd - containerSize > scrollPosition) {
     return elementEnd - containerSize;
   }
-  if (elementOffset < scrollPosition) {
-    return elementOffset;
+  if (elementOffset - stickyOffset < scrollPosition) {
+    return elementOffset - stickyOffset;
   }
   return undefined;
 }
@@ -119,13 +126,23 @@ export const useGridScroll = (
           ? rowsMeta.positions[elementIndex + 1] - rowsMeta.positions[elementIndex]
           : rowsMeta.currentPageTotalHeight - rowsMeta.positions[elementIndex];
 
+        const stickyOffset =
+          apiRef.current.state.virtualization.renderContext.stickyRows?.top.reduce(
+            (acc: number, index: number) => {
+              return index < elementIndex
+                ? acc + rowsMeta.positions[index + 1] - rowsMeta.positions[index]
+                : acc;
+            },
+            0,
+          ) || 0;
+
         scrollCoordinates.top = scrollIntoView({
           containerSize: dimensions.viewportInnerSize.height,
           scrollPosition: virtualScrollerRef.current!.scrollTop,
           elementSize: targetOffsetHeight,
           elementOffset: rowsMeta.positions[elementIndex],
+          stickyOffset,
         });
-        console.log('scrollCoordinates.top', scrollCoordinates.top);
       }
 
       scrollCoordinates = apiRef.current.unstable_applyPipeProcessors(
