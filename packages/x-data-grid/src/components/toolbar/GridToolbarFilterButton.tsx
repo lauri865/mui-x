@@ -138,7 +138,7 @@ const GridToolbarFilterButton = forwardRef<HTMLButtonElement, GridToolbarFilterB
     return (
       <rootProps.slots.baseTooltip
         title={tooltipContentNode}
-        delay={1000}
+        delay={500}
         {...rootProps.slotProps?.baseTooltip}
         {...tooltipProps}
       >

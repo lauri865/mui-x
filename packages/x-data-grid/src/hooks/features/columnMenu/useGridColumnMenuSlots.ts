@@ -72,7 +72,11 @@ const useGridColumnMenuSlots = (props: UseGridColumnMenuSlotsProps) => {
         itemProps = { ...itemProps, ...customProps };
       }
       return addDividers && index !== sorted.length - 1
-        ? [...acc, [processedComponents[key]!, itemProps], [rootProps.slots.baseDivider, {}]]
+        ? [
+            ...acc,
+            [processedComponents[key]!, itemProps],
+            [rootProps.slots.baseDropdownMenu.Separator, {}],
+          ]
         : [...acc, [processedComponents[key]!, itemProps]];
     }, []);
   }, [
@@ -83,7 +87,7 @@ const useGridColumnMenuSlots = (props: UseGridColumnMenuSlotsProps) => {
     processedComponents,
     processedSlotProps,
     userItems,
-    rootProps.slots.baseDivider,
+    rootProps.slots.baseDropdownMenu.Separator,
   ]);
 };
 

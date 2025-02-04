@@ -17,21 +17,21 @@ const Pinned = styled('div')({
   position: 'sticky',
   height: '100%',
   boxSizing: 'border-box',
-  borderTop: '1px solid var(--rowBorderColor)',
+  borderTop: '1px solid var(--color-grid-border)',
   backgroundColor: 'var(--DataGrid-pinnedBackground)',
 });
 const PinnedLeft = styled(Pinned)({
   left: 0,
-  borderRight: '1px solid var(--rowBorderColor)',
+  borderRight: '1px solid var(--color-grid-border)',
 });
 const PinnedRight = styled(Pinned)({
   right: 0,
-  borderLeft: '1px solid var(--rowBorderColor)',
+  borderLeft: '1px solid var(--color-grid-border)',
 });
 
 const Main = styled('div')({
   flexGrow: 1,
-  borderTop: '1px solid var(--rowBorderColor)',
+  borderTop: '1px solid var(--color-grid-border)',
 });
 
 type Props = {

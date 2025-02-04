@@ -249,6 +249,7 @@ const GridRow = forwardRef<HTMLDivElement, GridRowProps>(function GridRow(props,
       ...styleProp,
       maxHeight: rowHeight === 'auto' ? 'none' : rowHeight, // max-height doesn't support "auto"
       minHeight: rowHeight,
+      height: rowHeight === 'auto' ? undefined : undefined,
       '--height': typeof rowHeight === 'number' ? `${rowHeight}px` : rowHeight,
     };
 

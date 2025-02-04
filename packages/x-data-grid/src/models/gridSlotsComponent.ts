@@ -1,10 +1,12 @@
 import * as React from 'react';
 import type { GridSlotProps } from './gridSlotsComponentsProps';
 import type { GridIconSlotsComponent } from './gridIconSlotsComponent';
+import { DropdownMenu } from '@twgrid/x-data-grid-shadcn';
 
 export type { GridSlotProps } from './gridSlotsComponentsProps';
 
 export interface GridBaseSlots {
+  baseDropdownMenu: typeof DropdownMenu;
   /**
    * The custom Badge component used in the grid for both header and cells.
    * @default Badge

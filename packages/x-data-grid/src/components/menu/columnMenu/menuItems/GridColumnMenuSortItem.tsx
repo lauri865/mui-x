@@ -24,9 +24,8 @@ function GridColumnMenuSortItem(props: GridColumnMenuItemProps) {
   const sortingOrder: readonly GridSortDirection[] = colDef.sortingOrder ?? rootProps.sortingOrder;
 
   const onSortMenuItemClick = React.useCallback(
-    (event: React.MouseEvent<HTMLElement>) => {
-      onClick(event);
-      const direction = event.currentTarget.getAttribute('data-value') || null;
+    (event: Event) => {
+      const direction = (event.currentTarget as HTMLElement).getAttribute('data-value') || null;
       apiRef.current.sortColumn(
         colDef!.field,
         (direction === sortDirection ? null : direction) as GridSortDirection,
@@ -49,31 +48,34 @@ function GridColumnMenuSortItem(props: GridColumnMenuItemProps) {
     return typeof label === 'function' ? label(colDef) : label;
   };
 
+  const DropdownMenu = rootProps.slots.baseDropdownMenu;
+
   return (
     <React.Fragment>
-      {sortingOrder.includes('asc') && sortDirection !== 'asc' ? (
-        <rootProps.slots.baseMenuItem
-          onClick={onSortMenuItemClick}
-          data-value="asc"
-          iconStart={<rootProps.slots.columnMenuSortAscendingIcon fontSize="small" />}
-        >
-          {getLabel('columnMenuSortAsc')}
-        </rootProps.slots.baseMenuItem>
-      ) : null}
-      {sortingOrder.includes('desc') && sortDirection !== 'desc' ? (
-        <rootProps.slots.baseMenuItem
-          onClick={onSortMenuItemClick}
-          data-value="desc"
-          iconStart={<rootProps.slots.columnMenuSortDescendingIcon fontSize="small" />}
-        >
-          {getLabel('columnMenuSortDesc')}
-        </rootProps.slots.baseMenuItem>
-      ) : null}
-      {sortingOrder.includes(null) && sortDirection != null ? (
-        <rootProps.slots.baseMenuItem onClick={onSortMenuItemClick} iconStart="">
-          {apiRef.current.getLocaleText('columnMenuUnsort')}
-        </rootProps.slots.baseMenuItem>
-      ) : null}
+      <DropdownMenu.RadioGroup value={sortDirection as string}>
+        {sortingOrder.includes('asc') ? (
+          <DropdownMenu.RadioItem
+            onSelect={onSortMenuItemClick}
+            data-value="asc"
+            value="asc"
+            defaultChecked
+          >
+            {getLabel('columnMenuSortAsc')}
+            <rootProps.slots.columnMenuSortAscendingIcon />
+          </DropdownMenu.RadioItem>
+        ) : null}
+        {sortingOrder.includes('desc') ? (
+          <DropdownMenu.RadioItem onSelect={onSortMenuItemClick} data-value="desc" value="desc">
+            {getLabel('columnMenuSortDesc')}
+            <rootProps.slots.columnMenuSortDescendingIcon />
+          </DropdownMenu.RadioItem>
+        ) : null}
+        {sortingOrder.includes(null) && sortDirection != null ? (
+          <DropdownMenu.RadioItem onSelect={onSortMenuItemClick} value="">
+            {apiRef.current.getLocaleText('columnMenuUnsort')}
+          </DropdownMenu.RadioItem>
+        ) : null}
+      </DropdownMenu.RadioGroup>
     </React.Fragment>
   );
 }

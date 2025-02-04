@@ -1,49 +1,49 @@
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import * as React from 'react';
-import MenuList from '@mui/material/MenuList';
-import { styled } from '@mui/material/styles';
-
-import { forwardRef } from '@mui/x-internals/forwardRef';
 import { isHideMenuKey } from '../../../utils/keyboardUtils';
 import { GridColumnMenuContainerProps } from './GridColumnMenuProps';
-import { gridClasses } from '../../../constants/gridClasses';
+import { useGridRootProps } from '../../../hooks/utils/useGridRootProps';
 
-const StyledMenuList = styled(MenuList)(() => ({
-  minWidth: 248,
-}));
+const GridColumnMenuContainer = (props: GridColumnMenuContainerProps) => {
+  const { hideMenu, colDef, id, labelledby, className, children, open, ...other } = props;
 
-const GridColumnMenuContainer = forwardRef<HTMLUListElement, GridColumnMenuContainerProps>(
-  function GridColumnMenuContainer(props, ref) {
-    const { hideMenu, colDef, id, labelledby, className, children, open, ...other } = props;
+  const rootProps = useGridRootProps();
 
-    const handleListKeyDown = React.useCallback(
-      (event: React.KeyboardEvent) => {
-        if (event.key === 'Tab') {
-          event.preventDefault();
+  const handleListKeyDown = React.useCallback(
+    (event: React.KeyboardEvent) => {
+      if (event.key === 'Tab') {
+        event.preventDefault();
+      }
+      if (isHideMenuKey(event.key)) {
+        hideMenu(event);
+      }
+    },
+    [hideMenu],
+  );
+
+  // @ts-ignore
+  const DropdownMenu = rootProps.slots.baseDropdownMenu;
+
+  return (
+    <DropdownMenu.Root
+      id={id}
+      className={clsx(`twg-menu`)}
+      aria-labelledby={labelledby}
+      open
+      onOpenChange={(open) => {
+        if (!open) {
+          hideMenu({} as any);
         }
-        if (isHideMenuKey(event.key)) {
-          hideMenu(event);
-        }
-      },
-      [hideMenu],
-    );
-
-    return (
-      <StyledMenuList
-        id={id}
-        className={clsx(gridClasses.menuList, className)}
-        aria-labelledby={labelledby}
-        onKeyDown={handleListKeyDown}
-        autoFocus={open}
-        {...other}
-        ref={ref}
-      >
+      }}
+    >
+      <DropdownMenu.Content>
+        {labelledby}
         {children}
-      </StyledMenuList>
-    );
-  },
-);
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  );
+};
 
 GridColumnMenuContainer.propTypes = {
   // ----------------------------- Warning --------------------------------

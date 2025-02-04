@@ -78,7 +78,18 @@ export const useGridColumnMenu = (apiRef: RefObject<GridPrivateApiCommunity>): v
         const fieldIndex = visibleOrderedFields.indexOf(fieldToFocus);
         fieldToFocus = visibleOrderedFields[fieldIndex + 1] || visibleOrderedFields[fieldIndex - 1];
       }
-      apiRef.current.setColumnHeaderFocus(fieldToFocus);
+
+      requestAnimationFrame(() => {
+        const focusEl = document.activeElement as HTMLElement;
+        if (
+          focusEl &&
+          (focusEl.getAttribute('role') === 'columnheader' ||
+            focusEl.getAttribute('role') === 'gridcell')
+        ) {
+          return;
+        }
+        apiRef.current.setColumnHeaderFocus(fieldToFocus);
+      });
     }
 
     const newState = { open: false, field: undefined };

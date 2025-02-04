@@ -20,7 +20,6 @@ import {
   gridColumnGroupsHeaderMaxDepthSelector,
   gridColumnGroupsHeaderStructureSelector,
 } from '../hooks/features/columnGrouping/gridColumnGroupsSelector';
-import { gridColumnMenuSelector } from '../hooks/features/columnMenu/columnMenuSelector';
 
 function GridHeaders() {
   const apiRef = useGridPrivateApiContext();
@@ -45,7 +44,6 @@ function GridHeaders() {
 
   const headerGroupingMaxDepth = useGridSelector(apiRef, gridColumnGroupsHeaderMaxDepthSelector);
 
-  const columnMenuState = useGridSelector(apiRef, gridColumnMenuSelector);
   const columnVisibility = useGridSelector(apiRef, gridColumnVisibilityModelSelector);
   const columnGroupsHeaderStructure = useGridSelector(
     apiRef,
@@ -71,7 +69,7 @@ function GridHeaders() {
       columnHeaderFocus={columnHeaderFocus}
       columnGroupHeaderFocus={columnGroupHeaderFocus}
       headerGroupingMaxDepth={headerGroupingMaxDepth}
-      columnMenuState={columnMenuState}
+      columnMenuState={{ open: false, field: '' }}
       columnVisibility={columnVisibility}
       columnGroupsHeaderStructure={columnGroupsHeaderStructure}
       hasOtherElementInTabSequence={hasOtherElementInTabSequence}

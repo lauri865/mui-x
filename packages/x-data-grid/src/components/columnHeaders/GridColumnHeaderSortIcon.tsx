@@ -55,19 +55,31 @@ function GridColumnHeaderSortIconRaw(props: GridColumnHeaderSortIconProps) {
   const apiRef = useGridApiContext();
   const rootProps = useGridRootProps();
 
-  const iconElement = getIcon(rootProps.slots, direction, '', sortingOrder);
+  const iconElement = getIcon(rootProps.slots, direction, '!size-4', sortingOrder);
   if (!iconElement) {
     return null;
   }
 
+  const currentIndex = sortingOrder.indexOf(direction);
+  const nextDirection = sortingOrder[(currentIndex + 1) % sortingOrder.length];
+  const title =
+    nextDirection === 'asc'
+      ? apiRef.current.getLocaleText('columnMenuSortAsc')
+      : nextDirection === 'desc'
+        ? apiRef.current.getLocaleText('columnMenuSortDesc')
+        : apiRef.current.getLocaleText('columnMenuUnsort');
+
   const iconButton = (
-    <rootProps.slots.baseTooltip title={apiRef.current.getLocaleText('columnHeaderSortIconLabel')}>
+    <rootProps.slots.baseTooltip title={title as string}>
       <rootProps.slots.baseIconButton
         tabIndex={-1}
         aria-label={apiRef.current.getLocaleText('columnHeaderSortIconLabel')}
         size="icon"
         disabled={disabled}
-        className={clsx('hidden group-hover/cell:flex', index != null && 'flex')}
+        className={clsx(
+          'hidden group-hover/cell:flex data-sort:flex data-sort:bg-highlight data-sort:text-highlight-text data-sort:border-highlight-border border border-transparent',
+        )}
+        data-sort={direction || undefined}
         {...rootProps.slotProps?.baseIconButton}
         {...other}
       >

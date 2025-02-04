@@ -1,71 +1,57 @@
 import * as React from 'react';
-import composeClasses from '@mui/utils/composeClasses';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { GridStateColDef } from '../../models/colDef/gridColDef';
-import { getDataGridUtilityClass } from '../../constants/gridClasses';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-import { DataGridProcessedProps } from '../../models/props/DataGridProps';
+import { forwardRef } from '@mui/x-internals/forwardRef';
 
 export interface ColumnHeaderMenuIconProps {
   colDef: GridStateColDef;
   columnMenuId: string;
   columnMenuButtonId: string;
   open: boolean;
-  iconButtonRef: React.RefObject<HTMLButtonElement | null>;
 }
 
-type OwnerState = ColumnHeaderMenuIconProps & {
-  classes?: DataGridProcessedProps['classes'];
-};
+export const ColumnHeaderMenuIcon = React.memo(
+  forwardRef<HTMLButtonElement, ColumnHeaderMenuIconProps>((props, ref) => {
+    const { open, columnMenuId, columnMenuButtonId } = props;
+    const apiRef = useGridApiContext();
+    const rootProps = useGridRootProps();
 
-const useUtilityClasses = (ownerState: OwnerState) => {
-  const { classes, open } = ownerState;
-
-  const slots = {
-    root: ['menuIcon', open && 'menuOpen'],
-    button: ['menuIconButton'],
-  };
-
-  return composeClasses(slots, getDataGridUtilityClass, classes);
-};
-
-export const ColumnHeaderMenuIcon = React.memo((props: ColumnHeaderMenuIconProps) => {
-  const { colDef, open, columnMenuId, columnMenuButtonId, iconButtonRef } = props;
-  const apiRef = useGridApiContext();
-  const rootProps = useGridRootProps();
-  const ownerState = { ...props, classes: rootProps.classes };
-  const classes = useUtilityClasses(ownerState);
-
-  const handleMenuIconClick = React.useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      event.preventDefault();
-      event.stopPropagation();
-      apiRef.current.toggleColumnMenu(colDef.field);
-    },
-    [apiRef, colDef.field],
-  );
-
-  return (
-    <rootProps.slots.baseTooltip
-      title={apiRef.current.getLocaleText('columnMenuLabel')}
-      delay={1000}
-      {...rootProps.slotProps?.baseTooltip}
-    >
-      <rootProps.slots.baseIconButton
-        ref={iconButtonRef}
-        tabIndex={-1}
-        className={classes.button}
-        aria-label={apiRef.current.getLocaleText('columnMenuLabel')}
-        size="icon"
-        onClick={handleMenuIconClick}
-        aria-haspopup="menu"
-        aria-expanded={open}
-        aria-controls={open ? columnMenuId : undefined}
-        id={columnMenuButtonId}
-        {...rootProps.slotProps?.baseIconButton}
+    return (
+      <rootProps.slots.baseTooltip
+        title={open ? null : apiRef.current.getLocaleText('columnMenuLabel')}
+        delay={500}
+        {...rootProps.slotProps?.baseTooltip}
       >
-        <rootProps.slots.columnMenuIcon fontSize="inherit" />
-      </rootProps.slots.baseIconButton>
-    </rootProps.slots.baseTooltip>
-  );
-});
+        <rootProps.slots.baseIconButton
+          ref={ref}
+          tabIndex={-1}
+          aria-label={apiRef.current.getLocaleText('columnMenuLabel')}
+          size="icon"
+          id={columnMenuButtonId}
+          {...rootProps.slotProps?.baseIconButton}
+          onPointerDown={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+          }}
+          onFocus={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+          }}
+          onPointerDown={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            const isOpen = apiRef.current.state.columnMenu.open;
+            if (!isOpen || apiRef.current.state.columnMenu.field !== props.colDef.field) {
+              apiRef.current.showColumnMenu(props.colDef.field);
+            } else {
+              apiRef.current.hideColumnMenu();
+            }
+          }}
+        >
+          <rootProps.slots.columnMenuIcon fontSize="inherit" />
+        </rootProps.slots.baseIconButton>
+      </rootProps.slots.baseTooltip>
+    );
+  }),
+);

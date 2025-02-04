@@ -614,8 +614,8 @@ export const useGridColumnResize = (
     setTimeout(() => {
       doc.removeEventListener('click', preventClick, true);
     }, 100);
-    if (refs.columnHeaderElement) {
-      refs.columnHeaderElement!.style.pointerEvents = 'unset';
+    if (apiRef.current.columnHeadersContainerRef?.current) {
+      apiRef.current.columnHeadersContainerRef.current.style.pointerEvents = '';
     }
   }, [apiRef, refs, handleResizeMouseMove, handleResizeMouseUp, handleTouchMove, handleTouchEnd]);
 
@@ -625,7 +625,9 @@ export const useGridColumnResize = (
         ...state,
         columnResize: { ...state.columnResize, resizingColumnField: field },
       }));
-      apiRef.current.forceUpdate();
+      if (apiRef.current.columnHeadersContainerRef?.current) {
+        apiRef.current.columnHeadersContainerRef.current.style.pointerEvents = 'none';
+      }
     },
     [apiRef],
   );

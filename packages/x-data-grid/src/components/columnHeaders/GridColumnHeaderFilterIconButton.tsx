@@ -107,7 +107,7 @@ function GridColumnHeaderFilterIconButton(props: ColumnHeaderFilterIconButtonPro
           counter,
         ) as React.ReactElement<any>
       }
-      delay={1000}
+      delay={500}
       {...rootProps.slotProps?.baseTooltip}
     >
       <>

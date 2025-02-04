@@ -68,12 +68,13 @@ function GridColumnHeaderSeparatorRaw(props: GridColumnHeaderSeparatorProps) {
     <div
       className={clsx(
         classes.root,
-        'group/resizer text-grid-border hover:text-white active:text-white active:max-h-full h-full absolute cursor-col-resize px-1 z-1 group-focus-within/cell:text-highlight-border group-data-resizable/cell:pointer-events-auto pointer-events-none [anchor-name:--resizer]',
+        'group/resizer text-grid-border hover:text-white active:text-white active:max-h-full h-full absolute cursor-col-resize px-1 z-1 group-focus-within/cell:text-highlight-border active:[anchor-name:--resizer]',
         side === GridColumnHeaderSeparatorSides.Left &&
           '-left-[5px] group-focus-within/cell:-left-1',
         side === GridColumnHeaderSeparatorSides.Right &&
-          '-right-[5px] group-focus-within/cell:-right-1 group-has-[&+div:focus-within]:-right-1',
+          '-right-[5px] group-focus-within/cell:-right-1 group-data-sibling-focused/cell:-right-1',
         !rootProps.showColumnVerticalBorder && 'max-h-[20px]',
+        !resizable && 'pointer-events-none',
       )}
       {...other}
       onClick={stopClick}

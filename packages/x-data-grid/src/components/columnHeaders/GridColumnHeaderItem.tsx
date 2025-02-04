@@ -9,7 +9,6 @@ import { GridSortDirection } from '../../models/gridSortModel';
 import { useGridPrivateApiContext } from '../../hooks/utils/useGridPrivateApiContext';
 import { GridColumnHeaderSeparatorProps } from './GridColumnHeaderSeparator';
 import { ColumnHeaderMenuIcon } from './ColumnHeaderMenuIcon';
-import { GridColumnHeaderMenu } from '../menu/columnMenu/GridColumnHeaderMenu';
 import { gridClasses, getDataGridUtilityClass } from '../../constants/gridClasses';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { DataGridProcessedProps } from '../../models/props/DataGridProps';
@@ -19,7 +18,7 @@ import { isEventTargetInPortal } from '../../utils/domUtils';
 import { PinnedColumnPosition } from '../../internals/constants';
 import { attachPinnedStyle } from '../../internals/utils';
 import { useThemedComponent } from '@mui/x-data-grid/context/GridThemeContext';
-import { on } from 'events';
+import { gridColumnMenuSelector, useGridSelector } from '@mui/x-data-grid-pro';
 
 interface GridColumnHeaderItemProps {
   colIndex: number;
@@ -102,7 +101,7 @@ const useUtilityClasses = (ownerState: OwnerState) => {
 function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
   const {
     colDef,
-    columnMenuOpen,
+    columnMenuOpen: columnMenuOpenProp,
     colIndex,
     headerHeight,
     isResizing,
@@ -118,6 +117,7 @@ function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
     showRightBorder,
     pinnedPosition,
     pinnedOffset,
+    isSiblingFocused,
   } = props;
   const apiRef = useGridPrivateApiContext();
   const rootProps = useGridRootProps();
@@ -125,8 +125,11 @@ function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
   const headerCellRef = React.useRef<HTMLDivElement>(null);
   const columnMenuId = useId();
   const columnMenuButtonId = useId();
-  const iconButtonRef = React.useRef<HTMLButtonElement>(null);
-  const [showColumnMenuIcon, setShowColumnMenuIcon] = React.useState(columnMenuOpen);
+
+  const columnMenuOpen = useGridSelector(apiRef, () => {
+    const state = gridColumnMenuSelector(apiRef.current.state);
+    return state.open && state.field === colDef.field;
+  });
 
   const isDraggable = React.useMemo(
     () => !rootProps.disableColumnReorder && !disableReorder && !colDef.disableReorder,
@@ -173,19 +176,6 @@ function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
     [publish],
   );
 
-  const draggableEventHandlers = React.useMemo(
-    () =>
-      isDraggable
-        ? {
-            onDragStart: publish('columnHeaderDragStart'),
-            onDragEnter: publish('columnHeaderDragEnter'),
-            onDragOver: publish('columnHeaderDragOver'),
-            onDragEnd: publish('columnHeaderDragEnd'),
-          }
-        : {},
-    [isDraggable, publish],
-  );
-
   const columnHeaderSeparatorProps = React.useMemo(
     () => ({
       onMouseDown: publish('columnSeparatorMouseDown'),
@@ -194,27 +184,7 @@ function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
     [publish],
   );
 
-  React.useEffect(() => {
-    if (!showColumnMenuIcon) {
-      setShowColumnMenuIcon(columnMenuOpen);
-    }
-  }, [showColumnMenuIcon, columnMenuOpen]);
-
-  const handleExited = React.useCallback(() => {
-    setShowColumnMenuIcon(false);
-  }, []);
-
-  const columnMenuIconButton = !rootProps.disableColumnMenu && !colDef.disableColumnMenu && (
-    <ColumnHeaderMenuIcon
-      colDef={colDef}
-      columnMenuId={columnMenuId!}
-      columnMenuButtonId={columnMenuButtonId!}
-      open={showColumnMenuIcon}
-      iconButtonRef={iconButtonRef}
-    />
-  );
-
-  const columnMenu = (
+  /* const columnMenu = (
     <GridColumnHeaderMenu
       columnMenuId={columnMenuId!}
       columnMenuButtonId={columnMenuButtonId!}
@@ -225,6 +195,22 @@ function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
       contentComponentProps={rootProps.slotProps?.columnMenu}
       onExited={handleExited}
     />
+  ); */
+
+  const columnMenuIconButton = !rootProps.disableColumnMenu && !colDef.disableColumnMenu && (
+    <rootProps.slots.columnMenu
+      colDef={colDef}
+      hideMenu={apiRef.current.hideColumnMenu}
+      showMenu={() => apiRef.current.showColumnMenu(colDef.field)}
+      open={columnMenuOpen}
+    >
+      <ColumnHeaderMenuIcon
+        colDef={colDef}
+        columnMenuId={columnMenuId!}
+        columnMenuButtonId={columnMenuButtonId!}
+        open={columnMenuOpen}
+      />
+    </rootProps.slots.columnMenu>
   );
 
   const sortingOrder: readonly GridSortDirection[] = colDef.sortingOrder ?? rootProps.sortingOrder;
@@ -288,6 +274,7 @@ function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
         draggableContainer: classes.variants.draggableContainer,
         titleContainer: classes.variants.titleContainer,
         titleContainerContent: classes.variants.titleContainerContent,
+        title: classes.variants.title,
       }}
       columnMenuOpen={columnMenuOpen}
       colIndex={colIndex}
@@ -311,9 +298,10 @@ function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
       data-first={colIndex === 0 || undefined}
       data-last={isLast || undefined}
       data-resizable={colDef.resizable || undefined}
+      data-draggable={isDraggable || undefined}
       data-dragging={props.isDragging || undefined}
       data-sorted={Boolean(props.sortDirection) || undefined}
-      columnMenu={columnMenu}
+      data-sibling-focused={isSiblingFocused || undefined}
       columnHeaderSeparatorProps={columnHeaderSeparatorProps}
       style={style}
       {...mouseEventsHandlers}

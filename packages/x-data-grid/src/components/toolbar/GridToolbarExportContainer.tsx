@@ -59,7 +59,7 @@ const GridToolbarExportContainer = forwardRef<
     <React.Fragment>
       <rootProps.slots.baseTooltip
         title={apiRef.current.getLocaleText('toolbarExportLabel')}
-        delay={1000}
+        delay={500}
         {...rootProps.slotProps?.baseTooltip}
         {...tooltipProps}
       >

@@ -3,11 +3,13 @@ import { GridColDef } from '../../../models/colDef/gridColDef';
 import { GridColumnMenuRootProps } from '../../../hooks/features/columnMenu';
 
 export interface GridColumnMenuContainerProps extends React.HTMLAttributes<HTMLUListElement> {
-  hideMenu: (event: React.SyntheticEvent) => void;
+  showMenu: () => void;
+  hideMenu: () => void;
   colDef: GridColDef;
   open: boolean;
   id?: string;
   labelledby?: string;
+  children: React.ReactNode;
 }
 
 export interface GridGenericColumnMenuProps
@@ -15,4 +17,4 @@ export interface GridGenericColumnMenuProps
     GridColumnMenuContainerProps {}
 
 export interface GridColumnMenuProps
-  extends Omit<GridGenericColumnMenuProps, 'defaultSlots' | 'defaultSlotProps'> {}
+  extends Omit<GridColumnMenuContainerProps, 'defaultSlots' | 'defaultSlotProps'> {}

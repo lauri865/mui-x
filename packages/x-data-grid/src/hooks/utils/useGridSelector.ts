@@ -50,7 +50,9 @@ export const argsEqual = (prev: any, curr: any) => {
   return fn(prev, curr);
 };
 
-const createRefs = () => ({ state: null, equals: null, selector: null, args: undefined }) as any;
+const noop = () => {};
+const createRefs = () =>
+  ({ state: null, equals: null, selector: null, args: null, subscription: noop }) as any;
 
 const EMPTY = [] as unknown[];
 
@@ -59,7 +61,7 @@ type Refs<T> = {
   equals: <U = T>(a: U, b: U) => boolean;
   selector: Selector<any, any, T>;
   args: any;
-  subscription: undefined | (() => void);
+  subscription: null | (() => void);
 };
 
 const emptyGetSnapshot = () => null;

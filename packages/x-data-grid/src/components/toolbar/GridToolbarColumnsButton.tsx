@@ -57,7 +57,7 @@ const GridToolbarColumnsButton = forwardRef<HTMLButtonElement, GridToolbarColumn
     return (
       <rootProps.slots.baseTooltip
         title={apiRef.current.getLocaleText('toolbarColumnsLabel')}
-        delay={1000}
+        delay={500}
         {...rootProps.slotProps?.baseTooltip}
         {...tooltipProps}
       >

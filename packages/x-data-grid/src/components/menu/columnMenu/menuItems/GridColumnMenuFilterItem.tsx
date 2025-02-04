@@ -10,8 +10,7 @@ function GridColumnMenuFilterItem(props: GridColumnMenuItemProps) {
   const rootProps = useGridRootProps();
 
   const showFilter = React.useCallback(
-    (event: React.MouseEvent<HTMLElement>) => {
-      onClick(event);
+    (event: Event) => {
       apiRef.current.showFilterPanel(colDef.field);
     },
     [apiRef, colDef.field, onClick],
@@ -21,13 +20,13 @@ function GridColumnMenuFilterItem(props: GridColumnMenuItemProps) {
     return null;
   }
 
+  const DropdownMenu = rootProps.slots.baseDropdownMenu;
+
   return (
-    <rootProps.slots.baseMenuItem
-      onClick={showFilter}
-      iconStart={<rootProps.slots.columnMenuFilterIcon fontSize="small" />}
-    >
+    <DropdownMenu.Item onSelect={showFilter}>
+      <rootProps.slots.columnMenuFilterIcon />
       {apiRef.current.getLocaleText('columnMenuFilter')}
-    </rootProps.slots.baseMenuItem>
+    </DropdownMenu.Item>
   );
 }
 

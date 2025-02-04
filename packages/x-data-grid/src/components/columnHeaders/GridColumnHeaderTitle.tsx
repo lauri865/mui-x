@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import { isOverflown } from '../../utils/domUtils';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-import { useThemedComponent } from '@mui/x-data-grid/context/GridThemeContext';
+import { useThemedComponent } from '../../context/GridThemeContext';
 
 const ColumnHeaderInnerTitle = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   function ColumnHeaderInnerTitle(props, ref) {

@@ -329,6 +329,7 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
     const cellStyle = attachPinnedStyle(
       {
         '--width': `${width}px`,
+        width: `var(--width)`,
         ...styleProp,
       } as React.CSSProperties,
       isRtl,

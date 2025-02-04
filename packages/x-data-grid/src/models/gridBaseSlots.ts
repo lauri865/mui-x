@@ -18,6 +18,7 @@ export type ButtonProps = {
   id?: string;
   onClick?: React.MouseEventHandler<HTMLElement>;
   onKeyDown?: React.KeyboardEventHandler<HTMLElement>;
+  onPointerDown?: React.PointerEventHandler<HTMLElement>;
   role?: string;
   size?: 'sm' | 'md' | 'lg' | 'icon';
   startIcon?: React.ReactNode;
@@ -101,4 +102,5 @@ export type TooltipProps = {
   delay?: number;
   title: React.ReactNode;
   side?: 'top' | 'bottom' | 'left' | 'right';
+  sideOffset?: number;
 };

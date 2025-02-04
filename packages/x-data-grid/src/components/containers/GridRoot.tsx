@@ -73,6 +73,10 @@ const GridRoot = forwardRef<HTMLDivElement, GridRootProps>(function GridRoot(pro
 
   const isSSR = useIsSSR();
 
+  if (isSSR) {
+    return null;
+  }
+
   return (
     <div className={clsx(classes.root, className)} ref={handleRef}>
       <GridHeader />

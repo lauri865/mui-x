@@ -16,7 +16,7 @@ function GridColumnMenuHideItem(props: GridColumnMenuItemProps) {
   const disabled = columnsWithMenu.length === 1;
 
   const toggleColumn = React.useCallback(
-    (event: React.MouseEvent<HTMLElement>) => {
+    (event: Event) => {
       /**
        * Disabled `MenuItem` would trigger `click` event
        * after imperative `.click()` call on HTML element.
@@ -26,7 +26,6 @@ function GridColumnMenuHideItem(props: GridColumnMenuItemProps) {
         return;
       }
       apiRef.current.setColumnVisibility(colDef.field, false);
-      onClick(event);
     },
     [apiRef, colDef.field, onClick, disabled],
   );
@@ -39,14 +38,13 @@ function GridColumnMenuHideItem(props: GridColumnMenuItemProps) {
     return null;
   }
 
+  const DropdownMenu = rootProps.slots.baseDropdownMenu;
+
   return (
-    <rootProps.slots.baseMenuItem
-      onClick={toggleColumn}
-      disabled={disabled}
-      iconStart={<rootProps.slots.columnMenuHideIcon fontSize="small" />}
-    >
+    <DropdownMenu.Item onSelect={toggleColumn} disabled={disabled}>
+      <rootProps.slots.columnMenuHideIcon />
       {apiRef.current.getLocaleText('columnMenuHideColumn')}
-    </rootProps.slots.baseMenuItem>
+    </DropdownMenu.Item>
   );
 }
 

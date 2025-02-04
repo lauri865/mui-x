@@ -107,7 +107,7 @@ const GridToolbarDensitySelector = forwardRef<HTMLButtonElement, GridToolbarDens
       <React.Fragment>
         <rootProps.slots.baseTooltip
           title={apiRef.current.getLocaleText('toolbarDensityLabel')}
-          delay={1000}
+          delay={500}
           {...rootProps.slotProps?.baseTooltip}
           {...tooltipProps}
         >

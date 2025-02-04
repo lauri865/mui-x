@@ -32,11 +32,10 @@ const className = {
   columnHeaders: {
     base: 'flex flex-col rounded-l-grid rounded-r-grid w-[var(--DataGrid-rowWidth)] bg-grid-header-bg select-none',
   },
-
   columnHeaderCell: {
     base: [
-      'group/cell relative touch-none px-2.5 box-border tap-highlight-none flex items-center cursor-pointer border-b border-b-grid-border font-medium text-[13px] hover:z-1 active:[&+&]:pointer-events-none [&:focus-within+&]:hover:z-0',
-      'data-[align=center]:justify-center data-[align=right]:flex-row-reverse',
+      'group/cell relative touch-none pl-cell pr-0.5 box-border tap-highlight-none flex items-center cursor-pointer border-b border-b-grid-border font-medium text-[13px] hover:z-1 active:[&+&]:pointer-events-none [&:focus-within+div]:hover:z-0 justify-end',
+      'data-[align=center]:justify-center data-[align=right]:flex-row-reverse data-[align=center]:pr-1.5 data-[align=right]:pr-cell data-[align=right]:pl-0.5',
       'hover:bg-grid-hover-bg transition-colors active:bg-grid-hover-bg',
       'data-first:rounded-tl-[calc(var(--radius-grid)-1px)] group-data-fullwidth:data-last:rounded-tr-[calc(var(--radius-grid)-1px)]',
       'data-last:overflow-hidden',
@@ -61,14 +60,16 @@ const className = {
 
     draggableContainer: 'flex w-full h-full items-center',
     titleContainer:
-      'flex h-full items-center gap-0.5 min-w-0 flex-1 whitespace-nowrap overflow-hidden group-data-[align=center]/cell:justify-center',
-    titleContainerContent: 'flex h-full items-center overflow-hidden',
-    title: 'h-full truncate leading-[calc(var(--height)-5px)]',
+      'flex h-full items-center min-w-0 flex-1 whitespace-nowrap overflow-hidden group-data-[align=center]/cell:justify-center group-data-[align=right]/cell:justify-end',
+    titleContainerContent:
+      'flex h-full items-center overflow-hidden pr-1 group-data-[align=right]/cell:pl-1',
+    title: 'truncate',
   },
 
   cell: {
     base: [
-      'flex-none h-[var(--height)] w-[var(--width)] leading-[calc(var(--height)-1px)] box-border border-t border-grid-border overflow-hidden whitespace-nowrap text-ellipsis px-cell',
+      'h-[var(--height)] leading-[calc(var(--height)-1px)]',
+      'flex-none box-border border-t border-grid-border px-cell truncate',
       'data-[align=center]:justify-center',
       'data-empty:flex-1 data-empty:p-0 data-empty:h-[unset]',
       String.raw`data-[field=\_\_check\_\_]:p-0 data-[field=\_\_check\_\_]:flex data-[field=\_\_check\_\_]:justify-center data-[field=\_\_check\_\_]:items-center`,
@@ -103,7 +104,6 @@ const className = {
       'select-none',
       'w-[var(--DataGrid-rowWidth)]',
       'break-inside-avoid',
-      '[--rowBorderColor:var(--color-grid-border)]',
       // Hover states
       'hover:bg-grid-hover-bg',
       // Reset hover on touch devices
@@ -113,7 +113,7 @@ const className = {
       // last visible
       'data-bottom-border:border-b data-bottom-border:border-b-grid-border',
       // selected
-      'data-selected:bg-grid-selected-bg data-selected:hover:bg-grid-selected-bg data-selected:hover:[@media(hover:none)]:bg-grid-selected-bg data-selected:[--rowBorderColor:var(--color-grid-selected-border)] data-selected:[--color-grid-border:var(--color-grid-selected-border)] data-selected:[&+.twg-row>.twg-cell]:border-t-[var(--color-grid-selected-border)]',
+      'data-selected:bg-grid-selected-bg data-selected:hover:bg-grid-selected-bg data-selected:hover:[@media(hover:none)]:bg-grid-selected-bg data-selected:[--color-grid-border:var(--color-grid-selected-border)] data-selected:[&+.twg-row>.twg-cell]:border-t-[var(--color-grid-selected-border)]',
       'data-selectable:active:bg-grid-selected-bg',
       // editing
       'data-editing:bg-grid-editing-bg',

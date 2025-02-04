@@ -82,15 +82,13 @@ function GridScrollAreaWrapper(props: ScrollAreaProps) {
   const apiRef = useGridApiContext();
   const [dragging, setDragging] = React.useState<boolean>(false);
 
-  const handleColumnHeaderDragStart = useEventCallback(() => {
+  const handleColumnHeaderDragStart = () => {
     setDragging(true);
-  });
+  };
 
-  const handleColumnHeaderDragEnd = useEventCallback<GridEventListener<'columnHeaderDragEnd'>>(
-    () => {
-      setDragging(false);
-    },
-  );
+  const handleColumnHeaderDragEnd = () => {
+    setDragging(false);
+  };
 
   useGridApiEventHandler(apiRef, 'columnHeaderDragStart', handleColumnHeaderDragStart);
   useGridApiEventHandler(apiRef, 'columnHeaderDragEnd', handleColumnHeaderDragEnd);

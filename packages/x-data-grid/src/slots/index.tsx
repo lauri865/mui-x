@@ -6,7 +6,6 @@ import MUIDivider from '@mui/material/Divider';
 import MUILinearProgress from '@mui/material/LinearProgress';
 import MUIListItemIcon from '@mui/material/ListItemIcon';
 import MUIListItemText from '@mui/material/ListItemText';
-import MUIMenuList from '@mui/material/MenuList';
 import MUIMenuItem from '@mui/material/MenuItem';
 import MUITextField from '@mui/material/TextField';
 import MUIFormControl from '@mui/material/FormControl';
@@ -47,7 +46,7 @@ import type { GridIconSlotsComponent } from '../models';
 import type { GridBaseSlots } from '../models/gridSlotsComponent';
 import type { GridSlotProps } from '../models/gridSlotsComponentsProps';
 import MUISelectOption from './components/MUISelectOption';
-import { Button, Checkbox, Tooltip } from '@twgrid/x-data-grid-shadcn';
+import { Button, Checkbox, DropdownMenu, Tooltip } from '@twgrid/x-data-grid-shadcn';
 
 const iconSlots: GridIconSlotsComponent = {
   booleanCellTrueIcon: GridCheckIcon,
@@ -94,7 +93,7 @@ const baseSlots: GridBaseSlots = {
   baseCircularProgress: MUICircularProgress,
   baseDivider: MUIDivider,
   baseLinearProgress: MUILinearProgress,
-  baseMenuList: MUIMenuList,
+  baseDropdownMenu: DropdownMenu,
   baseMenuItem: BaseMenuItem,
   baseTextField: BaseTextField,
   baseFormControl: MUIFormControl,

@@ -5,18 +5,18 @@ import { forwardRef } from '@mui/x-internals/forwardRef';
 import { GridStateColDef } from '../../models/colDef/gridColDef';
 import { GridSortDirection } from '../../models/gridSortModel';
 import { useGridPrivateApiContext } from '../../hooks/utils/useGridPrivateApiContext';
-import { GridColumnHeaderTitle } from './GridColumnHeaderTitle';
 import {
   GridColumnHeaderSeparator,
   GridColumnHeaderSeparatorProps,
 } from './GridColumnHeaderSeparator';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { GridColumnGroup } from '../../models/gridColumnGrouping';
+import { isOverflown } from '../../utils/domUtils';
 
 interface GridGenericColumnHeaderItemProps
   extends Pick<GridStateColDef, 'headerClassName' | 'description' | 'resizable'> {
   classes: Record<
-    'root' | 'draggableContainer' | 'titleContainer' | 'titleContainerContent',
+    'root' | 'draggableContainer' | 'titleContainer' | 'titleContainerContent' | 'title',
     string
   >;
   colIndex: number;
@@ -71,6 +71,20 @@ const GridGenericColumnHeaderItem = forwardRef<HTMLDivElement, GridGenericColumn
     const apiRef = useGridPrivateApiContext();
     const rootProps = useGridRootProps();
     const headerCellRef = React.useRef<HTMLDivElement>(null);
+    const labelRef = React.useRef<HTMLDivElement>(null);
+
+    const [tooltip, setTooltip] = React.useState('');
+
+    const handleMouseOver = React.useCallback<React.MouseEventHandler<HTMLDivElement>>(() => {
+      if (!description && labelRef?.current) {
+        const isOver = isOverflown(labelRef.current);
+        if (isOver) {
+          setTooltip(label);
+        } else {
+          setTooltip('');
+        }
+      }
+    }, [description, label]);
 
     const handleRef = useForkRef(headerCellRef, ref);
 
@@ -93,41 +107,47 @@ const GridGenericColumnHeaderItem = forwardRef<HTMLDivElement, GridGenericColumn
     }, [apiRef, hasFocus]);
 
     return (
-      <div
-        className={clsx(classes.root, headerClassName)}
-        style={{
-          ...style,
-          height,
-          width,
-        }}
-        role="columnheader"
-        tabIndex={tabIndex}
-        aria-colindex={colIndex + 1}
-        aria-sort={ariaSort}
-        {...other}
-        ref={handleRef}
-      >
-        <div className={classes.titleContainer} role="presentation">
-          <div className={classes.titleContainerContent}>
+      <rootProps.slots.baseTooltip title={tooltip} sideOffset={4}>
+        <div
+          className={clsx(classes.root, headerClassName)}
+          style={{
+            ...style,
+            height,
+            width,
+          }}
+          role="columnheader"
+          tabIndex={tabIndex}
+          aria-colindex={colIndex + 1}
+          aria-sort={ariaSort}
+          {...other}
+          ref={handleRef}
+        >
+          <div className={classes.titleContainer} role="presentation">
             {headerComponent !== undefined ? (
               headerComponent
             ) : (
-              <GridColumnHeaderTitle label={label} description={description} columnWidth={width} />
+              <div className={clsx(classes.title)} ref={labelRef} onPointerOver={handleMouseOver}>
+                {label}
+              </div>
             )}
           </div>
-        </div>
-        {columnTitleIconButtons}
-        {columnMenuIconButton}
-        {columnMenu}
 
-        <GridColumnHeaderSeparator
-          resizable={!rootProps.disableColumnResize && !!resizable}
-          resizing={isResizing}
-          height={height}
-          side={separatorSide}
-          {...columnHeaderSeparatorProps}
-        />
-      </div>
+          {(columnTitleIconButtons || columnMenuIconButton || columnMenu) && (
+            <div className="toolbar flex gap-0.5 justify-end group-data-[align=right]/cell:flex-row-reverse px-1 empty:hidden">
+              {columnTitleIconButtons}
+              {columnMenuIconButton}
+            </div>
+          )}
+
+          <GridColumnHeaderSeparator
+            resizable={!rootProps.disableColumnResize && !!resizable}
+            resizing={isResizing}
+            height={height}
+            side={separatorSide}
+            {...columnHeaderSeparatorProps}
+          />
+        </div>
+      </rootProps.slots.baseTooltip>
     );
   },
 );
