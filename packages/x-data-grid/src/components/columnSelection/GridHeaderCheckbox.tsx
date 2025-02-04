@@ -15,6 +15,7 @@ import type { GridHeaderSelectionCheckboxParams } from '../../models/params/grid
 import { gridExpandedSortedRowIdsSelector } from '../../hooks/features/filter/gridFilterSelector';
 import { gridPaginatedVisibleSortedGridRowIdsSelector } from '../../hooks/features/pagination/gridPaginationSelector';
 import type { GridRowId } from '../../models/gridRows';
+import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
 
 type OwnerState = { classes: DataGridProcessedProps['classes'] };
 
@@ -97,16 +98,16 @@ const GridHeaderCheckbox = forwardRef<HTMLButtonElement, GridColumnHeaderParams>
 
     const isChecked = currentSelectionSize > 0;
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (checked: boolean) => {
       const params: GridHeaderSelectionCheckboxParams = {
-        value: event.target.checked,
+        value: checked && !isIndeterminate,
       };
 
       apiRef.current.publishEvent('headerSelectionCheckboxChange', params);
     };
 
     const tabIndex = tabIndexState !== null && tabIndexState.field === props.field ? 0 : -1;
-    React.useLayoutEffect(() => {
+    useEnhancedEffect(() => {
       const element = apiRef.current.getColumnHeaderElement(props.field);
       if (tabIndex === 0 && element) {
         element!.tabIndex = -1;
@@ -141,11 +142,11 @@ const GridHeaderCheckbox = forwardRef<HTMLButtonElement, GridColumnHeaderParams>
 
     return (
       <rootProps.slots.baseCheckbox
-        indeterminate={isIndeterminate}
-        checked={isChecked && !isIndeterminate}
-        onChange={handleChange}
+        checked={isIndeterminate ? 'indeterminate' : isChecked}
+        onCheckedChange={handleChange}
         className={classes.root}
-        inputProps={{ 'aria-label': label, name: 'select_all_rows' }}
+        aria-label={label}
+        name={'select_all_rows'}
         tabIndex={tabIndex}
         onKeyDown={handleKeyDown}
         disabled={!isMultipleRowSelectionEnabled(rootProps)}

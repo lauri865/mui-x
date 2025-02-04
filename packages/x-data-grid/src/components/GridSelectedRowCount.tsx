@@ -1,70 +1,45 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import composeClasses from '@mui/utils/composeClasses';
-import { styled, SxProps, Theme } from '@mui/system';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import { useGridApiContext } from '../hooks/utils/useGridApiContext';
-import { getDataGridUtilityClass } from '../constants/gridClasses';
+import { useThemedComponent } from '../context/GridThemeContext';
 import { useGridRootProps } from '../hooks/utils/useGridRootProps';
-import { DataGridProcessedProps } from '../models/props/DataGridProps';
 
 interface SelectedRowCountProps {
   selectedRowCount: number;
 }
 
-type GridSelectedRowCountProps = React.HTMLAttributes<HTMLDivElement> &
-  SelectedRowCountProps & {
-    sx?: SxProps<Theme>;
-  };
-
-type OwnerState = DataGridProcessedProps;
-
-const useUtilityClasses = (ownerState: OwnerState) => {
-  const { classes } = ownerState;
-
-  const slots = {
-    root: ['selectedRowCount'],
-  };
-
-  return composeClasses(slots, getDataGridUtilityClass, classes);
-};
-
-const GridSelectedRowCountRoot = styled('div', {
-  name: 'MuiDataGrid',
-  slot: 'SelectedRowCount',
-  overridesResolver: (props, styles) => styles.selectedRowCount,
-})<{ ownerState: OwnerState }>(({ theme }) => ({
-  alignItems: 'center',
-  display: 'flex',
-  margin: theme.spacing(0, 2),
-  visibility: 'hidden',
-  width: 0,
-  height: 0,
-  [theme.breakpoints.up('sm')]: {
-    visibility: 'visible',
-    width: 'auto',
-    height: 'auto',
-  },
-}));
+type GridSelectedRowCountProps = React.HTMLAttributes<HTMLDivElement> & SelectedRowCountProps;
 
 const GridSelectedRowCount = forwardRef<HTMLDivElement, GridSelectedRowCountProps>(
   function GridSelectedRowCount(props, ref) {
     const { className, selectedRowCount, ...other } = props;
     const apiRef = useGridApiContext();
-    const ownerState = useGridRootProps();
-    const classes = useUtilityClasses(ownerState);
-    const rowSelectedText = apiRef.current.getLocaleText('footerRowSelected')(selectedRowCount);
+    const rootProps = useGridRootProps();
+    const rowSelectedText = apiRef.current.getLocaleText('footerRowSelected');
+    const classes = useThemedComponent('selectedRowCount');
 
     return (
-      <GridSelectedRowCountRoot
-        className={clsx(classes.root, className)}
-        ownerState={ownerState}
-        {...other}
-        ref={ref}
+      <rootProps.slots.baseTooltip
+        title={apiRef.current.getLocaleText('toolbarQuickFilterDeleteIconLabel')}
+        delay={500}
+        {...rootProps.slotProps?.baseTooltip}
+        side="top"
       >
-        {rowSelectedText}
-      </GridSelectedRowCountRoot>
+        <div
+          className={clsx(classes.root, className)}
+          {...other}
+          ref={ref}
+          role="button"
+          onClick={() =>
+            apiRef.current.publishEvent('headerSelectionCheckboxChange', { value: false })
+          }
+        >
+          {rowSelectedText}
+          <span className={classes.variants.badge}>{selectedRowCount.toLocaleString()}</span>
+        </div>
+      </rootProps.slots.baseTooltip>
     );
   },
 );

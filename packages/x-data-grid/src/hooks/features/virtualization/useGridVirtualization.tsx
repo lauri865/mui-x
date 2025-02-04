@@ -22,6 +22,8 @@ export const EMPTY_RENDER_CONTEXT = {
   lastColumnIndex: 0,
 };
 
+const isSSR = typeof window === 'undefined';
+
 export const virtualizationStateInitializer: GridStateInitializer<RootProps> = (state, props) => {
   const { disableVirtualization, autoHeight } = props;
 
@@ -34,7 +36,19 @@ export const virtualizationStateInitializer: GridStateInitializer<RootProps> = (
 
   return {
     ...state,
-    virtualization,
+    virtualization: {
+      ...virtualization,
+      // Fixme to enable SSR
+      /* renderContext: {
+        firstRowIndex: 0,
+        lastRowIndex: Math.min(10, state.rows?.dataRowIds?.length || 0),
+        firstColumnIndex: 0,
+        lastColumnIndex: Math.min(
+          10,
+          Object.values(state.columns?.orderedFields || {}).reduce((acc, visible) => (acc += 1), 0),
+        ),
+      }, */
+    },
   };
 };
 

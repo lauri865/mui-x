@@ -7,6 +7,7 @@ import { forwardRef } from '@mui/x-internals/forwardRef';
 import { getDataGridUtilityClass } from '../../constants/gridClasses';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import type { DataGridProcessedProps } from '../../models/props/DataGridProps';
+import { useThemedComponent } from '@mui/x-data-grid/context/GridThemeContext';
 
 export type GridFooterContainerProps = React.HTMLAttributes<HTMLDivElement> & {
   sx?: SxProps<Theme>;
@@ -33,23 +34,14 @@ const GridFooterContainerRoot = styled('div', {
   justifyContent: 'space-between',
   alignItems: 'center',
   minHeight: 52,
-  borderTop: '1px solid',
 });
 
 const GridFooterContainer = forwardRef<HTMLDivElement, GridFooterContainerProps>(
   function GridFooterContainer(props, ref) {
     const { className, ...other } = props;
-    const rootProps = useGridRootProps();
-    const classes = useUtilityClasses(rootProps);
+    const classes = useThemedComponent('footer');
 
-    return (
-      <GridFooterContainerRoot
-        className={clsx(classes.root, className)}
-        ownerState={rootProps}
-        {...other}
-        ref={ref}
-      />
-    );
+    return <div className={clsx(classes.root, className)} {...other} ref={ref} />;
   },
 );
 

@@ -680,10 +680,10 @@ export interface GridClasses {
 export type GridClassKey = keyof GridClasses;
 
 export function getDataGridUtilityClass(slot: string): string {
-  return generateUtilityClass('MuiDataGrid', slot);
+  return generateUtilityClass('twg', slot);
 }
 
-export const gridClasses = generateUtilityClasses<GridClassKey>('MuiDataGrid', [
+export const gridClasses = generateUtilityClasses<GridClassKey>('twg', [
   'actionsCell',
   'aggregationColumnHeader',
   'aggregationColumnHeader--alignLeft',

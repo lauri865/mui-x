@@ -21,19 +21,19 @@ const DATA_GRID_FORCED_PROPS: { [key in DataGridForcedPropsKey]?: DataGridProces
   checkboxSelectionVisibleOnly: false,
   disableColumnReorder: true,
   keepColumnPositionIfDraggedOutside: false,
-  signature: 'DataGrid',
+  signature: 'DataGridPremium',
   unstable_listView: false,
 };
 
 const defaultSlots = DATA_GRID_DEFAULT_SLOTS_COMPONENTS;
 
 export const useDataGridProps = <R extends GridValidRowModel>(inProps: DataGridProps<R>) => {
-  const themedProps =
+  const themedProps = inProps; /* 
     // eslint-disable-next-line material-ui/mui-name-matches-component-name
     useThemeProps({
       props: inProps,
       name: 'MuiDataGrid',
-    });
+    }); */
 
   const localeText = React.useMemo(
     () => ({ ...GRID_DEFAULT_LOCALE_TEXT, ...themedProps.localeText }),
@@ -67,7 +67,15 @@ export const useDataGridProps = <R extends GridValidRowModel>(inProps: DataGridP
       ...injectDefaultProps,
       localeText,
       slots,
-      ...DATA_GRID_FORCED_PROPS,
+      signature: 'DataGridPremium',
+      // @ts-ignore
+      ...(themedProps.unstable_dataSource
+        ? {
+            filterMode: 'server',
+            sortingMode: 'server',
+            paginationMode: 'server',
+          }
+        : {}),
     }),
     [themedProps, localeText, slots, injectDefaultProps],
   );

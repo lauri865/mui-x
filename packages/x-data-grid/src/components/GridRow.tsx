@@ -34,6 +34,7 @@ import { getPinnedCellOffset } from '../internals/utils/getPinnedCellOffset';
 import { useGridConfiguration } from '../hooks/utils/useGridConfiguration';
 import { useGridPrivateApiContext } from '../hooks/utils/useGridPrivateApiContext';
 import { createSelector } from '../utils/createSelector';
+import { useThemedComponent } from '../context/GridThemeContext';
 
 const isRowReorderingEnabledSelector = createSelector(
   gridEditRowsStateSelector,
@@ -141,18 +142,8 @@ const GridRow = forwardRef<HTMLDivElement, GridRowProps>(function GridRow(props,
     focusedColumnIndex < visibleColumns.length - pinnedColumns.right.length &&
     focusedColumnIndex >= lastColumnIndex;
 
-  const classes = composeGridClasses(rootProps.classes, {
-    root: [
-      'row',
-      selected && 'selected',
-      editable && 'row--editable',
-      editing && 'row--editing',
-      isFirstVisible && 'row--firstVisible',
-      isLastVisible && 'row--lastVisible',
-      showBottomBorder && 'row--borderBottom',
-      rowHeight === 'auto' && 'row--dynamicHeight',
-    ],
-  });
+  const classes = useThemedComponent('row');
+  const cellClasses = useThemedComponent('cell');
   const getRowAriaAttributes = configuration.hooks.useGridRowAriaAttributes();
 
   React.useLayoutEffect(() => {
@@ -448,10 +439,6 @@ const GridRow = forwardRef<HTMLDivElement, GridRowProps>(function GridRow(props,
     ? {
         onClick: publishClick,
         onDoubleClick: publish('rowDoubleClick', onDoubleClick),
-        onMouseEnter: publish('rowMouseEnter', onMouseEnter),
-        onMouseLeave: publish('rowMouseLeave', onMouseLeave),
-        onMouseOut: publish('rowMouseOut', onMouseOut),
-        onMouseOver: publish('rowMouseOver', onMouseOver),
       }
     : null;
 
@@ -459,6 +446,12 @@ const GridRow = forwardRef<HTMLDivElement, GridRowProps>(function GridRow(props,
     <div
       data-id={rowId}
       data-rowindex={index}
+      data-first-visible={isFirstVisible || undefined}
+      data-last-visible={isLastVisible || undefined}
+      data-selected={selected || undefined}
+      data-editing={editing || undefined}
+      data-editable={editable || undefined}
+      data-bottom-border={showBottomBorder || undefined}
       role="row"
       className={clsx(...rowClassNames, classes.root, className)}
       style={style}
@@ -474,7 +467,7 @@ const GridRow = forwardRef<HTMLDivElement, GridRowProps>(function GridRow(props,
         style={{ width: offsetLeft }}
       />
       {cells}
-      <div role="presentation" className={clsx(gridClasses.cell, gridClasses.cellEmpty)} />
+      <div role="presentation" className={clsx(cellClasses.root)} data-empty="true" />
       {rightCells}
       {scrollbarWidth !== 0 && (
         <ScrollbarFiller pinnedRight={pinnedColumns.right.length > 0} borderTop={!isFirstVisible} />

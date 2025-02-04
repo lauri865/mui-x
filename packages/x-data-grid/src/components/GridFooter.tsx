@@ -21,9 +21,7 @@ const GridFooter = forwardRef<HTMLDivElement, GridFooterContainerProps>(
     const selectedRowCountElement =
       !rootProps.hideFooterSelectedRowCount && selectedRowCount > 0 ? (
         <GridSelectedRowCount selectedRowCount={selectedRowCount} />
-      ) : (
-        <div />
-      );
+      ) : null;
 
     const rowCountElement =
       !rootProps.hideFooterRowCount && !rootProps.pagination ? (
@@ -42,8 +40,8 @@ const GridFooter = forwardRef<HTMLDivElement, GridFooterContainerProps>(
 
     return (
       <GridFooterContainer {...props} ref={ref}>
-        {selectedRowCountElement}
         {rowCountElement}
+        {selectedRowCountElement}
         {paginationElement}
       </GridFooterContainer>
     );

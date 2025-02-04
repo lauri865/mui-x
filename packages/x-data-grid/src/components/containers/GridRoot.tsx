@@ -21,6 +21,8 @@ import { GridDensity } from '../../models/gridDensity';
 import { useIsSSR } from '../../hooks/utils/useIsSSR';
 import { GridHeader } from '../GridHeader';
 import { GridBody, GridFooterPlaceholder } from '../base';
+import { theme } from '../../theme';
+import { useThemedComponent } from '@mui/x-data-grid/context/GridThemeContext';
 
 export interface GridRootProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
@@ -67,27 +69,16 @@ const GridRoot = forwardRef<HTMLDivElement, GridRootProps>(function GridRoot(pro
 
   const handleRef = useForkRef(rootElementRef, ref, rootMountCallback);
 
-  const ownerState = rootProps;
-
-  const classes = useUtilityClasses(ownerState, density);
+  const classes = useThemedComponent('root');
 
   const isSSR = useIsSSR();
 
-  if (isSSR) {
-    return null;
-  }
-
   return (
-    <GridRootStyles
-      className={clsx(classes.root, className)}
-      ownerState={ownerState}
-      {...other}
-      ref={handleRef}
-    >
+    <div className={clsx(classes.root, className)} ref={handleRef}>
       <GridHeader />
       <GridBody>{children}</GridBody>
       <GridFooterPlaceholder />
-    </GridRootStyles>
+    </div>
   );
 });
 

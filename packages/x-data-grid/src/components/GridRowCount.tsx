@@ -8,6 +8,7 @@ import { useGridApiContext } from '../hooks/utils/useGridApiContext';
 import { getDataGridUtilityClass } from '../constants/gridClasses';
 import { useGridRootProps } from '../hooks/utils/useGridRootProps';
 import { DataGridProcessedProps } from '../models/props/DataGridProps';
+import { useThemedComponent } from '../context/GridThemeContext';
 
 interface RowCountProps {
   rowCount: number;
@@ -21,32 +22,11 @@ export type GridRowCountProps = React.HTMLAttributes<HTMLDivElement> &
 
 type OwnerState = DataGridProcessedProps;
 
-const useUtilityClasses = (ownerState: OwnerState) => {
-  const { classes } = ownerState;
-
-  const slots = {
-    root: ['rowCount'],
-  };
-
-  return composeClasses(slots, getDataGridUtilityClass, classes);
-};
-
-const GridRowCountRoot = styled('div', {
-  name: 'MuiDataGrid',
-  slot: 'RowCount',
-  overridesResolver: (props, styles) => styles.rowCount,
-})<{ ownerState: OwnerState }>(({ theme }) => ({
-  alignItems: 'center',
-  display: 'flex',
-  margin: theme.spacing(0, 2),
-}));
-
 const GridRowCount = forwardRef<HTMLDivElement, GridRowCountProps>(
   function GridRowCount(props, ref) {
     const { className, rowCount, visibleRowCount, ...other } = props;
     const apiRef = useGridApiContext();
-    const ownerState = useGridRootProps();
-    const classes = useUtilityClasses(ownerState);
+    const classes = useThemedComponent('rowCount');
 
     if (rowCount === 0) {
       return null;
@@ -58,14 +38,10 @@ const GridRowCount = forwardRef<HTMLDivElement, GridRowCountProps>(
         : rowCount.toLocaleString();
 
     return (
-      <GridRowCountRoot
-        className={clsx(classes.root, className)}
-        ownerState={ownerState}
-        {...other}
-        ref={ref}
-      >
-        {apiRef.current.getLocaleText('footerTotalRows')} {text}
-      </GridRowCountRoot>
+      <div className={clsx(classes.root, className)} {...other} ref={ref}>
+        {apiRef.current.getLocaleText('footerTotalRows')}
+        <span className={classes.variants.badge}>{text}</span>
+      </div>
     );
   },
 );

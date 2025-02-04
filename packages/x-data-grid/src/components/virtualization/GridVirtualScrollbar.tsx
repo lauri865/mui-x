@@ -123,8 +123,10 @@ const GridVirtualScrollbar = forwardRef<HTMLDivElement, GridVirtualScrollbarProp
       }
       isLocked.current = true;
 
-      const value = scrollPosition[propertyScrollPosition] / contentSize;
-      scrollbar[propertyScroll] = value * scrollbarInnerSize;
+      requestAnimationFrame(() => {
+        const value = scrollPosition[propertyScrollPosition] / contentSize;
+        scrollbar[propertyScroll] = value * scrollbarInnerSize;
+      });
     });
 
     const onScrollbarScroll = useEventCallback(() => {

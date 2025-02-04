@@ -64,7 +64,7 @@ function GridVirtualScrollerFiller({ rowsLength }: Props) {
       style={
         {
           height,
-          '--rowBorderColor': rowsLength === 0 ? 'transparent' : 'var(--DataGrid-rowBorderColor)',
+          '--rowBorderColor': rowsLength === 0 ? 'transparent' : 'var(--color-grid-border)',
         } as React.CSSProperties
       }
     >

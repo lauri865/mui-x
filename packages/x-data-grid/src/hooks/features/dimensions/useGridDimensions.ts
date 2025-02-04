@@ -92,6 +92,12 @@ export const dimensionsStateInitializer: GridStateInitializer<RootProps> = (
         density,
         gridVisiblePinnedColumnDefinitionsSelector(apiRef),
       ),
+      // Fixme to enable SSR
+      /* isReady: true,
+      viewportOuterSize: {
+        width: 500,
+        height: 500,
+      }, */
     },
   };
 };

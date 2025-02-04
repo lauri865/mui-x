@@ -23,6 +23,7 @@ import getProductInfoFromUrl from 'docs/src/modules/utils/getProductInfoFromUrl'
 import { DocsProvider } from '@mui/docs/DocsProvider';
 import { mapTranslations } from '@mui/docs/i18n';
 import config from '../config';
+import '../styles/global.css';
 
 // Remove the license warning from demonstration purposes
 LicenseInfo.setLicenseKey(process.env.NEXT_PUBLIC_MUI_LICENSE);

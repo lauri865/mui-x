@@ -55,9 +55,9 @@ const GridCellCheckboxForwardRef = forwardRef<HTMLInputElement, GridRenderCellPa
     const rippleRef = React.useRef<TouchRippleActions>(null);
     const handleRef = useForkRef(checkboxElement, ref);
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const params: GridRowSelectionCheckboxParams = { value: event.target.checked, id };
-      apiRef.current.publishEvent('rowSelectionCheckboxChange', params, event);
+    const handleChange = (checked: boolean) => {
+      const params: GridRowSelectionCheckboxParams = { value: checked, id };
+      apiRef.current.publishEvent('rowSelectionCheckboxChange', params, {} as any);
     };
 
     React.useLayoutEffect(() => {
@@ -112,13 +112,13 @@ const GridCellCheckboxForwardRef = forwardRef<HTMLInputElement, GridRenderCellPa
       <rootProps.slots.baseCheckbox
         tabIndex={tabIndex}
         checked={isChecked && !isIndeterminate}
-        onChange={handleChange}
+        onCheckedChange={handleChange}
         className={classes.root}
-        inputProps={{ 'aria-label': label, name: 'select_row' }}
+        aria-label={label}
+        name={'select_row'}
         onKeyDown={handleKeyDown}
         indeterminate={isIndeterminate}
         disabled={!isSelectable}
-        touchRippleRef={rippleRef as any /* FIXME: typing error */}
         {...rootProps.slotProps?.baseCheckbox}
         {...other}
         ref={handleRef}

@@ -146,7 +146,7 @@ export interface GridLocaleText {
   columnHeaderSortIconLabel: string;
 
   // Rows selected footer text
-  footerRowSelected: (count: number) => React.ReactNode;
+  footerRowSelected: string;
 
   // Total rows footer text
   footerTotalRows: React.ReactNode;

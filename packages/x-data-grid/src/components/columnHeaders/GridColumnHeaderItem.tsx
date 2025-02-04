@@ -18,6 +18,8 @@ import { GridColumnHeaderEventLookup } from '../../models/events';
 import { isEventTargetInPortal } from '../../utils/domUtils';
 import { PinnedColumnPosition } from '../../internals/constants';
 import { attachPinnedStyle } from '../../internals/utils';
+import { useThemedComponent } from '@mui/x-data-grid/context/GridThemeContext';
+import { on } from 'events';
 
 interface GridColumnHeaderItemProps {
   colIndex: number;
@@ -136,14 +138,11 @@ function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
     headerComponent = colDef.renderHeader(apiRef.current.getColumnHeaderParams(colDef.field));
   }
 
-  const ownerState = {
-    ...props,
-    classes: rootProps.classes,
-    showRightBorder,
+  const classes = useThemedComponent('columnHeaderCell', {
     showLeftBorder,
-  };
-
-  const classes = useUtilityClasses(ownerState);
+    showRightBorder,
+    checkbox: colDef.field === '__check__',
+  });
 
   const publish = React.useCallback(
     (eventName: keyof GridColumnHeaderEventLookup) => (event: React.SyntheticEvent) => {
@@ -166,13 +165,10 @@ function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
       onClick: publish('columnHeaderClick'),
       onContextMenu: publish('columnHeaderContextMenu'),
       onDoubleClick: publish('columnHeaderDoubleClick'),
-      onMouseOver: publish('columnHeaderOver'), // TODO remove as it's not used
-      onMouseOut: publish('columnHeaderOut'), // TODO remove as it's not used
-      onMouseEnter: publish('columnHeaderEnter'), // TODO remove as it's not used
-      onMouseLeave: publish('columnHeaderLeave'), // TODO remove as it's not used
       onKeyDown: publish('columnHeaderKeyDown'),
       onFocus: publish('columnHeaderFocus'),
       onBlur: publish('columnHeaderBlur'),
+      onPointerDown: publish('columnHeaderPointerDown'),
     }),
     [publish],
   );
@@ -287,7 +283,12 @@ function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
   return (
     <GridGenericColumnHeaderItem
       ref={headerCellRef}
-      classes={classes}
+      classes={{
+        root: classes.root,
+        draggableContainer: classes.variants.draggableContainer,
+        titleContainer: classes.variants.titleContainer,
+        titleContainerContent: classes.variants.titleContainerContent,
+      }}
       columnMenuOpen={columnMenuOpen}
       colIndex={colIndex}
       height={headerHeight}
@@ -296,7 +297,6 @@ function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
       hasFocus={hasFocus}
       tabIndex={tabIndex}
       separatorSide={separatorSide}
-      isDraggable={isDraggable}
       headerComponent={headerComponent}
       description={colDef.description}
       elementId={colDef.field}
@@ -307,8 +307,13 @@ function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
       label={label}
       resizable={!rootProps.disableColumnResize && !!colDef.resizable}
       data-field={colDef.field}
+      data-align={colDef.headerAlign}
+      data-first={colIndex === 0 || undefined}
+      data-last={isLast || undefined}
+      data-resizable={colDef.resizable || undefined}
+      data-dragging={props.isDragging || undefined}
+      data-sorted={Boolean(props.sortDirection) || undefined}
       columnMenu={columnMenu}
-      draggableContainerProps={draggableEventHandlers}
       columnHeaderSeparatorProps={columnHeaderSeparatorProps}
       style={style}
       {...mouseEventsHandlers}

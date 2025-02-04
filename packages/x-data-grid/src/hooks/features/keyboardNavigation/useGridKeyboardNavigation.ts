@@ -595,6 +595,7 @@ export const useGridKeyboardNavigation = (
             break;
           }
           if (!event.shiftKey && rowIndexBefore < lastRowIndexInPage) {
+            return;
             goToCell(
               colIndexBefore,
               getRowIdFromIndex(Math.min(rowIndexBefore + viewportPageSize, lastRowIndexInPage)),

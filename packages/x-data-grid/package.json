@@ -50,6 +50,7 @@
     "@babel/runtime": "^7.26.7",
     "@mui/utils": "^5.16.6 || ^6.0.0",
     "@mui/x-internals": "workspace:*",
+    "@twgrid/x-data-grid-shadcn": "workspace:*",
     "clsx": "^2.1.1",
     "prop-types": "^15.8.1",
     "reselect": "^5.1.1",

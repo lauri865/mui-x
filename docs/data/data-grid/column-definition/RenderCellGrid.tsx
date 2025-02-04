@@ -1,20 +1,15 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
-import { TouchRippleActions } from '@mui/material/ButtonBase/TouchRipple';
 
 function RenderDate(props: GridRenderCellParams<any, Date>) {
   const { hasFocus, value } = props;
   const buttonElement = React.useRef<HTMLButtonElement>(null);
-  const rippleRef = React.useRef<TouchRippleActions>(null);
 
   React.useLayoutEffect(() => {
     if (hasFocus) {
       const input = buttonElement.current!.querySelector('input');
       input?.focus();
-    } else if (rippleRef.current) {
-      // Only available in @mui/material v5.4.1 or later
-      rippleRef.current.stop({} as any);
     }
   }, [hasFocus]);
 
@@ -23,7 +18,6 @@ function RenderDate(props: GridRenderCellParams<any, Date>) {
       {value?.getFullYear() ?? ''}
       <Button
         ref={buttonElement}
-        touchRippleRef={rippleRef}
         variant="contained"
         size="small"
         style={{ marginLeft: 16 }}

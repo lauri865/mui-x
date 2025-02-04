@@ -46,7 +46,8 @@
       ],
       "test/*": ["./test/*"],
       "docs/*": ["./node_modules/@mui/monorepo/docs/*"],
-      "docsx/*": ["./docs/*"]
+      "docsx/*": ["./docs/*"],
+      "@/*": ["./*"]
     }
   },
   "exclude": ["**/node_modules/!(@mui)/**", "**/build/**/*", "docs/export/**/*"]

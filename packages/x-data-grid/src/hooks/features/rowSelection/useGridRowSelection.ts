@@ -594,7 +594,7 @@ export const useGridRowSelection = (
     ],
   );
 
-  const preventSelectionOnShift = React.useCallback<GridEventListener<'cellMouseDown'>>(
+  const preventSelectionOnShift = React.useCallback<GridEventListener<'cellPointerDown'>>(
     (params, event) => {
       if (canHaveMultipleSelection && event.shiftKey) {
         window.getSelection()?.removeAllRanges();
@@ -607,7 +607,7 @@ export const useGridRowSelection = (
     GridEventListener<'rowSelectionCheckboxChange'>
   >(
     (params, event) => {
-      if (canHaveMultipleSelection && (event.nativeEvent as any).shiftKey) {
+      if (canHaveMultipleSelection && event.shiftKey) {
         expandMouseRowRangeSelection(params.id);
       } else {
         apiRef.current.selectRow(params.id, params.value, !canHaveMultipleSelection);
@@ -693,9 +693,13 @@ export const useGridRowSelection = (
         }
       }
 
-      if (event.key === ' ' && event.shiftKey) {
+      if (event.key === ' ') {
         event.preventDefault();
-        handleSingleRowSelection(params.id, event);
+        if (!event.shiftKey) {
+          handleSingleRowSelection(params.id, { ctrlKey: true } as any);
+        } else {
+          expandMouseRowRangeSelection(params.id);
+        }
         return;
       }
 
@@ -730,7 +734,7 @@ export const useGridRowSelection = (
   );
   useGridApiEventHandler(
     apiRef,
-    'cellMouseDown',
+    'cellPointerDown',
     runIfRowSelectionIsEnabled(preventSelectionOnShift),
   );
   useGridApiEventHandler(apiRef, 'cellKeyDown', runIfRowSelectionIsEnabled(handleCellKeyDown));

@@ -218,7 +218,7 @@ export const useGridVirtualScroller = () => {
   const ignoreNextScrollEvent = React.useRef(false);
   const previousContextScrollPosition = React.useRef(EMPTY_SCROLL_POSITION);
   const previousRowContext = React.useRef(EMPTY_RENDER_CONTEXT);
-  const renderContext = useGridSelector(apiRef, gridRenderContextSelector);
+  const [renderContext, setRenderContext] = React.useState(gridRenderContextSelector(apiRef));
 
   const focusedVirtualCell = useGridSelector(apiRef, gridFocusedVirtualCellSelector);
 
@@ -246,15 +246,13 @@ export const useGridVirtualScroller = () => {
         nextRenderContext.firstRowIndex !== previousRowContext.current.firstRowIndex ||
         nextRenderContext.lastRowIndex !== previousRowContext.current.lastRowIndex;
 
-      apiRef.current.setState((state) => {
-        return {
-          ...state,
-          virtualization: {
-            ...state.virtualization,
-            renderContext: nextRenderContext,
-          },
-        };
-      });
+      setRenderContext(nextRenderContext);
+      apiRef.current.state.virtualization = {
+        ...apiRef.current.state.virtualization,
+        renderContext: nextRenderContext,
+      };
+
+      apiRef.current.publishEvent('renderContextChange', nextRenderContext);
 
       // The lazy-loading hook is listening to `renderedRowsIntervalChange`,
       // but only does something if we already have a render context, because
@@ -347,9 +345,7 @@ export const useGridVirtualScroller = () => {
     const nextRenderContext = computeRenderContext(inputs, scrollPosition.current, scrollCache);
 
     // Prevents batching render context changes
-    ReactDOM.flushSync(() => {
-      updateRenderContext(nextRenderContext);
-    });
+    updateRenderContext(nextRenderContext);
 
     scrollTimeout.start(1000, triggerUpdateRenderContext);
 
@@ -548,6 +544,10 @@ export const useGridVirtualScroller = () => {
       );
       const showBottomBorder = isLastVisibleInSection && params.position === 'top';
 
+      if (showBottomBorder) {
+        console.log('TEST');
+      }
+
       const firstColumnIndex = currentRenderContext.firstColumnIndex;
       const lastColumnIndex = currentRenderContext.lastColumnIndex;
 
@@ -717,7 +717,7 @@ export const useGridVirtualScroller = () => {
     getScrollerProps: () => ({
       ref: scrollerRef,
       onScroll: handleScroll,
-      onWheel: handleWheel,
+      //onWheel: handleWheel,
       onTouchMove: handleTouchMove,
       style: scrollerStyle,
       role: 'presentation',

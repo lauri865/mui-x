@@ -136,13 +136,10 @@ export const GRID_DEFAULT_LOCALE_TEXT: GridLocaleText = {
   columnHeaderSortIconLabel: 'Sort',
 
   // Rows selected footer text
-  footerRowSelected: (count) =>
-    count !== 1
-      ? `${count.toLocaleString()} rows selected`
-      : `${count.toLocaleString()} row selected`,
+  footerRowSelected: 'Selected',
 
   // Total row amount footer text
-  footerTotalRows: 'Total Rows:',
+  footerTotalRows: 'Total',
 
   // Total visible row amount footer text
   footerTotalVisibleRows: (visibleCount, totalCount) =>

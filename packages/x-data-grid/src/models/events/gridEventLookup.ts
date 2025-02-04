@@ -38,22 +38,6 @@ export interface GridRowEventLookup {
    */
   rowDoubleClick: { params: GridRowParams; event: React.MouseEvent<HTMLElement> };
   /**
-   * Fired when the mouse enters the row. Called with a [[GridRowParams]] object.
-   */
-  rowMouseEnter: { params: GridRowParams; event: React.MouseEvent<HTMLElement> };
-  /**
-   * Fired when the mouse leaves the row. Called with a [[GridRowParams]] object.
-   */
-  rowMouseLeave: { params: GridRowParams; event: React.MouseEvent<HTMLElement> };
-  /**
-   * @ignore - do not document.
-   */
-  rowMouseOut: { params: GridRowParams; event: React.MouseEvent<HTMLElement> };
-  /**
-   * @ignore - do not document.
-   */
-  rowMouseOver: { params: GridRowParams; event: React.MouseEvent<HTMLElement> };
-  /**
    * Fired when the user starts dragging a row. It's mapped to the `dragstart` DOM event.
    * @ignore - do not document.
    */
@@ -109,6 +93,11 @@ export interface GridColumnHeaderEventLookup {
   columnHeaderOver: {
     params: GridColumnHeaderParams;
     event: React.MouseEvent<HTMLElement>;
+  };
+
+  columnHeaderPointerDown: {
+    params: GridColumnHeaderParams;
+    event: React.PointerEvent<HTMLElement>;
   };
   /**
    * Fired when a `mouseout` event happens in a column header.
@@ -294,21 +283,14 @@ export interface GridCellEventLookup {
   /**
    * Fired when a `mousedown` event happens in a cell.
    */
-  cellMouseDown: {
+  cellPointerDown: {
     params: GridCellParams<any>;
-    event: React.MouseEvent<HTMLElement>;
+    event: React.PointerEvent<HTMLElement>;
   };
   /**
    * Fired when a `mouseup` event happens in a cell.
    */
   cellMouseUp: {
-    params: GridCellParams<any>;
-    event: React.MouseEvent<HTMLElement>;
-  };
-  /**
-   * Fired when a `mouseover` event happens in a cell.
-   */
-  cellMouseOver: {
     params: GridCellParams<any>;
     event: React.MouseEvent<HTMLElement>;
   };
@@ -489,6 +471,11 @@ export interface GridEventLookup
    * Fired when the rendered rows index interval changes. Called with a [[GridRenderContext]] object.
    */
   renderedRowsIntervalChange: { params: GridRenderContext };
+
+  /**
+   * Fired when the renderContext changes. Called with a [[GridRenderContext]] object.
+   */
+  renderContextChange: { params: GridRenderContext };
 
   // Edit
   /**

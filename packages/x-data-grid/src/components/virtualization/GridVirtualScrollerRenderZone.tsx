@@ -10,6 +10,8 @@ import { gridRenderContextSelector } from '../../hooks/features/virtualization';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { getDataGridUtilityClass } from '../../constants/gridClasses';
 import { DataGridProcessedProps } from '../../models/props/DataGridProps';
+import { useGridApiOptionHandler } from '../../hooks/utils/useGridApiEventHandler';
+import { GridEventListener } from '../../models/events';
 
 type OwnerState = DataGridProcessedProps;
 
@@ -41,11 +43,15 @@ const GridVirtualScrollerRenderZone = forwardRef<
   const apiRef = useGridApiContext();
   const rootProps = useGridRootProps();
   const classes = useUtilityClasses(rootProps);
-  const offsetTop = useGridSelector(apiRef, () => {
-    const renderContext = gridRenderContextSelector(apiRef);
-    const rowsMeta = gridRowsMetaSelector(apiRef.current.state);
-    return rowsMeta.positions[renderContext.firstRowIndex] ?? 0;
-  });
+  const [offsetTop, setOffsetTop] = React.useState(0);
+  const handleRenderContextChange = React.useCallback<GridEventListener<'renderContextChange'>>(
+    (renderContext) => {
+      const rowsMeta = gridRowsMetaSelector(apiRef.current.state);
+      setOffsetTop(rowsMeta.positions[renderContext.firstRowIndex] ?? 0);
+    },
+    [setOffsetTop],
+  );
+  useGridApiOptionHandler(apiRef, 'renderContextChange', handleRenderContextChange);
 
   return (
     <VirtualScrollerRenderZoneRoot
@@ -53,6 +59,7 @@ const GridVirtualScrollerRenderZone = forwardRef<
       ownerState={rootProps}
       style={{
         transform: `translate3d(0, ${offsetTop}px, 0)`,
+        willChange: 'transform',
       }}
       {...other}
       ref={ref}

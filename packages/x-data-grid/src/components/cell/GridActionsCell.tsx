@@ -12,10 +12,6 @@ import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 const hasActions = (colDef: any): colDef is GridActionsColDef =>
   typeof colDef.getActions === 'function';
 
-interface TouchRippleActions {
-  stop: (event: any, callback?: () => void) => void;
-}
-
 interface GridActionsCellProps extends Omit<GridRenderCellParams, 'api'> {
   api?: GridRenderCellParams['api'];
   position?: GridMenuProps['position'];
@@ -45,7 +41,6 @@ function GridActionsCell(props: GridActionsCellProps) {
   const rootRef = React.useRef<HTMLDivElement>(null);
   const buttonRef = React.useRef<HTMLButtonElement>(null);
   const ignoreCallToFocus = React.useRef(false);
-  const touchRippleRefs = React.useRef<Record<string, TouchRippleActions | null>>({});
   const isRtl = useRtl();
   const menuId = useId();
   const buttonId = useId();
@@ -59,16 +54,6 @@ function GridActionsCell(props: GridActionsCellProps) {
   const iconButtons = options.filter((option) => !option.props.showInMenu);
   const menuButtons = options.filter((option) => option.props.showInMenu);
   const numberOfButtons = iconButtons.length + (menuButtons.length ? 1 : 0);
-
-  React.useLayoutEffect(() => {
-    if (!hasFocus) {
-      Object.entries(touchRippleRefs.current).forEach(([index, ref]) => {
-        ref?.stop({}, () => {
-          delete touchRippleRefs.current[index];
-        });
-      });
-    }
-  }, [hasFocus]);
 
   React.useEffect(() => {
     if (focusedButtonIndex < 0 || !rootRef.current) {
@@ -127,11 +112,6 @@ function GridActionsCell(props: GridActionsCellProps) {
       showMenu();
     }
   };
-
-  const handleTouchRippleRef =
-    (index: string | number) => (instance: TouchRippleActions | null) => {
-      touchRippleRefs.current[index] = instance;
-    };
 
   const handleButtonClick =
     (index: number, onClick?: React.MouseEventHandler): React.MouseEventHandler =>
@@ -203,7 +183,6 @@ function GridActionsCell(props: GridActionsCellProps) {
       {iconButtons.map((button, index) =>
         React.cloneElement(button, {
           key: index,
-          touchRippleRef: handleTouchRippleRef(index),
           onClick: handleButtonClick(index, button.props.onClick),
           tabIndex: focusedButtonIndex === index ? tabIndex : -1,
         }),
@@ -220,7 +199,6 @@ function GridActionsCell(props: GridActionsCellProps) {
           role="menuitem"
           size="small"
           onClick={toggleMenu}
-          touchRippleRef={handleTouchRippleRef(buttonId)}
           tabIndex={focusedButtonIndex === iconButtons.length ? tabIndex : -1}
           {...rootProps.slotProps?.baseIconButton}
         >

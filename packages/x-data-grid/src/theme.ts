@@ -1,0 +1,156 @@
+export const getThemedClassName = (className: string) => `twg-${className}`;
+
+const className = {
+  root: {
+    base: 'group dark flex flex-1 box-border relative border border-solid border-grid-border bg-grid-bg text-white font-sans font-normal text-sm leading-relaxed outline-none h-full min-w-0 min-h-0 flex-col overflow-hidden rounded-grid',
+    autoHeight: 'h-auto',
+    noScrollbar: 'scrollbar-none',
+  },
+
+  main: {
+    base: 'group relative flex-1 flex flex-col overflow-hidden',
+    scroller:
+      'relative h-full flex-1 overflow-scroll [scrollbar-width:none] flex flex-col [&::-webkit-scrollbar]:hidden print:overflow-hidden z-0',
+  },
+
+  panelAnchor: {
+    base: 'absolute top-[var(--DataGrid-headersTotalHeight)] left-0 w-[calc(100%-(var(--DataGrid-hasScrollY)*var(--DataGrid-scrollbarSize)))]',
+  },
+
+  autosizing: {
+    columnHeaderTitleContent: 'overflow-visible !important',
+    menuIcon: {
+      '@media (hover: hover)': 'w-0 invisible',
+    },
+    cell: 'overflow-visible whitespace-nowrap min-w-max max-w-max',
+    groupingCell: 'w-auto',
+    treeDataGroupingCell: 'w-auto',
+  },
+
+  topContainer: 'sticky z-4 top-0',
+
+  columnHeaders: {
+    base: 'flex flex-col rounded-l-grid rounded-r-grid w-[var(--DataGrid-rowWidth)] bg-grid-header-bg select-none',
+  },
+
+  columnHeaderCell: {
+    base: [
+      'group/cell relative touch-none px-2.5 box-border tap-highlight-none flex items-center cursor-pointer border-b border-b-grid-border font-medium text-[13px] hover:z-1 active:[&+&]:pointer-events-none [&:focus-within+&]:hover:z-0',
+      'data-[align=center]:justify-center data-[align=right]:flex-row-reverse',
+      'hover:bg-grid-hover-bg transition-colors active:bg-grid-hover-bg',
+      'data-first:rounded-tl-[calc(var(--radius-grid)-1px)] group-data-fullwidth:data-last:rounded-tr-[calc(var(--radius-grid)-1px)]',
+      'data-last:overflow-hidden',
+      'hover:shadow-[1px_0px_0_var(--color-grid-border),-1px_0px_0_var(--color-grid-border)] active:shadow-[1px_0px_0_var(--color-grid-border),-1px_0px_0_var(--color-grid-border)]',
+      String.raw`data-[field=\_\_check\_\_]:p-0`,
+      'group-data-dragging:[&_*]:pointer-events-none',
+    ].join(' '),
+    focusWithin: 'outline outline-[rgba(144,202,249,0.5)] -outline-offset-1',
+    focus: 'outline outline-[#90caf9] -outline-offset-1',
+    checkbox: '',
+    header: 'relative flex items-center',
+    headerFilter: 'pt-2 pb-2 pr-1.5 min-h-min overflow-hidden',
+    sortedHeader: 'visible w-auto',
+    headerTitle: 'flex items-center gap-0.5 min-w-0 flex-1 whitespace-nowrap overflow-hidden',
+    headerTitleContent: 'overflow-hidden flex items-center',
+    filledGroup: 'border-b border-solid',
+    sortable: 'cursor-pointer',
+    moving: 'bg-[rgba(255,255,255,0.08)]',
+    pinned: 'sticky z-10 bg-[#121212]',
+    showLeftBorder: '',
+    showRightBorder: '',
+
+    draggableContainer: 'flex w-full h-full items-center',
+    titleContainer:
+      'flex h-full items-center gap-0.5 min-w-0 flex-1 whitespace-nowrap overflow-hidden group-data-[align=center]/cell:justify-center',
+    titleContainerContent: 'flex h-full items-center overflow-hidden',
+    title: 'h-full truncate leading-[calc(var(--height)-5px)]',
+  },
+
+  cell: {
+    base: [
+      'flex-none h-[var(--height)] w-[var(--width)] leading-[calc(var(--height)-1px)] box-border border-t border-grid-border overflow-hidden whitespace-nowrap text-ellipsis px-cell',
+      'data-[align=center]:justify-center',
+      'data-empty:flex-1 data-empty:p-0 data-empty:h-[unset]',
+      String.raw`data-[field=\_\_check\_\_]:p-0 data-[field=\_\_check\_\_]:flex data-[field=\_\_check\_\_]:justify-center data-[field=\_\_check\_\_]:items-center`,
+      'data-selected:bg-[rgba(144,202,249,0.16)] data-selected:hover:bg-[rgba(144,202,249,0.24)]',
+      // makes drag-drop easier, we can catch onPointerMove discretely at cell level, not cell content level
+    ].join(' '),
+    editable: '',
+    editing: 'p-0.25 flex shadow-md bg-[#121212]',
+    editingFocus: 'outline outline-[#90caf9] -outline-offset-1',
+    boolean: 'flex h-full w-full items-center justify-center',
+    booleanTrue: 'text-[rgba(255,255,255,0.7)]',
+    booleanFalse: 'text-[rgba(255,255,255,0.5)]',
+    actions: 'inline-flex items-center gap-2',
+    showLeftBorder: 'border-l border-l-grid-border',
+    showRightBorder: 'border-r border-r-grid-border',
+
+    left: 'text-left justify-start',
+    right: 'text-right justify-end',
+    center: 'text-center justify-center',
+
+    pinned: 'sticky z-[3] bg-[var(--DataGrid-pinnedBackground)]',
+    pinnedLeft:
+      'rounded-tl-[calc(var(--radius-grid)-1px)] rounded-bl-[calc(var(--radius-grid)-1px)]',
+    pinnedRight:
+      'rounded-tr-[calc(var(--radius-grid)-1px)] rounded-br-[calc(var(--radius-grid)-1px)]',
+    isSelectionMode: 'cursor-default',
+  },
+
+  row: {
+    base: [
+      'flex',
+      'select-none',
+      'w-[var(--DataGrid-rowWidth)]',
+      'break-inside-avoid',
+      '[--rowBorderColor:var(--color-grid-border)]',
+      // Hover states
+      'hover:bg-grid-hover-bg',
+      // Reset hover on touch devices
+      'hover:[@media(hover:none)]:bg-transparent',
+      // first visible
+      'data-first-visible:[&>.twg-cell]:border-t-transparent',
+      // last visible
+      'data-bottom-border:border-b data-bottom-border:border-b-grid-border',
+      // selected
+      'data-selected:bg-grid-selected-bg data-selected:hover:bg-grid-selected-bg data-selected:hover:[@media(hover:none)]:bg-grid-selected-bg data-selected:[--rowBorderColor:var(--color-grid-selected-border)] data-selected:[--color-grid-border:var(--color-grid-selected-border)] data-selected:[&+.twg-row>.twg-cell]:border-t-[var(--color-grid-selected-border)]',
+      'data-selectable:active:bg-grid-selected-bg',
+      // editing
+      'data-editing:bg-grid-editing-bg',
+    ].join(' '),
+
+    skeleton: 'hover:bg-transparent',
+
+    editable: '',
+    editing: 'bg-[#121212]',
+    dynamicHeight: '[&>.twg-cell]:white-space-[initial] [&>.twg-cell]:leading-inherit',
+  },
+
+  scrollbars: {
+    filler: 'min-w-[calc(var(--DataGrid-hasScrollY)*var(--DataGrid-scrollbarSize))] self-stretch',
+    fillerBorderTop: 'border-t border-grid-border',
+    fillerBorderBottom: 'border-b border-grid-border',
+    fillerPinnedRight: 'bg-grid-pinned-bg sticky right-0',
+  },
+
+  filler: {
+    base: 'flex-1',
+    bottom: 'border-b border-b-grid-border',
+  },
+
+  footer: {
+    base: 'select-none flex h-10 justify-between items-center border-t border-t-grid-border flex-shrink-0 px-cell text-[13px]',
+  },
+  rowCount: {
+    base: 'flex items-center gap-1.5 text-white/50',
+    badge:
+      'bg-grid-hover-bg px-1.5 py-0.5 rounded-md text-xs min-w-[20px] text-center border border-grid-border text-white/40 tabular-nums font-medium',
+  },
+  selectedRowCount: {
+    base: 'flex items-center gap-1.5 text-highlight-text cursor-pointer hover:bg-grid-hover-bg hover:opacity-50 pl-1.5 pr-1 -mr-1 py-1 rounded-grid transition-all',
+    badge:
+      'bg-highlight px-1.5 py-0.5 rounded-md text-xs min-w-[20px] text-center border border-highlight-border/50 text-highlight-text tabular-nums font-medium',
+  },
+};
+
+export const theme = className;

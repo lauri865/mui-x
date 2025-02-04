@@ -6,6 +6,8 @@ import { GridPrivateApiCommunity } from '../models/api/gridApiCommunity';
 import { GridRootPropsContext } from './GridRootPropsContext';
 import { GridConfiguration } from '../models/configuration/gridConfiguration';
 import { GridConfigurationContext } from '../components/GridConfigurationContext';
+import { GridThemeContext } from './GridThemeContext';
+import { theme } from '../theme';
 
 type GridContextProviderProps = {
   privateApiRef: RefObject<GridPrivateApiCommunity>;
@@ -23,12 +25,14 @@ export function GridContextProvider({
   const apiRef = React.useRef(privateApiRef.current.getPublicApi());
 
   return (
-    <GridConfigurationContext.Provider value={configuration}>
-      <GridRootPropsContext.Provider value={props}>
-        <GridPrivateApiContext.Provider value={privateApiRef}>
-          <GridApiContext.Provider value={apiRef}>{children}</GridApiContext.Provider>
-        </GridPrivateApiContext.Provider>
-      </GridRootPropsContext.Provider>
-    </GridConfigurationContext.Provider>
+    <GridThemeContext.Provider value={theme}>
+      <GridConfigurationContext.Provider value={configuration}>
+        <GridRootPropsContext.Provider value={props}>
+          <GridPrivateApiContext.Provider value={privateApiRef}>
+            <GridApiContext.Provider value={apiRef}>{children}</GridApiContext.Provider>
+          </GridPrivateApiContext.Provider>
+        </GridRootPropsContext.Provider>
+      </GridConfigurationContext.Provider>
+    </GridThemeContext.Provider>
   );
 }

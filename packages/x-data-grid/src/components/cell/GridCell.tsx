@@ -43,6 +43,7 @@ import {
 import { useGridPrivateApiContext } from '../../hooks/utils/useGridPrivateApiContext';
 import { gridEditCellStateSelector } from '../../hooks/features/editing/gridEditingSelectors';
 import { attachPinnedStyle } from '../../internals/utils';
+import { useThemedComponent } from '@mui/x-data-grid/context/GridThemeContext';
 
 export const gridPinnedColumnPositionLookup = {
   [PinnedColumnPosition.LEFT]: GridPinnedColumnPosition.LEFT,
@@ -261,7 +262,13 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
     isSelected,
     isSelectionMode,
   };
-  const classes = useUtilityClasses(ownerState);
+  const classes = useThemedComponent('cell', {
+    editable: isEditable,
+    pinned:
+      pinnedPosition === PinnedColumnPosition.LEFT || pinnedPosition === PinnedColumnPosition.RIGHT,
+    showRightBorder,
+    showLeftBorder,
+  });
 
   const publishMouseUp = React.useCallback(
     (eventName: GridEvents) => (event: React.MouseEvent<HTMLDivElement>) => {
@@ -288,7 +295,7 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
   );
 
   const publish = React.useCallback(
-    (eventName: keyof GridCellEventLookup, propHandler: any) =>
+    (eventName: keyof GridCellEventLookup, propHandler?: any) =>
       (event: React.SyntheticEvent<HTMLDivElement>) => {
         // The row might have been deleted during the click
         if (!apiRef.current.getRow(rowId)) {
@@ -406,7 +413,6 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
   }
 
   let children: React.ReactNode;
-  let title: string | undefined;
 
   if (editCellState === null && column.renderCell) {
     children = column.renderCell(cellParams);
@@ -437,40 +443,31 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
   if (children === undefined) {
     const valueString = valueToRender?.toString();
     children = valueString;
-    title = valueString;
   }
 
   if (React.isValidElement(children) && canManageOwnFocus) {
     children = React.cloneElement<any>(children, { focusElementRef });
   }
 
-  const draggableEventHandlers = disableDragEvents
-    ? null
-    : {
-        onDragEnter: publish('cellDragEnter', onDragEnter),
-        onDragOver: publish('cellDragOver', onDragOver),
-      };
-
   return (
     <div
       className={clsx(classes.root, classNames, className)}
       role="gridcell"
       data-field={field}
+      data-align={align}
       data-colindex={colIndex}
       aria-colindex={colIndex + 1}
       aria-colspan={colSpan}
       aria-rowspan={rowSpan}
+      data-selected={isSelected || undefined}
       style={style}
-      title={title}
       tabIndex={tabIndex}
       onClick={publish('cellClick', onClick)}
       onDoubleClick={publish('cellDoubleClick', onDoubleClick)}
-      onMouseOver={publish('cellMouseOver', onMouseOver)}
-      onMouseDown={publishMouseDown('cellMouseDown')}
+      onMouseDown={publishMouseDown('cellPointerDown')}
       onMouseUp={publishMouseUp('cellMouseUp')}
       onKeyDown={publish('cellKeyDown', onKeyDown)}
       onKeyUp={publish('cellKeyUp', onKeyUp)}
-      {...draggableEventHandlers}
       {...other}
       onFocus={handleFocus}
       ref={handleRef}

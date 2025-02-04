@@ -818,6 +818,7 @@ export const GridRootStyles = styled('div', {
     },
   };
 
+  console.log('gridStyle', gridStyle);
   return gridStyle;
 });
 

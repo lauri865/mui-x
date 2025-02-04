@@ -7,6 +7,9 @@ import {
 import { getDataGridUtilityClass } from '../../constants/gridClasses';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { DataGridProcessedProps } from '../../models/props/DataGridProps';
+import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
+import { gridDimensionsSelector } from '../../hooks/features/dimensions/gridDimensionsSelectors';
+import clsx from 'clsx';
 
 enum GridColumnHeaderSeparatorSides {
   Left = 'left',
@@ -41,6 +44,8 @@ const useUtilityClasses = (ownerState: OwnerState) => {
 };
 
 function GridColumnHeaderSeparatorRaw(props: GridColumnHeaderSeparatorProps) {
+  const apiRef = useGridApiContext();
+  const [resizerHeight, setResizerHeight] = React.useState<number | null>(null);
   const {
     resizable,
     resizing,
@@ -52,15 +57,40 @@ function GridColumnHeaderSeparatorRaw(props: GridColumnHeaderSeparatorProps) {
   const ownerState = { ...props, side, classes: rootProps.classes };
   const classes = useUtilityClasses(ownerState);
 
-  const stopClick = React.useCallback((event: React.MouseEvent<HTMLDivElement>) => {
+  const stopClick = (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
-  }, []);
+    setResizerHeight(null);
+  };
 
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
-    <div className={classes.root} style={{ minHeight: height }} {...other} onClick={stopClick}>
-      <rootProps.slots.columnResizeIcon className={classes.icon} />
+    <div
+      className={clsx(
+        classes.root,
+        'group/resizer text-grid-border hover:text-white active:text-white active:max-h-full h-full absolute cursor-col-resize px-1 z-1 group-focus-within/cell:text-highlight-border group-data-resizable/cell:pointer-events-auto pointer-events-none [anchor-name:--resizer]',
+        side === GridColumnHeaderSeparatorSides.Left &&
+          '-left-[5px] group-focus-within/cell:-left-1',
+        side === GridColumnHeaderSeparatorSides.Right &&
+          '-right-[5px] group-focus-within/cell:-right-1 group-has-[&+div:focus-within]:-right-1',
+        !rootProps.showColumnVerticalBorder && 'max-h-[20px]',
+      )}
+      {...other}
+      onClick={stopClick}
+      onPointerDown={(event) => {
+        event.stopPropagation();
+        setResizerHeight(gridDimensionsSelector(apiRef.current.state).viewportOuterSize.height);
+      }}
+    >
+      <div className="w-px bg-current h-full" />
+      {resizerHeight && (
+        <div
+          className="w-px bg-white top-[anchor(top)] hidden group-active/resizer:[position-anchor:--resizer] group-active/resizer:flex pointer-events-none"
+          style={{
+            height: resizerHeight,
+          }}
+        />
+      )}
     </div>
   );
 }

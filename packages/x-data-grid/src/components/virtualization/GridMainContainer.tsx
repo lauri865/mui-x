@@ -1,42 +1,16 @@
 import * as React from 'react';
-import { styled } from '@mui/system';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { useGridConfiguration } from '../../hooks/utils/useGridConfiguration';
 import { GridLoadingOverlayVariant } from '../GridLoadingOverlay';
-
-const GridPanelAnchor = styled('div')({
-  position: 'absolute',
-  top: `var(--DataGrid-headersTotalHeight)`,
-  left: 0,
-  width: 'calc(100% - (var(--DataGrid-hasScrollY) * var(--DataGrid-scrollbarSize)))',
-});
+import { useThemedComponent } from '@mui/x-data-grid/context/GridThemeContext';
 
 type OwnerState = Pick<DataGridProcessedProps, 'classes'> & {
   hasScrollX: boolean;
   hasPinnedRight: boolean;
   loadingOverlayVariant: GridLoadingOverlayVariant | null;
 };
-
-const Element = styled('div', {
-  name: 'MuiDataGrid',
-  slot: 'Main',
-  overridesResolver: (props, styles) => {
-    const { ownerState } = props;
-    return [
-      styles.main,
-      ownerState.hasPinnedRight && styles['main--hasPinnedRight'],
-      ownerState.loadingOverlayVariant === 'skeleton' && styles['main--hasSkeletonLoadingOverlay'],
-    ];
-  },
-})<{ ownerState: OwnerState }>({
-  flexGrow: 1,
-  position: 'relative',
-  overflow: 'hidden',
-  display: 'flex',
-  flexDirection: 'column',
-});
 
 export const GridMainContainer = forwardRef<
   HTMLDivElement,
@@ -45,22 +19,21 @@ export const GridMainContainer = forwardRef<
     ownerState: OwnerState;
   }>
 >((props, ref) => {
-  const { ownerState } = props;
   const rootProps = useGridRootProps();
   const configuration = useGridConfiguration();
   const ariaAttributes = configuration.hooks.useGridAriaAttributes();
+  const classes = useThemedComponent('panelAnchor');
 
   return (
-    <Element
-      ownerState={ownerState}
+    <div
       className={props.className}
       tabIndex={-1}
       {...ariaAttributes}
       {...rootProps.slotProps?.main}
       ref={ref}
     >
-      <GridPanelAnchor role="presentation" data-id="gridPanelAnchor" />
+      <div className={classes.root} role="presentation" data-id="gridPanelAnchor" />
       {props.children}
-    </Element>
+    </div>
   );
 });

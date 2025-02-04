@@ -1,0 +1,30 @@
+@import 'tailwindcss';
+@import '../../packages/x-data-grid-shadcn/src/index.css';
+
+@source '../node_modules/@mui/x-data-grid';
+@source '../../packages/x-data-grid/src';
+@source '../../packages/x-data-grid-shadcn/src/**/*.{js,ts,jsx,tsx,css}';
+/* @plugin 'tailwindcss-animate'; */
+
+.twg-root {
+  @theme {
+    --color-grid-bg: #09090b;
+    --color-grid-pinned-bg: #09090b;
+    --color-grid-header-bg: #09090b;
+    --color-grid-border: #27272a;
+    --color-grid-selected-bg: #112a6d;
+    --color-grid-selected-border: #1343b4;
+    --color-highlight: --alpha(var(--color-blue-600) / 30%);
+    --color-highlight-border: var(--color-blue-600);
+    --color-grid-hover-bg: #19191b;
+    --color-highlight-text: var(--color-blue-500);
+    --radius-grid: 6px;
+    --spacing-cell: 10px;
+    --cell-padding: 10px;
+  }
+
+  .twg-cell:focus-within,
+  .twg-columnHeaderCell:focus-within {
+    @apply bg-highlight outline-highlight-border outline-1 outline-offset-[-1px] transition-none z-1;
+  }
+}

@@ -6,7 +6,10 @@ import { useGridSelector } from '../../utils';
 import { useGridRootProps } from '../../utils/useGridRootProps';
 import { useGridPrivateApiContext } from '../../utils/useGridPrivateApiContext';
 import type { GridColumnsRenderContext } from '../../../models/params/gridScrollParams';
-import { useGridApiEventHandler } from '../../utils/useGridApiEventHandler';
+import {
+  useGridApiEventHandler,
+  useGridApiOptionHandler,
+} from '../../utils/useGridApiEventHandler';
 import { GridEventListener } from '../../../models/events';
 import { GridColumnHeaderItem } from '../../../components/columnHeaders/GridColumnHeaderItem';
 import {
@@ -42,6 +45,7 @@ import {
   shouldCellShowRightBorder,
 } from '../../../utils/cellBorderUtils';
 import { PinnedColumnPosition } from '../../../internals/constants';
+import { useThemedComponent } from '@mui/x-data-grid/context/GridThemeContext';
 
 interface HeaderInfo {
   groupId: GridColumnGroup['groupId'] | null;
@@ -107,7 +111,21 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
   const rootProps = useGridRootProps();
   const columnGroupsModel = useGridSelector(apiRef, gridColumnGroupsUnwrappedModelSelector);
   const columnPositions = useGridSelector(apiRef, gridColumnPositionsSelector);
-  const renderContext = useGridSelector(apiRef, gridRenderContextColumnsSelector);
+  const [renderContext, setRenderContext] = React.useState(
+    gridRenderContextColumnsSelector(apiRef.current.state),
+  );
+  const handleRenderContextChange = React.useCallback<GridEventListener<'renderContextChange'>>(
+    (newContext) => {
+      if (
+        renderContext.firstColumnIndex !== newContext.firstColumnIndex ||
+        renderContext.lastColumnIndex !== newContext.lastColumnIndex
+      ) {
+        setRenderContext(newContext);
+      }
+    },
+    [],
+  );
+  useGridApiOptionHandler(apiRef, 'renderContextChange', handleRenderContextChange);
   const pinnedColumns = useGridSelector(apiRef, gridVisiblePinnedColumnDefinitionsSelector);
   const columnsLookup = useGridSelector(apiRef, gridColumnLookupSelector);
   const offsetLeft = computeOffsetLeft(columnPositions, renderContext, pinnedColumns.left.length);
@@ -134,6 +152,10 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
     () => setDragCol(''),
     [],
   );
+
+  const fillerClasses = useThemedComponent('filler', {
+    bottom: true,
+  });
 
   const leftRenderContext = React.useMemo(() => {
     return pinnedColumns.left.length
@@ -195,10 +217,8 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
         {isNotPinned && (
           <div
             role="presentation"
-            className={clsx(
-              gridClasses.filler,
-              borderBottom && gridClasses['filler--borderBottom'],
-            )}
+            className={clsx(fillerClasses.root)}
+            data-field="«filler-right»"
           />
         )}
         {hasScrollbarFiller && (
@@ -290,7 +310,7 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
       );
     }
 
-    return getFillers(params, columns, 0);
+    return getFillers(params, columns, 0, undefined);
   };
 
   const getColumnHeadersRow = () => {
