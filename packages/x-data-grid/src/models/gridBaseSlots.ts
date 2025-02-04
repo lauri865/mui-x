@@ -19,12 +19,11 @@ export type ButtonProps = {
   onClick?: React.MouseEventHandler<HTMLElement>;
   onKeyDown?: React.KeyboardEventHandler<HTMLElement>;
   role?: string;
-  size?: 'small' | 'medium' | 'large';
+  size?: 'sm' | 'md' | 'lg' | 'icon';
   startIcon?: React.ReactNode;
   style?: React.CSSProperties;
   tabIndex?: number;
   title?: string;
-  touchRippleRef?: any; // FIXME(v8:romgrk): find a way to remove
 };
 
 export type IconButtonProps = Omit<ButtonProps, 'startIcon'> & {
@@ -99,6 +98,7 @@ export type TextFieldProps = {
 
 export type TooltipProps = {
   children: React.ReactElement<any, any>;
-  enterDelay?: number;
+  delay?: number;
   title: React.ReactNode;
+  side?: 'top' | 'bottom' | 'left' | 'right';
 };

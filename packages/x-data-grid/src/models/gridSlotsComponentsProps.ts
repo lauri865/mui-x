@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { BadgeProps as MUIBadgeProps } from '@mui/material/Badge';
+/* import type { BadgeProps as MUIBadgeProps } from '@mui/material/Badge';
 import type { ButtonProps as MUIButtonProps } from '@mui/material/Button';
 import type { CheckboxProps } from '@mui/material/Checkbox';
 import type { CircularProgressProps as MUICircularProgressProps } from '@mui/material/CircularProgress';
@@ -15,7 +15,7 @@ import type { TooltipProps as MUITooltipProps } from '@mui/material/Tooltip';
 import type { InputLabelProps } from '@mui/material/InputLabel';
 import type { PopperProps } from '@mui/material/Popper';
 import type { TablePaginationProps } from '@mui/material/TablePagination';
-import type { ChipProps } from '@mui/material/Chip';
+import type { ChipProps } from '@mui/material/Chip'; */
 import type { GridToolbarProps } from '../components/toolbar/GridToolbar';
 import type { ColumnHeaderFilterIconButtonProps } from '../components/columnHeaders/GridColumnHeaderFilterIconButton';
 import type { GridColumnMenuProps } from '../components/menu/columnMenu/GridColumnMenuProps';
@@ -94,39 +94,39 @@ export interface RowPropsOverrides {}
 
 interface BaseSlotProps {
   baseBadge: BadgeProps & BaseBadgePropsOverrides;
-  baseCheckbox: CheckboxProps & BaseCheckboxPropsOverrides;
+  baseCheckbox: {} & BaseCheckboxPropsOverrides;
   baseCircularProgress: CircularProgressProps & BaseCircularProgressPropsOverrides;
   baseDivider: DividerProps & BaseDividerPropsOverrides;
   baseLinearProgress: LinearProgressProps & BaseLinearProgressPropsOverrides;
-  baseMenuList: MenuListProps & BaseMenuListPropsOverrides;
+  baseMenuList: {} & BaseMenuListPropsOverrides;
   baseMenuItem: MenuItemProps & BaseMenuItemPropsOverrides;
   baseTextField: TextFieldProps & BaseTextFieldPropsOverrides;
-  baseFormControl: FormControlProps & BaseFormControlPropsOverrides;
-  baseSelect: SelectProps & BaseSelectPropsOverrides;
-  baseSwitch: SwitchProps & BaseSwitchPropsOverrides;
+  baseFormControl: {} & BaseFormControlPropsOverrides;
+  baseSelect: {} & BaseSelectPropsOverrides;
+  baseSwitch: {} & BaseSwitchPropsOverrides;
   baseButton: ButtonProps & BaseButtonPropsOverrides;
   baseIconButton: IconButtonProps & BaseIconButtonPropsOverrides;
-  basePopper: PopperProps & BasePopperPropsOverrides;
+  basePopper: {} & BasePopperPropsOverrides;
   baseTooltip: TooltipProps & BaseTooltipPropsOverrides;
-  baseInputLabel: InputLabelProps & BaseInputLabelPropsOverrides;
-  baseInputAdornment: InputAdornmentProps & BaseInputAdornmentPropsOverrides;
+  baseInputLabel: {} & BaseInputLabelPropsOverrides;
+  baseInputAdornment: {} & BaseInputAdornmentPropsOverrides;
   baseSelectOption: {
     native: boolean;
     value: any;
     children?: React.ReactNode;
   } & BaseSelectOptionPropsOverrides;
   baseSkeleton: SkeletonProps & BaseSkeletonPropsOverrides;
-  baseChip: ChipProps & BaseChipPropsOverrides;
+  baseChip: {} & BaseChipPropsOverrides;
 }
 
 interface MaterialSlotProps {
-  baseBadge: MUIBadgeProps;
-  baseButton: MUIButtonProps;
-  baseIconButton: MUIIconButtonProps;
-  baseLinearProgress: MUILinearProgressProps;
-  baseCircularProgress: MUICircularProgressProps;
-  baseMenuItem: MUIMenuItemProps;
-  baseTooltip: MUITooltipProps;
+  baseBadge: {};
+  baseButton: {};
+  baseIconButton: {};
+  baseLinearProgress: {};
+  baseCircularProgress: {};
+  baseMenuItem: {};
+  baseTooltip: {};
 }
 
 interface ElementSlotProps {
@@ -145,7 +145,7 @@ interface ElementSlotProps {
   loadingOverlay: GridLoadingOverlayProps & LoadingOverlayPropsOverrides;
   noResultsOverlay: GridOverlayProps & NoResultsOverlayPropsOverrides;
   noRowsOverlay: GridOverlayProps & NoRowsOverlayPropsOverrides;
-  pagination: Partial<TablePaginationProps> & PaginationPropsOverrides;
+  pagination: Partial<{}> & PaginationPropsOverrides;
   panel: GridPanelProps & PanelPropsOverrides;
   pinnedRows: GridPinnedRowsProps & PinnedRowsPropsOverrides;
   row: GridRowProps & RowPropsOverrides;

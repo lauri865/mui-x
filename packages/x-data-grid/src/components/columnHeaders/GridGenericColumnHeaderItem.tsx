@@ -32,13 +32,11 @@ interface GridGenericColumnHeaderItemProps
   separatorSide?: GridColumnHeaderSeparatorProps['side'];
   headerComponent?: React.ReactNode;
   elementId: GridStateColDef['field'] | GridColumnGroup['groupId'];
-  isDraggable: boolean;
   width: number;
   columnMenuIconButton?: React.ReactNode;
   columnMenu?: React.ReactNode;
   columnTitleIconButtons?: React.ReactNode;
   label: string;
-  draggableContainerProps?: Partial<React.HTMLProps<HTMLDivElement>>;
   columnHeaderSeparatorProps?: Partial<GridColumnHeaderSeparatorProps>;
   style?: React.CSSProperties;
 }
@@ -55,7 +53,6 @@ const GridGenericColumnHeaderItem = forwardRef<HTMLDivElement, GridGenericColumn
       hasFocus,
       tabIndex,
       separatorSide,
-      isDraggable,
       headerComponent,
       description,
       elementId,
@@ -66,7 +63,6 @@ const GridGenericColumnHeaderItem = forwardRef<HTMLDivElement, GridGenericColumn
       headerClassName,
       label,
       resizable,
-      draggableContainerProps,
       columnHeaderSeparatorProps,
       style,
       ...other
@@ -111,28 +107,19 @@ const GridGenericColumnHeaderItem = forwardRef<HTMLDivElement, GridGenericColumn
         {...other}
         ref={handleRef}
       >
-        <div
-          className={classes.draggableContainer}
-          draggable={isDraggable}
-          role="presentation"
-          {...draggableContainerProps}
-        >
-          <div className={classes.titleContainer} role="presentation">
-            <div className={classes.titleContainerContent}>
-              {headerComponent !== undefined ? (
-                headerComponent
-              ) : (
-                <GridColumnHeaderTitle
-                  label={label}
-                  description={description}
-                  columnWidth={width}
-                />
-              )}
-            </div>
-            {columnTitleIconButtons}
+        <div className={classes.titleContainer} role="presentation">
+          <div className={classes.titleContainerContent}>
+            {headerComponent !== undefined ? (
+              headerComponent
+            ) : (
+              <GridColumnHeaderTitle label={label} description={description} columnWidth={width} />
+            )}
           </div>
-          {columnMenuIconButton}
         </div>
+        {columnTitleIconButtons}
+        {columnMenuIconButton}
+        {columnMenu}
+
         <GridColumnHeaderSeparator
           resizable={!rootProps.disableColumnResize && !!resizable}
           resizing={isResizing}
@@ -140,7 +127,6 @@ const GridGenericColumnHeaderItem = forwardRef<HTMLDivElement, GridGenericColumn
           side={separatorSide}
           {...columnHeaderSeparatorProps}
         />
-        {columnMenu}
       </div>
     );
   },

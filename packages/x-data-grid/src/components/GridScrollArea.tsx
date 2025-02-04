@@ -44,7 +44,7 @@ const useUtilityClasses = (ownerState: OwnerState) => {
 };
 
 const GridScrollAreaRawRoot = styled('div', {
-  name: 'MuiDataGrid',
+  name: 'twg',
   slot: 'ScrollArea',
   overridesResolver: (props, styles) => [
     { [`&.${gridClasses['scrollArea--left']}`]: styles['scrollArea--left'] },
@@ -55,7 +55,7 @@ const GridScrollAreaRawRoot = styled('div', {
   position: 'absolute',
   top: 0,
   zIndex: 101,
-  width: 20,
+  width: 25,
   bottom: 0,
   [`&.${gridClasses['scrollArea--left']}`]: {
     left: 0,
@@ -86,9 +86,11 @@ function GridScrollAreaWrapper(props: ScrollAreaProps) {
     setDragging(true);
   });
 
-  const handleColumnHeaderDragEnd = useEventCallback(() => {
-    setDragging(false);
-  });
+  const handleColumnHeaderDragEnd = useEventCallback<GridEventListener<'columnHeaderDragEnd'>>(
+    () => {
+      setDragging(false);
+    },
+  );
 
   useGridApiEventHandler(apiRef, 'columnHeaderDragStart', handleColumnHeaderDragStart);
   useGridApiEventHandler(apiRef, 'columnHeaderDragEnd', handleColumnHeaderDragEnd);
@@ -134,7 +136,7 @@ function GridScrollAreaContent(props: ScrollAreaProps) {
   const headerHeight = Math.floor(rootProps.columnHeaderHeight * densityFactor);
 
   const style: React.CSSProperties = {
-    height: headerHeight,
+    height: gridDimensionsSelector(apiRef.current.state).viewportOuterSize.height,
     top: totalHeaderHeight - headerHeight,
   };
 
@@ -148,11 +150,14 @@ function GridScrollAreaContent(props: ScrollAreaProps) {
     setCanScrollMore(getCanScrollMore);
   };
 
-  const handleDragOver = useEventCallback((event: React.DragEvent<HTMLDivElement>) => {
-    let offset: number;
+  React.useLayoutEffect(() => {
+    setCanScrollMore(getCanScrollMore);
+  }, [columnsTotalWidth]);
 
-    // Prevents showing the forbidden cursor
-    event.preventDefault();
+  const resetTimeout = React.useRef<NodeJS.Timeout | null>(null);
+
+  const handleDragOver = useEventCallback((event: React.PointerEvent<HTMLDivElement>) => {
+    let offset: number;
 
     if (scrollDirection === 'left') {
       offset = event.clientX - rootRef.current!.getBoundingClientRect().right;
@@ -163,6 +168,19 @@ function GridScrollAreaContent(props: ScrollAreaProps) {
     }
 
     offset = (offset - CLIFF) * SLOP + CLIFF;
+
+    if (rootRef.current) {
+      rootRef.current.style.pointerEvents = 'none';
+      rootRef.current.addEventListener(
+        'pointerleave',
+        () => {
+          if (rootRef.current) {
+            rootRef.current.style.pointerEvents = '';
+          }
+        },
+        { once: true },
+      );
+    }
 
     // Avoid freeze and inertia.
     timeout.start(0, () => {
@@ -184,7 +202,7 @@ function GridScrollAreaContent(props: ScrollAreaProps) {
       ref={rootRef}
       className={clsx(classes.root)}
       ownerState={ownerState}
-      onDragOver={handleDragOver}
+      onPointerEnter={handleDragOver}
       style={style}
     />
   );

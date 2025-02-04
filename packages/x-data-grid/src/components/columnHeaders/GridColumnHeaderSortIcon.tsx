@@ -7,7 +7,7 @@ import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { getDataGridUtilityClass } from '../../constants/gridClasses';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { DataGridProcessedProps } from '../../models/props/DataGridProps';
-import { GridIconButtonContainer } from './GridIconButtonContainer';
+import clsx from 'clsx';
 
 export interface GridColumnHeaderSortIconProps {
   field: string;
@@ -47,46 +47,36 @@ function getIcon(
     Icon = icons.columnUnsortedIcon;
     iconProps.sortingOrder = sortingOrder;
   }
-  return Icon ? <Icon fontSize="small" className={className} {...iconProps} /> : null;
+  return Icon ? <Icon className={className} {...iconProps} /> : null;
 }
 
 function GridColumnHeaderSortIconRaw(props: GridColumnHeaderSortIconProps) {
   const { direction, index, sortingOrder, disabled, ...other } = props;
   const apiRef = useGridApiContext();
   const rootProps = useGridRootProps();
-  const ownerState = { ...props, classes: rootProps.classes };
-  const classes = useUtilityClasses(ownerState);
 
-  const iconElement = getIcon(rootProps.slots, direction, classes.icon, sortingOrder);
+  const iconElement = getIcon(rootProps.slots, direction, '', sortingOrder);
   if (!iconElement) {
     return null;
   }
 
   const iconButton = (
-    <rootProps.slots.baseIconButton
-      tabIndex={-1}
-      aria-label={apiRef.current.getLocaleText('columnHeaderSortIconLabel')}
-      title={apiRef.current.getLocaleText('columnHeaderSortIconLabel')}
-      size="small"
-      disabled={disabled}
-      {...rootProps.slotProps?.baseIconButton}
-      {...other}
-    >
-      {iconElement}
-    </rootProps.slots.baseIconButton>
+    <rootProps.slots.baseTooltip title={apiRef.current.getLocaleText('columnHeaderSortIconLabel')}>
+      <rootProps.slots.baseIconButton
+        tabIndex={-1}
+        aria-label={apiRef.current.getLocaleText('columnHeaderSortIconLabel')}
+        size="icon"
+        disabled={disabled}
+        className={clsx('hidden group-hover/cell:flex', index != null && 'flex')}
+        {...rootProps.slotProps?.baseIconButton}
+        {...other}
+      >
+        {iconElement}
+      </rootProps.slots.baseIconButton>
+    </rootProps.slots.baseTooltip>
   );
 
-  return (
-    <GridIconButtonContainer>
-      {index != null && (
-        <rootProps.slots.baseBadge badgeContent={index} color="default" overlap="circular">
-          {iconButton}
-        </rootProps.slots.baseBadge>
-      )}
-
-      {index == null && iconButton}
-    </GridIconButtonContainer>
-  );
+  return <>{iconButton}</>;
 }
 
 const GridColumnHeaderSortIcon = React.memo(GridColumnHeaderSortIconRaw);

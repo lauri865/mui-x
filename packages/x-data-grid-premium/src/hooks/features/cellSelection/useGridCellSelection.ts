@@ -234,7 +234,7 @@ export const useGridCellSelection = (
     stopAutoScroll();
   });
 
-  const handleCellMouseDown = React.useCallback<GridEventListener<'cellMouseDown'>>(
+  const handlecellPointerDown = React.useCallback<GridEventListener<'cellPointerDown'>>(
     (params, event) => {
       // Skip if the click comes from the right-button or, only on macOS, Ctrl is pressed
       // Fix for https://github.com/mui/mui-x/pull/6567#issuecomment-1329155578
@@ -461,7 +461,11 @@ export const useGridCellSelection = (
   useGridApiEventHandler(apiRef, 'cellClick', runIfCellSelectionIsEnabled(handleCellClick));
   useGridApiEventHandler(apiRef, 'cellFocusIn', runIfCellSelectionIsEnabled(handleCellFocusIn));
   useGridApiEventHandler(apiRef, 'cellKeyDown', runIfCellSelectionIsEnabled(handleCellKeyDown));
-  useGridApiEventHandler(apiRef, 'cellMouseDown', runIfCellSelectionIsEnabled(handleCellMouseDown));
+  useGridApiEventHandler(
+    apiRef,
+    'cellPointerDown',
+    runIfCellSelectionIsEnabled(handlecellPointerDown),
+  );
   useGridApiEventHandler(apiRef, 'cellMouseOver', runIfCellSelectionIsEnabled(handleCellMouseOver));
 
   React.useEffect(() => {

@@ -20,7 +20,7 @@ import { GridColumnMenu } from '../components/menu/columnMenu/GridColumnMenu';
 import { GridDetailPanels } from '../components/GridDetailPanels';
 import { GridPinnedRows } from '../components/GridPinnedRows';
 import { GridNoResultsOverlay } from '../components/GridNoResultsOverlay';
-import materialSlots from '../material';
+import materialSlots from '../slots';
 
 // TODO: camelCase these key. It's a private helper now.
 // Remove then need to call `uncapitalizeObjectKeys`.

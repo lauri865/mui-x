@@ -307,7 +307,7 @@ export const useGridSorting = (
    */
   const handleColumnHeaderClick = React.useCallback<GridEventListener<'columnHeaderClick'>>(
     ({ field, colDef }, event) => {
-      if (!colDef.sortable || props.disableColumnSorting) {
+      if (!colDef.sortable || props.disableColumnSorting || event.defaultPrevented) {
         return;
       }
       const allowMultipleSorting = event.shiftKey || event.metaKey || event.ctrlKey;

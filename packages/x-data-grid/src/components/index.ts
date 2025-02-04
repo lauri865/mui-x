@@ -3,7 +3,7 @@ export * from './cell';
 export * from './containers';
 export * from './columnHeaders';
 export * from './columnSelection';
-export * from '../material/icons';
+export * from '../slots/icons';
 export * from './menu';
 export * from './panel';
 export * from './columnsManagement';

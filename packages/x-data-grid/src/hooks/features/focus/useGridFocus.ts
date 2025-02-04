@@ -350,9 +350,12 @@ export const useGridFocus = (
     [logger, apiRef],
   );
 
-  const handleCellMouseDown = React.useCallback<GridEventListener<'cellMouseDown'>>((params) => {
-    lastClickedCell.current = params;
-  }, []);
+  const handlecellPointerDown = React.useCallback<GridEventListener<'cellPointerDown'>>(
+    (params) => {
+      lastClickedCell.current = params;
+    },
+    [],
+  );
 
   const handleDocumentClick = React.useCallback(
     (event: MouseEvent) => {
@@ -512,7 +515,7 @@ export const useGridFocus = (
 
   useGridApiEventHandler(apiRef, 'columnHeaderBlur', handleBlur);
   useGridApiEventHandler(apiRef, 'cellDoubleClick', handleCellDoubleClick);
-  useGridApiEventHandler(apiRef, 'cellMouseDown', handleCellMouseDown);
+  useGridApiEventHandler(apiRef, 'cellPointerDown', handlecellPointerDown);
   useGridApiEventHandler(apiRef, 'cellKeyDown', handleCellKeyDown);
   useGridApiEventHandler(apiRef, 'cellModeChange', handleCellModeChange);
   useGridApiEventHandler(apiRef, 'columnHeaderFocus', handleColumnHeaderFocus);

@@ -11,7 +11,6 @@ import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { getDataGridUtilityClass } from '../../constants/gridClasses';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import type { DataGridProcessedProps } from '../../models/props/DataGridProps';
-import { GridIconButtonContainer } from './GridIconButtonContainer';
 import { GridColumnHeaderParams } from '../../models/params/gridColumnHeaderParams';
 
 export interface ColumnHeaderFilterIconButtonProps {
@@ -108,10 +107,10 @@ function GridColumnHeaderFilterIconButton(props: ColumnHeaderFilterIconButtonPro
           counter,
         ) as React.ReactElement<any>
       }
-      enterDelay={1000}
+      delay={1000}
       {...rootProps.slotProps?.baseTooltip}
     >
-      <GridIconButtonContainer>
+      <>
         {counter > 1 && (
           <rootProps.slots.baseBadge badgeContent={counter} color="default">
             {iconButton}
@@ -119,7 +118,7 @@ function GridColumnHeaderFilterIconButton(props: ColumnHeaderFilterIconButtonPro
         )}
 
         {counter === 1 && iconButton}
-      </GridIconButtonContainer>
+      </>
     </rootProps.slots.baseTooltip>
   );
 }

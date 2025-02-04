@@ -46,7 +46,7 @@ describe('<DataGridPro/> - Components', () => {
       [
         ['onClick', 'cellClick'],
         ['onDoubleClick', 'cellDoubleClick'],
-        ['onMouseDown', 'cellMouseDown'],
+        ['onMouseDown', 'cellPointerDown'],
         ['onMouseUp', 'cellMouseUp'],
         ['onDragEnter', 'cellDragEnter'],
         ['onDragOver', 'cellDragOver'],
