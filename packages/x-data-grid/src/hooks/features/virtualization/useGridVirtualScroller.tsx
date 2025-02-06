@@ -404,29 +404,14 @@ export const useGridVirtualScroller = () => {
     params: {
       rows?: GridRowEntry[];
       position?: GridPinnedRowsPosition;
-      renderContext?:
-        | GridRenderContext
-        | (Pick<GridRenderContext, 'firstRowIndex' | 'lastRowIndex'> & {
-            firstColumnIndex: undefined;
-            lastColumnIndex: undefined;
-          });
+      renderContext?: GridRenderContext;
     } = {},
   ) => {
     if (!params.rows && !currentPage.range) {
       return [];
     }
 
-    let baseRenderContext = renderContext;
-    if (params.renderContext) {
-      baseRenderContext = params.renderContext as GridRenderContext;
-
-      if (params.renderContext.firstColumnIndex === -1) {
-        baseRenderContext.firstColumnIndex = renderContext.firstColumnIndex;
-      }
-      if (params.renderContext.lastColumnIndex === -1) {
-        baseRenderContext.lastColumnIndex = renderContext.lastColumnIndex;
-      }
-    }
+    let baseRenderContext = params.renderContext ?? renderContext;
 
     const isLastSection =
       (!hasBottomPinnedRows && params.position === undefined) ||

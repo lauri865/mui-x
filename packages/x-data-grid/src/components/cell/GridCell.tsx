@@ -171,6 +171,8 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
       rowId,
       field,
     },
+    undefined,
+    props.column.editable,
   );
 
   const cellMode: GridCellModes = editCellState ? GridCellModes.Edit : GridCellModes.View;
@@ -195,15 +197,32 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
   });
   cellParams.api = apiRef.current;
 
-  const isSelected = useGridSelector(apiRef, () =>
-    apiRef.current.unstable_applyPipeProcessors('isCellSelected', false, {
-      id: rowId,
-      field,
-    }),
+  const isSelected = useGridSelector(
+    apiRef,
+    () =>
+      apiRef.current.unstable_applyPipeProcessors('isCellSelected', false, {
+        id: rowId,
+        field,
+      }),
+    undefined,
+    undefined,
+    rootProps.cellSelection,
   );
 
-  const hiddenCells = useGridSelector(apiRef, gridRowSpanningHiddenCellsSelector);
-  const spannedCells = useGridSelector(apiRef, gridRowSpanningSpannedCellsSelector);
+  const hiddenCells = useGridSelector(
+    apiRef,
+    gridRowSpanningHiddenCellsSelector,
+    undefined,
+    undefined,
+    rootProps.rowSpanning,
+  );
+  const spannedCells = useGridSelector(
+    apiRef,
+    gridRowSpanningSpannedCellsSelector,
+    undefined,
+    undefined,
+    rootProps.rowSpanning,
+  );
 
   const { hasFocus, isEditable = false, value } = cellParams;
 
@@ -218,15 +237,13 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
   const { classes: rootClasses, getCellClassName } = rootProps;
 
   // There is a hidden grid state access in `applyPipeProcessor('cellClassName', ...)`
-  const pipesClassName = useGridSelector(apiRef, () =>
-    apiRef.current
-      .unstable_applyPipeProcessors('cellClassName', [], {
-        id: rowId,
-        field,
-      })
-      .filter(Boolean)
-      .join(' '),
-  );
+  const pipesClassName = apiRef.current
+    .unstable_applyPipeProcessors('cellClassName', [], {
+      id: rowId,
+      field,
+    })
+    .filter(Boolean)
+    .join(' ');
 
   const classNames = [pipesClassName] as (string | undefined)[];
 

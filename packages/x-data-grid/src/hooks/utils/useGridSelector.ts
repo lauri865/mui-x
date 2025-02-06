@@ -50,9 +50,8 @@ export const argsEqual = (prev: any, curr: any) => {
   return fn(prev, curr);
 };
 
-const noop = () => {};
 const createRefs = () =>
-  ({ state: null, equals: null, selector: null, args: null, subscription: noop }) as any;
+  ({ state: null, equals: null, selector: null, args: undefined, subscription: null }) as any;
 
 const EMPTY = [] as unknown[];
 
@@ -61,7 +60,7 @@ type Refs<T> = {
   equals: <U = T>(a: U, b: U) => boolean;
   selector: Selector<any, any, T>;
   args: any;
-  subscription: null | (() => void);
+  subscription: undefined | (() => void);
 };
 
 const emptyGetSnapshot = () => null;
@@ -71,6 +70,7 @@ export const useGridSelector = <Api extends GridApiCommon, Args, T>(
   selector: Selector<Api, Args, T>,
   args: Args = undefined as Args,
   equals: <U = T>(a: U, b: U) => boolean = defaultCompare,
+  enabled: boolean = true,
 ) => {
   if (process.env.NODE_ENV !== 'production') {
     if (!apiRef.current.state) {
@@ -108,43 +108,25 @@ export const useGridSelector = <Api extends GridApiCommon, Args, T>(
     }
   }
 
-  const subscribe = React.useCallback(
-    () => {
-      if (refs.current.subscription) {
-        return null;
+  React.useInsertionEffect(() => {
+    if (!enabled) {
+      return;
+    }
+    return apiRef.current.store.subscribe(() => {
+      const newState = applySelector(
+        apiRef,
+        refs.current.selector,
+        refs.current.args,
+        apiRef.current.instanceId,
+      ) as T;
+
+      if (!refs.current.equals(refs.current.state, newState)) {
+        refs.current.state = newState;
+        setState(newState);
       }
-
-      refs.current.subscription = apiRef.current.store.subscribe(() => {
-        const newState = applySelector(
-          apiRef,
-          refs.current.selector,
-          refs.current.args,
-          apiRef.current.instanceId,
-        ) as T;
-
-        if (!refs.current.equals(refs.current.state, newState)) {
-          refs.current.state = newState;
-          setState(newState);
-        }
-      });
-
-      return null;
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    EMPTY,
-  );
-
-  const unsubscribe = React.useCallback(() => {
-    return () => {
-      if (refs.current.subscription) {
-        refs.current.subscription();
-        refs.current.subscription = undefined;
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, EMPTY);
-
-  useSyncExternalStore(unsubscribe, subscribe, emptyGetSnapshot);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    });
+  }, [enabled]);
 
   return state;
 };

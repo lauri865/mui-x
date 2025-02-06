@@ -61,6 +61,10 @@ export default function DataGridDemo() {
             left: ['lastName'],
             right: ['id'],
           },
+          pinnedRows: {
+            top: [1],
+            bottom: [],
+          },
         }}
         pageSizeOptions={[5]}
         //checkboxSelection

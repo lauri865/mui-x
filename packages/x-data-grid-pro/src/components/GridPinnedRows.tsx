@@ -26,10 +26,14 @@ export function GridPinnedRows({ position, virtualScroller }: GridPinnedRowsProp
     () => ({
       firstRowIndex: 0,
       lastRowIndex: rows.length,
-      firstColumnIndex: undefined,
-      lastColumnIndex: undefined,
+      firstColumnIndex: virtualScroller.renderContext.firstColumnIndex,
+      lastColumnIndex: virtualScroller.renderContext.lastColumnIndex,
     }),
-    [rows],
+    [
+      rows,
+      virtualScroller.renderContext.firstColumnIndex,
+      virtualScroller.renderContext.lastColumnIndex,
+    ],
   );
 
   if (rows.length === 0) {

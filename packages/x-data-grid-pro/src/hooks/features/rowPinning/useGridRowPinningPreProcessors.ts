@@ -156,6 +156,8 @@ export const useGridRowPinningPreProcessors = (apiRef: RefObject<GridPrivateApiP
         newGroupingParams.dataRowIds = newGroupingParams.dataRowIds.filter(shouldKeepRow);
       }
 
+      console.log(newGroupingParams.tree, newGroupingParams);
+
       return newGroupingParams;
     },
     [apiRef],

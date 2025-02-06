@@ -87,7 +87,6 @@ export const useGridFocus = (
           },
         };
       });
-      apiRef.current.forceUpdate();
 
       // The row might have been deleted
       if (!apiRef.current.getRow(id)) {

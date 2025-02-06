@@ -66,6 +66,10 @@ import {
   useGridColumnPinning,
   columnPinningStateInitializer,
 } from '../hooks/features/columnPinning/useGridColumnPinning';
+import {
+  useGridRowPinning,
+  rowPinningStateInitializer,
+} from '../hooks/features/rowPinning/useGridRowPinning';
 
 export const useDataGridComponent = (
   inputApiRef: RefObject<GridApiCommunity | null> | undefined,
@@ -104,6 +108,7 @@ export const useDataGridComponent = (
   useGridInitializeState(dimensionsStateInitializer, apiRef, props);
   useGridInitializeState(rowsMetaStateInitializer, apiRef, props);
   useGridInitializeState(listViewStateInitializer, apiRef, props);
+  useGridInitializeState(rowPinningStateInitializer, apiRef, props);
 
   useGridKeyboardNavigation(apiRef, props);
   useGridRowSelection(apiRef, props);
@@ -133,6 +138,7 @@ export const useDataGridComponent = (
   useGridStatePersistence(apiRef);
   useGridVirtualization(apiRef, props);
   useGridListView(apiRef, props);
+  useGridRowPinning(apiRef, props);
 
   return apiRef;
 };

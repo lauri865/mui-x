@@ -38,6 +38,10 @@ import { GridPaginationMeta, GridPaginationModel } from '../gridPaginationProps'
 import type { GridAutosizeOptions } from '../../hooks/features/columnResize';
 import type { GridDataSource } from '../gridDataSource';
 import type { GridRowSelectionPropagation } from '../gridRowSelectionModel';
+import {
+  GridPinnedRowsModel,
+  GridRowPinningProps,
+} from '../../hooks/features/rowPinning/rowPinningInterfaces';
 
 export interface GridExperimentalFeatures {
   /**
@@ -55,9 +59,7 @@ export type DataGridProps<R extends GridValidRowModel = any> = Omit<
     DataGridPropsWithComplexDefaultValueBeforeProcessing &
     DataGridPropsWithoutDefaultValue<R>,
   DataGridForcedPropsKey
-> & {
-  pagination?: true;
-};
+>;
 
 /**
  * The props of the Data Grid component after the pre-processing phase that the user should not be able to override.
@@ -277,7 +279,7 @@ export interface DataGridPropsWithDefaultValues<R extends GridValidRowModel = an
   loading: boolean;
   /**
    * If `true`, pagination is enabled.
-   * @default true
+   * @default false
    */
   pagination: boolean;
   /**
@@ -287,8 +289,6 @@ export interface DataGridPropsWithDefaultValues<R extends GridValidRowModel = an
    * @default "client"
    */
   paginationMode: GridFeatureMode;
-  // TODO: document
-  pinnedColumns: GridPinnedColumnFields;
   /**
    * Set of rows of type [[GridRowsProp]].
    * @default []
@@ -763,6 +763,7 @@ export interface DataGridPropsWithoutDefaultValue<R extends GridValidRowModel = 
   getRowId?: GridRowIdGetter<R>;
   /**
    * Nonce of the inline styles for [Content Security Policy](https://www.w3.org/TR/2016/REC-CSP2-20161215/#script-src-the-nonce-attribute).
+   * @deprecated
    */
   nonce?: string;
   /**
@@ -828,6 +829,10 @@ export interface DataGridPropsWithoutDefaultValue<R extends GridValidRowModel = 
    * @param {GridCallbackDetails} details Additional details for this callback.
    */
   onColumnWidthChange?: GridEventListener<'columnWidthChange'>;
+
+  // TODO: document
+  pinnedColumns?: GridPinnedColumnFields;
+  pinnedRows?: GridPinnedRowsModel;
 }
 
 export interface DataGridProSharedPropsWithDefaultValue {

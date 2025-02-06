@@ -82,6 +82,8 @@ export const useGridRowPinning = (
 
   const isFirstRender = React.useRef(true);
 
+  console.log(apiRef.current.state);
+
   React.useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;

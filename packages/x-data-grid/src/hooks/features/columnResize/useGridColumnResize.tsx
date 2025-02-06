@@ -476,7 +476,7 @@ export const useGridColumnResize = (
       pinnedPosition !== GridPinnedColumnPosition.LEFT
         ? []
         : findLeftPinnedCellsAfterCol(apiRef.current, refs.columnHeaderElement, isRtl);
-    console.log(refs.leftPinnedCellsAfter);
+
     refs.rightPinnedCellsBefore =
       pinnedPosition !== GridPinnedColumnPosition.RIGHT
         ? []

@@ -28,6 +28,8 @@ import type { GridColumnResizeState } from '../hooks/features/columnResize';
 import type { GridRowSpanningState } from '../hooks/features/rows/useGridRowSpanning';
 import type { GridListViewState } from '../hooks/features/listView/useGridListView';
 import { GridPinnedColumnFields } from '../hooks/features/columns/gridColumnsInterfaces';
+import { GridPinnedRowsModel } from '../hooks/features/rowPinning/rowPinningInterfaces';
+import { GridPinnedRowsState } from '../hooks/features/rowPinning/rowPinningInterfaces';
 
 /**
  * The state of Data Grid.
@@ -56,6 +58,7 @@ export interface GridStateCommunity {
   columnResize: GridColumnResizeState;
   rowSpanning: GridRowSpanningState;
   listViewColumn: GridListViewState;
+  pinnedRows: GridPinnedRowsState;
 }
 
 /**
@@ -70,4 +73,5 @@ export interface GridInitialStateCommunity {
   density?: GridDensityState;
   scroll?: { top: number; left: number };
   pinnedColumns?: GridPinnedColumnFields;
+  pinnedRows?: GridPinnedRowsModel;
 }

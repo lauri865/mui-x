@@ -25,6 +25,7 @@ export function GridDragDrop() {
   const [action, setAction] = React.useState<'move' | 'hide'>('move');
   const [draggedColumn, setDraggedColumn] = React.useState<GridColumnHeaderParams | null>(null);
   const isReordering = React.useRef(false);
+  const animationFrame = React.useRef<number | null>(null);
   const [pointer, setPointerPosition] = React.useState({ x: 0, y: 0 });
 
   const getDraggedColumn = useEventCallback(() => draggedColumn);
@@ -102,7 +103,7 @@ export function GridDragDrop() {
     }
     setPointerPosition({ x: event.clientX, y: event.clientY });
 
-    requestAnimationFrame(() => {
+    animationFrame.current = requestAnimationFrame(() => {
       updateRefs();
     });
     const col = draggedColumnRef.current;
@@ -197,6 +198,10 @@ export function GridDragDrop() {
     document.body.removeEventListener('keydown', onKeyDown);
     document.body.removeEventListener('pointerup', pointerUp);
     document.documentElement.classList.remove('dragging');
+    if (animationFrame.current) {
+      cancelAnimationFrame(animationFrame.current);
+      animationFrame.current = null;
+    }
     const gridRef = apiRef.current.rootElementRef.current;
     if (gridRef) {
       gridRef.removeAttribute('data-dragging');

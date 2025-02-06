@@ -210,6 +210,7 @@ export const gridVisibleRowsSelector = createSelectorMemoized(
   gridExpandedSortedRowEntriesSelector,
   (clientPaginationEnabled, paginationRowRange, paginationRows, expandedSortedRowEntries) => {
     if (clientPaginationEnabled) {
+      console.log('pagination rows', paginationRows);
       return {
         rows: paginationRows,
         range: paginationRowRange,

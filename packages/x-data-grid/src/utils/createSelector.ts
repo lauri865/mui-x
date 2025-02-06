@@ -148,7 +148,6 @@ export const createSelector = ((
   // We use this property to detect if the selector was created with createSelector
   // or it's only a simple function the receives the state and returns part of it.
   selector.acceptsApiRef = true;
-
   return selector;
 }) as unknown as CreateSelectorFunction;
 
