@@ -14,11 +14,10 @@ import MUIInputAdornment from '@mui/material/InputAdornment';
 import MUIPopper from '@mui/material/Popper';
 import MUIInputLabel from '@mui/material/InputLabel';
 import MUISkeleton from '@mui/material/Skeleton';
+import { Button, Checkbox, DropdownMenu, icons, Tooltip } from '@twgrid/x-data-grid-shadcn';
 import { GridColumnUnsortedIcon } from './icons/GridColumnUnsortedIcon';
 import {
   GridAddIcon,
-  GridArrowDownwardIcon,
-  GridArrowUpwardIcon,
   GridCheckIcon,
   GridCloseIcon,
   GridColumnIcon,
@@ -31,13 +30,9 @@ import {
   GridRemoveIcon,
   GridSaveAltIcon,
   GridSearchIcon,
-  GridSeparatorIcon,
   GridTableRowsIcon,
-  GridTripleDotsVerticalIcon,
   GridViewHeadlineIcon,
   GridViewStreamIcon,
-  GridVisibilityOffIcon,
-  GridViewColumnIcon,
   GridClearIcon,
   GridLoadIcon,
   GridDeleteForeverIcon,
@@ -46,20 +41,15 @@ import type { GridIconSlotsComponent } from '../models';
 import type { GridBaseSlots } from '../models/gridSlotsComponent';
 import type { GridSlotProps } from '../models/gridSlotsComponentsProps';
 import MUISelectOption from './components/MUISelectOption';
-import { Button, Checkbox, DropdownMenu, Tooltip } from '@twgrid/x-data-grid-shadcn';
 
 const iconSlots: GridIconSlotsComponent = {
   booleanCellTrueIcon: GridCheckIcon,
   booleanCellFalseIcon: GridCloseIcon,
-  columnMenuIcon: GridTripleDotsVerticalIcon,
   openFilterButtonIcon: GridFilterListIcon,
   filterPanelDeleteIcon: GridCloseIcon,
   columnFilteredIcon: GridFilterAltIcon,
   columnSelectorIcon: GridColumnIcon,
   columnUnsortedIcon: GridColumnUnsortedIcon,
-  columnSortedAscendingIcon: GridArrowUpwardIcon,
-  columnSortedDescendingIcon: GridArrowDownwardIcon,
-  columnResizeIcon: GridSeparatorIcon,
   densityCompactIcon: GridViewHeadlineIcon,
   densityStandardIcon: GridTableRowsIcon,
   densityComfortableIcon: GridViewStreamIcon,
@@ -74,17 +64,25 @@ const iconSlots: GridIconSlotsComponent = {
   rowReorderIcon: GridDragIcon,
   quickFilterIcon: GridSearchIcon,
   quickFilterClearIcon: GridCloseIcon,
-  columnMenuHideIcon: GridVisibilityOffIcon,
-  columnMenuSortAscendingIcon: GridArrowUpwardIcon,
-  columnMenuSortDescendingIcon: GridArrowDownwardIcon,
-  columnMenuFilterIcon: GridFilterAltIcon,
-  columnMenuManageColumnsIcon: GridViewColumnIcon,
   columnMenuClearIcon: GridClearIcon,
   loadIcon: GridLoadIcon,
   filterPanelAddIcon: GridAddIcon,
   filterPanelRemoveAllIcon: GridDeleteForeverIcon,
   columnReorderIcon: GridDragIcon,
   menuItemCheckIcon: GridCheckIcon,
+  // shadcn
+  columnsIcon: icons.column,
+  pinIcon: icons.pin,
+  hideIcon: icons.hide,
+  reorderIcon: icons.reorder,
+  columnSortedAscendingIcon: icons.sortAsc,
+  columnSortedDescendingIcon: icons.sortDesc,
+  columnMenuSortAscendingIcon: icons.sortAsc,
+  columnMenuSortDescendingIcon: icons.sortDesc,
+  columnMenuIcon: icons.columnMenu,
+  columnMenuFilterIcon: icons.filter,
+  columnMenuHideIcon: icons.hide,
+  columnMenuManageColumnsIcon: icons.column,
 };
 
 const baseSlots: GridBaseSlots = {

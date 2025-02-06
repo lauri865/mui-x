@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { theme } from '../theme';
 import clsx from 'clsx';
+import { theme } from '../theme';
 
 type GridTheme = typeof theme;
 export const GridThemeContext = React.createContext<GridTheme>({} as GridTheme);
@@ -26,7 +26,7 @@ export const useThemedComponent = <N extends keyof GridTheme>(
       variants &&
         Object.entries(variants).map(([key, value]) =>
           value && theme[name][key as keyof GridTheme[N]]
-            ? `twg-${name}-${key} ` + theme[name][key as keyof GridTheme[N]]
+            ? `twg-${name}-${key} ${  theme[name][key as keyof GridTheme[N]]}`
             : '',
         ),
     ),

@@ -352,11 +352,12 @@ export const useGridColumnResize = (
       div.style.setProperty('--width', finalWidth);
     });
 
-    const pinnedPosition = apiRef.current.unstable_applyPipeProcessors(
+    const pinnedPosition = apiRef.current.getColumnPinnedPosition(refs.colDef!.field);
+    /* const pinnedPosition = apiRef.current.unstable_applyPipeProcessors(
       'isColumnPinned',
       false,
       refs.colDef!.field,
-    );
+    ); */
 
     if (pinnedPosition === GridPinnedColumnPosition.LEFT) {
       updateProperty(refs.fillerLeft, 'width', widthDiff);
@@ -469,16 +470,13 @@ export const useGridColumnResize = (
       isRtl ? 'filler--pinnedLeft' : 'filler--pinnedRight',
     );
 
-    const pinnedPosition = apiRef.current.unstable_applyPipeProcessors(
-      'isColumnPinned',
-      false,
-      refs.colDef!.field,
-    );
+    const pinnedPosition = apiRef.current.getColumnPinnedPosition(refs.colDef!.field);
 
     refs.leftPinnedCellsAfter =
       pinnedPosition !== GridPinnedColumnPosition.LEFT
         ? []
         : findLeftPinnedCellsAfterCol(apiRef.current, refs.columnHeaderElement, isRtl);
+    console.log(refs.leftPinnedCellsAfter);
     refs.rightPinnedCellsBefore =
       pinnedPosition !== GridPinnedColumnPosition.RIGHT
         ? []

@@ -21,8 +21,8 @@ export interface GridColumnsState {
 }
 
 export interface GridPinnedColumnFields {
-  left?: string[];
-  right?: string[];
+  left: string[];
+  right: string[];
 }
 
 export const EMPTY_PINNED_COLUMN_FIELDS = {
@@ -34,8 +34,6 @@ export interface GridPinnedColumns {
   left: GridStateColDef[];
   right: GridStateColDef[];
 }
-
-export type GridColumnPinningState = GridPinnedColumnFields;
 
 export type GridColumnDimensions = { [key in GridColumnDimensionProperties]?: number };
 

@@ -1,8 +1,8 @@
 import * as React from 'react';
+import { forwardRef } from '@mui/x-internals/forwardRef';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { GridStateColDef } from '../../models/colDef/gridColDef';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-import { forwardRef } from '@mui/x-internals/forwardRef';
 
 export interface ColumnHeaderMenuIconProps {
   colDef: GridStateColDef;
@@ -29,11 +29,8 @@ export const ColumnHeaderMenuIcon = React.memo(
           aria-label={apiRef.current.getLocaleText('columnMenuLabel')}
           size="icon"
           id={columnMenuButtonId}
+          variant={open ? 'primary' : undefined}
           {...rootProps.slotProps?.baseIconButton}
-          onPointerDown={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-          }}
           onFocus={(e) => {
             e.stopPropagation();
             e.preventDefault();
@@ -49,7 +46,7 @@ export const ColumnHeaderMenuIcon = React.memo(
             }
           }}
         >
-          <rootProps.slots.columnMenuIcon fontSize="inherit" />
+          <rootProps.slots.columnMenuIcon />
         </rootProps.slots.baseIconButton>
       </rootProps.slots.baseTooltip>
     );

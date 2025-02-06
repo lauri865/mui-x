@@ -1,6 +1,6 @@
 import * as React from 'react';
 import clsx from 'clsx';
-import { useThemedComponent } from '@mui/x-data-grid/context/GridThemeContext';
+import { useThemedComponent } from '../../context/GridThemeContext';
 
 export function GridTopContainer(props: React.PropsWithChildren) {
   const classes = useThemedComponent('topContainer');

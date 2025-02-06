@@ -4,10 +4,9 @@ import clsx from 'clsx';
 import composeClasses from '@mui/utils/composeClasses';
 import { styled, SxProps, Theme } from '@mui/system';
 import { forwardRef } from '@mui/x-internals/forwardRef';
+import { useThemedComponent } from '../../context/GridThemeContext';
 import { getDataGridUtilityClass } from '../../constants/gridClasses';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import type { DataGridProcessedProps } from '../../models/props/DataGridProps';
-import { useThemedComponent } from '@mui/x-data-grid/context/GridThemeContext';
 
 export type GridFooterContainerProps = React.HTMLAttributes<HTMLDivElement> & {
   sx?: SxProps<Theme>;

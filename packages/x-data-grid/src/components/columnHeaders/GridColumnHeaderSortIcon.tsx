@@ -1,13 +1,13 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import composeClasses from '@mui/utils/composeClasses';
+import clsx from 'clsx';
 import { GridSlotsComponent } from '../../models/gridSlotsComponent';
 import { GridSortDirection } from '../../models/gridSortModel';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { getDataGridUtilityClass } from '../../constants/gridClasses';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { DataGridProcessedProps } from '../../models/props/DataGridProps';
-import clsx from 'clsx';
 
 export interface GridColumnHeaderSortIconProps {
   field: string;
@@ -55,7 +55,7 @@ function GridColumnHeaderSortIconRaw(props: GridColumnHeaderSortIconProps) {
   const apiRef = useGridApiContext();
   const rootProps = useGridRootProps();
 
-  const iconElement = getIcon(rootProps.slots, direction, '!size-4', sortingOrder);
+  const iconElement = getIcon(rootProps.slots, direction, '', sortingOrder);
   if (!iconElement) {
     return null;
   }
@@ -77,7 +77,7 @@ function GridColumnHeaderSortIconRaw(props: GridColumnHeaderSortIconProps) {
         size="icon"
         disabled={disabled}
         className={clsx(
-          'hidden group-hover/cell:flex data-sort:flex data-sort:bg-highlight data-sort:text-highlight-text data-sort:border-highlight-border border border-transparent',
+          'hidden group-hover/cell:flex data-sort:flex data-sort:bg-highlight data-sort:text-highlight-text data-sort:border-highlight-border [&_svg]:!size-3.5',
         )}
         data-sort={direction || undefined}
         {...rootProps.slotProps?.baseIconButton}
@@ -88,7 +88,7 @@ function GridColumnHeaderSortIconRaw(props: GridColumnHeaderSortIconProps) {
     </rootProps.slots.baseTooltip>
   );
 
-  return <>{iconButton}</>;
+  return <React.Fragment>{iconButton}</React.Fragment>;
 }
 
 const GridColumnHeaderSortIcon = React.memo(GridColumnHeaderSortIconRaw);

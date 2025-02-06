@@ -51,6 +51,8 @@ import {
   rowSpanningStateInitializer,
   useGridListView,
   listViewStateInitializer,
+  useGridColumnPinning,
+  columnPinningStateInitializer,
 } from '@mui/x-data-grid/internals';
 import { GridApiPro, GridPrivateApiPro } from '../models/gridApiPro';
 import { DataGridProProcessedProps } from '../models/dataGridProProps';
@@ -63,10 +65,6 @@ import {
 import { useGridTreeData } from '../hooks/features/treeData/useGridTreeData';
 import { useGridTreeDataPreProcessors } from '../hooks/features/treeData/useGridTreeDataPreProcessors';
 import { useGridDataSourceTreeDataPreProcessors } from '../hooks/features/serverSideTreeData/useGridDataSourceTreeDataPreProcessors';
-import {
-  useGridColumnPinning,
-  columnPinningStateInitializer,
-} from '../hooks/features/columnPinning/useGridColumnPinning';
 import { useGridColumnPinningPreProcessors } from '../hooks/features/columnPinning/useGridColumnPinningPreProcessors';
 import {
   useGridDetailPanel,
@@ -104,7 +102,7 @@ export const useDataGridProComponent = (
   useGridDetailPanelPreProcessors(apiRef, props);
   // The column pinning `hydrateColumns` pre-processor must be after every other `hydrateColumns` pre-processors
   // Because it changes the order of the columns.
-  useGridColumnPinningPreProcessors(apiRef, props);
+  //useGridColumnPinningPreProcessors(apiRef, props);
   useGridRowsPreProcessors(apiRef);
 
   /**

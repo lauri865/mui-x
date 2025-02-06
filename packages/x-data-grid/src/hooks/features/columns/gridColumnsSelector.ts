@@ -76,7 +76,10 @@ export const gridVisibleColumnFieldsSelector = createSelectorMemoized(
  * Get the visible pinned columns model.
  * @category Visible Columns
  */
-export const gridPinnedColumnsSelector = (state: GridStateCommunity) => state.pinnedColumns;
+export const gridPinnedColumnsSelector = (state: GridStateCommunity) => state.pinnedColumns.model;
+
+export const gridVisiblePinnedColumnsSelector = (state: GridStateCommunity) =>
+  state.pinnedColumns.visible;
 
 /**
  * Get the visible pinned columns.
@@ -84,15 +87,19 @@ export const gridPinnedColumnsSelector = (state: GridStateCommunity) => state.pi
  */
 export const gridVisiblePinnedColumnDefinitionsSelector = createSelectorMemoized(
   gridColumnsStateSelector,
-  gridPinnedColumnsSelector,
-  gridVisibleColumnFieldsSelector,
+  gridVisiblePinnedColumnsSelector,
   gridIsRtlSelector,
-  (columnsState, model, visibleColumnFields, isRtl) => {
-    const visiblePinnedFields = filterVisibleColumns(model, visibleColumnFields, isRtl);
+  (columnsState, visiblePinnedFields, isRtl) => {
     const visiblePinnedColumns = {
       left: visiblePinnedFields.left.map((field) => columnsState.lookup[field]),
       right: visiblePinnedFields.right.map((field) => columnsState.lookup[field]),
     };
+    if (isRtl) {
+      return {
+        left: visiblePinnedColumns.right,
+        right: visiblePinnedColumns.left,
+      };
+    }
     return visiblePinnedColumns;
   },
 );

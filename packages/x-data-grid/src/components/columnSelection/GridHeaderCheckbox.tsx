@@ -2,6 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import composeClasses from '@mui/utils/composeClasses';
 import { forwardRef } from '@mui/x-internals/forwardRef';
+import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
 import { isMultipleRowSelectionEnabled } from '../../hooks/features/rowSelection/utils';
 import { useGridSelector } from '../../hooks/utils/useGridSelector';
 import { gridTabIndexColumnHeaderSelector } from '../../hooks/features/focus/gridFocusStateSelector';
@@ -15,7 +16,6 @@ import type { GridHeaderSelectionCheckboxParams } from '../../models/params/grid
 import { gridExpandedSortedRowIdsSelector } from '../../hooks/features/filter/gridFilterSelector';
 import { gridPaginatedVisibleSortedGridRowIdsSelector } from '../../hooks/features/pagination/gridPaginationSelector';
 import type { GridRowId } from '../../models/gridRows';
-import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
 
 type OwnerState = { classes: DataGridProcessedProps['classes'] };
 

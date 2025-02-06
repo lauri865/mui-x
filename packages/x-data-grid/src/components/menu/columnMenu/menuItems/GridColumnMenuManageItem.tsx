@@ -11,8 +11,7 @@ function GridColumnMenuManageItem(props: GridColumnMenuItemProps) {
   const rootProps = useGridRootProps();
 
   const showColumns = React.useCallback(
-    (event: React.MouseEvent<HTMLElement>) => {
-      onClick(event); // hide column menu
+    (event: Event) => {
       apiRef.current.showPreferences(GridPreferencePanelsValue.columns);
     },
     [apiRef, onClick],
@@ -22,13 +21,13 @@ function GridColumnMenuManageItem(props: GridColumnMenuItemProps) {
     return null;
   }
 
+  const DropdownMenu = rootProps.slots.baseDropdownMenu;
+
   return (
-    <rootProps.slots.baseMenuItem
-      onClick={showColumns}
-      iconStart={<rootProps.slots.columnMenuManageColumnsIcon fontSize="small" />}
-    >
+    <DropdownMenu.Item onSelect={showColumns}>
+      <rootProps.slots.columnMenuManageColumnsIcon />
       {apiRef.current.getLocaleText('columnMenuManageColumns')}
-    </rootProps.slots.baseMenuItem>
+    </DropdownMenu.Item>
   );
 }
 

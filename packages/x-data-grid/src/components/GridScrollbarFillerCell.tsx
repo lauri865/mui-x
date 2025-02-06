@@ -1,14 +1,6 @@
 import * as React from 'react';
 import clsx from 'clsx';
-import { gridClasses } from '../constants';
-
-const classes = {
-  root: gridClasses.scrollbarFiller,
-  header: gridClasses['scrollbarFiller--header'],
-  borderTop: gridClasses['scrollbarFiller--borderTop'],
-  borderBottom: gridClasses['scrollbarFiller--borderBottom'],
-  pinnedRight: gridClasses['scrollbarFiller--pinnedRight'],
-};
+import { useThemedComponent } from '../context/GridThemeContext';
 
 function GridScrollbarFillerCell({
   header,
@@ -21,18 +13,8 @@ function GridScrollbarFillerCell({
   borderBottom?: boolean;
   pinnedRight?: boolean;
 }) {
-  return (
-    <div
-      role="presentation"
-      className={clsx(
-        classes.root,
-        header && classes.header,
-        borderTop && classes.borderTop,
-        borderBottom && classes.borderBottom,
-        pinnedRight && classes.pinnedRight,
-      )}
-    />
-  );
+  const classes = useThemedComponent('scrollbarFiller');
+  return <div role="presentation" className={clsx(classes.root)} />;
 }
 
 export { GridScrollbarFillerCell };

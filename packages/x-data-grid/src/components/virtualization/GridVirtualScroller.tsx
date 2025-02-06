@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useThemedComponent } from '../../context/GridThemeContext';
 import {
   gridHasBottomFillerSelector,
   gridHasFillerSelector,
@@ -19,7 +20,6 @@ import { GridVirtualScrollerFiller as SpaceFiller } from './GridVirtualScrollerF
 import { GridVirtualScrollerRenderZone as RenderZone } from './GridVirtualScrollerRenderZone';
 import { GridVirtualScrollbar as Scrollbar } from './GridVirtualScrollbar';
 import { GridStateCommunity } from '../../models/gridStateCommunity';
-import { useThemedComponent } from '@mui/x-data-grid/context/GridThemeContext';
 import { GridDragDrop } from '../dragdrop/GridDragDrop';
 
 const hasPinnedRightSelector = (state: GridStateCommunity) => state.dimensions.rightPinnedWidth > 0;
@@ -66,7 +66,7 @@ function GridVirtualScroller(props: GridVirtualScrollerProps) {
       {...getContainerProps()}
       data-scroll-x={hasScrollX || undefined}
       data-scroll-y={hasScrollY || undefined}
-      data-fullwidth={hasScrollX || !hasHorizontalFiller || undefined}
+      data-fullwidth={!hasHorizontalFiller || undefined}
     >
       <GridDragDrop />
       <GridScrollArea scrollDirection="left" {...getScrollAreaProps()} />

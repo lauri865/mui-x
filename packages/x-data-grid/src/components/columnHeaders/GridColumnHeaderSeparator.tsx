@@ -4,12 +4,13 @@ import {
   unstable_composeClasses as composeClasses,
   unstable_capitalize as capitalize,
 } from '@mui/utils';
+import clsx from 'clsx';
 import { getDataGridUtilityClass } from '../../constants/gridClasses';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { gridDimensionsSelector } from '../../hooks/features/dimensions/gridDimensionsSelectors';
-import clsx from 'clsx';
+import { useThemedComponent } from '../../context/GridThemeContext';
 
 enum GridColumnHeaderSeparatorSides {
   Left = 'left',
@@ -54,8 +55,7 @@ function GridColumnHeaderSeparatorRaw(props: GridColumnHeaderSeparatorProps) {
     ...other
   } = props;
   const rootProps = useGridRootProps();
-  const ownerState = { ...props, side, classes: rootProps.classes };
-  const classes = useUtilityClasses(ownerState);
+  const classes = useThemedComponent('columnSeparator');
 
   const stopClick = (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -68,13 +68,13 @@ function GridColumnHeaderSeparatorRaw(props: GridColumnHeaderSeparatorProps) {
     <div
       className={clsx(
         classes.root,
-        'group/resizer text-grid-border hover:text-white active:text-white active:max-h-full h-full absolute cursor-col-resize px-1 z-1 group-focus-within/cell:text-highlight-border active:[anchor-name:--resizer]',
-        side === GridColumnHeaderSeparatorSides.Left &&
-          '-left-[5px] group-focus-within/cell:-left-1',
+        'group/resizer text-grid-border hover:text-white active:text-white active:max-h-full h-full absolute cursor-col-resize px-1 z-1 hover:z-20 group-focus-within/cell:text-highlight-border active:[anchor-name:--resizer]',
+        side === GridColumnHeaderSeparatorSides.Left && '-left-[5px] twg-columnSeparator--sideLeft',
         side === GridColumnHeaderSeparatorSides.Right &&
-          '-right-[5px] group-focus-within/cell:-right-1 group-data-sibling-focused/cell:-right-1',
+          '-right-1 group-data-last-pinned-left/cell:-right-[5px] twg-columnSeparator--sideRight',
         !rootProps.showColumnVerticalBorder && 'max-h-[20px]',
         !resizable && 'pointer-events-none',
+        resizable && 'twg-columnSeparator--resizable',
       )}
       {...other}
       onClick={stopClick}
@@ -86,7 +86,7 @@ function GridColumnHeaderSeparatorRaw(props: GridColumnHeaderSeparatorProps) {
       <div className="w-px bg-current h-full" />
       {resizerHeight && (
         <div
-          className="w-px bg-white top-[anchor(top)] hidden group-active/resizer:[position-anchor:--resizer] group-active/resizer:flex pointer-events-none"
+          className="w-px bg-white top-[anchor(top)] hidden group-active/resizer:[position-anchor:--resizer] group-active/resizer:flex pointer-events-none z-10 absolute"
           style={{
             height: resizerHeight,
           }}

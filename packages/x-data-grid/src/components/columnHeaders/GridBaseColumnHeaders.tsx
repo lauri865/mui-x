@@ -1,8 +1,7 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-import { useThemedComponent } from '@mui/x-data-grid/context/GridThemeContext';
+import { useThemedComponent } from '../../context/GridThemeContext';
 
 interface GridBaseColumnHeadersProps extends React.HTMLAttributes<HTMLDivElement> {}
 

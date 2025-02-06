@@ -12,13 +12,13 @@ import { GridEditModes, GridCellModes } from '../models/gridEditRowModel';
 import { gridClasses } from '../constants/gridClasses';
 import { composeGridClasses } from '../utils/composeGridClasses';
 import { useGridRootProps } from '../hooks/utils/useGridRootProps';
-import { GridPinnedColumns } from '../hooks/features/columns';
+import { GridPinnedColumnFields, GridPinnedColumns } from '../hooks/features/columns';
 import type { GridStateColDef } from '../models/colDef/gridColDef';
 import { shouldCellShowLeftBorder, shouldCellShowRightBorder } from '../utils/cellBorderUtils';
 import { gridColumnPositionsSelector } from '../hooks/features/columns/gridColumnsSelector';
 import { useGridSelector, objectShallowCompare } from '../hooks/utils/useGridSelector';
 import { GridRowClassNameParams } from '../models/params/gridRowParams';
-import { useGridVisibleRows } from '../hooks/utils/useGridVisibleRows';
+import { getVisibleRows, useGridVisibleRows } from '../hooks/utils/useGridVisibleRows';
 import { findParentElementFromClassName, isEventTargetInPortal } from '../utils/domUtils';
 import { GRID_CHECKBOX_SELECTION_COL_DEF } from '../colDef/gridCheckboxSelectionColDef';
 import { GRID_ACTIONS_COLUMN_TYPE } from '../colDef/gridActionsColDef';
@@ -62,7 +62,7 @@ export interface GridRowProps extends React.HTMLAttributes<HTMLDivElement> {
   firstColumnIndex: number;
   lastColumnIndex: number;
   visibleColumns: GridStateColDef[];
-  pinnedColumns: GridPinnedColumns;
+  pinnedColumns: GridPinnedColumnFields;
   /**
    * Determines which cell has focus.
    * If `null`, no cell in this row has focus.
@@ -115,16 +115,14 @@ const GridRow = forwardRef<HTMLDivElement, GridRowProps>(function GridRow(props,
   const configuration = useGridConfiguration();
   const ref = React.useRef<HTMLDivElement>(null);
   const rootProps = useGridRootProps();
-  const currentPage = useGridVisibleRows(apiRef, rootProps);
-  const sortModel = useGridSelector(apiRef, gridSortModelSelector);
-  const treeDepth = useGridSelector(apiRef, gridRowMaximumTreeDepthSelector);
-  const columnPositions = useGridSelector(apiRef, gridColumnPositionsSelector);
+  const currentPage = getVisibleRows(apiRef);
+  const sortModel = gridSortModelSelector(apiRef);
+  const treeDepth = gridRowMaximumTreeDepthSelector(apiRef);
+  const columnPositions = gridColumnPositionsSelector(apiRef);
   const rowReordering = (rootProps as any).rowReordering as boolean;
-  const isRowReorderingEnabled = useGridSelector(
-    apiRef,
-    isRowReorderingEnabledSelector,
-    rowReordering,
-  );
+  // only allow reordering if not editing any rows
+  const isRowReorderingEnabled =
+    rowReordering && isObjectEmpty(gridEditRowsStateSelector(apiRef.current.state));
   const handleRef = useForkRef(ref, refProp);
   const rowNode = apiRef.current.getRowNode(rowId);
   const editing = useGridSelector(apiRef, gridRowIsEditingSelector, {
@@ -375,8 +373,9 @@ const GridRow = forwardRef<HTMLDivElement, GridRowProps>(function GridRow(props,
     );
   };
 
-  const leftCells = pinnedColumns.left.map((column, i) => {
+  const leftCells = pinnedColumns.left.map((__check__, i) => {
     const indexRelativeToAllColumns = i;
+    const column = visibleColumns[indexRelativeToAllColumns];
     return getCell(
       column,
       i,
@@ -386,8 +385,9 @@ const GridRow = forwardRef<HTMLDivElement, GridRowProps>(function GridRow(props,
     );
   });
 
-  const rightCells = pinnedColumns.right.map((column, i) => {
+  const rightCells = pinnedColumns.right.map((_, i) => {
     const indexRelativeToAllColumns = visibleColumns.length - pinnedColumns.right.length + i;
+    const column = visibleColumns[indexRelativeToAllColumns];
     return getCell(
       column,
       i,
@@ -470,9 +470,6 @@ const GridRow = forwardRef<HTMLDivElement, GridRowProps>(function GridRow(props,
       {cells}
       <div role="presentation" className={clsx(cellClasses.root)} data-empty="true" />
       {rightCells}
-      {scrollbarWidth !== 0 && (
-        <ScrollbarFiller pinnedRight={pinnedColumns.right.length > 0} borderTop={!isFirstVisible} />
-      )}
     </div>
   );
 });

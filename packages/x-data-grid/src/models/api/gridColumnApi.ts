@@ -74,3 +74,13 @@ export interface GridColumnReorderApi {
    */
   setColumnIndex: (field: string, targetIndexPosition: number) => void;
 }
+
+export interface GridColumnReorderApiInternal {
+  /**
+   * Moves a column from its original position to the position given by `targetIndexPosition`.
+   * @param {string} field The field name
+   * @param {number} targetIndexPosition The new position (0-based).
+   * @param {boolean} updateState Determines if the state should be updated. Default is `true`.
+   */
+  setColumnIndex: (field: string, targetIndexPosition: number, updateState?: boolean) => void;
+}

@@ -28,7 +28,10 @@ import { GridFilterModel } from '../gridFilterModel';
 import { GridInputRowSelectionModel, GridRowSelectionModel } from '../gridRowSelectionModel';
 import { GridInitialStateCommunity } from '../gridStateCommunity';
 import { GridSlotsComponentsProps } from '../gridSlotsComponentsProps';
-import { GridColumnVisibilityModel } from '../../hooks/features/columns/gridColumnsInterfaces';
+import {
+  GridColumnVisibilityModel,
+  GridPinnedColumnFields,
+} from '../../hooks/features/columns/gridColumnsInterfaces';
 import { GridCellModesModel, GridRowModesModel } from '../api/gridEditingApi';
 import { GridColumnGroupingModel } from '../gridColumnGrouping';
 import { GridPaginationMeta, GridPaginationModel } from '../gridPaginationProps';
@@ -60,8 +63,8 @@ export type DataGridProps<R extends GridValidRowModel = any> = Omit<
  * The props of the Data Grid component after the pre-processing phase that the user should not be able to override.
  * Those are usually used in feature-hook for which the pro-plan has more advanced features (eg: multi-sorting, multi-filtering, ...).
  */
-export type DataGridForcedPropsKey =
-  | 'checkboxSelectionVisibleOnly'
+export type DataGridForcedPropsKey = 'signature';
+/*  | 'checkboxSelectionVisibleOnly'
   | 'disableMultipleColumnsFiltering'
   | 'disableMultipleColumnsSorting'
   | 'disableColumnReorder'
@@ -70,9 +73,7 @@ export type DataGridForcedPropsKey =
   | 'hideFooterRowCount'
   | 'pagination'
   | 'signature'
-  | 'unstable_listView';
-
-/**
+  | 'unstable_listView' */ /**
  * The Data Grid options with a default value that must be merged with the value given through props.
  */
 export interface DataGridPropsWithComplexDefaultValueAfterProcessing {
@@ -276,7 +277,7 @@ export interface DataGridPropsWithDefaultValues<R extends GridValidRowModel = an
   loading: boolean;
   /**
    * If `true`, pagination is enabled.
-   * @default false
+   * @default true
    */
   pagination: boolean;
   /**
@@ -286,6 +287,8 @@ export interface DataGridPropsWithDefaultValues<R extends GridValidRowModel = an
    * @default "client"
    */
   paginationMode: GridFeatureMode;
+  // TODO: document
+  pinnedColumns: GridPinnedColumnFields;
   /**
    * Set of rows of type [[GridRowsProp]].
    * @default []

@@ -27,7 +27,6 @@ import {
   GridColumnsInitialState,
   GridColumnsState,
   GridColumnVisibilityModel,
-  EMPTY_PINNED_COLUMN_FIELDS,
 } from './gridColumnsInterfaces';
 import { GridStateInitializer } from '../../utils/useGridInitializeState';
 import {
@@ -54,9 +53,6 @@ export const columnsStateInitializer: GridStateInitializer<
   return {
     ...state,
     columns: columnsState,
-    // In pro/premium, this part of the state is defined. We give it an empty but defined value
-    // for the community version.
-    pinnedColumns: state.pinnedColumns ?? EMPTY_PINNED_COLUMN_FIELDS,
   };
 };
 
@@ -98,7 +94,6 @@ export function useGridColumns(
       apiRef.current.setState(mergeColumnsState(columnsState));
       apiRef.current.publishEvent('columnsChange', columnsState.orderedFields);
       apiRef.current.updateRenderContext?.();
-      apiRef.current.forceUpdate();
     },
     [logger, apiRef],
   );
@@ -200,7 +195,7 @@ export function useGridColumns(
   );
 
   const setColumnIndex = React.useCallback<GridColumnReorderApi['setColumnIndex']>(
-    (field, targetIndexPosition) => {
+    (field, targetIndexPosition, updateState = true) => {
       const allColumns = gridColumnFieldsSelector(apiRef);
       const oldIndexPosition = getColumnIndexRelativeToVisibleColumns(field);
       if (oldIndexPosition === targetIndexPosition) {
@@ -212,10 +207,15 @@ export function useGridColumns(
       const updatedColumns = [...allColumns];
       const fieldRemoved = updatedColumns.splice(oldIndexPosition, 1)[0];
       updatedColumns.splice(targetIndexPosition, 0, fieldRemoved);
-      setGridColumnsState({
-        ...gridColumnsStateSelector(apiRef.current.state),
-        orderedFields: updatedColumns,
-      });
+
+      if (updateState) {
+        setGridColumnsState({
+          ...gridColumnsStateSelector(apiRef.current.state),
+          orderedFields: updatedColumns,
+        });
+      } else {
+        apiRef.current.state.columns.orderedFields = updatedColumns;
+      }
 
       const params: GridColumnOrderChangeParams = {
         column: apiRef.current.getColumn(field),
@@ -273,11 +273,7 @@ export function useGridColumns(
   const columnReorderApi: GridColumnReorderApi = { setColumnIndex };
 
   useGridApiMethod(apiRef, columnApi, 'public');
-  useGridApiMethod(
-    apiRef,
-    columnReorderApi,
-    props.signature === GridSignature.DataGrid ? 'private' : 'public',
-  );
+  useGridApiMethod(apiRef, columnReorderApi, 'public');
 
   /**
    * PRE-PROCESSING

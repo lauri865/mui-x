@@ -1,7 +1,7 @@
 import * as React from 'react';
+import { DropdownMenu } from '@twgrid/x-data-grid-shadcn';
 import type { GridSlotProps } from './gridSlotsComponentsProps';
 import type { GridIconSlotsComponent } from './gridIconSlotsComponent';
-import { DropdownMenu } from '@twgrid/x-data-grid-shadcn';
 
 export type { GridSlotProps } from './gridSlotsComponentsProps';
 

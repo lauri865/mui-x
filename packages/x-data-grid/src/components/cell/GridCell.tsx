@@ -10,6 +10,7 @@ import {
 import { fastMemo } from '@mui/x-internals/fastMemo';
 import { useRtl } from '@mui/system/RtlProvider';
 import { forwardRef } from '@mui/x-internals/forwardRef';
+import { useThemedComponent } from '../../context/GridThemeContext';
 import { doesSupportPreventScroll } from '../../utils/doesSupportPreventScroll';
 import { getDataGridUtilityClass, gridClasses } from '../../constants/gridClasses';
 import {
@@ -43,7 +44,6 @@ import {
 import { useGridPrivateApiContext } from '../../hooks/utils/useGridPrivateApiContext';
 import { gridEditCellStateSelector } from '../../hooks/features/editing/gridEditingSelectors';
 import { attachPinnedStyle } from '../../internals/utils';
-import { useThemedComponent } from '@mui/x-data-grid/context/GridThemeContext';
 
 export const gridPinnedColumnPositionLookup = {
   [PinnedColumnPosition.LEFT]: GridPinnedColumnPosition.LEFT,
@@ -461,6 +461,7 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
       aria-colspan={colSpan}
       aria-rowspan={rowSpan}
       data-selected={isSelected || undefined}
+      data-pinned={gridPinnedColumnPositionLookup[pinnedPosition]}
       style={style}
       tabIndex={tabIndex}
       onClick={publish('cellClick', onClick)}

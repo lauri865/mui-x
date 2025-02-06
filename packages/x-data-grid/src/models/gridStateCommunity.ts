@@ -27,6 +27,7 @@ import type { GridVisibleRowsLookupState } from '../hooks/features/filter/gridFi
 import type { GridColumnResizeState } from '../hooks/features/columnResize';
 import type { GridRowSpanningState } from '../hooks/features/rows/useGridRowSpanning';
 import type { GridListViewState } from '../hooks/features/listView/useGridListView';
+import { GridPinnedColumnFields } from '../hooks/features/columns/gridColumnsInterfaces';
 
 /**
  * The state of Data Grid.
@@ -68,4 +69,5 @@ export interface GridInitialStateCommunity {
   preferencePanel?: GridPreferencePanelInitialState;
   density?: GridDensityState;
   scroll?: { top: number; left: number };
+  pinnedColumns?: GridPinnedColumnFields;
 }

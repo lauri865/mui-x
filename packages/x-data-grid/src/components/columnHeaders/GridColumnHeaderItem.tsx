@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { unstable_composeClasses as composeClasses, unstable_useId as useId } from '@mui/utils';
 import { fastMemo } from '@mui/x-internals/fastMemo';
 import { useRtl } from '@mui/system/RtlProvider';
+import { useThemedComponent } from '../../context/GridThemeContext';
 import { GridStateColDef } from '../../models/colDef/gridColDef';
 import { GridSortDirection } from '../../models/gridSortModel';
 import { useGridPrivateApiContext } from '../../hooks/utils/useGridPrivateApiContext';
@@ -17,8 +18,9 @@ import { GridColumnHeaderEventLookup } from '../../models/events';
 import { isEventTargetInPortal } from '../../utils/domUtils';
 import { PinnedColumnPosition } from '../../internals/constants';
 import { attachPinnedStyle } from '../../internals/utils';
-import { useThemedComponent } from '@mui/x-data-grid/context/GridThemeContext';
-import { gridColumnMenuSelector, useGridSelector } from '@mui/x-data-grid-pro';
+import { gridColumnMenuSelector } from '../../hooks/features/columnMenu/columnMenuSelector';
+import { useGridSelector } from '../../hooks/utils/useGridSelector';
+import { gridPinnedColumnPositionLookup } from '../cell/GridCell';
 
 interface GridColumnHeaderItemProps {
   colIndex: number;
@@ -40,6 +42,8 @@ interface GridColumnHeaderItemProps {
   style?: React.CSSProperties;
   isLastUnpinned: boolean;
   isSiblingFocused: boolean;
+  isLastPinnedLeft: boolean;
+  isFirstPinnedRight: boolean;
   showLeftBorder: boolean;
   showRightBorder: boolean;
 }
@@ -62,6 +66,8 @@ const useUtilityClasses = (ownerState: OwnerState) => {
     pinnedPosition,
     isLastUnpinned,
     isSiblingFocused,
+    isLastPinnedLeft,
+    isFirstPinnedRight,
   } = ownerState;
 
   const isColumnSorted = sortDirection != null;
@@ -141,10 +147,11 @@ function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
     headerComponent = colDef.renderHeader(apiRef.current.getColumnHeaderParams(colDef.field));
   }
 
-  const classes = useThemedComponent('columnHeaderCell', {
+  const classes = useThemedComponent('columnHeader', {
     showLeftBorder,
     showRightBorder,
     checkbox: colDef.field === '__check__',
+    pinned: pinnedPosition !== undefined,
   });
 
   const publish = React.useCallback(
@@ -302,6 +309,10 @@ function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
       data-dragging={props.isDragging || undefined}
       data-sorted={Boolean(props.sortDirection) || undefined}
       data-sibling-focused={isSiblingFocused || undefined}
+      data-pinned={(pinnedPosition && gridPinnedColumnPositionLookup[pinnedPosition]) || undefined}
+      data-last-unpinned={props.isLastUnpinned || undefined}
+      data-last-pinned-left={props.isLastPinnedLeft || undefined}
+      data-first-pinned-right={props.isFirstPinnedRight || undefined}
       columnHeaderSeparatorProps={columnHeaderSeparatorProps}
       style={style}
       {...mouseEventsHandlers}

@@ -140,7 +140,6 @@ const GridSkeletonLoadingOverlay = forwardRef<HTMLDivElement, React.HTMLAttribut
           const emptyCell = (
             <slots.skeletonCell key={`skeleton-filler-column-${i}`} width={emptyCellWidth} empty />
           );
-          const hasScrollbarFiller = isLastColumn && scrollbarWidth !== 0;
 
           if (hasFillerBefore) {
             rowCells.push(emptyCell);
@@ -169,15 +168,6 @@ const GridSkeletonLoadingOverlay = forwardRef<HTMLDivElement, React.HTMLAttribut
 
           if (hasFillerAfter) {
             rowCells.push(emptyCell);
-          }
-
-          if (hasScrollbarFiller) {
-            rowCells.push(
-              <GridScrollbarFillerCell
-                key={`skeleton-scrollbar-filler-${i}`}
-                pinnedRight={pinnedColumns.right.length > 0}
-              />,
-            );
           }
         }
 

@@ -51,7 +51,7 @@ const Scrollbar = styled('div')({
 const ScrollbarVertical = styled(Scrollbar)({
   width: 'var(--size)',
   height:
-    'calc(var(--DataGrid-hasScrollY) * (100% - var(--DataGrid-topContainerHeight) - var(--DataGrid-bottomContainerHeight) - var(--DataGrid-hasScrollX) * var(--DataGrid-scrollbarSize)))',
+    'calc(var(--DataGrid-hasScrollY) * (100% - var(--DataGrid-headerHeight) - var(--DataGrid-hasScrollX) * var(--DataGrid-scrollbarSize)))',
   overflowY: 'auto',
   overflowX: 'hidden',
   // Disable focus-visible style, it's a scrollbar.
@@ -59,7 +59,7 @@ const ScrollbarVertical = styled(Scrollbar)({
   '& > div': {
     width: 'var(--size)',
   },
-  top: 'var(--DataGrid-topContainerHeight)',
+  top: 'var(--DataGrid-headerHeight)',
   right: '0px',
 });
 
@@ -95,13 +95,10 @@ const GridVirtualScrollbar = forwardRef<HTMLDivElement, GridVirtualScrollbarProp
     const contentSize =
       dimensions.minimumSize[propertyDimension] + (hasScroll ? dimensions.scrollbarSize : 0);
 
-    const scrollbarSize =
-      props.position === 'vertical'
-        ? dimensions.viewportInnerSize.height
-        : dimensions.viewportOuterSize.width;
-
     const scrollbarInnerSize =
-      scrollbarSize * (contentSize / dimensions.viewportOuterSize[propertyDimension]);
+      props.position === 'horizontal'
+        ? dimensions.minimumSize[propertyDimension]
+        : dimensions.minimumSize[propertyDimension] - dimensions.headerHeight;
 
     const onScrollerScroll = useEventCallback(() => {
       const scrollbar = scrollbarRef.current;
@@ -124,8 +121,7 @@ const GridVirtualScrollbar = forwardRef<HTMLDivElement, GridVirtualScrollbarProp
       isLocked.current = true;
 
       requestAnimationFrame(() => {
-        const value = scrollPosition[propertyScrollPosition] / contentSize;
-        scrollbar[propertyScroll] = value * scrollbarInnerSize;
+        scrollbar[propertyScroll] = scrollPosition[propertyScrollPosition];
       });
     });
 
@@ -143,8 +139,7 @@ const GridVirtualScrollbar = forwardRef<HTMLDivElement, GridVirtualScrollbarProp
       }
       isLocked.current = true;
 
-      const value = scrollbar[propertyScroll] / scrollbarInnerSize;
-      scroller[propertyScroll] = value * contentSize;
+      scroller[propertyScroll] = scrollbar[propertyScroll];
     });
 
     useOnMount(() => {

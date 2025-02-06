@@ -27,9 +27,9 @@ const TooltipContent = React.forwardRef<
 ));
 TooltipContent.displayName = TooltipPrimitive.Content.displayName;
 
-export const Tooltip = ({ children, ...props }: React.ComponentProps<typeof TooltipContent>) => {
+export function Tooltip({ children, ...props }: React.ComponentProps<typeof TooltipContent>) {
   if (!props.title) {
-    return <>{children}</>;
+    return <React.Fragment>{children}</React.Fragment>;
   }
   return (
     <TooltipProvider>
@@ -39,4 +39,4 @@ export const Tooltip = ({ children, ...props }: React.ComponentProps<typeof Tool
       </TooltipRoot>
     </TooltipProvider>
   );
-};
+}

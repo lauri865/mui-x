@@ -5,7 +5,7 @@ import { isHideMenuKey } from '../../../utils/keyboardUtils';
 import { GridColumnMenuContainerProps } from './GridColumnMenuProps';
 import { useGridRootProps } from '../../../hooks/utils/useGridRootProps';
 
-const GridColumnMenuContainer = (props: GridColumnMenuContainerProps) => {
+function GridColumnMenuContainer(props: GridColumnMenuContainerProps) {
   const { hideMenu, colDef, id, labelledby, className, children, open, ...other } = props;
 
   const rootProps = useGridRootProps();
@@ -33,7 +33,7 @@ const GridColumnMenuContainer = (props: GridColumnMenuContainerProps) => {
       open
       onOpenChange={(open) => {
         if (!open) {
-          hideMenu({} as any);
+          hideMenu();
         }
       }}
     >
@@ -43,7 +43,7 @@ const GridColumnMenuContainer = (props: GridColumnMenuContainerProps) => {
       </DropdownMenu.Content>
     </DropdownMenu.Root>
   );
-};
+}
 
 GridColumnMenuContainer.propTypes = {
   // ----------------------------- Warning --------------------------------

@@ -50,11 +50,6 @@ export interface GridIconSlotsComponent {
    */
   columnSortedDescendingIcon: React.JSXElementConstructor<any> | null;
   /**
-   * Icon displayed in between two column headers that allows to resize the column header.
-   * @default GridSeparatorIcon
-   */
-  columnResizeIcon: React.JSXElementConstructor<any>;
-  /**
    * Icon displayed on the compact density option in the toolbar.
    * @default GridViewHeadlineIcon
    */
@@ -184,4 +179,9 @@ export interface GridIconSlotsComponent {
    * @default GridCheckIcon
    */
   menuItemCheckIcon: React.JSXElementConstructor<any>;
+
+  columnsIcon: React.JSXElementConstructor<any>;
+  pinIcon: React.JSXElementConstructor<any>;
+  hideIcon: React.JSXElementConstructor<any>;
+  reorderIcon: React.JSXElementConstructor<any>;
 }

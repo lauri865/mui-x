@@ -1,6 +1,7 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import { styled } from '@mui/material/styles';
+import { useThemedComponent } from '../../../context/GridThemeContext';
 import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { useGridSelector } from '../../utils';
 import { useGridRootProps } from '../../utils/useGridRootProps';
@@ -31,8 +32,9 @@ import { GridColumnMenuState } from '../columnMenu';
 import {
   GridColumnVisibilityModel,
   gridColumnPositionsSelector,
-  gridVisiblePinnedColumnDefinitionsSelector,
   gridColumnLookupSelector,
+  gridPinnedColumnsSelector,
+  gridVisiblePinnedColumnsSelector,
 } from '../columns';
 import { GridGroupingStructure } from '../columnGrouping/gridColumnGroupsInterfaces';
 import { gridColumnGroupsUnwrappedModelSelector } from '../columnGrouping/gridColumnGroupsSelector';
@@ -45,7 +47,6 @@ import {
   shouldCellShowRightBorder,
 } from '../../../utils/cellBorderUtils';
 import { PinnedColumnPosition } from '../../../internals/constants';
-import { useThemedComponent } from '@mui/x-data-grid/context/GridThemeContext';
 
 interface HeaderInfo {
   groupId: GridColumnGroup['groupId'] | null;
@@ -126,7 +127,7 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
     [],
   );
   useGridApiOptionHandler(apiRef, 'renderContextChange', handleRenderContextChange);
-  const pinnedColumns = useGridSelector(apiRef, gridVisiblePinnedColumnDefinitionsSelector);
+  const pinnedColumns = gridVisiblePinnedColumnsSelector(apiRef.current.state);
   const columnsLookup = useGridSelector(apiRef, gridColumnLookupSelector);
   const offsetLeft = computeOffsetLeft(columnPositions, renderContext, pinnedColumns.left.length);
   const columnsTotalWidth = useGridSelector(apiRef, gridDimensionsColumnsTotalWidthSelector);
@@ -192,6 +193,7 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
       renderedColumns,
       firstColumnToRender,
       lastColumnToRender,
+      visibleColumns,
     };
   };
 
@@ -221,20 +223,13 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
             data-field="«filler-right»"
           />
         )}
-        {hasScrollbarFiller && (
-          <ScrollbarFiller
-            header
-            pinnedRight={isPinnedRight}
-            borderBottom={borderBottom}
-            borderTop={false}
-          />
-        )}
+        {hasScrollbarFiller && <ScrollbarFiller data-field="«filler-right»" />}
       </React.Fragment>
     );
   };
 
   const getColumnHeaders = (params?: GetHeadersParams, other = {}) => {
-    const { renderedColumns, firstColumnToRender } = getColumnsToRender(params);
+    const { renderedColumns, firstColumnToRender, visibleColumns } = getColumnsToRender(params);
 
     const columns: React.JSX.Element[] = [];
     for (let i = 0; i < renderedColumns.length; i += 1) {
@@ -262,8 +257,8 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
 
       const siblingWithBorderingSeparator =
         pinnedPosition === PinnedColumnPosition.RIGHT
-          ? renderedColumns[i - 1]
-          : renderedColumns[i + 1];
+          ? visibleColumns[columnIndex + 1]
+          : visibleColumns[columnIndex + 1];
       const isSiblingFocused = siblingWithBorderingSeparator
         ? columnHeaderFocus !== null &&
           columnHeaderFocus.field === siblingWithBorderingSeparator.field
@@ -303,6 +298,14 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
           pinnedOffset={pinnedOffset}
           isLastUnpinned={isLastUnpinned}
           isSiblingFocused={isSiblingFocused}
+          isLastPinnedLeft={
+            pinnedPosition === PinnedColumnPosition.LEFT &&
+            columnIndex === pinnedColumns.left.length - 1
+          }
+          isFirstPinnedRight={
+            pinnedPosition === PinnedColumnPosition.RIGHT &&
+            columnIndex === columnPositions.length - pinnedColumns.right.length
+          }
           showLeftBorder={showLeftBorder}
           showRightBorder={showRightBorder}
           {...other}

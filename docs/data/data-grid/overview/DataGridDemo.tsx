@@ -61,6 +61,10 @@ export default function DataGridDemo() {
         pageSizeOptions={[5]}
         checkboxSelection
         disableRowSelectionOnClick
+        pinnedColumns={{
+          left: ['lastName'],
+          right: ['id'],
+        }}
       />
     </Box>
   );

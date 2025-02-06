@@ -14,7 +14,7 @@
     --color-grid-border: #27272a;
     --color-grid-selected-bg: #112a6d;
     --color-grid-selected-border: #1343b4;
-    --color-highlight: --alpha(var(--color-blue-600) / 30%);
+    --color-highlight: #0e2154;
     --color-highlight-border: var(--color-blue-600);
     --color-grid-hover-bg: #19191b;
     --color-highlight-text: var(--color-blue-500);
@@ -24,7 +24,7 @@
   }
 
   .twg-cell:focus-within,
-  .twg-columnHeaderCell:focus-within {
+  .twg-columnHeader:focus-within {
     @apply bg-highlight outline-highlight-border outline-1 outline-offset-[-1px] transition-none z-1;
   }
 }

@@ -19,9 +19,6 @@ const className = {
 
   autosizing: {
     columnHeaderTitleContent: 'overflow-visible !important',
-    menuIcon: {
-      '@media (hover: hover)': 'w-0 invisible',
-    },
     cell: 'overflow-visible whitespace-nowrap min-w-max max-w-max',
     groupingCell: 'w-auto',
     treeDataGroupingCell: 'w-auto',
@@ -32,16 +29,20 @@ const className = {
   columnHeaders: {
     base: 'flex flex-col rounded-l-grid rounded-r-grid w-[var(--DataGrid-rowWidth)] bg-grid-header-bg select-none',
   },
-  columnHeaderCell: {
+  columnSeparator: {
+    base: '',
+  },
+  columnHeader: {
     base: [
-      'group/cell relative touch-none pl-cell pr-0.5 box-border tap-highlight-none flex items-center cursor-pointer border-b border-b-grid-border font-medium text-[13px] hover:z-1 active:[&+&]:pointer-events-none [&:focus-within+div]:hover:z-0 justify-end',
+      'group/cell relative touch-none pl-cell pr-0.5 box-border tap-highlight-none flex items-center cursor-pointer border-b border-b-grid-border font-medium text-[13px] active:[&+&]:pointer-events-none data-sibling-focused:hover:z-0 justify-end',
       'data-[align=center]:justify-center data-[align=right]:flex-row-reverse data-[align=center]:pr-1.5 data-[align=right]:pr-cell data-[align=right]:pl-0.5',
       'hover:bg-grid-hover-bg transition-colors active:bg-grid-hover-bg',
       'data-first:rounded-tl-[calc(var(--radius-grid)-1px)] group-data-fullwidth:data-last:rounded-tr-[calc(var(--radius-grid)-1px)]',
       'data-last:overflow-hidden',
-      'hover:shadow-[1px_0px_0_var(--color-grid-border),-1px_0px_0_var(--color-grid-border)] active:shadow-[1px_0px_0_var(--color-grid-border),-1px_0px_0_var(--color-grid-border)]',
+      '[&:hover_.twg-columnSeparator]:max-h-full',
       String.raw`data-[field=\_\_check\_\_]:p-0`,
       'group-data-dragging:[&_*]:pointer-events-none',
+      // pinning borders
     ].join(' '),
     focusWithin: 'outline outline-[rgba(144,202,249,0.5)] -outline-offset-1',
     focus: 'outline outline-[#90caf9] -outline-offset-1',
@@ -54,9 +55,9 @@ const className = {
     filledGroup: 'border-b border-solid',
     sortable: 'cursor-pointer',
     moving: 'bg-[rgba(255,255,255,0.08)]',
-    pinned: 'sticky z-10 bg-[#121212]',
-    showLeftBorder: '',
-    showRightBorder: '',
+    pinned: 'sticky z-4 focus-within:z-5 data-sibling-focused:hover:z-6 bg-grid-pinned-bg',
+    showLeftBorder: 'border-l border-l-grid-border',
+    showRightBorder: 'border-r border-r-grid-border',
 
     draggableContainer: 'flex w-full h-full items-center',
     titleContainer:
@@ -74,6 +75,7 @@ const className = {
       'data-empty:flex-1 data-empty:p-0 data-empty:h-[unset]',
       String.raw`data-[field=\_\_check\_\_]:p-0 data-[field=\_\_check\_\_]:flex data-[field=\_\_check\_\_]:justify-center data-[field=\_\_check\_\_]:items-center`,
       'data-selected:bg-[rgba(144,202,249,0.16)] data-selected:hover:bg-[rgba(144,202,249,0.24)]',
+      'data-reordering:bg-grid-hover-bg data-reordering:shadow-[inset_1px_0_0_0_var(--color-grid-border),inset_-1px_0_0_0_var(--color-grid-border),1px_0_1px_0px_#00000050,-1px_0_1px_0px_#00000050]',
       // makes drag-drop easier, we can catch onPointerMove discretely at cell level, not cell content level
     ].join(' '),
     editable: '',
@@ -89,8 +91,7 @@ const className = {
     left: 'text-left justify-start',
     right: 'text-right justify-end',
     center: 'text-center justify-center',
-
-    pinned: 'sticky z-[3] bg-[var(--DataGrid-pinnedBackground)]',
+    pinned: 'sticky z-[3] bg-grid-pinned-bg',
     pinnedLeft:
       'rounded-tl-[calc(var(--radius-grid)-1px)] rounded-bl-[calc(var(--radius-grid)-1px)]',
     pinnedRight:
@@ -100,20 +101,20 @@ const className = {
 
   row: {
     base: [
-      'flex',
+      'flex group/row',
       'select-none',
       'w-[var(--DataGrid-rowWidth)]',
       'break-inside-avoid',
       // Hover states
-      'hover:bg-grid-hover-bg',
+      'hover:*:bg-grid-hover-bg',
       // Reset hover on touch devices
-      'hover:[@media(hover:none)]:bg-transparent',
+      'hover:*:bg-[unset]',
       // first visible
       'data-first-visible:[&>.twg-cell]:border-t-transparent',
       // last visible
       'data-bottom-border:border-b data-bottom-border:border-b-grid-border',
       // selected
-      'data-selected:bg-grid-selected-bg data-selected:hover:bg-grid-selected-bg data-selected:hover:[@media(hover:none)]:bg-grid-selected-bg data-selected:[--color-grid-border:var(--color-grid-selected-border)] data-selected:[&+.twg-row>.twg-cell]:border-t-[var(--color-grid-selected-border)]',
+      'data-selected:*:!bg-grid-selected-bg data-selected:*:hover:bg-grid-selected-bg data-selected:[--color-grid-border:var(--color-grid-selected-border)] data-selected:[&+.twg-row>.twg-cell]:border-t-[var(--color-grid-selected-border)]',
       'data-selectable:active:bg-grid-selected-bg',
       // editing
       'data-editing:bg-grid-editing-bg',
@@ -126,11 +127,8 @@ const className = {
     dynamicHeight: '[&>.twg-cell]:white-space-[initial] [&>.twg-cell]:leading-inherit',
   },
 
-  scrollbars: {
-    filler: 'min-w-[calc(var(--DataGrid-hasScrollY)*var(--DataGrid-scrollbarSize))] self-stretch',
-    fillerBorderTop: 'border-t border-grid-border',
-    fillerBorderBottom: 'border-b border-grid-border',
-    fillerPinnedRight: 'bg-grid-pinned-bg sticky right-0',
+  scrollbarFiller: {
+    base: 'min-w-[calc(var(--DataGrid-hasScrollY)*var(--DataGrid-scrollbarSize))] self-stretch border-b border-b-grid-border',
   },
 
   filler: {

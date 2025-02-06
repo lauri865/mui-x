@@ -102,7 +102,6 @@ export function findGridCellElementsFromCol(col: HTMLElement, api: GridPrivateAp
   if (!api.virtualScrollerRef?.current) {
     return [];
   }
-
   queryRows(api).forEach((rowElement) => {
     const rowId = rowElement.getAttribute('data-id');
     if (!rowId) {
@@ -151,10 +150,12 @@ const findPinnedCells = ({
       return;
     }
 
+    console.log(
+      rowElement.querySelectorAll(`.${gridClasses['cell']}[data-pinned=${position}]`),
+      `.${gridClasses['cell']}[data-pinned=${position}]`,
+    );
     rowElement
-      .querySelectorAll(
-        `.${gridClasses[position === 'left' ? 'cell--pinnedLeft' : 'cell--pinnedRight']}`,
-      )
+      .querySelectorAll(`.${gridClasses['cell']}[data-pinned=${position}]`)
       .forEach((cell) => {
         const currentColIndex = parseCellColIndex(cell);
         if (currentColIndex !== null && filterFn(currentColIndex)) {
@@ -211,12 +212,9 @@ const findPinnedHeaders = ({
   if (colIndex === null) {
     return [];
   }
-
   const elements: HTMLElement[] = [];
   api.columnHeadersContainerRef.current
-    .querySelectorAll(
-      `.${gridClasses[position === 'left' ? 'columnHeader--pinnedLeft' : 'columnHeader--pinnedRight']}`,
-    )
+    .querySelectorAll(`.${gridClasses['columnHeader']}[data-pinned=${position}]`)
     .forEach((element) => {
       const currentColIndex = parseCellColIndex(element);
       if (currentColIndex !== null && filterFn(currentColIndex, element)) {

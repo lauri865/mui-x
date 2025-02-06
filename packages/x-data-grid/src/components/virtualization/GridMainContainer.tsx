@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { forwardRef } from '@mui/x-internals/forwardRef';
+import { useThemedComponent } from '../../context/GridThemeContext';
 import { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { useGridConfiguration } from '../../hooks/utils/useGridConfiguration';
 import { GridLoadingOverlayVariant } from '../GridLoadingOverlay';
-import { useThemedComponent } from '@mui/x-data-grid/context/GridThemeContext';
 
 type OwnerState = Pick<DataGridProcessedProps, 'classes'> & {
   hasScrollX: boolean;

@@ -5,7 +5,7 @@ import { gridRenderContextSelector } from './gridVirtualizationSelectors';
 import { gridFocusCellSelector } from '../focus';
 import { gridVisibleRowsSelector } from '../pagination';
 
-const gridIsFocusedCellOutOfContext = createSelector(
+export const gridIsFocusedCellOutOfContext = createSelector(
   gridFocusCellSelector,
   gridRenderContextSelector,
   gridVisibleRowsSelector,
@@ -31,15 +31,10 @@ const gridIsFocusedCellOutOfContext = createSelector(
 );
 
 export const gridFocusedVirtualCellSelector = createSelectorMemoized(
-  gridIsFocusedCellOutOfContext,
   gridVisibleColumnDefinitionsSelector,
   gridVisibleRowsSelector,
   gridFocusCellSelector,
-  (isFocusedCellOutOfRenderContext, visibleColumns, currentPage, focusedCell) => {
-    if (!isFocusedCellOutOfRenderContext) {
-      return null;
-    }
-
+  (visibleColumns, currentPage, focusedCell) => {
     const rowIndex = currentPage.rowIdToIndexMap.get(focusedCell!.id);
 
     if (rowIndex === undefined) {

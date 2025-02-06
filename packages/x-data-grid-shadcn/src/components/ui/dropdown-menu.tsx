@@ -44,7 +44,7 @@ const SubContent = React.forwardRef<
   <Primitive.SubContent
     ref={ref}
     className={cn(
-      'z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
+      'z-50 min-w-[8rem] overflow-hidden rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-lg shadow-black data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
       className,
     )}
     {...props}
@@ -60,9 +60,10 @@ const Content = React.forwardRef<
     <Primitive.Content
       ref={ref}
       sideOffset={sideOffset}
+      side="bottom"
       className={cn(
-        'z-5000 min-w-[8rem] overflow-hidden rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md',
-        'data-[state=open]:animate-in data-[state=open]:duration-150 data-data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
+        'z-5000 min-w-[8rem] overflow-hidden rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md shadow-black',
+        'data-[state=open]:animate-in duration-150 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=open]:data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
         className,
       )}
       {...props}
@@ -142,7 +143,11 @@ const Label = React.forwardRef<
 >(({ className, inset, ...props }, ref) => (
   <Primitive.Label
     ref={ref}
-    className={cn('px-2 py-1.5 text-sm font-semibold', inset && 'pl-8', className)}
+    className={cn(
+      'px-2 py-1.5 text-sm font-semibold flex gap-2 [&_svg]:size-4 items-center',
+      inset && 'pl-8',
+      className,
+    )}
     {...props}
   />
 ));
@@ -156,11 +161,11 @@ const Separator = React.forwardRef<
 ));
 Separator.displayName = Primitive.Separator.displayName;
 
-const Shortcut = ({ className, ...props }: React.HTMLAttributes<HTMLSpanElement>) => {
+function Shortcut({ className, ...props }: React.HTMLAttributes<HTMLSpanElement>) {
   return (
     <span className={cn('ml-auto text-xs tracking-widest opacity-60', className)} {...props} />
   );
-};
+}
 Shortcut.displayName = 'Shortcut';
 
 export {

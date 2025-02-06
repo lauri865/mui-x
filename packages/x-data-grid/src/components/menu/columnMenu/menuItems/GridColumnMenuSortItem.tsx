@@ -52,30 +52,24 @@ function GridColumnMenuSortItem(props: GridColumnMenuItemProps) {
 
   return (
     <React.Fragment>
-      <DropdownMenu.RadioGroup value={sortDirection as string}>
-        {sortingOrder.includes('asc') ? (
-          <DropdownMenu.RadioItem
-            onSelect={onSortMenuItemClick}
-            data-value="asc"
-            value="asc"
-            defaultChecked
-          >
-            {getLabel('columnMenuSortAsc')}
-            <rootProps.slots.columnMenuSortAscendingIcon />
-          </DropdownMenu.RadioItem>
-        ) : null}
-        {sortingOrder.includes('desc') ? (
-          <DropdownMenu.RadioItem onSelect={onSortMenuItemClick} data-value="desc" value="desc">
-            {getLabel('columnMenuSortDesc')}
-            <rootProps.slots.columnMenuSortDescendingIcon />
-          </DropdownMenu.RadioItem>
-        ) : null}
-        {sortingOrder.includes(null) && sortDirection != null ? (
-          <DropdownMenu.RadioItem onSelect={onSortMenuItemClick} value="">
-            {apiRef.current.getLocaleText('columnMenuUnsort')}
-          </DropdownMenu.RadioItem>
-        ) : null}
-      </DropdownMenu.RadioGroup>
+      {sortingOrder.includes('asc') && sortDirection !== 'asc' ? (
+        <DropdownMenu.Item onSelect={onSortMenuItemClick} data-value="asc" defaultChecked>
+          <rootProps.slots.columnMenuSortAscendingIcon />
+          {getLabel('columnMenuSortAsc')}
+        </DropdownMenu.Item>
+      ) : null}
+      {sortingOrder.includes('desc') && sortDirection !== 'desc' ? (
+        <DropdownMenu.Item onSelect={onSortMenuItemClick} data-value="desc">
+          <rootProps.slots.columnMenuSortDescendingIcon />
+          {getLabel('columnMenuSortDesc')}
+        </DropdownMenu.Item>
+      ) : null}
+      {sortingOrder.includes(null) && sortDirection != null ? (
+        <DropdownMenu.Item onSelect={onSortMenuItemClick}>
+          <rootProps.slots.filterPanelDeleteIcon />
+          {apiRef.current.getLocaleText('columnMenuUnsort')}
+        </DropdownMenu.Item>
+      ) : null}
     </React.Fragment>
   );
 }

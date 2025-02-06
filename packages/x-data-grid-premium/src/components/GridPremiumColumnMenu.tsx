@@ -35,6 +35,7 @@ export const GRID_COLUMN_MENU_SLOT_PROPS_PREMIUM = {
 
 export const GridPremiumColumnMenu = forwardRef<HTMLUListElement, GridColumnMenuProps>(
   function GridPremiumColumnMenuSimple(props, ref) {
+    return null;
     return (
       <GridGenericColumnMenu
         {...props}

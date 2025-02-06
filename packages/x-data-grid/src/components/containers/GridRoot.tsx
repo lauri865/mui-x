@@ -10,7 +10,7 @@ import { SxProps } from '@mui/system';
 import { Theme } from '@mui/material/styles';
 import { fastMemo } from '@mui/x-internals/fastMemo';
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import { GridRootStyles } from './GridRootStyles';
+import { useThemedComponent } from '../../context/GridThemeContext';
 import { useGridSelector } from '../../hooks/utils/useGridSelector';
 import { useGridPrivateApiContext } from '../../hooks/utils/useGridPrivateApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
@@ -18,43 +18,15 @@ import { getDataGridUtilityClass } from '../../constants/gridClasses';
 import { gridDensitySelector } from '../../hooks/features/density/densitySelector';
 import { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { GridDensity } from '../../models/gridDensity';
-import { useIsSSR } from '../../hooks/utils/useIsSSR';
+import { useIsServerRendered, useIsSSR } from '../../hooks/utils/useIsSSR';
 import { GridHeader } from '../GridHeader';
 import { GridBody, GridFooterPlaceholder } from '../base';
-import { theme } from '../../theme';
-import { useThemedComponent } from '@mui/x-data-grid/context/GridThemeContext';
 
-export interface GridRootProps extends React.HTMLAttributes<HTMLDivElement> {
-  /**
-   * The system prop that allows defining system overrides as well as additional CSS styles.
-   */
-  sx?: SxProps<Theme>;
-}
-
-type OwnerState = DataGridProcessedProps;
-
-const useUtilityClasses = (ownerState: OwnerState, density: GridDensity) => {
-  const { autoHeight, classes, showCellVerticalBorder } = ownerState;
-
-  const slots = {
-    root: [
-      'root',
-      autoHeight && 'autoHeight',
-      `root--density${capitalize(density)}`,
-      ownerState.slots.toolbar === null && 'root--noToolbar',
-      'withBorderColor',
-      showCellVerticalBorder && 'withVerticalBorder',
-    ],
-  };
-
-  return composeClasses(slots, getDataGridUtilityClass, classes);
-};
+export interface GridRootProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const GridRoot = forwardRef<HTMLDivElement, GridRootProps>(function GridRoot(props, ref) {
-  const rootProps = useGridRootProps();
   const { className, children, ...other } = props;
   const apiRef = useGridPrivateApiContext();
-  const density = useGridSelector(apiRef, gridDensitySelector);
   const rootElementRef = apiRef.current.rootElementRef;
 
   const rootMountCallback = React.useCallback(

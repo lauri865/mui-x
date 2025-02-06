@@ -12,10 +12,6 @@ export { useGridAriaAttributes } from '../hooks/utils/useGridAriaAttributes';
 export { useGridRowAriaAttributes } from '../hooks/features/rows/useGridRowAriaAttributes';
 // eslint-enable import/export
 
-export {
-  useGridColumnPinning,
-  columnPinningStateInitializer,
-} from '../hooks/features/columnPinning/useGridColumnPinning';
 export { useGridColumnPinningPreProcessors } from '../hooks/features/columnPinning/useGridColumnPinningPreProcessors';
 export {
   useGridColumnReorder,

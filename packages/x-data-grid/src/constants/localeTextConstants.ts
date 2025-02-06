@@ -126,8 +126,8 @@ export const GRID_DEFAULT_LOCALE_TEXT: GridLocaleText = {
   columnMenuFilter: 'Filter',
   columnMenuHideColumn: 'Hide column',
   columnMenuUnsort: 'Unsort',
-  columnMenuSortAsc: 'Sort by ASC',
-  columnMenuSortDesc: 'Sort by DESC',
+  columnMenuSortAsc: 'Sort Ascending',
+  columnMenuSortDesc: 'Sort Descending',
 
   // Column header text
   columnHeaderFiltersTooltipActive: (count) =>
@@ -160,6 +160,7 @@ export const GRID_DEFAULT_LOCALE_TEXT: GridLocaleText = {
   actionsCellMore: 'more',
 
   // Column pinning text
+  columnPinning: 'Column pinning',
   pinToLeft: 'Pin to left',
   pinToRight: 'Pin to right',
   unpin: 'Unpin',

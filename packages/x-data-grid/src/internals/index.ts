@@ -41,6 +41,10 @@ export {
   columnMenuStateInitializer,
 } from '../hooks/features/columnMenu/useGridColumnMenu';
 export { useGridColumns, columnsStateInitializer } from '../hooks/features/columns/useGridColumns';
+export {
+  useGridColumnPinning,
+  columnPinningStateInitializer,
+} from '../hooks/features/columnPinning/useGridColumnPinning';
 export * from '../hooks/features/columns/gridColumnsUtils';
 export { useGridColumnSpanning } from '../hooks/features/columns/useGridColumnSpanning';
 export * from '../hooks/features/columns/gridColumnsSelector';

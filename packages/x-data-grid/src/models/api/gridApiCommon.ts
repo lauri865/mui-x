@@ -35,6 +35,7 @@ import type { GridInitialStateCommunity, GridStateCommunity } from '../gridState
 import { GridHeaderFilteringApi, GridHeaderFilteringPrivateApi } from './gridHeaderFilteringApi';
 import type { DataGridProcessedProps } from '../props/DataGridProps';
 import type { GridColumnResizeApi } from '../../hooks/features/columnResize';
+import type { GridColumnPinningApi } from '../../hooks/features/columnPinning';
 
 export interface GridApiCommon<
   GridState extends GridStateCommunity = any,
@@ -48,6 +49,7 @@ export interface GridApiCommon<
     GridEditingApi,
     GridParamsApi,
     GridColumnApi,
+    GridColumnPinningApi,
     GridRowSelectionApi,
     GridSortApi,
     GridPaginationApi,

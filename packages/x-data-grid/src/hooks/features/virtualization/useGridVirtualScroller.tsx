@@ -26,6 +26,8 @@ import {
   gridVisiblePinnedColumnDefinitionsSelector,
   gridColumnPositionsSelector,
   gridHasColSpanSelector,
+  gridPinnedColumnsSelector,
+  gridVisiblePinnedColumnsSelector,
 } from '../columns/gridColumnsSelector';
 import { gridDimensionsSelector } from '../dimensions/gridDimensionsSelectors';
 import { gridPinnedRowsSelector } from '../rows/gridRowsSelector';
@@ -54,8 +56,11 @@ import { EMPTY_RENDER_CONTEXT } from './useGridVirtualization';
 import { gridRowSpanningHiddenCellsOriginMapSelector } from '../rows/gridRowSpanningSelectors';
 import { gridListColumnSelector } from '../listView/gridListViewSelectors';
 import { minimalContentHeight } from '../rows/gridRowsUtils';
-import { EMPTY_PINNED_COLUMN_FIELDS, GridPinnedColumns } from '../columns';
-import { gridFocusedVirtualCellSelector } from './gridFocusedVirtualCellSelector';
+import { EMPTY_PINNED_COLUMN_FIELDS, GridPinnedColumnFields, GridPinnedColumns } from '../columns';
+import {
+  gridFocusedVirtualCellSelector,
+  gridIsFocusedCellOutOfContext,
+} from './gridFocusedVirtualCellSelector';
 import { roundToDecimalPlaces } from '../../../utils/roundToDecimalPlaces';
 import { isJSDOM } from '../../../utils/isJSDOM';
 import { GridStateCommunity } from '../../../models/gridStateCommunity';
@@ -114,9 +119,9 @@ export const useGridVirtualScroller = () => {
     useGridSelector(apiRef, gridVirtualizationColumnEnabledSelector) && !isJSDOM;
 
   const pinnedRows = useGridSelector(apiRef, gridPinnedRowsSelector);
-  const pinnedColumnDefinitions = gridVisiblePinnedColumnDefinitionsSelector(apiRef);
+  const pinnedColumnDefinitions = gridVisiblePinnedColumnsSelector(apiRef.current.state);
   const pinnedColumns = listView
-    ? (EMPTY_PINNED_COLUMN_FIELDS as unknown as GridPinnedColumns)
+    ? (EMPTY_PINNED_COLUMN_FIELDS as unknown as GridPinnedColumnFields)
     : pinnedColumnDefinitions;
   const hasBottomPinnedRows = pinnedRows.bottom.length > 0;
   const [panels, setPanels] = React.useState(EMPTY_DETAIL_PANELS);
@@ -220,7 +225,12 @@ export const useGridVirtualScroller = () => {
   const previousRowContext = React.useRef(EMPTY_RENDER_CONTEXT);
   const [renderContext, setRenderContext] = React.useState(gridRenderContextSelector(apiRef));
 
-  const focusedVirtualCell = useGridSelector(apiRef, gridFocusedVirtualCellSelector);
+  const focusedVirtualCell = React.useMemo(() => {
+    if (!gridIsFocusedCellOutOfContext(apiRef.current.state)) {
+      return null;
+    }
+    return gridFocusedVirtualCellSelector(apiRef.current.state);
+  }, [apiRef, renderContext]);
 
   const scrollTimeout = useTimeout();
   const frozenContext = React.useRef<GridRenderContext | undefined>(undefined);
@@ -548,10 +558,6 @@ export const useGridVirtualScroller = () => {
       );
       const showBottomBorder = isLastVisibleInSection && params.position === 'top';
 
-      if (showBottomBorder) {
-        console.log('TEST');
-      }
-
       const firstColumnIndex = currentRenderContext.firstColumnIndex;
       const lastColumnIndex = currentRenderContext.lastColumnIndex;
 
@@ -721,7 +727,7 @@ export const useGridVirtualScroller = () => {
     getScrollerProps: () => ({
       ref: scrollerRef,
       onScroll: handleScroll,
-      //onWheel: handleWheel,
+      // onWheel: handleWheel,
       onTouchMove: handleTouchMove,
       style: scrollerStyle,
       role: 'presentation',

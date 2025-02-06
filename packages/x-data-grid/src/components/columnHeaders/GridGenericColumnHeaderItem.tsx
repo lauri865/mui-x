@@ -12,6 +12,7 @@ import {
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { GridColumnGroup } from '../../models/gridColumnGrouping';
 import { isOverflown } from '../../utils/domUtils';
+import { gridClasses } from '../../constants/gridClasses';
 
 interface GridGenericColumnHeaderItemProps
   extends Pick<GridStateColDef, 'headerClassName' | 'description' | 'resizable'> {
@@ -122,18 +123,25 @@ const GridGenericColumnHeaderItem = forwardRef<HTMLDivElement, GridGenericColumn
           {...other}
           ref={handleRef}
         >
-          <div className={classes.titleContainer} role="presentation">
+          <div
+            className={clsx(classes.titleContainer, gridClasses['columnHeaderTitleContainer'])}
+            role="presentation"
+          >
             {headerComponent !== undefined ? (
               headerComponent
             ) : (
-              <div className={clsx(classes.title)} ref={labelRef} onPointerOver={handleMouseOver}>
+              <div
+                className={clsx(classes.title, gridClasses['columnHeaderTitle'])}
+                ref={labelRef}
+                onPointerOver={handleMouseOver}
+              >
                 {label}
               </div>
             )}
           </div>
 
           {(columnTitleIconButtons || columnMenuIconButton || columnMenu) && (
-            <div className="toolbar flex gap-0.5 justify-end group-data-[align=right]/cell:flex-row-reverse px-1 empty:hidden">
+            <div className="toolbar flex gap-0.5 justify-end group-data-[align=right]/cell:flex-row-reverse px-1.5 empty:hidden">
               {columnTitleIconButtons}
               {columnMenuIconButton}
             </div>

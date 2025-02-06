@@ -62,6 +62,10 @@ import {
   listViewStateInitializer,
   useGridListView,
 } from '../hooks/features/listView/useGridListView';
+import {
+  useGridColumnPinning,
+  columnPinningStateInitializer,
+} from '../hooks/features/columnPinning/useGridColumnPinning';
 
 export const useDataGridComponent = (
   inputApiRef: RefObject<GridApiCommunity | null> | undefined,
@@ -83,6 +87,7 @@ export const useDataGridComponent = (
    */
   useGridInitializeState(rowSelectionStateInitializer, apiRef, props);
   useGridInitializeState(columnsStateInitializer, apiRef, props);
+  useGridInitializeState(columnPinningStateInitializer, apiRef, props);
   useGridInitializeState(paginationStateInitializer, apiRef, props);
   useGridInitializeState(rowsStateInitializer, apiRef, props);
   useGridInitializeState(editingStateInitializer, apiRef, props);
@@ -106,6 +111,7 @@ export const useDataGridComponent = (
   useGridRows(apiRef, props);
   useGridRowSpanning(apiRef, props);
   useGridParamsApi(apiRef, props);
+  useGridColumnPinning(apiRef, props);
   useGridColumnSpanning(apiRef);
   useGridColumnGrouping(apiRef, props);
   useGridEditing(apiRef, props);

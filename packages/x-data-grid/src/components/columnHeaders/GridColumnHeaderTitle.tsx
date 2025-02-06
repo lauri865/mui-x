@@ -11,7 +11,7 @@ const ColumnHeaderInnerTitle = forwardRef<HTMLDivElement, React.HTMLAttributes<H
     // Tooltip adds aria-label to the props, which is not needed since the children prop is a string
     // See https://github.com/mui/mui-x/pull/14482
     const { className, 'aria-label': ariaLabel, ...other } = props;
-    const classes = useThemedComponent('columnHeaderCell');
+    const classes = useThemedComponent('columnHeader');
 
     return <div className={clsx(classes.variants.title, className)} {...other} ref={ref} />;
   },

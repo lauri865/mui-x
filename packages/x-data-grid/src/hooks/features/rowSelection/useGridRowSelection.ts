@@ -441,11 +441,7 @@ export const useGridRowSelection = (
   };
 
   useGridApiMethod(apiRef, selectionPublicApi, 'public');
-  useGridApiMethod(
-    apiRef,
-    selectionPrivateApi,
-    props.signature === GridSignature.DataGrid ? 'private' : 'public',
-  );
+  useGridApiMethod(apiRef, selectionPrivateApi, 'public');
 
   /*
    * EVENTS
@@ -607,6 +603,8 @@ export const useGridRowSelection = (
     GridEventListener<'rowSelectionCheckboxChange'>
   >(
     (params, event) => {
+      // todo: fix intercace for slots
+      // @ts-ignore
       if (canHaveMultipleSelection && event.shiftKey) {
         expandMouseRowRangeSelection(params.id);
       } else {

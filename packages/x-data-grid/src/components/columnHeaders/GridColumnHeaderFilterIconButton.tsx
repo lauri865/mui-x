@@ -110,7 +110,7 @@ function GridColumnHeaderFilterIconButton(props: ColumnHeaderFilterIconButtonPro
       delay={500}
       {...rootProps.slotProps?.baseTooltip}
     >
-      <>
+      <React.Fragment>
         {counter > 1 && (
           <rootProps.slots.baseBadge badgeContent={counter} color="default">
             {iconButton}
@@ -118,7 +118,7 @@ function GridColumnHeaderFilterIconButton(props: ColumnHeaderFilterIconButtonPro
         )}
 
         {counter === 1 && iconButton}
-      </>
+      </React.Fragment>
     </rootProps.slots.baseTooltip>
   );
 }

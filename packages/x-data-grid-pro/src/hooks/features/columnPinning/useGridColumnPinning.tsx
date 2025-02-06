@@ -10,6 +10,7 @@ import {
   GridEventListener,
   GridPinnedColumnPosition,
   gridColumnFieldsSelector,
+  EMPTY_PINNED_COLUMN_FIELDS,
 } from '@mui/x-data-grid';
 import {
   useGridRegisterPipeProcessor,
@@ -38,7 +39,7 @@ export const columnPinningStateInitializer: GridStateInitializer<
   } else if (props.initialState?.pinnedColumns) {
     model = props.initialState.pinnedColumns;
   } else {
-    model = {};
+    model = EMPTY_PINNED_COLUMN_FIELDS;
   }
 
   return {
