@@ -468,7 +468,12 @@ const GridRow = forwardRef<HTMLDivElement, GridRowProps>(function GridRow(props,
         style={{ width: offsetLeft }}
       />
       {cells}
-      <div role="presentation" className={clsx(cellClasses.root)} data-empty="true" />
+      <div
+        role="presentation"
+        className={clsx(cellClasses.root)}
+        data-empty="true"
+        data-field="«filler-right-body»"
+      />
       {rightCells}
     </div>
   );

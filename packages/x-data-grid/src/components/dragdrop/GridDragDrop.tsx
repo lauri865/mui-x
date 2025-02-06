@@ -5,9 +5,15 @@ import { useGridApiEventHandler } from '../../hooks/utils/useGridApiEventHandler
 import { useGridPrivateApiContext } from '../../hooks/utils/useGridPrivateApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { findGridCellElementsFromCol } from '../../utils/domUtils';
+import { GridPinnedColumnPosition } from '../../hooks/features/columns/gridColumnsInterfaces';
+import {
+  gridColumnVisibilityModelSelector,
+  gridVisiblePinnedColumnsSelector,
+} from '../../hooks/features/columns/gridColumnsSelector';
 
 export function GridDragDrop() {
   const originalIndex = React.useRef<number>(0);
+  const originalPinnedPosition = React.useRef<GridPinnedColumnPosition | null>(null);
   const startPosition = React.useRef<{
     x: number;
     y: number;
@@ -29,32 +35,27 @@ export function GridDragDrop() {
       return;
     }
     if (event.key === 'Escape') {
+      if (originalPinnedPosition.current) {
+        apiRef.current.pinColumn(draggedColumn.field, originalPinnedPosition.current);
+      } else {
+        // this has to come before setColumnIndex, otherwise we'll restore to the wrong index
+        apiRef.current.unpinColumn(draggedColumn.field);
+      }
       apiRef.current.setColumnIndex(draggedColumn.field, originalIndex.current);
       apiRef.current.setColumnVisibility(draggedColumn.field, true);
       pointerUp();
     }
   }, []);
 
-  const pointerGridLeave = React.useCallback(() => {
+  const pointerGridLeave = useEventCallback(() => {
     const draggedColumn = draggedColumnRef.current;
     if (!draggedColumn) {
       return;
     }
     apiRef.current.setColumnVisibility(draggedColumn.field, false);
+    apiRef.current.unpinColumn(draggedColumn.field);
     setAction('hide');
-  }, []);
-
-  const pointerGridEnter = React.useCallback((event: PointerEvent) => {
-    const draggedColumn = draggedColumnRef.current;
-    if (!draggedColumn) {
-      return;
-    }
-
-    if (action === 'hide') {
-      apiRef.current.setColumnVisibility(draggedColumn.field, true);
-      setAction('move');
-    }
-  }, []);
+  });
 
   const preventClick = React.useCallback((event: MouseEvent) => {
     event.preventDefault();
@@ -93,7 +94,6 @@ export function GridDragDrop() {
       if (gridRef) {
         gridRef.dataset.dragging = 'true';
         gridRef.addEventListener('pointerleave', pointerGridLeave);
-        gridRef.addEventListener('pointerenter', pointerGridEnter);
       }
       const el = apiRef.current.getColumnHeaderElement(draggedColumnRef.current.field);
       if (el) {
@@ -101,7 +101,10 @@ export function GridDragDrop() {
       }
     }
     setPointerPosition({ x: event.clientX, y: event.clientY });
-    updateRefs();
+
+    requestAnimationFrame(() => {
+      updateRefs();
+    });
     const col = draggedColumnRef.current;
     if (col) {
       const cell = document.elementFromPoint(event.clientX, event.clientY) as HTMLElement;
@@ -109,18 +112,21 @@ export function GridDragDrop() {
         return;
       }
       if (cell.role === 'gridcell' || cell.role === 'columnheader') {
+        const visibilityModel = gridColumnVisibilityModelSelector(apiRef.current.state);
+        const isHidden = visibilityModel[col.field] === false;
+        if (isHidden) {
+          apiRef.current.setColumnVisibility(col.field, true);
+          setAction('move');
+        }
         const field = cell.getAttribute('data-field');
         if (!field || field === col.field) {
           return;
         }
         const width = col.colDef.computedWidth;
         const overColumn = apiRef.current.getColumn(field);
-        if (overColumn.disableReorder) {
-          return;
-        }
         const overWidth = overColumn.computedWidth;
-        const newIndex = apiRef.current.getColumnIndex(field);
-        const currentIndex = apiRef.current.getColumnIndex(col.field);
+        const newIndex = apiRef.current.getColumnIndex(field, false);
+        const currentIndex = apiRef.current.getColumnIndex(col.field, false);
         const direction = currentIndex < newIndex ? 'right' : 'left';
 
         if (overWidth > width) {
@@ -138,13 +144,31 @@ export function GridDragDrop() {
           }
         }
 
+        const nextPinnedPosition = apiRef.current.getColumnPinnedPosition(overColumn.field);
+        const currentPinnedPosition = apiRef.current.getColumnPinnedPosition(col.field);
+        if (nextPinnedPosition !== currentPinnedPosition) {
+          if (nextPinnedPosition) {
+            apiRef.current.pinColumn(col.field, nextPinnedPosition);
+          } else {
+            apiRef.current.unpinColumn(col.field);
+          }
+        }
+
+        if (overColumn.disableReorder) {
+          return;
+        }
+
         apiRef.current.setColumnIndex(col.field, newIndex);
-        apiRef.current.setColumnIndex(
-          overColumn.field,
-          newIndex + (direction === 'right' ? -1 : 1),
-        );
-      } else if (cell.dataset.field === '«filler-right»') {
-        const newIndex = apiRef.current.getAllColumns().length - 1;
+      } else if (cell.dataset.field === '«filler-right-body»') {
+        const visibilityModel = gridColumnVisibilityModelSelector(apiRef.current.state);
+        const isHidden = visibilityModel[col.field] === false;
+        if (isHidden) {
+          apiRef.current.setColumnVisibility(col.field, true);
+          setAction('move');
+        }
+        apiRef.current.unpinColumn(col.field);
+        const pinnedColumns = gridVisiblePinnedColumnsSelector(apiRef.current.state);
+        const newIndex = apiRef.current.getAllColumns().length - 1 - pinnedColumns.right.length;
         apiRef.current.setColumnIndex(col.field, newIndex);
       }
     }
@@ -177,7 +201,6 @@ export function GridDragDrop() {
     if (gridRef) {
       gridRef.removeAttribute('data-dragging');
       gridRef.removeEventListener('pointerleave', pointerGridLeave);
-      gridRef.removeEventListener('pointerenter', pointerGridEnter);
     }
     document.documentElement.classList.remove('dragging');
   });
@@ -189,6 +212,7 @@ export function GridDragDrop() {
     startPosition.current = { x: event.clientX, y: event.clientY };
     originalIndex.current = apiRef.current.getColumnIndex(params.field);
     draggedColumnRef.current = params;
+    originalPinnedPosition.current = apiRef.current.getColumnPinnedPosition(params.field);
     document.body.addEventListener('pointermove', pointerMove);
     document.body.addEventListener('pointerup', pointerUp, { once: true });
   });
@@ -205,7 +229,7 @@ export function GridDragDrop() {
 
   return (
     <div
-      className="fixed flex gap-2 items-center top-0 left-0 z-9999 pointer-events-none px-cell bg-highlight border border-highlight-border backdrop-blur-sm min-w-[100px] font-medium rounded-grid *:size-3.5"
+      className="fixed flex gap-2 items-center top-0 left-0 z-9999 pointer-events-none px-cell bg-highlight border border-highlight-border backdrop-blur-sm min-w-[100px] font-medium rounded-grid *:size-3.5 will-change-transform"
       style={{
         transform: `translate3d(${pointer.x + 5}px, ${pointer.y + 5}px, 0)`,
         height: 36,

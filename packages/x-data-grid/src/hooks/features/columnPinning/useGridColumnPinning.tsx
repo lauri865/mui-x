@@ -152,9 +152,9 @@ export const useGridColumnPinning = (
       apiRef.current.state.pinnedColumns.visible = visiblePinnedColumns;
 
       const newOrderedFields = [
-        ...(visiblePinnedColumns.left ?? []),
+        ...(pinnedColumns.left ?? []),
         ...filteredColumns,
-        ...(visiblePinnedColumns.right ?? []),
+        ...(pinnedColumns.right ?? []),
       ];
 
       return {

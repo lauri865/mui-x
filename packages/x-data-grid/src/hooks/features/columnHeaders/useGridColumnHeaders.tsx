@@ -220,7 +220,7 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
           <div
             role="presentation"
             className={clsx(fillerClasses.root)}
-            data-field="«filler-right»"
+            data-field="«filler-right-body»"
           />
         )}
         {hasScrollbarFiller && <ScrollbarFiller data-field="«filler-right»" />}

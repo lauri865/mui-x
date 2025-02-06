@@ -36,11 +36,11 @@ const className = {
     base: [
       'group/cell relative touch-none pl-cell pr-0.5 box-border tap-highlight-none flex items-center cursor-pointer border-b border-b-grid-border font-medium text-[13px] active:[&+&]:pointer-events-none data-sibling-focused:hover:z-0 justify-end',
       'data-[align=center]:justify-center data-[align=right]:flex-row-reverse data-[align=center]:pr-1.5 data-[align=right]:pr-cell data-[align=right]:pl-0.5',
-      'hover:bg-grid-hover-bg transition-colors active:bg-grid-hover-bg',
+      'hover:bg-grid-hover-bg transition-[background-color] active:bg-grid-hover-bg',
       'data-first:rounded-tl-[calc(var(--radius-grid)-1px)] group-data-fullwidth:data-last:rounded-tr-[calc(var(--radius-grid)-1px)]',
       'data-last:overflow-hidden',
       '[&:hover_.twg-columnSeparator]:max-h-full',
-      String.raw`data-[field=\_\_check\_\_]:p-0`,
+      `data-[field=«check»]:p-0`,
       'group-data-dragging:[&_*]:pointer-events-none',
       // pinning borders
     ].join(' '),
@@ -73,7 +73,7 @@ const className = {
       'flex-none box-border border-t border-grid-border px-cell truncate',
       'data-[align=center]:justify-center',
       'data-empty:flex-1 data-empty:p-0 data-empty:h-[unset]',
-      String.raw`data-[field=\_\_check\_\_]:p-0 data-[field=\_\_check\_\_]:flex data-[field=\_\_check\_\_]:justify-center data-[field=\_\_check\_\_]:items-center`,
+      `data-[field=«check»]:p-0 data-[field=«check»]:flex data-[field=«check»]:justify-center data-[field=«check»]:items-center`,
       'data-selected:bg-[rgba(144,202,249,0.16)] data-selected:hover:bg-[rgba(144,202,249,0.24)]',
       'data-reordering:bg-grid-hover-bg data-reordering:shadow-[inset_1px_0_0_0_var(--color-grid-border),inset_-1px_0_0_0_var(--color-grid-border),1px_0_1px_0px_#00000050,-1px_0_1px_0px_#00000050]',
       // makes drag-drop easier, we can catch onPointerMove discretely at cell level, not cell content level

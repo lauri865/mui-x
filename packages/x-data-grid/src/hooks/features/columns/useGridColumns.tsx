@@ -172,7 +172,7 @@ export function useGridColumns(
   const setColumnVisibility = React.useCallback<GridColumnApi['setColumnVisibility']>(
     (field, isVisible) => {
       const columnVisibilityModel = gridColumnVisibilityModelSelector(apiRef);
-      const isCurrentlyVisible: boolean = columnVisibilityModel[field] ?? true;
+      const isCurrentlyVisible: boolean = columnVisibilityModel[field] !== false;
       if (isVisible !== isCurrentlyVisible) {
         const newModel: GridColumnVisibilityModel = {
           ...columnVisibilityModel,
@@ -215,6 +215,7 @@ export function useGridColumns(
         });
       } else {
         apiRef.current.state.columns.orderedFields = updatedColumns;
+        return;
       }
 
       const params: GridColumnOrderChangeParams = {

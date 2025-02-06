@@ -5,6 +5,7 @@ import {
   gridHasFillerSelector,
   gridHasScrollXSelector,
   gridHasScrollYSelector,
+  gridVerticalScrollbarWidthSelector,
 } from '../../internals/selectors/dimensionSelectors';
 import { GridScrollArea } from '../GridScrollArea';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
@@ -21,6 +22,7 @@ import { GridVirtualScrollerRenderZone as RenderZone } from './GridVirtualScroll
 import { GridVirtualScrollbar as Scrollbar } from './GridVirtualScrollbar';
 import { GridStateCommunity } from '../../models/gridStateCommunity';
 import { GridDragDrop } from '../dragdrop/GridDragDrop';
+import { gridDimensionsSelector } from '@mui/x-data-grid-pro';
 
 const hasPinnedRightSelector = (state: GridStateCommunity) => state.dimensions.rightPinnedWidth > 0;
 
@@ -33,6 +35,7 @@ function GridVirtualScroller(props: GridVirtualScrollerProps) {
   const rootProps = useGridRootProps();
   const hasScrollY = useGridSelector(apiRef, gridHasScrollYSelector);
   const hasScrollX = useGridSelector(apiRef, gridHasScrollXSelector);
+  const scrollbarYSize = gridVerticalScrollbarWidthSelector(apiRef.current.state);
   const hasHorizontalFiller = useGridSelector(apiRef, gridHasFillerSelector);
   const hasPinnedRight = useGridSelector(apiRef, hasPinnedRightSelector);
   const hasBottomFiller = useGridSelector(apiRef, gridHasBottomFillerSelector);
@@ -66,7 +69,9 @@ function GridVirtualScroller(props: GridVirtualScrollerProps) {
       {...getContainerProps()}
       data-scroll-x={hasScrollX || undefined}
       data-scroll-y={hasScrollY || undefined}
-      data-fullwidth={!hasHorizontalFiller || undefined}
+      data-fullwidth={
+        hasHorizontalFiller === false || (hasPinnedRight && !scrollbarYSize) || undefined
+      }
     >
       <GridDragDrop />
       <GridScrollArea scrollDirection="left" {...getScrollAreaProps()} />
