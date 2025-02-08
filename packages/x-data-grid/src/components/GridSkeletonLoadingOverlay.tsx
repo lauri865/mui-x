@@ -23,32 +23,12 @@ import { getDataGridUtilityClass, gridClasses } from '../constants/gridClasses';
 import { getPinnedCellOffset } from '../internals/utils/getPinnedCellOffset';
 import { shouldCellShowLeftBorder, shouldCellShowRightBorder } from '../utils/cellBorderUtils';
 import { escapeOperandAttributeSelector } from '../utils/domUtils';
-import { GridScrollbarFillerCell } from './GridScrollbarFillerCell';
 import { rtlFlipSide } from '../utils/rtlFlipSide';
 import { attachPinnedStyle } from '../internals/utils';
-
-const SkeletonOverlay = styled('div', {
-  name: 'MuiDataGrid',
-  slot: 'SkeletonLoadingOverlay',
-  overridesResolver: (props, styles) => styles.skeletonLoadingOverlay,
-})({
-  minWidth: '100%',
-  width: 'max-content', // prevents overflow: clip; cutting off the x axis
-  height: '100%',
-  overflow: 'clip', // y axis is hidden while the x axis is allowed to overflow
-});
+import { useThemedComponent } from '../context/GridThemeContext';
+import { gridPinnedColumnPositionLookup } from './cell/GridCell';
 
 type OwnerState = { classes: DataGridProcessedProps['classes'] };
-
-const useUtilityClasses = (ownerState: OwnerState) => {
-  const { classes } = ownerState;
-
-  const slots = {
-    root: ['skeletonLoadingOverlay'],
-  };
-
-  return composeClasses(slots, getDataGridUtilityClass, classes);
-};
 
 const getColIndex = (el: HTMLElement) => parseInt(el.getAttribute('data-colindex')!, 10);
 
@@ -57,7 +37,9 @@ const GridSkeletonLoadingOverlay = forwardRef<HTMLDivElement, React.HTMLAttribut
     const rootProps = useGridRootProps();
     const { slots } = rootProps;
     const isRtl = useRtl();
-    const classes = useUtilityClasses({ classes: rootProps.classes });
+    const classes = useThemedComponent('skeletonLoadingOverlay');
+    const rowClasses = useThemedComponent('row');
+    const cellClasses = useThemedComponent('cell');
     const ref = React.useRef<HTMLDivElement>(null);
     const handleRef = useForkRef(ref, forwardedRef);
     const apiRef = useGridApiContext();
@@ -138,7 +120,22 @@ const GridSkeletonLoadingOverlay = forwardRef<HTMLDivElement, React.HTMLAttribut
           const expandedWidth = dimensions.viewportOuterSize.width - dimensions.columnsTotalWidth;
           const emptyCellWidth = Math.max(0, expandedWidth);
           const emptyCell = (
-            <slots.skeletonCell key={`skeleton-filler-column-${i}`} width={emptyCellWidth} empty />
+            <slots.skeletonCell
+              key={`skeleton-filler-column-${i}`}
+              className={clsx(
+                'flex items-center',
+                cellClasses.root,
+                pinnedPosition && cellClasses.variants.pinned,
+                pinnedPosition === PinnedColumnPosition.LEFT && 'cell--pinnedLeft',
+                pinnedPosition === PinnedColumnPosition.RIGHT && 'cell--pinnedRight',
+              )}
+              data-pinned={
+                (pinnedPosition && gridPinnedColumnPositionLookup[pinnedPosition]) || undefined
+              }
+              width={emptyCellWidth}
+              empty
+              data-empty="true"
+            />
           );
 
           if (hasFillerBefore) {
@@ -155,11 +152,21 @@ const GridSkeletonLoadingOverlay = forwardRef<HTMLDivElement, React.HTMLAttribut
               height={dimensions.rowHeight}
               data-colindex={colIndex}
               className={clsx(
-                isPinnedLeft && gridClasses['cell--pinnedLeft'],
-                isPinnedRight && gridClasses['cell--pinnedRight'],
-                showRightBorder && gridClasses['cell--withRightBorder'],
-                showLeftBorder && gridClasses['cell--withLeftBorder'],
+                'flex items-center',
+                cellClasses.root,
+                showRightBorder && cellClasses.variants.showRightBorder,
+                showLeftBorder && cellClasses.variants.showLeftBorder,
+                pinnedPosition && cellClasses.variants.pinned,
+                pinnedPosition === PinnedColumnPosition.LEFT && 'cell--pinnedLeft',
+                pinnedPosition === PinnedColumnPosition.RIGHT && 'cell--pinnedRight',
+                column.align === 'left' && cellClasses.variants.left,
+                column.align === 'right' && cellClasses.variants.right,
+                column.align === 'center' && cellClasses.variants.center,
               )}
+              data-pinned={
+                (pinnedPosition && gridPinnedColumnPositionLookup[pinnedPosition]) || undefined
+              }
+              data-align={column.align}
               style={
                 { '--width': `${column.computedWidth}px`, ...pinnedStyle } as React.CSSProperties
               }
@@ -174,11 +181,9 @@ const GridSkeletonLoadingOverlay = forwardRef<HTMLDivElement, React.HTMLAttribut
         array.push(
           <div
             key={`skeleton-row-${i}`}
-            className={clsx(
-              gridClasses.row,
-              gridClasses.rowSkeleton,
-              i === 0 && gridClasses['row--firstVisible'],
-            )}
+            className={clsx(rowClasses.root)}
+            data-first-visible={i === 0 ? true : undefined}
+            data-last-visible={i === skeletonRowsCount - 1 ? true : undefined}
           >
             {rowCells}
           </div>,
@@ -251,9 +256,9 @@ const GridSkeletonLoadingOverlay = forwardRef<HTMLDivElement, React.HTMLAttribut
     useGridApiEventHandler(apiRef, 'columnResize', handleColumnResize);
 
     return (
-      <SkeletonOverlay className={classes.root} {...props} ref={handleRef}>
+      <div className={classes.root} {...props} ref={handleRef}>
         {children}
-      </SkeletonOverlay>
+      </div>
     );
   },
 );

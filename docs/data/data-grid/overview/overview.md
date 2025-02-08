@@ -38,7 +38,7 @@ Pro features are denoted by the blue cube icon (<span class="plan-pro"></span>) 
 
 The demo below displays 31 columns and 100,000 rows—over three million cells in total:
 
-{{"demo": "DataGridProDemo.js", "defaultCodeOpen": false, "disableAd": true, "bg": "inline"}}
+# {{"demo": "DataGridProDemo.js", "defaultCodeOpen": false, "disableAd": true, "bg": "inline"}}
 
 ## Premium version [<span class="plan-premium"></span>](/x/introduction/licensing/#premium-plan 'Premium plan')
 
@@ -50,7 +50,7 @@ The demo below groups rows by commodity name, and uses an aggregation function t
 You can experiment with grouping other columns in the column header menus.
 You can also try exporting to Excel, and copying and pasting data to and from Excel tables.
 
-{{"demo": "DataGridPremiumDemo.js", "defaultCodeOpen": false, "disableAd": true, "bg": "inline"}}
+# {{"demo": "DataGridPremiumDemo.js", "defaultCodeOpen": false, "disableAd": true, "bg": "inline"}}
 
 ## API
 

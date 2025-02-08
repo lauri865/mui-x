@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DropdownMenu } from '@twgrid/x-data-grid-shadcn';
+import { ContextMenu, DropdownMenu } from '@twgrid/x-data-grid-shadcn';
 import type { GridSlotProps } from './gridSlotsComponentsProps';
 import type { GridIconSlotsComponent } from './gridIconSlotsComponent';
 
@@ -17,6 +17,11 @@ export interface GridBaseSlots {
    * @default Checkbox
    */
   baseCheckbox: React.JSXElementConstructor<GridSlotProps['baseCheckbox']>;
+  /**
+   * The custom ContextMenu component used in the grid.
+   * @default ContextMenu
+   */
+  baseContextMenu?: typeof ContextMenu;
   /**
    * The custom CircularProgress component used in the grid.
    * @default CircularProgress

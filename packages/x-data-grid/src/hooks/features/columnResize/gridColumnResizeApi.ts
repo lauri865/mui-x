@@ -15,7 +15,7 @@ export type GridAutosizeOptions = {
   columns?: GridColDef['field'][];
   /**
    * If true, include the header widths in the calculation.
-   * @default false
+   * @default true
    */
   includeHeaders?: boolean;
   /**

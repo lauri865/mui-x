@@ -124,14 +124,14 @@ const GridGenericColumnHeaderItem = forwardRef<HTMLDivElement, GridGenericColumn
           ref={handleRef}
         >
           <div
-            className={clsx(classes.titleContainer, gridClasses['columnHeaderTitleContainer'])}
+            className={clsx(classes.titleContainer, gridClasses.columnHeaderTitleContainer)}
             role="presentation"
           >
             {headerComponent !== undefined ? (
               headerComponent
             ) : (
               <div
-                className={clsx(classes.title, gridClasses['columnHeaderTitle'])}
+                className={clsx(classes.title, gridClasses.columnHeaderTitle)}
                 ref={labelRef}
                 onPointerOver={handleMouseOver}
               >

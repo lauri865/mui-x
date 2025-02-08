@@ -44,6 +44,8 @@ import {
 import { useGridPrivateApiContext } from '../../hooks/utils/useGridPrivateApiContext';
 import { gridEditCellStateSelector } from '../../hooks/features/editing/gridEditingSelectors';
 import { attachPinnedStyle } from '../../internals/utils';
+import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
+import { useGridApiEventHandler } from '../../hooks/utils/useGridApiEventHandler';
 
 export const gridPinnedColumnPositionLookup = {
   [PinnedColumnPosition.LEFT]: GridPinnedColumnPosition.LEFT,
@@ -114,6 +116,7 @@ const useUtilityClasses = (ownerState: OwnerState) => {
       isEditable && 'cell--editable',
       showLeftBorder && 'cell--withLeftBorder',
       showRightBorder && 'cell--withRightBorder',
+      // needed for resizer
       pinnedPosition === PinnedColumnPosition.LEFT && 'cell--pinnedLeft',
       pinnedPosition === PinnedColumnPosition.RIGHT && 'cell--pinnedRight',
       isSelectionMode && !isEditable && 'cell--selectionMode',
@@ -285,6 +288,9 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
       pinnedPosition === PinnedColumnPosition.LEFT || pinnedPosition === PinnedColumnPosition.RIGHT,
     showRightBorder,
     showLeftBorder,
+    left: align === 'left',
+    center: align === 'center',
+    right: align === 'right',
   });
 
   const publishMouseUp = React.useCallback(
@@ -369,7 +375,7 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
     return cellStyle;
   }, [width, isNotVisible, styleProp, pinnedOffset, pinnedPosition, isRtl, rowSpan]);
 
-  React.useEffect(() => {
+  useEnhancedEffect(() => {
     if (!hasFocus || cellMode === GridCellModes.Edit) {
       return;
     }
@@ -467,6 +473,43 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
     children = React.cloneElement<any>(children, { focusElementRef });
   }
 
+  const showOverflow = (event: Event) => {
+    const el = event.currentTarget as HTMLElement;
+    const isOverflowingX = el.scrollWidth > el.clientWidth;
+    const isOverflowingY = el.scrollHeight > el.clientHeight;
+    if (isOverflowingX) {
+      const delta = el.scrollWidth - el.clientWidth;
+      el.style.minWidth = `${el.clientWidth + delta}px`;
+      el.style.overflow = 'visible';
+      el.style.marginRight = `-${delta + (showRightBorder ? -1 : 0)}px`;
+      el.style.zIndex = '1';
+      el.style.borderRight = '1px solid var(--color-grid-border)';
+    }
+    if (isOverflowingY) {
+      const delta = el.scrollHeight - el.clientHeight;
+      el.style.overflow = 'visible';
+      el.style.marginBottom = `-${delta}px`;
+      el.style.zIndex = '1';
+      el.style.borderRight = '1px solid var(--color-grid-border)';
+      el.style.borderBottom = '1px solid var(--color-grid-border)';
+    }
+  };
+
+  const hideOverflow = (event: Event) => {
+    const el = event.currentTarget as HTMLElement;
+    el.style.minWidth = '';
+    el.style.overflow = '';
+    el.style.marginRight = '';
+    el.style.marginBottom = '';
+    el.style.zIndex = '';
+    el.style.borderRight = '';
+    el.style.borderBottom = '';
+  };
+
+  useGridApiEventHandler(apiRef, 'columnResize', (params) => {
+    hideOverflow({ currentTarget: cellRef.current! } as any);
+  });
+
   return (
     <div
       className={clsx(classes.root, classNames, className)}
@@ -487,6 +530,11 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
       onMouseUp={publishMouseUp('cellMouseUp')}
       onKeyDown={publish('cellKeyDown', onKeyDown)}
       onKeyUp={publish('cellKeyUp', onKeyUp)}
+      onContextMenu={publish('cellContextMenu')}
+      onPointerEnter={showOverflow as any}
+      onPointerLeave={hideOverflow as any}
+      onFocusCapture={showOverflow as any}
+      onBlur={hideOverflow as any}
       {...other}
       onFocus={handleFocus}
       ref={handleRef}

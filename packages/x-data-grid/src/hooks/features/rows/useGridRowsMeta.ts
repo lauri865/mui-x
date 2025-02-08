@@ -16,7 +16,8 @@ import { gridDensityFactorSelector } from '../density/densitySelector';
 import { gridPaginationSelector } from '../pagination/gridPaginationSelector';
 import { GridStateInitializer } from '../../utils/useGridInitializeState';
 import { useGridRegisterPipeApplier } from '../../core/pipeProcessing';
-import { gridPinnedRowsSelector, gridRowCountSelector } from './gridRowsSelector';
+import { gridRowCountSelector } from './gridRowsSelector';
+import { gridVisiblePinnedRowsSelector } from '../rowPinning';
 import { gridDimensionsSelector } from '../dimensions/gridDimensionsSelectors';
 import { getValidRowHeight, getRowHeightWarning } from './gridRowsUtils';
 import type { HeightEntry } from './gridRowsMetaInterfaces';
@@ -72,7 +73,7 @@ export const useGridRowsMeta = (
 
   const densityFactor = useGridSelector(apiRef, gridDensityFactorSelector);
   const currentPage = useGridVisibleRows(apiRef, props);
-  const pinnedRows = useGridSelector(apiRef, gridPinnedRowsSelector);
+  const pinnedRows = useGridSelector(apiRef, gridVisiblePinnedRowsSelector);
   const rowHeight = useGridSelector(apiRef, gridRowHeightSelector);
 
   const getRowHeightEntry: GridRowsMetaPrivateApi['getRowHeightEntry'] = (rowId) => {

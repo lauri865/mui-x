@@ -150,12 +150,8 @@ const findPinnedCells = ({
       return;
     }
 
-    console.log(
-      rowElement.querySelectorAll(`.${gridClasses['cell']}[data-pinned=${position}]`),
-      `.${gridClasses['cell']}[data-pinned=${position}]`,
-    );
     rowElement
-      .querySelectorAll(`.${gridClasses['cell']}[data-pinned=${position}]`)
+      .querySelectorAll(`.${gridClasses.cell}[data-pinned=${position}]`)
       .forEach((cell) => {
         const currentColIndex = parseCellColIndex(cell);
         if (currentColIndex !== null && filterFn(currentColIndex)) {
@@ -214,7 +210,7 @@ const findPinnedHeaders = ({
   }
   const elements: HTMLElement[] = [];
   api.columnHeadersContainerRef.current
-    .querySelectorAll(`.${gridClasses['columnHeader']}[data-pinned=${position}]`)
+    .querySelectorAll(`.${gridClasses.columnHeader}[data-pinned=${position}]`)
     .forEach((element) => {
       const currentColIndex = parseCellColIndex(element);
       if (currentColIndex !== null && filterFn(currentColIndex, element)) {

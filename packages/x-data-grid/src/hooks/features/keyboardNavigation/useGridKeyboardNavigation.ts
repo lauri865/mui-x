@@ -32,17 +32,7 @@ import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipe
 import { isEventTargetInPortal } from '../../../utils/domUtils';
 import { getLeftColumnIndex, getRightColumnIndex, findNonRowSpannedCell } from './utils';
 import { gridListColumnSelector } from '../listView/gridListViewSelectors';
-import { createSelectorMemoized } from '../../../utils/createSelector';
-import { gridVisibleRowsSelector } from '../pagination';
-import { gridPinnedRowsSelector } from '../rows/gridRowsSelector';
-
-const gridVisibleRowsWithPinnedRowsSelector = createSelectorMemoized(
-  gridVisibleRowsSelector,
-  gridPinnedRowsSelector,
-  (visibleRows, pinnedRows) => {
-    return (pinnedRows.top || []).concat(visibleRows.rows, pinnedRows.bottom || []);
-  },
-);
+import { gridVisibleRowsWithPinnedRowsSelector } from '../rowPinning/gridRowPinningInternalSelector';
 
 /**
  * @requires useGridSorting (method) - can be after

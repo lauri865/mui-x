@@ -88,6 +88,23 @@
     ::file-selector-button {
       border-color: var(--color-gray-200, currentColor);
     }
+
+    &.twg-autosizing {
+      .twg-columnHeader,
+      .twg-columnHeaderTitleContainer,
+      .twg-columnHeaderTitle,
+      .twg-cell {
+        overflow: visible !important;
+        white-space: nowrap;
+        min-width: max-content !important;
+        max-width: max-content !important;
+        pointer-events: none !important;
+      }
+
+      .twg-columnHeader .toolbar button {
+        display: flex !important;
+      }
+    }
   }
 }
 

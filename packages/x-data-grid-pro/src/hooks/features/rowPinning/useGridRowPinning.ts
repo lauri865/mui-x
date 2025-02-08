@@ -53,6 +53,7 @@ export const rowPinningStateInitializer: GridStateInitializer<
         pinnedRows: { top: [], bottom: [] },
       },
     },
+    pinnedRows: props.pinnedRows ?? { top: [], bottom: [] },
   };
 };
 

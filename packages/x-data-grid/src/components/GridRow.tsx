@@ -321,6 +321,7 @@ const GridRow = forwardRef<HTMLDivElement, GridRowProps>(function GridRow(props,
     if (rowNode?.type === 'skeletonRow') {
       return (
         <slots.skeletonCell
+          className={cellClasses.root}
           key={column.field}
           type={column.type}
           width={width}

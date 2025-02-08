@@ -29,7 +29,7 @@ function writeToClipboardPolyfill(data: string) {
   }
 }
 
-function copyToClipboard(data: string) {
+export function copyToClipboard(data: string) {
   if (navigator.clipboard) {
     navigator.clipboard.writeText(data).catch(() => {
       writeToClipboardPolyfill(data);

@@ -10,10 +10,7 @@ export interface GridPinnedRowsModel {
   bottom: GridRowId[];
 }
 
-export interface GridPinnedRowsState {
-  model: GridPinnedRowsModel;
-  visible: GridPinnedRowsModel;
-}
+export type GridPinnedRowsState = GridPinnedRowsModel;
 
 export const EMPTY_PINNED_ROWS: GridPinnedRowsModel = {
   top: [],
@@ -24,11 +21,14 @@ export interface GridRowPinningApi {
   /**
    * Pin the row at the specified index.
    * @param {GridRowId} rowIndex - The id of the row to pin.
+   * @param id
+   * @param position
    */
   pinRow: (id: GridRowId, position: GridPinnedRowPosition) => void;
   /**
    * Unpin the row at the specified index.
    * @param {GridRowId} rowId - The id of the row to unpin.
+   * @param id
    */
   unpinRow: (id: GridRowId) => void;
   /**
@@ -38,12 +38,14 @@ export interface GridRowPinningApi {
   /**
    * Check if the row at the specified index is pinned.
    * @param {GridRowId} rowId - The id of the row to check.
+   * @param id
    * @returns {boolean} - Whether the row is pinned.
    */
-  isRowPinned: (id: number) => boolean;
+  isRowPinned: (id: GridRowId) => boolean;
   /**
    * Get the row's pinned position.
    * @param {GridRowId} rowId - The id of the row.
+   * @param id
    * @returns {GridPinnedRowPosition | null} - The row's pinned position.
    */
   getRowPinnedPosition: (id: GridRowId) => GridPinnedRowPosition | null;

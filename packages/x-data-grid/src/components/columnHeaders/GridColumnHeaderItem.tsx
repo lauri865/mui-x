@@ -21,6 +21,7 @@ import { attachPinnedStyle } from '../../internals/utils';
 import { gridColumnMenuSelector } from '../../hooks/features/columnMenu/columnMenuSelector';
 import { useGridSelector } from '../../hooks/utils/useGridSelector';
 import { gridPinnedColumnPositionLookup } from '../cell/GridCell';
+import { GRID_CHECKBOX_SELECTION_FIELD } from '../../colDef';
 
 interface GridColumnHeaderItemProps {
   colIndex: number;
@@ -150,7 +151,7 @@ function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
   const classes = useThemedComponent('columnHeader', {
     showLeftBorder,
     showRightBorder,
-    checkbox: colDef.field === '__check__',
+    checkbox: colDef.field === GRID_CHECKBOX_SELECTION_FIELD,
     pinned: pinnedPosition !== undefined,
   });
 
@@ -170,10 +171,22 @@ function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
     [apiRef, colDef.field],
   );
 
+  const handleContextMenu = React.useCallback(
+    (event: React.MouseEvent) => {
+      if (!event.ctrlKey) {
+        event.stopPropagation();
+        event.preventDefault();
+        apiRef.current.toggleColumnMenu(colDef.field);
+      }
+      publish('columnHeaderContextMenu')(event);
+    },
+    [apiRef, publish],
+  );
+
   const mouseEventsHandlers = React.useMemo(
     () => ({
       onClick: publish('columnHeaderClick'),
-      onContextMenu: publish('columnHeaderContextMenu'),
+      onContextMenu: handleContextMenu,
       onDoubleClick: publish('columnHeaderDoubleClick'),
       onKeyDown: publish('columnHeaderKeyDown'),
       onFocus: publish('columnHeaderFocus'),

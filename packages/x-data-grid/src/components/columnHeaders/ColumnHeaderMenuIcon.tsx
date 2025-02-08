@@ -45,6 +45,7 @@ export const ColumnHeaderMenuIcon = React.memo(
               apiRef.current.hideColumnMenu();
             }
           }}
+          data-open={open || undefined}
         >
           <rootProps.slots.columnMenuIcon />
         </rootProps.slots.baseIconButton>

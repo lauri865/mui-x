@@ -1,39 +1,10 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import composeClasses from '@mui/utils/composeClasses';
-import { styled, SxProps, Theme } from '@mui/system';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import { useThemedComponent } from '../../context/GridThemeContext';
-import { getDataGridUtilityClass } from '../../constants/gridClasses';
-import type { DataGridProcessedProps } from '../../models/props/DataGridProps';
 
-export type GridFooterContainerProps = React.HTMLAttributes<HTMLDivElement> & {
-  sx?: SxProps<Theme>;
-};
-
-type OwnerState = DataGridProcessedProps;
-
-const useUtilityClasses = (ownerState: OwnerState) => {
-  const { classes } = ownerState;
-
-  const slots = {
-    root: ['footerContainer', 'withBorderColor'],
-  };
-
-  return composeClasses(slots, getDataGridUtilityClass, classes);
-};
-
-const GridFooterContainerRoot = styled('div', {
-  name: 'MuiDataGrid',
-  slot: 'FooterContainer',
-  overridesResolver: (props, styles) => styles.footerContainer,
-})<{ ownerState: OwnerState }>({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  minHeight: 52,
-});
+export type GridFooterContainerProps = React.HTMLAttributes<HTMLDivElement>;
 
 const GridFooterContainer = forwardRef<HTMLDivElement, GridFooterContainerProps>(
   function GridFooterContainer(props, ref) {

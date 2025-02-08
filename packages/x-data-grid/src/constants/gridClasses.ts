@@ -368,7 +368,7 @@ export interface GridClasses {
   /**
    * Styles applied to the footer container element.
    */
-  footerContainer: string;
+  footer: string;
   /**
    * Styles applied to the column header icon's container.
    */
@@ -773,7 +773,7 @@ export const gridClasses = generateUtilityClasses<GridClassKey>('twg', [
   'filterFormOperatorInput',
   'filterFormValueInput',
   'filterIcon',
-  'footerContainer',
+  'footer',
   'headerFilterRow',
   'iconButtonContainer',
   'iconSeparator',

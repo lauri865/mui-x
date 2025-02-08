@@ -11,6 +11,7 @@ import { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { gridDimensionsSelector } from '../../hooks/features/dimensions/gridDimensionsSelectors';
 import { useThemedComponent } from '../../context/GridThemeContext';
+import { createPortal } from 'react-dom';
 
 enum GridColumnHeaderSeparatorSides {
   Left = 'left',
@@ -23,26 +24,6 @@ export interface GridColumnHeaderSeparatorProps extends React.HTMLAttributes<HTM
   height: number;
   side?: GridColumnHeaderSeparatorSides;
 }
-
-type OwnerState = GridColumnHeaderSeparatorProps & {
-  classes?: DataGridProcessedProps['classes'];
-};
-
-const useUtilityClasses = (ownerState: OwnerState) => {
-  const { resizable, resizing, classes, side } = ownerState;
-
-  const slots = {
-    root: [
-      'columnSeparator',
-      resizable && 'columnSeparator--resizable',
-      resizing && 'columnSeparator--resizing',
-      side && `columnSeparator--side${capitalize(side)}`,
-    ],
-    icon: ['iconSeparator'],
-  };
-
-  return composeClasses(slots, getDataGridUtilityClass, classes);
-};
 
 function GridColumnHeaderSeparatorRaw(props: GridColumnHeaderSeparatorProps) {
   const apiRef = useGridApiContext();
@@ -68,30 +49,40 @@ function GridColumnHeaderSeparatorRaw(props: GridColumnHeaderSeparatorProps) {
     <div
       className={clsx(
         classes.root,
-        'group/resizer text-grid-border hover:text-white active:text-white active:max-h-full h-full absolute cursor-col-resize px-1 z-1 hover:z-20 group-focus-within/cell:text-highlight-border active:[anchor-name:--resizer]',
+        'group/resizer text-grid-border hover:text-white active:text-white active:max-h-full h-full absolute cursor-col-resize px-1 z-1 active:z-20 hover:z-20 group-focus-within/cell:text-highlight-border active:[anchor-name:--resizer]',
         side === GridColumnHeaderSeparatorSides.Left && '-left-[5px] twg-columnSeparator--sideLeft',
         side === GridColumnHeaderSeparatorSides.Right &&
           '-right-1 group-data-last-pinned-left/cell:-right-[5px] twg-columnSeparator--sideRight',
         !rootProps.showColumnVerticalBorder && 'max-h-[20px]',
         !resizable && 'pointer-events-none',
-        resizable && 'twg-columnSeparator--resizable',
+        resizable && 'twg-columnSeparator--resizable !pointer-events-auto',
       )}
       {...other}
       onClick={stopClick}
       onPointerDown={(event) => {
         event.stopPropagation();
         setResizerHeight(gridDimensionsSelector(apiRef.current.state).viewportOuterSize.height);
+
+        document.addEventListener(
+          'pointerup',
+          () => {
+            setResizerHeight(null);
+          },
+          { once: true },
+        );
       }}
     >
       <div className="w-px bg-current h-full" />
-      {resizerHeight && (
-        <div
-          className="w-px bg-white top-[anchor(top)] hidden group-active/resizer:[position-anchor:--resizer] group-active/resizer:flex pointer-events-none z-10 absolute"
-          style={{
-            height: resizerHeight,
-          }}
-        />
-      )}
+      {resizerHeight &&
+        createPortal(
+          <div
+            className="w-px bg-white top-[anchor(top)] left-[anchor(left)] ml-1 [position-anchor:--resizer] flex pointer-events-none z-20 absolute"
+            style={{
+              height: resizerHeight,
+            }}
+          />,
+          document.body,
+        )}
     </div>
   );
 }

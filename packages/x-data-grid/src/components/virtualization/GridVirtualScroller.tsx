@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { gridDimensionsSelector } from '@mui/x-data-grid-pro';
 import { useThemedComponent } from '../../context/GridThemeContext';
 import {
   gridHasBottomFillerSelector,
@@ -22,7 +23,8 @@ import { GridVirtualScrollerRenderZone as RenderZone } from './GridVirtualScroll
 import { GridVirtualScrollbar as Scrollbar } from './GridVirtualScrollbar';
 import { GridStateCommunity } from '../../models/gridStateCommunity';
 import { GridDragDrop } from '../dragdrop/GridDragDrop';
-import { gridDimensionsSelector } from '@mui/x-data-grid-pro';
+import { GridContextMenu } from '../contextMenu/GridContextMenu';
+import clsx from 'clsx';
 
 const hasPinnedRightSelector = (state: GridStateCommunity) => state.dimensions.rightPinnedWidth > 0;
 
@@ -65,7 +67,10 @@ function GridVirtualScroller(props: GridVirtualScrollerProps) {
 
   return (
     <div
-      className={classes.root}
+      className={clsx(
+        classes.root,
+        overlaysProps.loadingOverlayVariant === 'skeleton' && classes.variants.skeleton,
+      )}
       {...getContainerProps()}
       data-scroll-x={hasScrollX || undefined}
       data-scroll-y={hasScrollY || undefined}
@@ -76,13 +81,16 @@ function GridVirtualScroller(props: GridVirtualScrollerProps) {
       <GridDragDrop />
       <GridScrollArea scrollDirection="left" {...getScrollAreaProps()} />
       <GridScrollArea scrollDirection="right" {...getScrollAreaProps()} />
-      <div className={classes.variants.scroller} {...getScrollerProps()}>
+      <GridContextMenu />
+      <div
+        className={clsx('twg-virtualScroller', classes.variants.scroller)}
+        {...getScrollerProps()}
+      >
         <TopContainer>
           {!rootProps.unstable_listView && <GridHeaders />}
+          {getOverlay()}
           <rootProps.slots.pinnedRows position="top" virtualScroller={virtualScroller} />
         </TopContainer>
-
-        {getOverlay()}
 
         <Content {...getContentProps()}>
           <RenderZone {...getRenderZoneProps()}>

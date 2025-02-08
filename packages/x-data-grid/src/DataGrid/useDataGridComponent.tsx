@@ -106,9 +106,9 @@ export const useDataGridComponent = (
   useGridInitializeState(columnGroupsStateInitializer, apiRef, props);
   useGridInitializeState(virtualizationStateInitializer, apiRef, props);
   useGridInitializeState(dimensionsStateInitializer, apiRef, props);
+  useGridInitializeState(rowPinningStateInitializer, apiRef, props);
   useGridInitializeState(rowsMetaStateInitializer, apiRef, props);
   useGridInitializeState(listViewStateInitializer, apiRef, props);
-  useGridInitializeState(rowPinningStateInitializer, apiRef, props);
 
   useGridKeyboardNavigation(apiRef, props);
   useGridRowSelection(apiRef, props);
@@ -123,6 +123,7 @@ export const useDataGridComponent = (
   useGridFocus(apiRef, props);
   useGridPreferencesPanel(apiRef, props);
   useGridFilter(apiRef, props);
+  useGridRowPinning(apiRef, props);
   useGridSorting(apiRef, props);
   useGridDensity(apiRef, props);
   useGridColumnResize(apiRef, props);
@@ -138,7 +139,6 @@ export const useDataGridComponent = (
   useGridStatePersistence(apiRef);
   useGridVirtualization(apiRef, props);
   useGridListView(apiRef, props);
-  useGridRowPinning(apiRef, props);
 
   return apiRef;
 };

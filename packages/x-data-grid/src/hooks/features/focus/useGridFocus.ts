@@ -24,13 +24,22 @@ import { getVisibleRows } from '../../utils/useGridVisibleRows';
 import { clamp } from '../../../utils/utils';
 import { GridCellCoordinates } from '../../../models/gridCell';
 import type { GridRowEntry, GridRowId } from '../../../models/gridRows';
-import { gridPinnedRowsSelector } from '../rows/gridRowsSelector';
+import { gridVisiblePinnedRowsSelector } from '../rowPinning';
+import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
+import { gridVisibleRowIdsWithPinnedRowsSelector } from '../rowPinning/gridRowPinningInternalSelector';
 
-export const focusStateInitializer: GridStateInitializer = (state) => ({
-  ...state,
-  focus: { cell: null, columnHeader: null, columnHeaderFilter: null, columnGroupHeader: null },
-  tabIndex: { cell: null, columnHeader: null, columnHeaderFilter: null, columnGroupHeader: null },
-});
+export const focusStateInitializer: GridStateInitializer = (state, props) => {
+  return {
+    ...state,
+    focus: {
+      cell: props.initialState?.focus?.cell ?? null,
+      columnHeader: props.initialState?.focus?.columnHeader ?? null,
+      columnHeaderFilter: null,
+      columnGroupHeader: null,
+    },
+    tabIndex: { cell: null, columnHeader: null, columnHeaderFilter: null, columnGroupHeader: null },
+  };
+};
 
 /**
  * @requires useGridParamsApi (method)
@@ -39,7 +48,7 @@ export const focusStateInitializer: GridStateInitializer = (state) => ({
  */
 export const useGridFocus = (
   apiRef: RefObject<GridPrivateApiCommunity>,
-  props: Pick<DataGridProcessedProps, 'pagination' | 'paginationMode'>,
+  props: Pick<DataGridProcessedProps, 'autoFocus' | 'pagination' | 'paginationMode'>,
 ): void => {
   const logger = useGridLogger(apiRef, 'useGridFocus');
 
@@ -209,11 +218,8 @@ export const useGridFocus = (
       let columnIndexToFocus = apiRef.current.getColumnIndex(field);
       const visibleColumns = gridVisibleColumnDefinitionsSelector(apiRef);
 
-      const currentPage = getVisibleRows(apiRef, {
-        pagination: props.pagination,
-        paginationMode: props.paginationMode,
-      });
-      const pinnedRows = gridPinnedRowsSelector(apiRef);
+      const currentPage = getVisibleRows(apiRef);
+      const pinnedRows = gridVisiblePinnedRowsSelector(apiRef);
 
       // Include pinned rows as well
       const currentPageRows = ([] as GridRowEntry[]).concat(
@@ -502,6 +508,51 @@ export const useGridFocus = (
 
   useGridApiMethod(apiRef, focusApi, 'public');
   useGridApiMethod(apiRef, focusPrivateApi, 'private');
+
+  useEnhancedEffect(() => {
+    const autoFocus = props.autoFocus;
+    const rowIds = gridVisibleRowIdsWithPinnedRowsSelector(apiRef);
+    if (!autoFocus) {
+      return;
+    }
+
+    const autoFocusedCell = () => {
+      const visibleColumns = gridVisibleColumnDefinitionsSelector(apiRef);
+      const field = autoFocus === true ? visibleColumns[0].field : autoFocus;
+      apiRef.current.setState((state) => ({
+        ...state,
+        tabIndex: {
+          cell: { id: rowIds[0], field },
+          columnHeader: null,
+          columnHeaderFilter: null,
+          columnGroupHeader: null,
+        },
+        focus: {
+          cell: { id: rowIds[0], field },
+          columnHeader: null,
+          columnHeaderFilter: null,
+          columnGroupHeader: null,
+        },
+      }));
+    };
+
+    if (rowIds.length !== 0) {
+      autoFocusedCell();
+      return;
+    }
+
+    const unsubscribe = apiRef.current.subscribeEvent('sortedRowsSet', () => {
+      const rowIds = gridVisibleRowIdsWithPinnedRowsSelector(apiRef);
+      if (rowIds.length === 0) {
+        return;
+      }
+      autoFocusedCell();
+      return unsubscribe();
+    });
+
+    return unsubscribe;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [apiRef]);
 
   React.useEffect(() => {
     const doc = ownerDocument(apiRef.current.rootElementRef!.current);

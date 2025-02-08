@@ -24,6 +24,7 @@
   }
 
   .twg-cell:focus-within,
+  .twg-cell[data-open],
   .twg-columnHeader:focus-within {
     @apply bg-highlight outline-highlight-border outline-1 outline-offset-[-1px] transition-none z-1;
   }

@@ -3,10 +3,14 @@ import PropTypes from 'prop-types';
 import { GridColumnMenuItemProps } from '../GridColumnMenuItemProps';
 import { GridColumnMenuHideItem } from './GridColumnMenuHideItem';
 import { GridColumnMenuManageItem } from './GridColumnMenuManageItem';
+import { GridColumnMenuAutoSizeItem } from './GridColumnMenuAutoSizeItem';
+import { GridColumnMenuAutoSizeAllItem } from './GridColumnMenuAutoSizeAllItem';
 
 function GridColumnMenuColumnsItem(props: GridColumnMenuItemProps) {
   return (
     <React.Fragment>
+      <GridColumnMenuAutoSizeItem {...props} />
+      <GridColumnMenuAutoSizeAllItem {...props} />
       <GridColumnMenuHideItem {...props} />
       <GridColumnMenuManageItem {...props} />
     </React.Fragment>

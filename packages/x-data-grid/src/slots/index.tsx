@@ -14,7 +14,14 @@ import MUIInputAdornment from '@mui/material/InputAdornment';
 import MUIPopper from '@mui/material/Popper';
 import MUIInputLabel from '@mui/material/InputLabel';
 import MUISkeleton from '@mui/material/Skeleton';
-import { Button, Checkbox, DropdownMenu, icons, Tooltip } from '@twgrid/x-data-grid-shadcn';
+import {
+  Button,
+  Checkbox,
+  ContextMenu,
+  DropdownMenu,
+  icons,
+  Tooltip,
+} from '@twgrid/x-data-grid-shadcn';
 import { GridColumnUnsortedIcon } from './icons/GridColumnUnsortedIcon';
 import {
   GridAddIcon,
@@ -41,6 +48,7 @@ import type { GridIconSlotsComponent } from '../models';
 import type { GridBaseSlots } from '../models/gridSlotsComponent';
 import type { GridSlotProps } from '../models/gridSlotsComponentsProps';
 import MUISelectOption from './components/MUISelectOption';
+import clsx from 'clsx';
 
 const iconSlots: GridIconSlotsComponent = {
   booleanCellTrueIcon: GridCheckIcon,
@@ -83,6 +91,7 @@ const iconSlots: GridIconSlotsComponent = {
   columnMenuFilterIcon: icons.filter,
   columnMenuHideIcon: icons.hide,
   columnMenuManageColumnsIcon: icons.column,
+  autosizeIcon: icons.autoSize,
 };
 
 const baseSlots: GridBaseSlots = {
@@ -103,8 +112,18 @@ const baseSlots: GridBaseSlots = {
   basePopper: MUIPopper,
   baseInputLabel: MUIInputLabel,
   baseSelectOption: MUISelectOption,
-  baseSkeleton: MUISkeleton,
+  baseSkeleton: (props) => (
+    <div
+      className={clsx('bg-white/8 animate-pulse rounded-md text-[11px]')}
+      style={{
+        width: props.width,
+        height: props.height,
+      }}
+      data-variant={props.variant}
+    />
+  ),
   baseChip: MUIChip,
+  baseContextMenu: ContextMenu,
 };
 
 const materialSlots: GridBaseSlots & GridIconSlotsComponent = {

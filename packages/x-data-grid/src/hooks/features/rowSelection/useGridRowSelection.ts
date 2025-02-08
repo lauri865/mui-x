@@ -22,7 +22,6 @@ import {
   selectedGridRowsSelector,
   selectedIdsLookupSelector,
 } from './gridRowSelectionSelector';
-import { gridPaginatedVisibleSortedGridRowIdsSelector } from '../pagination';
 import { gridFocusCellSelector } from '../focus/gridFocusStateSelector';
 import {
   gridExpandedSortedRowIdsSelector,
@@ -38,6 +37,10 @@ import { GRID_DETAIL_PANEL_TOGGLE_FIELD } from '../../../internals/constants';
 import { gridClasses } from '../../../constants/gridClasses';
 import { isEventTargetInPortal } from '../../../utils/domUtils';
 import { isMultipleRowSelectionEnabled, findRowsToSelect, findRowsToDeselect } from './utils';
+import {
+  gridVisiblePaginatedRowIdsWithPinnedRowsSelector,
+  gridVisibleRowIdsWithPinnedRowsSelector,
+} from '../rowPinning/gridRowPinningInternalSelector';
 
 const getSelectionModelPropValue = (
   selectionModelProp: DataGridProcessedProps['rowSelectionModel'],
@@ -138,14 +141,15 @@ export const useGridRowSelection = (
   const isNestedData = useGridSelector(apiRef, gridRowMaximumTreeDepthSelector) > 1;
 
   const expandMouseRowRangeSelection = React.useCallback(
-    (id: GridRowId) => {
+    (id: GridRowId, startIdProp?: GridRowId) => {
       let endId = id;
-      const startId = lastRowToggled.current ?? id;
+      const startId = startIdProp ?? lastRowToggled.current ?? id;
       const isSelected = apiRef.current.isRowSelected(id);
       if (isSelected) {
-        const visibleRowIds = gridExpandedSortedRowIdsSelector(apiRef);
+        const visibleRowIds = gridVisibleRowIdsWithPinnedRowsSelector(apiRef);
         const startIndex = visibleRowIds.findIndex((rowId) => rowId === startId);
         const endIndex = visibleRowIds.findIndex((rowId) => rowId === endId);
+        console.log('visibleRowIds', visibleRowIds, startId, endId, startIndex, endIndex);
         if (startIndex === endIndex) {
           return;
         }
@@ -417,7 +421,7 @@ export const useGridRowSelection = (
       logger.debug(`Expanding selection from row ${startId} to row ${endId}`);
 
       // Using rows from all pages allow to select a range across several pages
-      const allPagesRowIds = gridExpandedSortedRowIdsSelector(apiRef);
+      const allPagesRowIds = gridVisibleRowIdsWithPinnedRowsSelector(apiRef);
       const startIndex = allPagesRowIds.indexOf(startId);
       const endIndex = allPagesRowIds.indexOf(endId);
       const [start, end] = startIndex > endIndex ? [endIndex, startIndex] : [startIndex, endIndex];
@@ -620,8 +624,8 @@ export const useGridRowSelection = (
     (params) => {
       const rowsToBeSelected =
         props.pagination && props.checkboxSelectionVisibleOnly && props.paginationMode === 'client'
-          ? gridPaginatedVisibleSortedGridRowIdsSelector(apiRef)
-          : gridExpandedSortedRowIdsSelector(apiRef);
+          ? gridVisiblePaginatedRowIdsWithPinnedRowsSelector(apiRef)
+          : gridVisibleRowIdsWithPinnedRowsSelector(apiRef);
 
       apiRef.current.selectRows(rowsToBeSelected, params.value);
     },
@@ -653,6 +657,9 @@ export const useGridRowSelection = (
             return;
           }
 
+          expandMouseRowRangeSelection(focusCell.id, params.id);
+          return;
+          /* 
           const newRowIndex = apiRef.current.getRowIndexRelativeToVisibleRows(focusCell.id);
           const previousRowIndex = apiRef.current.getRowIndexRelativeToVisibleRows(params.id);
 
@@ -687,7 +694,7 @@ export const useGridRowSelection = (
             .slice(start, end + 1)
             .map((row) => row.id);
           apiRef.current.selectRows(rowsBetweenStartAndEnd, !isNextRowSelected);
-          return;
+          return; */
         }
       }
 
@@ -703,7 +710,11 @@ export const useGridRowSelection = (
 
       if (String.fromCharCode(event.keyCode) === 'A' && (event.ctrlKey || event.metaKey)) {
         event.preventDefault();
-        selectRows(apiRef.current.getAllRowIds(), true);
+        if (apiRef.current.getSelectedRows().size === apiRef.current.getAllRowIds().length) {
+          apiRef.current.setRowSelectionModel([]);
+        } else {
+          selectRows(apiRef.current.getAllRowIds(), true);
+        }
       }
     },
     [apiRef, handleSingleRowSelection, selectRows, canHaveMultipleSelection],

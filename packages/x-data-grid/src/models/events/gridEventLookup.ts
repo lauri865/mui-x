@@ -325,6 +325,11 @@ export interface GridCellEventLookup {
     params: GridCellParams<any>;
     event: React.DragEvent<HTMLElement>;
   };
+
+  cellContextMenu: {
+    params: GridCellParams<any>;
+    event: React.MouseEvent<HTMLElement>;
+  };
 }
 
 export interface GridControlledStateEventLookup {

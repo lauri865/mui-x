@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
+import { isObjectEmpty } from '@mui/x-internals/isObjectEmpty';
 import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
 import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { GridStateInitializer } from '../../utils/useGridInitializeState';
@@ -13,8 +14,6 @@ import { gridPinnedColumnsSelector } from '../columns/gridColumnsSelector';
 import { useGridApiMethod } from '../../utils/useGridApiMethod';
 import { GridColumnPinningApi, GridColumnPinningState } from './gridColumnPinningInterfaces';
 import { useGridRegisterPipeProcessor, GridPipeProcessor } from '../../core/pipeProcessing';
-import { GridStateCommunity } from '../../../models/gridStateCommunity';
-import { isObjectEmpty } from '@mui/x-internals/isObjectEmpty';
 
 export const columnPinningStateInitializer: GridStateInitializer<
   Pick<DataGridProcessedProps, 'pinnedColumns' | 'initialState'>

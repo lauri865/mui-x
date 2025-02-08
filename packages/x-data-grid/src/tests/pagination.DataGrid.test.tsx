@@ -428,7 +428,7 @@ describe('<DataGrid /> - Pagination', () => {
         />,
       );
 
-      const footerHeight = document.querySelector('.MuiDataGrid-footerContainer')!.clientHeight;
+      const footerHeight = document.querySelector('.MuiDataGrid-footer')!.clientHeight;
       const expectedFullPageRowsLength = Math.floor(
         (height - columnHeaderHeight - footerHeight) / rowHeight,
       );

@@ -18,6 +18,7 @@ import type {
   GridSortingState,
   GridTabIndexState,
   GridVirtualizationState,
+  GridColumnIdentifier,
 } from '../hooks';
 import type { GridRowsMetaState } from '../hooks/features/rows/gridRowsMetaState';
 import type { GridEditingState } from './gridEditRowModel';
@@ -28,8 +29,11 @@ import type { GridColumnResizeState } from '../hooks/features/columnResize';
 import type { GridRowSpanningState } from '../hooks/features/rows/useGridRowSpanning';
 import type { GridListViewState } from '../hooks/features/listView/useGridListView';
 import { GridPinnedColumnFields } from '../hooks/features/columns/gridColumnsInterfaces';
-import { GridPinnedRowsModel } from '../hooks/features/rowPinning/rowPinningInterfaces';
-import { GridPinnedRowsState } from '../hooks/features/rowPinning/rowPinningInterfaces';
+import {
+  GridPinnedRowsModel,
+  GridPinnedRowsState,
+} from '../hooks/features/rowPinning/rowPinningInterfaces';
+import { GridCellCoordinates } from '../models/gridCell';
 
 /**
  * The state of Data Grid.
@@ -74,4 +78,8 @@ export interface GridInitialStateCommunity {
   scroll?: { top: number; left: number };
   pinnedColumns?: GridPinnedColumnFields;
   pinnedRows?: GridPinnedRowsModel;
+  focus?: {
+    cell?: GridCellCoordinates;
+    columnHeader?: GridColumnIdentifier;
+  };
 }

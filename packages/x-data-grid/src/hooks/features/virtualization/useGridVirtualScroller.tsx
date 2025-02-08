@@ -30,7 +30,7 @@ import {
   gridVisiblePinnedColumnsSelector,
 } from '../columns/gridColumnsSelector';
 import { gridDimensionsSelector } from '../dimensions/gridDimensionsSelectors';
-import { gridPinnedRowsSelector } from '../rows/gridRowsSelector';
+import { gridVisiblePinnedRowsSelector } from '../rowPinning';
 import { GridPinnedRowsPosition } from '../rows/gridRowsInterfaces';
 import { useGridVisibleRows, getVisibleRows } from '../../utils/useGridVisibleRows';
 import { useGridApiOptionHandler } from '../../utils';
@@ -118,7 +118,7 @@ export const useGridVirtualScroller = () => {
   const enabledForColumns =
     useGridSelector(apiRef, gridVirtualizationColumnEnabledSelector) && !isJSDOM;
 
-  const pinnedRows = useGridSelector(apiRef, gridPinnedRowsSelector);
+  const pinnedRows = useGridSelector(apiRef, gridVisiblePinnedRowsSelector);
   const pinnedColumnDefinitions = gridVisiblePinnedColumnsSelector(apiRef.current.state);
   const pinnedColumns = listView
     ? (EMPTY_PINNED_COLUMN_FIELDS as unknown as GridPinnedColumnFields)
@@ -411,7 +411,7 @@ export const useGridVirtualScroller = () => {
       return [];
     }
 
-    let baseRenderContext = params.renderContext ?? renderContext;
+    const baseRenderContext = params.renderContext ?? renderContext;
 
     const isLastSection =
       (!hasBottomPinnedRows && params.position === undefined) ||
@@ -541,7 +541,6 @@ export const useGridVirtualScroller = () => {
         currentRenderContext,
         pinnedColumns.left.length,
       );
-      const showBottomBorder = isLastVisibleInSection && params.position === 'top';
 
       const firstColumnIndex = currentRenderContext.firstColumnIndex;
       const lastColumnIndex = currentRenderContext.lastColumnIndex;
@@ -564,7 +563,7 @@ export const useGridVirtualScroller = () => {
           isFirstVisible={isFirstVisible}
           isLastVisible={isLastVisible}
           isNotVisible={isVirtualFocusRow}
-          showBottomBorder={showBottomBorder}
+          showBottomBorder={false}
           scrollbarWidth={verticalScrollbarWidth}
           gridHasFiller={gridHasFiller}
           {...rowProps}

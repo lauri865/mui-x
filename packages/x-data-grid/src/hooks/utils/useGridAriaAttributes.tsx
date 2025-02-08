@@ -3,7 +3,7 @@ import { gridVisibleColumnDefinitionsSelector } from '../features/columns/gridCo
 import { useGridSelector } from './useGridSelector';
 import { useGridRootProps } from './useGridRootProps';
 import { gridColumnGroupsHeaderMaxDepthSelector } from '../features/columnGrouping/gridColumnGroupsSelector';
-import { gridPinnedRowsCountSelector } from '../features/rows/gridRowsSelector';
+import { gridVisiblePinnedRowsCountSelector } from '../features/rowPinning';
 import { useGridPrivateApiContext } from './useGridPrivateApiContext';
 import { isMultipleRowSelectionEnabled } from '../features/rowSelection/utils';
 import { gridExpandedRowCountSelector } from '../features/filter/gridFilterSelector';
@@ -14,7 +14,7 @@ export const useGridAriaAttributes = (): React.HTMLAttributes<HTMLElement> => {
   const visibleColumns = useGridSelector(apiRef, gridVisibleColumnDefinitionsSelector);
   const accessibleRowCount = useGridSelector(apiRef, gridExpandedRowCountSelector);
   const headerGroupingMaxDepth = useGridSelector(apiRef, gridColumnGroupsHeaderMaxDepthSelector);
-  const pinnedRowsCount = useGridSelector(apiRef, gridPinnedRowsCountSelector);
+  const pinnedRowsCount = useGridSelector(apiRef, gridVisiblePinnedRowsCountSelector);
 
   return {
     role: 'grid',

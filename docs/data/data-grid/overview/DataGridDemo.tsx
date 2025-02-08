@@ -49,6 +49,7 @@ export default function DataGridDemo() {
   return (
     <Box sx={{ height: 400, width: '100%' }}>
       <DataGrid
+        autoFocus="lastName"
         rows={rows}
         columns={columns}
         initialState={{
@@ -63,11 +64,11 @@ export default function DataGridDemo() {
           },
           pinnedRows: {
             top: [1],
-            bottom: [],
+            bottom: [2],
           },
         }}
         pageSizeOptions={[5]}
-        //checkboxSelection
+        // checkboxSelection
         disableRowSelectionOnClick
       />
     </Box>

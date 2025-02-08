@@ -39,32 +39,11 @@ export interface GridSkeletonCellProps extends React.HTMLAttributes<HTMLDivEleme
   empty?: boolean;
 }
 
-type OwnerState = Pick<GridSkeletonCellProps, 'align' | 'empty'> & {
-  classes?: DataGridProcessedProps['classes'];
-};
-
-const useUtilityClasses = (ownerState: OwnerState) => {
-  const { align, classes, empty } = ownerState;
-
-  const slots = {
-    root: [
-      'cell',
-      'cellSkeleton',
-      `cell--text${align ? capitalize(align) : 'Left'}`,
-      empty && 'cellEmpty',
-    ],
-  };
-
-  return composeClasses(slots, getDataGridUtilityClass, classes);
-};
-
 const randomNumberGenerator = createRandomNumberGenerator(12345);
 
 function GridSkeletonCell(props: GridSkeletonCellProps) {
   const { field, type, align, width, height, empty = false, style, className, ...other } = props;
   const rootProps = useGridRootProps();
-  const ownerState = { classes: rootProps.classes, align, empty };
-  const classes = useUtilityClasses(ownerState);
 
   // Memo prevents the non-circular skeleton widths changing to random widths on every render
   const skeletonProps = React.useMemo(() => {
@@ -94,7 +73,7 @@ function GridSkeletonCell(props: GridSkeletonCellProps) {
   return (
     <div
       data-field={field}
-      className={clsx(classes.root, className)}
+      className={clsx(className)}
       style={{ height, maxWidth: width, minWidth: width, ...style }}
       {...other}
     >

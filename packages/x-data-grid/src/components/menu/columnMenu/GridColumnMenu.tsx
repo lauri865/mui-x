@@ -69,6 +69,14 @@ function GridColumnMenu(props: GridColumnMenuProps) {
                 : 'end'
           }
           onInteractOutside={(event) => {
+            if (event.detail.originalEvent instanceof PointerEvent) {
+              const element = event.target as HTMLElement;
+              const isCell = element.closest('[role="columnheader"], [role="gridcell"]');
+
+              if (event.detail.originalEvent.button === 2 && isCell) {
+                event.preventDefault();
+              }
+            }
             event.target?.addEventListener(
               'click',
               (event) => {

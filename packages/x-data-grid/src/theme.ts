@@ -11,6 +11,7 @@ const className = {
     base: 'group relative flex-1 flex flex-col overflow-hidden',
     scroller:
       'relative h-full flex-1 overflow-scroll [scrollbar-width:none] flex flex-col [&::-webkit-scrollbar]:hidden print:overflow-hidden z-0',
+    skeleton: '[&_.twg-virtualScroller>.twg-filler]:!hidden',
   },
 
   panelAnchor: {
@@ -38,7 +39,7 @@ const className = {
       'data-[align=center]:justify-center data-[align=right]:flex-row-reverse data-[align=center]:pr-1.5 data-[align=right]:pr-cell data-[align=right]:pl-0.5',
       'hover:bg-grid-hover-bg transition-[background-color] active:bg-grid-hover-bg',
       'data-first:rounded-tl-[calc(var(--radius-grid)-1px)] group-data-fullwidth:data-last:rounded-tr-[calc(var(--radius-grid)-1px)]',
-      'data-last:overflow-hidden',
+      //'data-last:overflow-hidden',
       '[&:hover_.twg-columnSeparator]:max-h-full',
       `data-[field=«check»]:p-0`,
       'group-data-dragging:[&_*]:pointer-events-none',
@@ -92,10 +93,6 @@ const className = {
     right: 'text-right justify-end',
     center: 'text-center justify-center',
     pinned: 'sticky z-[3] bg-grid-pinned-bg',
-    pinnedLeft:
-      'rounded-tl-[calc(var(--radius-grid)-1px)] rounded-bl-[calc(var(--radius-grid)-1px)]',
-    pinnedRight:
-      'rounded-tr-[calc(var(--radius-grid)-1px)] rounded-br-[calc(var(--radius-grid)-1px)]',
     isSelectionMode: 'cursor-default',
   },
 
@@ -127,6 +124,11 @@ const className = {
     dynamicHeight: '[&>.twg-cell]:white-space-[initial] [&>.twg-cell]:leading-inherit',
   },
 
+  pinnedRows: {
+    base: 'sticky z-4 bg-grid-pinned-bg/50 shadow-sm shadow-black/30 backdrop-blur-sm',
+    top: 'top-0 [&_.twg-cell]:border-t-0 [&_.twg-cell]:border-b [&_.twg-cell]:!border-b-grid-border',
+    bottom: 'bottom-0',
+  },
   scrollbarFiller: {
     base: 'min-w-[calc(var(--DataGrid-hasScrollY)*var(--DataGrid-scrollbarSize))] self-stretch border-b border-b-grid-border',
   },
@@ -148,6 +150,9 @@ const className = {
     base: 'flex items-center gap-1.5 text-highlight-text cursor-pointer hover:bg-grid-hover-bg hover:opacity-50 pl-1.5 pr-1 -mr-1 py-1 rounded-grid transition-all',
     badge:
       'bg-highlight px-1.5 py-0.5 rounded-md text-xs min-w-[20px] text-center border border-highlight-border/50 text-highlight-text tabular-nums font-medium',
+  },
+  skeletonLoadingOverlay: {
+    base: 'min-w-full w-max h-full overflow-clip',
   },
 };
 

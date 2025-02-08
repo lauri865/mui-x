@@ -105,6 +105,7 @@ export interface DataGridPropsWithComplexDefaultValueBeforeProcessing {
  * TODO: add multiSortKey
  */
 export interface DataGridPropsWithDefaultValues<R extends GridValidRowModel = any> {
+  autoFocus?: true | GridColDef<R>['field'];
   /**
    * If `true`, the Data Grid height is dynamic and follows the number of rows in the Data Grid.
    * @default false

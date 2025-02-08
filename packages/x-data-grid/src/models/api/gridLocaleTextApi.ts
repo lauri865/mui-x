@@ -139,6 +139,8 @@ export interface GridLocaleText {
   columnMenuUnsort: React.ReactNode;
   columnMenuSortAsc: React.ReactNode | ((colDef: GridColDef) => React.ReactNode);
   columnMenuSortDesc: React.ReactNode | ((colDef: GridColDef) => React.ReactNode);
+  columnMenuAutoSizeColumn: React.ReactNode;
+  columnMenuAutoSizeAllColumns: React.ReactNode;
 
   // Column header text
   columnHeaderFiltersTooltipActive: (count: number) => React.ReactNode;

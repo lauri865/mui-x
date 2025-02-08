@@ -208,21 +208,7 @@ function extractColumnWidths(
     if (options.includeHeaders) {
       const header = findGridHeader(apiRef.current, column.field);
       if (header) {
-        const title = header.querySelector(`.${gridClasses.columnHeaderTitle}`);
-        const content = header.querySelector(`.${gridClasses.columnHeaderTitleContainerContent}`)!;
-        const iconContainer = header.querySelector(`.${gridClasses.iconButtonContainer}`);
-        const menuContainer = header.querySelector(`.${gridClasses.menuIcon}`);
-        const element = title ?? content;
-
-        const style = window.getComputedStyle(header, null);
-        const paddingWidth = parseInt(style.paddingLeft, 10) + parseInt(style.paddingRight, 10);
-        const contentWidth = element.scrollWidth + 1;
-        const width =
-          contentWidth +
-          paddingWidth +
-          (iconContainer?.clientWidth ?? 0) +
-          (menuContainer?.clientWidth ?? 0);
-
+        const width = header.getBoundingClientRect().width;
         filteredWidths.push(width);
       }
     }
@@ -686,8 +672,8 @@ export const useGridColumnResize = (
       if (column.resizable === false) {
         return;
       }
-
       apiRef.current.autosizeColumns({
+        includeHeaders: true,
         ...props.autosizeOptions,
         disableColumnVirtualization: false,
         columns: [column.field],

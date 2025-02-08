@@ -153,8 +153,7 @@ export const useGridPrintExport = (
         gridRootElement!.querySelector<HTMLElement>(`.${gridClasses.toolbarContainer}`)
           ?.offsetHeight || 0;
       let gridFooterElementHeight =
-        gridRootElement!.querySelector<HTMLElement>(`.${gridClasses.footerContainer}`)
-          ?.offsetHeight || 0;
+        gridRootElement!.querySelector<HTMLElement>(`.${gridClasses.footer}`)?.offsetHeight || 0;
 
       if (normalizeOptions.hideToolbar) {
         gridClone.querySelector(`.${gridClasses.toolbarContainer}`)?.remove();
@@ -162,7 +161,7 @@ export const useGridPrintExport = (
       }
 
       if (normalizeOptions.hideFooter) {
-        gridClone.querySelector(`.${gridClasses.footerContainer}`)?.remove();
+        gridClone.querySelector(`.${gridClasses.footer}`)?.remove();
         gridFooterElementHeight = 0;
       }
 
@@ -181,7 +180,7 @@ export const useGridPrintExport = (
         // so if getRowsToExport is being used to only export a subset of rows then we need to
         // adjust the footer position to be correctly placed at the bottom of the grid
         const gridFooterElement: HTMLElement | null = gridClone.querySelector(
-          `.${gridClasses.footerContainer}`,
+          `.${gridClasses.footer}`,
         )!;
 
         gridFooterElement.style.position = 'absolute';

@@ -116,7 +116,7 @@ export const useDataGridPremiumComponent = (
   useGridDetailPanelPreProcessors(apiRef, props);
   // The column pinning `hydrateColumns` pre-processor must be after every other `hydrateColumns` pre-processors
   // Because it changes the order of the columns.
-  //useGridColumnPinningPreProcessors(apiRef, props);
+  // useGridColumnPinningPreProcessors(apiRef, props);
   useGridRowsPreProcessors(apiRef);
 
   /**
@@ -128,8 +128,8 @@ export const useDataGridPremiumComponent = (
   useGridInitializeState(rowSelectionStateInitializer, apiRef, props);
   useGridInitializeState(cellSelectionStateInitializer, apiRef, props);
   useGridInitializeState(detailPanelStateInitializer, apiRef, props);
-  useGridInitializeState(columnPinningStateInitializer, apiRef, props);
   useGridInitializeState(columnsStateInitializer, apiRef, props);
+  useGridInitializeState(columnPinningStateInitializer, apiRef, props);
   useGridInitializeState(rowPinningStateInitializer, apiRef, props);
   useGridInitializeState(paginationStateInitializer, apiRef, props);
   useGridInitializeState(rowsStateInitializer, apiRef, props);
@@ -158,9 +158,9 @@ export const useDataGridPremiumComponent = (
   useGridKeyboardNavigation(apiRef, props);
   useGridRowSelection(apiRef, props);
   useGridCellSelection(apiRef, props);
-  useGridColumnPinning(apiRef, props);
   useGridRowPinning(apiRef, props);
   useGridColumns(apiRef, props);
+  useGridColumnPinning(apiRef, props);
   useGridRows(apiRef, props);
   useGridRowSpanning(apiRef, props);
   useGridParamsApi(apiRef, props);

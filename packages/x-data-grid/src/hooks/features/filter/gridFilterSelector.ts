@@ -6,6 +6,7 @@ import { GridStateCommunity } from '../../../models/gridStateCommunity';
 import { gridSortedRowEntriesSelector } from '../sorting/gridSortingSelector';
 import { gridColumnLookupSelector } from '../columns/gridColumnsSelector';
 import { gridRowMaximumTreeDepthSelector, gridRowTreeSelector } from '../rows/gridRowsSelector';
+import { gridVisiblePinnedRowsCountSelector } from '../rowPinning/gridRowPinningSelector';
 
 /**
  * @category Filtering
@@ -180,7 +181,8 @@ export const gridExpandedRowCountSelector = createSelector(
  */
 export const gridFilteredTopLevelRowCountSelector = createSelector(
   gridFilteredSortedTopLevelRowEntriesSelector,
-  (visibleSortedTopLevelRows) => visibleSortedTopLevelRows.length,
+  gridVisiblePinnedRowsCountSelector,
+  (visibleSortedTopLevelRows, pinnedCount) => visibleSortedTopLevelRows.length + pinnedCount,
 );
 
 /**
