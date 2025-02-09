@@ -103,11 +103,6 @@ export const useGridDetailPanel = (
         return;
       }
 
-      // Ignore if the user didn't click specifically in the "i" button
-      if (event.target === event.currentTarget) {
-        return;
-      }
-
       apiRef.current.toggleDetailPanel(params.id);
     },
     [apiRef, contentCache, props.getDetailPanelContent],
@@ -119,7 +114,7 @@ export const useGridDetailPanel = (
         return;
       }
 
-      if (params.field === GRID_DETAIL_PANEL_TOGGLE_FIELD && event.key === ' ') {
+      if (params.field === GRID_DETAIL_PANEL_TOGGLE_FIELD && event.key === 'Enter') {
         apiRef.current.toggleDetailPanel(params.id);
       }
     },

@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect';
+import { createSelector } from '../../../utils/createSelector';
 import { createSelectorMemoized } from '../../../utils/createSelector';
 import { gridVisibleColumnDefinitionsSelector } from '../columns/gridColumnsSelector';
 import { gridRenderContextSelector } from './gridVirtualizationSelectors';

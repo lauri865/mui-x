@@ -92,13 +92,12 @@ const GridVirtualScrollbar = forwardRef<HTMLDivElement, GridVirtualScrollbarProp
     const propertyScrollPosition = props.position === 'vertical' ? 'top' : 'left';
     const hasScroll = props.position === 'vertical' ? dimensions.hasScrollX : dimensions.hasScrollY;
 
-    const contentSize =
-      dimensions.minimumSize[propertyDimension] + (hasScroll ? dimensions.scrollbarSize : 0);
-
     const scrollbarInnerSize =
       props.position === 'horizontal'
         ? dimensions.minimumSize[propertyDimension]
-        : dimensions.minimumSize[propertyDimension] - dimensions.headerHeight;
+        : dimensions.minimumSize[propertyDimension] -
+          dimensions.headersTotalHeight -
+          (dimensions.hasScrollX ? dimensions.scrollbarSize : 0);
 
     const onScrollerScroll = useEventCallback(() => {
       const scrollbar = scrollbarRef.current;
@@ -173,7 +172,11 @@ const GridVirtualScrollbar = forwardRef<HTMLDivElement, GridVirtualScrollbarProp
         tabIndex={-1}
         aria-hidden="true"
       >
-        <div ref={contentRef} className={classes.content} />
+        <div
+          ref={contentRef}
+          className={classes.content}
+          style={{ [propertyDimension]: `${scrollbarInnerSize}px` }}
+        />
       </Container>
     );
   },

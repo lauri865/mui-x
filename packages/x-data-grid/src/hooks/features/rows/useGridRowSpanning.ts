@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
 import useLazyRef from '@mui/utils/useLazyRef';
-import { GRID_DETAIL_PANEL_TOGGLE_FIELD } from '../../../internals/constants';
+import { GRID_DETAIL_PANEL_TOGGLE_FIELD } from '../../../colDef/gridDetailPanelColDef';
 import { gridVisibleColumnDefinitionsSelector } from '../columns/gridColumnsSelector';
 import { getVisibleRows } from '../../utils/useGridVisibleRows';
 import { gridRenderContextSelector } from '../virtualization/gridVirtualizationSelectors';

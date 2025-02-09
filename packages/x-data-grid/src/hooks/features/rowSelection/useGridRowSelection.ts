@@ -23,17 +23,13 @@ import {
   selectedIdsLookupSelector,
 } from './gridRowSelectionSelector';
 import { gridFocusCellSelector } from '../focus/gridFocusStateSelector';
-import {
-  gridExpandedSortedRowIdsSelector,
-  gridFilteredRowsLookupSelector,
-} from '../filter/gridFilterSelector';
+import { gridFilteredRowsLookupSelector } from '../filter/gridFilterSelector';
 import { GRID_CHECKBOX_SELECTION_COL_DEF, GRID_ACTIONS_COLUMN_TYPE } from '../../../colDef';
 import { GridCellModes } from '../../../models/gridEditRowModel';
 import { isKeyboardEvent, isNavigationKey } from '../../../utils/keyboardUtils';
-import { getVisibleRows } from '../../utils/useGridVisibleRows';
 import { GridStateInitializer } from '../../utils/useGridInitializeState';
 import { GridRowSelectionModel } from '../../../models';
-import { GRID_DETAIL_PANEL_TOGGLE_FIELD } from '../../../internals/constants';
+import { GRID_DETAIL_PANEL_TOGGLE_FIELD } from '../../../colDef/gridDetailPanelColDef';
 import { gridClasses } from '../../../constants/gridClasses';
 import { isEventTargetInPortal } from '../../../utils/domUtils';
 import { isMultipleRowSelectionEnabled, findRowsToSelect, findRowsToDeselect } from './utils';

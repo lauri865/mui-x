@@ -42,6 +42,7 @@ import {
   GridPinnedRowsModel,
   GridRowPinningProps,
 } from '../../hooks/features/rowPinning/rowPinningInterfaces';
+import { GridExpandedRowIds } from '../../hooks/features/detailPanel';
 
 export interface GridExperimentalFeatures {
   /**
@@ -834,6 +835,7 @@ export interface DataGridPropsWithoutDefaultValue<R extends GridValidRowModel = 
   // TODO: document
   pinnedColumns?: GridPinnedColumnFields;
   pinnedRows?: GridPinnedRowsModel;
+  detailPanelExpandedRowIds?: GridExpandedRowIds;
 }
 
 export interface DataGridProSharedPropsWithDefaultValue {

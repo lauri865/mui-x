@@ -1,22 +1,15 @@
 import * as React from 'react';
 import clsx from 'clsx';
-import composeClasses from '@mui/utils/composeClasses';
-import { getDataGridUtilityClass, gridClasses, useGridSelector } from '@mui/x-data-grid';
+import { gridClasses, useGridSelector } from '@mui/x-data-grid';
 import {
   GridPinnedRowsProps,
   gridPinnedRowsSelector,
   useGridPrivateApiContext,
 } from '@mui/x-data-grid/internals';
-
-const useUtilityClasses = () => {
-  const slots = {
-    root: ['pinnedRows'],
-  };
-  return composeClasses(slots, getDataGridUtilityClass, {});
-};
+import { useThemedComponent } from '@mui/x-data-grid/context/GridThemeContext';
 
 export function GridPinnedRows({ position, virtualScroller }: GridPinnedRowsProps) {
-  const classes = useUtilityClasses();
+  const classes = useThemedComponent('pinnedRows');
   const apiRef = useGridPrivateApiContext();
 
   const pinnedRowsData = useGridSelector(apiRef, gridPinnedRowsSelector);

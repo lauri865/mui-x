@@ -258,10 +258,6 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
     );
   }
 
-  if (column.display === 'flex') {
-    classNames.push(gridClasses['cell--flex']);
-  }
-
   if (getCellClassName) {
     classNames.push(getCellClassName(cellParams));
   }
@@ -270,18 +266,7 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
   const cellRef = React.useRef<HTMLDivElement>(null);
   const handleRef = useForkRef(ref, cellRef);
   const focusElementRef = React.useRef<FocusElement>(null);
-  const isSelectionMode = rootProps.cellSelection ?? false;
 
-  const ownerState = {
-    align,
-    showLeftBorder,
-    showRightBorder,
-    isEditable,
-    classes: rootProps.classes,
-    pinnedPosition,
-    isSelected,
-    isSelectionMode,
-  };
   const classes = useThemedComponent('cell', {
     editable: isEditable,
     pinned:
@@ -291,6 +276,7 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
     left: align === 'left',
     center: align === 'center',
     right: align === 'right',
+    flex: column.display === 'flex',
   });
 
   const publishMouseUp = React.useCallback(
@@ -473,43 +459,10 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
     children = React.cloneElement<any>(children, { focusElementRef });
   }
 
-  const showOverflow = (event: Event) => {
-    const el = event.currentTarget as HTMLElement;
-    const isOverflowingX = el.scrollWidth > el.clientWidth;
-    const isOverflowingY = el.scrollHeight > el.clientHeight;
-    if (isOverflowingX) {
-      const delta = el.scrollWidth - el.clientWidth;
-      el.style.minWidth = `${el.clientWidth + delta}px`;
-      el.style.overflow = 'visible';
-      el.style.marginRight = `-${delta + (showRightBorder ? -1 : 0)}px`;
-      el.style.zIndex = '1';
-      el.style.borderRight = '1px solid var(--color-grid-border)';
-    }
-    if (isOverflowingY) {
-      const delta = el.scrollHeight - el.clientHeight;
-      el.style.overflow = 'visible';
-      el.style.marginBottom = `-${delta}px`;
-      el.style.zIndex = '1';
-      el.style.borderRight = '1px solid var(--color-grid-border)';
-      el.style.borderBottom = '1px solid var(--color-grid-border)';
-    }
-  };
-
-  const hideOverflow = (event: Event) => {
-    const el = event.currentTarget as HTMLElement;
-    el.style.minWidth = '';
-    el.style.overflow = '';
-    el.style.marginRight = '';
-    el.style.marginBottom = '';
-    el.style.zIndex = '';
-    el.style.borderRight = '';
-    el.style.borderBottom = '';
-  };
-
-  useGridApiEventHandler(apiRef, 'columnResize', (params) => {
-    hideOverflow({ currentTarget: cellRef.current! } as any);
-  });
-
+  const showOverflowWithBorder = React.useCallback(showOverflow(showRightBorder), [
+    showRightBorder,
+  ]);
+  const showEmpty = children === null || children === undefined || children === '';
   return (
     <div
       className={clsx(classes.root, classNames, className)}
@@ -531,18 +484,51 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
       onKeyDown={publish('cellKeyDown', onKeyDown)}
       onKeyUp={publish('cellKeyUp', onKeyUp)}
       onContextMenu={publish('cellContextMenu')}
-      onPointerEnter={showOverflow as any}
+      onPointerEnter={showOverflowWithBorder as any}
       onPointerLeave={hideOverflow as any}
-      onFocusCapture={showOverflow as any}
+      onFocusCapture={showOverflowWithBorder as any}
       onBlur={hideOverflow as any}
       {...other}
       onFocus={handleFocus}
       ref={handleRef}
     >
-      {children}
+      {showEmpty ? <span className={clsx(classes.variants.empty)}>–</span> : children}
     </div>
   );
 });
+
+const showOverflow = (showRightBorder: boolean) => (event: Event) => {
+  const el = event.currentTarget as HTMLElement;
+  const isOverflowingX = el.scrollWidth > el.clientWidth;
+  const isOverflowingY = el.scrollHeight > el.clientHeight;
+  if (isOverflowingX) {
+    const delta = el.scrollWidth - el.clientWidth;
+    el.style.minWidth = `${el.clientWidth + delta}px`;
+    el.style.overflow = 'visible';
+    el.style.marginRight = `-${delta + (showRightBorder ? -1 : 0)}px`;
+    el.style.zIndex = '1';
+    el.style.borderRight = '1px solid var(--color-grid-border)';
+  }
+  if (isOverflowingY) {
+    const delta = el.scrollHeight - el.clientHeight;
+    el.style.overflow = 'visible';
+    el.style.marginBottom = `-${delta}px`;
+    el.style.zIndex = '1';
+    el.style.borderRight = '1px solid var(--color-grid-border)';
+    el.style.borderBottom = '1px solid var(--color-grid-border)';
+  }
+};
+
+const hideOverflow = (event: Event) => {
+  const el = event.currentTarget as HTMLElement;
+  el.style.minWidth = '';
+  el.style.overflow = '';
+  el.style.marginRight = '';
+  el.style.marginBottom = '';
+  el.style.zIndex = '';
+  el.style.borderRight = '';
+  el.style.borderBottom = '';
+};
 
 GridCell.propTypes = {
   // ----------------------------- Warning --------------------------------

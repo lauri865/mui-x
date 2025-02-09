@@ -18,7 +18,6 @@ export const GRID_CHECKBOX_SELECTION_COL_DEF: GridColDef = {
   // @ts-ignore
   aggregable: false,
   disableColumnMenu: true,
-  disableReorder: true,
   disableExport: true,
   getApplyQuickFilterFn: undefined,
   display: 'flex',

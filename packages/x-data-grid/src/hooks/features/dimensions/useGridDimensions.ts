@@ -170,8 +170,7 @@ export function useGridDimensions(apiRef: RefObject<GridPrivateApiCommunity>, pr
     // All the floating point dimensions should be rounded to .1 decimal places to avoid subpixel rendering issues
     // https://github.com/mui/mui-x/issues/9550#issuecomment-1619020477
     // https://github.com/mui/mui-x/issues/15721
-    const rootElement = apiRef.current.rootElementRef.current;
-
+    const rootElement = apiRef.current.mainElementRef.current;
     const scrollbarSize = measureScrollbarSize(rootElement, props.scrollbarSize);
 
     const rowsMeta = gridRowsMetaSelector(apiRef.current.state);
@@ -386,6 +385,7 @@ function setCSSVariables(root: HTMLElement, dimensions: GridDimensions) {
   set('--DataGrid-headersTotalHeight', `${dimensions.headersTotalHeight}px`);
   set('--DataGrid-topContainerHeight', `${dimensions.topContainerHeight}px`);
   set('--DataGrid-bottomContainerHeight', `${dimensions.bottomContainerHeight}px`);
+  set('--DataGrid-innerWidth', `${dimensions.viewportInnerSize.width}px`);
   set('--height', `${dimensions.rowHeight}px`);
 }
 

@@ -34,6 +34,7 @@ import {
   GridPinnedRowsState,
 } from '../hooks/features/rowPinning/rowPinningInterfaces';
 import { GridCellCoordinates } from '../models/gridCell';
+import { GridDetailPanelInitialState, GridDetailPanelState } from '../hooks/features/detailPanel';
 
 /**
  * The state of Data Grid.
@@ -63,6 +64,7 @@ export interface GridStateCommunity {
   rowSpanning: GridRowSpanningState;
   listViewColumn: GridListViewState;
   pinnedRows: GridPinnedRowsState;
+  detailPanel: GridDetailPanelState;
 }
 
 /**
@@ -82,4 +84,5 @@ export interface GridInitialStateCommunity {
     cell?: GridCellCoordinates;
     columnHeader?: GridColumnIdentifier;
   };
+  detailPanel?: GridDetailPanelInitialState;
 }

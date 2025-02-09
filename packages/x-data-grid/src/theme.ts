@@ -1,3 +1,5 @@
+import { borderBottom } from '@mui/system';
+
 export const getThemedClassName = (className: string) => `twg-${className}`;
 
 const className = {
@@ -73,7 +75,7 @@ const className = {
       'h-[var(--height)] leading-[calc(var(--height)-1px)]',
       'flex-none box-border border-t border-grid-border px-cell truncate',
       'data-[align=center]:justify-center',
-      'data-empty:flex-1 data-empty:p-0 data-empty:h-[unset]',
+      'data-empty:flex-1 data-empty:p-0 ',
       `data-[field=«check»]:p-0 data-[field=«check»]:flex data-[field=«check»]:justify-center data-[field=«check»]:items-center`,
       'data-selected:bg-[rgba(144,202,249,0.16)] data-selected:hover:bg-[rgba(144,202,249,0.24)]',
       'data-reordering:bg-grid-hover-bg data-reordering:shadow-[inset_1px_0_0_0_var(--color-grid-border),inset_-1px_0_0_0_var(--color-grid-border),1px_0_1px_0px_#00000050,-1px_0_1px_0px_#00000050]',
@@ -94,6 +96,8 @@ const className = {
     center: 'text-center justify-center',
     pinned: 'sticky z-[3] bg-grid-pinned-bg',
     isSelectionMode: 'cursor-default',
+    flex: 'flex items-center',
+    empty: 'twg-cell--empty opacity-30',
   },
 
   row: {
@@ -125,7 +129,7 @@ const className = {
   },
 
   pinnedRows: {
-    base: 'sticky z-4 bg-grid-pinned-bg/50 shadow-sm shadow-black/30 backdrop-blur-sm',
+    base: 'sticky z-4 bg-grid-pinned-bg/50 shadow-sm shadow-black/30 backdrop-blur-sm w-[var(--DataGrid-rowWidth)]',
     top: 'top-0 [&_.twg-cell]:border-t-0 [&_.twg-cell]:border-b [&_.twg-cell]:!border-b-grid-border',
     bottom: 'bottom-0',
   },
@@ -153,6 +157,15 @@ const className = {
   },
   skeletonLoadingOverlay: {
     base: 'min-w-full w-max h-full overflow-clip',
+  },
+
+  detailPanel: {
+    base: 'overflow-hidden',
+    borderTop: 'border-t border-t-grid-border',
+    borderBottom: 'border-b border-b-grid-border',
+    content: 'h-max box-content overflow-auto',
+    sticky: 'sticky left-0 w-[var(--DataGrid-innerWidth)]',
+    static: 'relative',
   },
 };
 

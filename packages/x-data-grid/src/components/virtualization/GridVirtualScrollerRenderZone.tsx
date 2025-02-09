@@ -1,6 +1,6 @@
 import * as React from 'react';
 import clsx from 'clsx';
-import { styled, SxProps, Theme } from '@mui/system';
+import { positions, styled, SxProps, Theme } from '@mui/system';
 import composeClasses from '@mui/utils/composeClasses';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
@@ -44,8 +44,8 @@ const GridVirtualScrollerRenderZone = forwardRef<
   const rootProps = useGridRootProps();
   const classes = useUtilityClasses(rootProps);
   const [offsetTop, setOffsetTop] = React.useState(0);
-  const handleRenderContextChange = React.useCallback<GridEventListener<'renderContextChange'>>(
-    (renderContext) => {
+  const handleRenderContextChange = React.useCallback(
+    (renderContext: any) => {
       const rowsMeta = gridRowsMetaSelector(apiRef.current.state);
       setOffsetTop(rowsMeta.positions[renderContext.firstRowIndex] ?? 0);
     },

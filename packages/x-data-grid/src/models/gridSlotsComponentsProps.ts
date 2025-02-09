@@ -28,7 +28,7 @@ import type { GridSkeletonCellProps } from '../components/cell/GridSkeletonCell'
 import type { GridRowProps } from '../components/GridRow';
 import type { GridCellProps } from '../components/cell/GridCell';
 import type { GridColumnHeadersProps } from '../components/GridColumnHeaders';
-import type { GridDetailPanelsProps } from '../components/GridDetailPanels';
+import type { GridDetailPanelsProps } from '../components/GridDetailPanel';
 import type { GridPinnedRowsProps } from '../components/GridPinnedRows';
 import type { GridColumnsManagementProps } from '../components/columnsManagement/GridColumnsManagement';
 import type { GridLoadingOverlayProps } from '../components/GridLoadingOverlay';

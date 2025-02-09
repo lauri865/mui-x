@@ -6,7 +6,7 @@ export type {
 export { GridVirtualScroller } from '../components/virtualization/GridVirtualScroller';
 export { GridVirtualScrollerContent } from '../components/virtualization/GridVirtualScrollerContent';
 export { GridVirtualScrollerRenderZone } from '../components/virtualization/GridVirtualScrollerRenderZone';
-export type { GridDetailPanelsProps } from '../components/GridDetailPanels';
+export type { GridDetailPanelsProps } from '../components/GridDetailPanel';
 export type { GridPinnedRowsProps } from '../components/GridPinnedRows';
 export { GridHeaders } from '../components/GridHeaders';
 export { GridBaseColumnHeaders } from '../components/columnHeaders/GridBaseColumnHeaders';
@@ -135,10 +135,7 @@ export {
 } from '../hooks/features/dimensions/useGridDimensions';
 export { useGridStatePersistence } from '../hooks/features/statePersistence/useGridStatePersistence';
 export type { GridRestoreStatePreProcessingContext } from '../hooks/features/statePersistence/gridStatePersistenceInterface';
-export {
-  useGridVirtualScroller,
-  EMPTY_DETAIL_PANELS,
-} from '../hooks/features/virtualization/useGridVirtualScroller';
+export { useGridVirtualScroller } from '../hooks/features/virtualization/useGridVirtualScroller';
 export * from '../hooks/features/virtualization';
 export {
   useGridColumnResize,

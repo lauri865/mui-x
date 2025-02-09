@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ContextMenu, DropdownMenu } from '@twgrid/x-data-grid-shadcn';
+import { Checkbox, ContextMenu, DropdownMenu } from '@twgrid/x-data-grid-shadcn';
 import type { GridSlotProps } from './gridSlotsComponentsProps';
 import type { GridIconSlotsComponent } from './gridIconSlotsComponent';
 
@@ -16,7 +16,7 @@ export interface GridBaseSlots {
    * The custom Checkbox component used in the grid for both header and cells.
    * @default Checkbox
    */
-  baseCheckbox: React.JSXElementConstructor<GridSlotProps['baseCheckbox']>;
+  baseCheckbox: typeof Checkbox;
   /**
    * The custom ContextMenu component used in the grid.
    * @default ContextMenu

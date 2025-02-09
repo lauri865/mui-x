@@ -1,6 +1,8 @@
 import {
   ArrowLeftRightIcon,
   ChevronDownIcon,
+  ChevronRight,
+  ChevronRightIcon,
   ChevronUpIcon,
   Columns3Icon,
   EllipsisVerticalIcon,
@@ -27,4 +29,6 @@ export const icons = {
   columnMenu: EllipsisVerticalIcon,
   filter: FilterIcon,
   autoSize: MoveHorizontalIcon,
+  arrowRight: ChevronRightIcon,
+  arrowDown: ChevronDownIcon,
 };

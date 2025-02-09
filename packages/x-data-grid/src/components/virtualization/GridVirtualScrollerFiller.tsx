@@ -11,6 +11,7 @@ const Filler = styled('div')({
   flexDirection: 'row',
   width: 'var(--DataGrid-rowWidth)',
   boxSizing: 'border-box',
+  flex: '1 0 auto',
 });
 
 const Pinned = styled('div')({

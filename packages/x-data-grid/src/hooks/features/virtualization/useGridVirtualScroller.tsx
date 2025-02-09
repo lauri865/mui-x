@@ -64,6 +64,8 @@ import {
 import { roundToDecimalPlaces } from '../../../utils/roundToDecimalPlaces';
 import { isJSDOM } from '../../../utils/isJSDOM';
 import { GridStateCommunity } from '../../../models/gridStateCommunity';
+import { gridDetailPanelExpandedRowIdsSelector } from '../detailPanel/gridDetailPanelSelector';
+import { GridDetailPanel } from '../../../components/GridDetailPanel';
 
 const MINIMUM_COLUMN_WIDTH = 50;
 
@@ -83,8 +85,6 @@ enum ScrollDirection {
 }
 
 const EMPTY_SCROLL_POSITION = { top: 0, left: 0 };
-
-export const EMPTY_DETAIL_PANELS = Object.freeze(new Map<GridRowId, React.ReactNode>());
 
 const createScrollCache = (
   isRtl: boolean,
@@ -124,7 +124,6 @@ export const useGridVirtualScroller = () => {
     ? (EMPTY_PINNED_COLUMN_FIELDS as unknown as GridPinnedColumnFields)
     : pinnedColumnDefinitions;
   const hasBottomPinnedRows = pinnedRows.bottom.length > 0;
-  const [panels, setPanels] = React.useState(EMPTY_DETAIL_PANELS);
 
   const isRtl = useRtl();
   const selectedRowsLookup = useGridSelector(apiRef, selectedIdsLookupSelector);
@@ -224,6 +223,7 @@ export const useGridVirtualScroller = () => {
   const previousContextScrollPosition = React.useRef(EMPTY_SCROLL_POSITION);
   const previousRowContext = React.useRef(EMPTY_RENDER_CONTEXT);
   const [renderContext, setRenderContext] = React.useState(gridRenderContextSelector(apiRef));
+  const detailPanels = useGridSelector(apiRef, gridDetailPanelExpandedRowIdsSelector);
 
   const focusedVirtualCell = React.useMemo(() => {
     if (!gridIsFocusedCellOutOfContext(apiRef.current.state)) {
@@ -355,9 +355,12 @@ export const useGridVirtualScroller = () => {
     const nextRenderContext = computeRenderContext(inputs, scrollPosition.current, scrollCache);
 
     // Prevents batching render context changes
-    updateRenderContext(nextRenderContext);
+    // Needed for
+    ReactDOM.flushSync(() => {
+      updateRenderContext(nextRenderContext);
+    });
 
-    scrollTimeout.start(1000, triggerUpdateRenderContext);
+    //scrollTimeout.start(1000, triggerUpdateRenderContext);
 
     return nextRenderContext;
   });
@@ -545,6 +548,8 @@ export const useGridVirtualScroller = () => {
       const firstColumnIndex = currentRenderContext.firstColumnIndex;
       const lastColumnIndex = currentRenderContext.lastColumnIndex;
 
+      const showBottomBorder = isLastVisibleInSection && params.position === 'top';
+
       rows.push(
         <rootProps.slots.row
           key={id}
@@ -563,7 +568,7 @@ export const useGridVirtualScroller = () => {
           isFirstVisible={isFirstVisible}
           isLastVisible={isLastVisible}
           isNotVisible={isVirtualFocusRow}
-          showBottomBorder={false}
+          showBottomBorder={showBottomBorder}
           scrollbarWidth={verticalScrollbarWidth}
           gridHasFiller={gridHasFiller}
           {...rowProps}
@@ -574,10 +579,17 @@ export const useGridVirtualScroller = () => {
         return;
       }
 
-      const panel = panels.get(id);
-      if (panel) {
-        rows.push(panel);
+      if (detailPanels.has(id)) {
+        rows.push(
+          <GridDetailPanel
+            key={`detailPanel-${id}`}
+            rowId={id}
+            borderTop={!showBottomBorder}
+            borderBottom={showBottomBorder}
+          />,
+        );
       }
+
       if (params.position === undefined && isLastVisibleInSection) {
         rows.push(apiRef.current.getInfiniteLoadingTriggerElement?.({ lastRowId: id }));
       }
@@ -703,7 +715,6 @@ export const useGridVirtualScroller = () => {
 
   return {
     renderContext,
-    setPanels,
     getRows,
     getContainerProps: () => ({
       ref: mainRefCallback,

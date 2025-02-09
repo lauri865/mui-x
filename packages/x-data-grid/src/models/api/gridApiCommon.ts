@@ -37,6 +37,8 @@ import type { DataGridProcessedProps } from '../props/DataGridProps';
 import type { GridColumnResizeApi } from '../../hooks/features/columnResize';
 import type { GridColumnPinningApi } from '../../hooks/features/columnPinning';
 import { GridRowPinningApi } from '../../hooks/features/rowPinning/rowPinningInterfaces';
+import { GridDetailPanelApi } from '../../hooks/features/detailPanel';
+import { GridDetailPanelPrivateApi } from '../../hooks/features/detailPanel';
 
 export interface GridApiCommon<
   GridState extends GridStateCommunity = any,
@@ -69,7 +71,8 @@ export interface GridApiCommon<
     GridColumnGroupingApi,
     GridHeaderFilteringApi,
     GridColumnResizeApi,
-    GridRowPinningApi {}
+    GridRowPinningApi,
+    GridDetailPanelApi {}
 
 export interface GridPrivateOnlyApiCommon<
   Api extends GridApiCommon,
@@ -88,7 +91,8 @@ export interface GridPrivateOnlyApiCommon<
     GridHeaderFilteringPrivateApi,
     GridVirtualizationPrivateApi,
     GridRowProPrivateApi,
-    GridParamsPrivateApi {}
+    GridParamsPrivateApi,
+    GridDetailPanelPrivateApi {}
 
 export interface GridPrivateApiCommon
   extends GridApiCommon,

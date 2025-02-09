@@ -17,7 +17,7 @@ import {
 import { GridCell } from '../components/cell/GridCell';
 import { GridColumnHeaders } from '../components/GridColumnHeaders';
 import { GridColumnMenu } from '../components/menu/columnMenu/GridColumnMenu';
-import { GridDetailPanels } from '../components/GridDetailPanels';
+import { GridDetailPanels } from '../components/GridDetailPanel';
 import { GridPinnedRows } from '../components/GridPinnedRows';
 import { GridNoResultsOverlay } from '../components/GridNoResultsOverlay';
 import materialSlots from '../slots';

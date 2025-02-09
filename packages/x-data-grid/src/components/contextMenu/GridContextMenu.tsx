@@ -38,6 +38,8 @@ export const GridContextMenu = () => {
     return null;
   }
 
+  const selection = apiRef.current.getSelectedRows();
+
   return (
     <ContextMenu.Root
       onOpenChange={(open) => {
@@ -192,7 +194,16 @@ export const GridContextMenu = () => {
             </ContextMenu.Sub>
             <ContextMenu.Separator />
             <ContextMenu.Sub>
-              <ContextMenu.SubTrigger>Export</ContextMenu.SubTrigger>
+              <ContextMenu.SubTrigger>
+                <span>
+                  Export
+                  {selection.size ? (
+                    <span className="opacity-70">&nbsp;({selection.size})</span>
+                  ) : (
+                    ''
+                  )}
+                </span>
+              </ContextMenu.SubTrigger>
               <ContextMenu.Portal>
                 <ContextMenu.SubContent alignOffset={-4}>
                   <ContextMenu.Item

@@ -22,7 +22,8 @@ import { getVisibleRows, useGridVisibleRows } from '../hooks/utils/useGridVisibl
 import { findParentElementFromClassName, isEventTargetInPortal } from '../utils/domUtils';
 import { GRID_CHECKBOX_SELECTION_COL_DEF } from '../colDef/gridCheckboxSelectionColDef';
 import { GRID_ACTIONS_COLUMN_TYPE } from '../colDef/gridActionsColDef';
-import { GRID_DETAIL_PANEL_TOGGLE_FIELD, PinnedColumnPosition } from '../internals/constants';
+import { GRID_DETAIL_PANEL_TOGGLE_FIELD } from '../colDef/gridDetailPanelColDef';
+import { PinnedColumnPosition } from '../internals/constants';
 import { gridSortModelSelector } from '../hooks/features/sorting/gridSortingSelector';
 import { gridRowMaximumTreeDepthSelector } from '../hooks/features/rows/gridRowsSelector';
 import {
@@ -35,6 +36,7 @@ import { useGridConfiguration } from '../hooks/utils/useGridConfiguration';
 import { useGridPrivateApiContext } from '../hooks/utils/useGridPrivateApiContext';
 import { createSelector } from '../utils/createSelector';
 import { useThemedComponent } from '../context/GridThemeContext';
+import { GridDetailPanel } from './GridDetailPanel';
 
 const isRowReorderingEnabledSelector = createSelector(
   gridEditRowsStateSelector,
@@ -445,38 +447,40 @@ const GridRow = forwardRef<HTMLDivElement, GridRowProps>(function GridRow(props,
     : null;
 
   return (
-    <div
-      data-id={rowId}
-      data-rowindex={index}
-      data-first-visible={isFirstVisible || undefined}
-      data-last-visible={isLastVisible || undefined}
-      data-selected={selected || undefined}
-      data-editing={editing || undefined}
-      data-editable={editable || undefined}
-      data-bottom-border={showBottomBorder || undefined}
-      role="row"
-      className={clsx(...rowClassNames, classes.root, className)}
-      style={style}
-      {...ariaAttributes}
-      {...eventHandlers}
-      {...other}
-      ref={handleRef}
-    >
-      {leftCells}
+    <>
       <div
-        role="presentation"
-        className={gridClasses.cellOffsetLeft}
-        style={{ width: offsetLeft }}
-      />
-      {cells}
-      <div
-        role="presentation"
-        className={clsx(cellClasses.root)}
-        data-empty="true"
-        data-field="«filler-right-body»"
-      />
-      {rightCells}
-    </div>
+        data-id={rowId}
+        data-rowindex={index}
+        data-first-visible={isFirstVisible || undefined}
+        data-last-visible={isLastVisible || undefined}
+        data-selected={selected || undefined}
+        data-editing={editing || undefined}
+        data-editable={editable || undefined}
+        data-bottom-border={showBottomBorder || undefined}
+        role="row"
+        className={clsx(...rowClassNames, classes.root, className)}
+        style={style}
+        {...ariaAttributes}
+        {...eventHandlers}
+        {...other}
+        ref={handleRef}
+      >
+        {leftCells}
+        <div
+          role="presentation"
+          className={gridClasses.cellOffsetLeft}
+          style={{ width: offsetLeft }}
+        />
+        {cells}
+        <div
+          role="presentation"
+          className={clsx(cellClasses.root)}
+          data-empty="true"
+          data-field="«filler-right-body»"
+        />
+        {rightCells}
+      </div>
+    </>
   );
 });
 

@@ -67,8 +67,6 @@ const iconSlots: GridIconSlotsComponent = {
   treeDataExpandIcon: GridKeyboardArrowRight,
   groupingCriteriaCollapseIcon: GridExpandMoreIcon,
   groupingCriteriaExpandIcon: GridKeyboardArrowRight,
-  detailPanelExpandIcon: GridAddIcon,
-  detailPanelCollapseIcon: GridRemoveIcon,
   rowReorderIcon: GridDragIcon,
   quickFilterIcon: GridSearchIcon,
   quickFilterClearIcon: GridCloseIcon,
@@ -92,6 +90,8 @@ const iconSlots: GridIconSlotsComponent = {
   columnMenuHideIcon: icons.hide,
   columnMenuManageColumnsIcon: icons.column,
   autosizeIcon: icons.autoSize,
+  detailPanelExpandIcon: icons.arrowRight,
+  detailPanelCollapseIcon: icons.arrowDown,
 };
 
 const baseSlots: GridBaseSlots = {

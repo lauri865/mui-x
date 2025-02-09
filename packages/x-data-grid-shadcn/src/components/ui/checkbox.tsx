@@ -5,8 +5,10 @@ import { Check, Minus } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
 const Checkbox = React.forwardRef<
-  React.ElementRef<typeof CheckboxPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>
+  HTMLButtonElement,
+  React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> & {
+    indeterminate?: boolean;
+  }
 >(({ className, ...props }, ref) => (
   <CheckboxPrimitive.Root
     ref={ref}

@@ -211,6 +211,7 @@ export default function FullWidthDetailPanel() {
         initialState={{
           pinnedColumns: {
             left: [GRID_DETAIL_PANEL_TOGGLE_FIELD],
+            right: [],
           },
         }}
         getDetailPanelHeight={getDetailPanelHeight}

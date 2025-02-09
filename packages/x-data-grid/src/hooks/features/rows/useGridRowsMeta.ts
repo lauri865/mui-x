@@ -21,6 +21,7 @@ import { gridVisiblePinnedRowsSelector } from '../rowPinning';
 import { gridDimensionsSelector } from '../dimensions/gridDimensionsSelectors';
 import { getValidRowHeight, getRowHeightWarning } from './gridRowsUtils';
 import type { HeightEntry } from './gridRowsMetaInterfaces';
+import { gridVisibleRowsWithPinnedRowsSelector } from '../rowPinning/gridRowPinningInternalSelector';
 
 /* eslint-disable no-underscore-dangle */
 

@@ -1,6 +1,10 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GRID_CHECKBOX_SELECTION_FIELD,
+  GridColDef,
+} from '@mui/x-data-grid';
 
 const columns: GridColDef<(typeof rows)[number]>[] = [
   { field: 'id', headerName: 'ID', width: 90 },
@@ -45,6 +49,9 @@ const rows = [
   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
 ];
 
+const detailPanel = (row) => {
+  return <div style={{ height: 100, width: 600 }}>{row.id}</div>;
+};
 export default function DataGridDemo() {
   return (
     <Box sx={{ height: 400, width: '100%' }}>
@@ -62,14 +69,16 @@ export default function DataGridDemo() {
             left: ['lastName'],
             right: ['id'],
           },
-          pinnedRows: {
+          /* pinnedRows: {
             top: [1],
             bottom: [2],
-          },
+          }, */
         }}
         pageSizeOptions={[5]}
         // checkboxSelection
         disableRowSelectionOnClick
+        checkboxSelection
+        getDetailPanelContent={detailPanel}
       />
     </Box>
   );
