@@ -128,7 +128,6 @@ const GridRow = forwardRef<HTMLDivElement, GridRowProps>(function GridRow(props,
     rowReordering && isObjectEmpty(gridEditRowsStateSelector(apiRef.current.state));
   const handleRef = useForkRef(ref, refProp);
   const rowNode = apiRef.current.getRowNode(rowId);
-  rowNode.type = 'skeletonRow';
   const editing = useGridSelector(apiRef, gridRowIsEditingSelector, {
     rowId,
     editMode: rootProps.editMode,

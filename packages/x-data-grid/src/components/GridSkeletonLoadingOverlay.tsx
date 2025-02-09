@@ -134,6 +134,8 @@ const GridSkeletonLoadingOverlay = forwardRef<HTMLDivElement, React.HTMLAttribut
               data-colindex={colIndex}
               pinnedOffset={pinnedOffset}
               pinnedPosition={pinnedPosition}
+              showLeftBorder={showLeftBorder}
+              showRightBorder={showRightBorder}
               data-align={column.align}
               style={{ '--width': `${column.computedWidth}px` } as React.CSSProperties}
             />,
