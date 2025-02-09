@@ -11,6 +11,11 @@ import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { getDataGridUtilityClass } from '../../constants/gridClasses';
 import { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { GridColType } from '../../models';
+import { PinnedColumnPosition } from '../../internals/constants';
+import { useRtl } from '@mui/system/RtlProvider';
+import { attachPinnedStyle } from '../../internals/utils';
+import { useThemedComponent } from '../../context/GridThemeContext';
+import { gridPinnedColumnPositionLookup } from './GridCell';
 
 const CIRCULAR_CONTENT_SIZE = '1.3em';
 
@@ -37,13 +42,47 @@ export interface GridSkeletonCellProps extends React.HTMLAttributes<HTMLDivEleme
    * @default false
    */
   empty?: boolean;
+  colIndex?: number;
+  pinnedPosition?: PinnedColumnPosition;
+  pinnedOffset?: number;
+  showLeftBorder?: boolean;
+  showRightBorder?: boolean;
 }
 
 const randomNumberGenerator = createRandomNumberGenerator(12345);
 
 function GridSkeletonCell(props: GridSkeletonCellProps) {
-  const { field, type, align, width, height, empty = false, style, className, ...other } = props;
+  const {
+    field,
+    colIndex,
+    type,
+    align,
+    width,
+    height,
+    empty = false,
+    style,
+    className,
+    pinnedPosition,
+    pinnedOffset,
+    showLeftBorder,
+    showRightBorder,
+    ...other
+  } = props;
   const rootProps = useGridRootProps();
+  const isRtl = useRtl();
+
+  const classes = useThemedComponent('cell', {
+    pinned:
+      pinnedPosition === PinnedColumnPosition.LEFT || pinnedPosition === PinnedColumnPosition.RIGHT,
+    showRightBorder,
+    showLeftBorder,
+    left: align === 'left',
+    center: align === 'center',
+    right: align === 'right',
+    flex: true,
+  });
+
+  const pinnedStyle = attachPinnedStyle({}, isRtl, pinnedPosition, pinnedOffset);
 
   // Memo prevents the non-circular skeleton widths changing to random widths on every render
   const skeletonProps = React.useMemo(() => {
@@ -73,8 +112,19 @@ function GridSkeletonCell(props: GridSkeletonCellProps) {
   return (
     <div
       data-field={field}
-      className={clsx(className)}
-      style={{ height, maxWidth: width, minWidth: width, ...style }}
+      data-colindex={colIndex}
+      className={clsx(classes.root, className)}
+      style={
+        {
+          height,
+          '--width': `${width}px`,
+          width: 'var(--width)',
+          ...pinnedStyle,
+          ...style,
+        } as React.CSSProperties
+      }
+      data-pinned={(pinnedPosition && gridPinnedColumnPositionLookup[pinnedPosition]) || undefined}
+      data-align={align}
       {...other}
     >
       {!empty && <rootProps.slots.baseSkeleton {...skeletonProps} />}

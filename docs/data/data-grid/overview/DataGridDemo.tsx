@@ -53,11 +53,14 @@ const detailPanel = (row) => {
   return <div style={{ height: 100, width: 600 }}>{row.id}</div>;
 };
 export default function DataGridDemo() {
+  const [data, setData] = React.useState(rows);
+  const [isLoading, setIsLoading] = React.useState(false);
   return (
     <Box sx={{ height: 400, width: '100%' }}>
       <DataGrid
+        rowCount={100}
         autoFocus="lastName"
-        rows={rows}
+        rows={data}
         columns={columns}
         initialState={{
           pagination: {
@@ -78,7 +81,20 @@ export default function DataGridDemo() {
         // checkboxSelection
         disableRowSelectionOnClick
         checkboxSelection
+        loading={isLoading}
         getDetailPanelContent={detailPanel}
+        onRowsScrollEnd={(params) => {
+          console.log(params);
+          setIsLoading(true);
+          setTimeout(() => {
+            const newRows = rows
+              .slice(0, 5)
+              .map((row) => ({ ...row, id: row.id + data.length }));
+
+            setData((prevData) => [...prevData, ...newRows]);
+            setIsLoading(false);
+          }, 1000);
+        }}
       />
     </Box>
   );

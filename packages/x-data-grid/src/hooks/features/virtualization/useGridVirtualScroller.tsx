@@ -66,6 +66,7 @@ import { isJSDOM } from '../../../utils/isJSDOM';
 import { GridStateCommunity } from '../../../models/gridStateCommunity';
 import { gridDetailPanelExpandedRowIdsSelector } from '../detailPanel/gridDetailPanelSelector';
 import { GridDetailPanel } from '../../../components/GridDetailPanel';
+import { GridInfiniteLoader } from '../../../components/virtualization/GridInfiniteLoader';
 
 const MINIMUM_COLUMN_WIDTH = 50;
 
@@ -590,8 +591,15 @@ export const useGridVirtualScroller = () => {
         );
       }
 
-      if (params.position === undefined && isLastVisibleInSection) {
-        rows.push(apiRef.current.getInfiniteLoadingTriggerElement?.({ lastRowId: id }));
+      if (!isPinnedSection && rootProps.onRowsScrollEnd && isLastVisibleInSection) {
+        rows.push(
+          <GridInfiniteLoader
+            key={`infiniteLoader-${id}`}
+            lastRowId={id}
+            onRowsScrollEnd={rootProps.onRowsScrollEnd}
+            margin={rootProps.scrollEndThreshold}
+          />,
+        );
       }
     });
     return rows;

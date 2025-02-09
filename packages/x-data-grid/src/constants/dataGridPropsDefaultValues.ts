@@ -51,6 +51,7 @@ export const DATA_GRID_PROPS_DEFAULT_VALUES: DataGridPropsWithDefaultValues = {
   rowSelection: true,
   rowSpacingType: 'margin',
   rowSpanning: false,
+  scrollEndThreshold: 100,
   showCellVerticalBorder: false,
   showColumnVerticalBorder: false,
   sortingMode: 'client',

@@ -37,6 +37,7 @@ import { useGridPrivateApiContext } from '../hooks/utils/useGridPrivateApiContex
 import { createSelector } from '../utils/createSelector';
 import { useThemedComponent } from '../context/GridThemeContext';
 import { GridDetailPanel } from './GridDetailPanel';
+import { gridPinnedColumnPositionLookup } from './cell/GridCell';
 
 const isRowReorderingEnabledSelector = createSelector(
   gridEditRowsStateSelector,
@@ -127,6 +128,7 @@ const GridRow = forwardRef<HTMLDivElement, GridRowProps>(function GridRow(props,
     rowReordering && isObjectEmpty(gridEditRowsStateSelector(apiRef.current.state));
   const handleRef = useForkRef(ref, refProp);
   const rowNode = apiRef.current.getRowNode(rowId);
+  rowNode.type = 'skeletonRow';
   const editing = useGridSelector(apiRef, gridRowIsEditingSelector, {
     rowId,
     editMode: rootProps.editMode,
@@ -320,20 +322,6 @@ const GridRow = forwardRef<HTMLDivElement, GridRowProps>(function GridRow(props,
       scrollbarWidth,
     );
 
-    if (rowNode?.type === 'skeletonRow') {
-      return (
-        <slots.skeletonCell
-          className={cellClasses.root}
-          key={column.field}
-          type={column.type}
-          width={width}
-          height={rowHeight}
-          field={column.field}
-          align={column.align}
-        />
-      );
-    }
-
     // when the cell is a reorder cell we are not allowing to reorder the col
     // fixes https://github.com/mui/mui-x/issues/11126
     const isReorderCell = column.field === '__reorder__';
@@ -353,6 +341,24 @@ const GridRow = forwardRef<HTMLDivElement, GridRowProps>(function GridRow(props,
       rootProps.showCellVerticalBorder,
       gridHasFiller,
     );
+
+    if (rowNode?.type === 'skeletonRow') {
+      return (
+        <slots.skeletonCell
+          key={column.field}
+          type={column.type}
+          field={column.field}
+          colIndex={indexRelativeToAllColumns}
+          align={column.align}
+          showLeftBorder={showLeftBorder}
+          showRightBorder={showRightBorder}
+          pinnedPosition={pinnedPosition}
+          pinnedOffset={pinnedOffset}
+          width={width}
+          height={rowHeight}
+        />
+      );
+    }
 
     return (
       <slots.cell

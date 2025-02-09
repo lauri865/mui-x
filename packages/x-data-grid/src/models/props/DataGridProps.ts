@@ -43,6 +43,7 @@ import {
   GridRowPinningProps,
 } from '../../hooks/features/rowPinning/rowPinningInterfaces';
 import { GridExpandedRowIds } from '../../hooks/features/detailPanel';
+import { InfiniteLoaderPayload } from '../../components/virtualization/GridInfiniteLoader';
 
 export interface GridExperimentalFeatures {
   /**
@@ -394,6 +395,9 @@ export interface DataGridPropsWithDefaultValues<R extends GridValidRowModel = an
    * @default false
    */
   virtualizeColumnsWithAutoRowHeight: boolean;
+
+  // TODO: document
+  scrollEndThreshold?: number;
 }
 
 /**
@@ -836,6 +840,7 @@ export interface DataGridPropsWithoutDefaultValue<R extends GridValidRowModel = 
   pinnedColumns?: GridPinnedColumnFields;
   pinnedRows?: GridPinnedRowsModel;
   detailPanelExpandedRowIds?: GridExpandedRowIds;
+  onRowsScrollEnd?: (params: InfiniteLoaderPayload) => void;
 }
 
 export interface DataGridProSharedPropsWithDefaultValue {

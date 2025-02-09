@@ -1,8 +1,6 @@
 import * as React from 'react';
 import clsx from 'clsx';
-import { styled } from '@mui/system';
 import useForkRef from '@mui/utils/useForkRef';
-import composeClasses from '@mui/utils/composeClasses';
 import { useRtl } from '@mui/system/RtlProvider';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import { useGridApiContext } from '../hooks/utils/useGridApiContext';
@@ -18,17 +16,12 @@ import {
 import { PinnedColumnPosition } from '../internals/constants';
 import { gridDimensionsColumnsTotalWidthSelector } from '../internals/selectors/dimensionSelectors';
 import { GridEventListener } from '../models';
-import { DataGridProcessedProps } from '../models/props/DataGridProps';
-import { getDataGridUtilityClass, gridClasses } from '../constants/gridClasses';
+import { gridClasses } from '../constants/gridClasses';
 import { getPinnedCellOffset } from '../internals/utils/getPinnedCellOffset';
 import { shouldCellShowLeftBorder, shouldCellShowRightBorder } from '../utils/cellBorderUtils';
 import { escapeOperandAttributeSelector } from '../utils/domUtils';
 import { rtlFlipSide } from '../utils/rtlFlipSide';
-import { attachPinnedStyle } from '../internals/utils';
 import { useThemedComponent } from '../context/GridThemeContext';
-import { gridPinnedColumnPositionLookup } from './cell/GridCell';
-
-type OwnerState = { classes: DataGridProcessedProps['classes'] };
 
 const getColIndex = (el: HTMLElement) => parseInt(el.getAttribute('data-colindex')!, 10);
 
@@ -39,7 +32,6 @@ const GridSkeletonLoadingOverlay = forwardRef<HTMLDivElement, React.HTMLAttribut
     const isRtl = useRtl();
     const classes = useThemedComponent('skeletonLoadingOverlay');
     const rowClasses = useThemedComponent('row');
-    const cellClasses = useThemedComponent('cell');
     const ref = React.useRef<HTMLDivElement>(null);
     const handleRef = useForkRef(ref, forwardedRef);
     const apiRef = useGridApiContext();
@@ -91,19 +83,15 @@ const GridSkeletonLoadingOverlay = forwardRef<HTMLDivElement, React.HTMLAttribut
             ? pinnedColumns[pinnedSide].findIndex((col) => col.field === column.field) // pinned section
             : colIndex - pinnedColumns.left.length; // middle section
           const scrollbarWidth = dimensions.hasScrollY ? dimensions.scrollbarSize : 0;
-          const pinnedStyle = attachPinnedStyle(
-            {},
-            isRtl,
+          const pinnedOffset = getPinnedCellOffset(
             pinnedPosition,
-            getPinnedCellOffset(
-              pinnedPosition,
-              column.computedWidth,
-              colIndex,
-              positions,
-              dimensions.columnsTotalWidth,
-              scrollbarWidth,
-            ),
+            column.computedWidth,
+            colIndex,
+            positions,
+            dimensions.columnsTotalWidth,
+            scrollbarWidth,
           );
+
           const gridHasFiller = dimensions.columnsTotalWidth < dimensions.viewportOuterSize.width;
           const showRightBorder = shouldCellShowRightBorder(
             pinnedPosition,
@@ -122,16 +110,8 @@ const GridSkeletonLoadingOverlay = forwardRef<HTMLDivElement, React.HTMLAttribut
           const emptyCell = (
             <slots.skeletonCell
               key={`skeleton-filler-column-${i}`}
-              className={clsx(
-                'flex items-center',
-                cellClasses.root,
-                pinnedPosition && cellClasses.variants.pinned,
-                pinnedPosition === PinnedColumnPosition.LEFT && 'cell--pinnedLeft',
-                pinnedPosition === PinnedColumnPosition.RIGHT && 'cell--pinnedRight',
-              )}
-              data-pinned={
-                (pinnedPosition && gridPinnedColumnPositionLookup[pinnedPosition]) || undefined
-              }
+              pinnedPosition={pinnedPosition}
+              pinnedOffset={pinnedOffset}
               width={emptyCellWidth}
               empty
               data-empty="true"
@@ -145,31 +125,17 @@ const GridSkeletonLoadingOverlay = forwardRef<HTMLDivElement, React.HTMLAttribut
           rowCells.push(
             <slots.skeletonCell
               key={`skeleton-column-${i}-${column.field}`}
+              colIndex={colIndex}
               field={column.field}
               type={column.type}
               align={column.align}
               width="var(--width)"
               height={dimensions.rowHeight}
               data-colindex={colIndex}
-              className={clsx(
-                'flex items-center',
-                cellClasses.root,
-                showRightBorder && cellClasses.variants.showRightBorder,
-                showLeftBorder && cellClasses.variants.showLeftBorder,
-                pinnedPosition && cellClasses.variants.pinned,
-                pinnedPosition === PinnedColumnPosition.LEFT && 'cell--pinnedLeft',
-                pinnedPosition === PinnedColumnPosition.RIGHT && 'cell--pinnedRight',
-                column.align === 'left' && cellClasses.variants.left,
-                column.align === 'right' && cellClasses.variants.right,
-                column.align === 'center' && cellClasses.variants.center,
-              )}
-              data-pinned={
-                (pinnedPosition && gridPinnedColumnPositionLookup[pinnedPosition]) || undefined
-              }
+              pinnedOffset={pinnedOffset}
+              pinnedPosition={pinnedPosition}
               data-align={column.align}
-              style={
-                { '--width': `${column.computedWidth}px`, ...pinnedStyle } as React.CSSProperties
-              }
+              style={{ '--width': `${column.computedWidth}px` } as React.CSSProperties}
             />,
           );
 
