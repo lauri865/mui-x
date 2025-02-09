@@ -9,7 +9,13 @@ import { GridFeatureMode } from '../gridFeatureMode';
 import { Logger } from '../logger';
 import { GridSortDirection, GridSortModel } from '../gridSortModel';
 import { GridSlotsComponent } from '../gridSlotsComponent';
-import { GridRowId, GridRowIdGetter, GridRowsProp, GridValidRowModel } from '../gridRows';
+import {
+  GridRowId,
+  GridRowIdGetter,
+  GridRowModel,
+  GridRowsProp,
+  GridValidRowModel,
+} from '../gridRows';
 import { GridEventListener } from '../events';
 import { GridCallbackDetails, GridLocaleText } from '../api';
 import { GridApiCommunity } from '../api/gridApiCommunity';
@@ -840,7 +846,7 @@ export interface DataGridPropsWithoutDefaultValue<R extends GridValidRowModel = 
   pinnedColumns?: GridPinnedColumnFields;
   pinnedRows?: GridPinnedRowsModel;
   detailPanelExpandedRowIds?: GridExpandedRowIds;
-  onRowsScrollEnd?: (params: InfiniteLoaderPayload) => void;
+  onRowsScrollEnd?: (params: InfiniteLoaderPayload) => Promise<void | GridRowModel<R>[]>;
 }
 
 export interface DataGridProSharedPropsWithDefaultValue {

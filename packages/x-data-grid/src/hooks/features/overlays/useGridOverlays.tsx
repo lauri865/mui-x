@@ -8,6 +8,10 @@ import { gridVisiblePinnedRowsCountSelector } from '../../features/rowPinning';
 import { GridLoadingOverlayVariant } from '../../../components/GridLoadingOverlay';
 import { GridOverlayWrapper } from '../../../components/base/GridOverlays';
 import type { GridOverlayType } from '../../../components/base/GridOverlays';
+import {
+  GridInfiniteLoader,
+  InfiniteLoadingOverlay,
+} from '../../../components/virtualization/GridInfiniteLoader';
 
 /**
  * Uses the grid state to determine which overlay to display.
@@ -54,6 +58,7 @@ export const useGridOverlays = () => {
     const overlayProps = rootProps.slotProps?.[overlayType];
     return (
       <GridOverlayWrapper {...overlaysProps}>
+        {overlayType === 'noRowsOverlay' && rootProps.onRowsScrollEnd && <InfiniteLoadingOverlay />}
         <Overlay {...overlayProps} />
       </GridOverlayWrapper>
     );

@@ -10,7 +10,6 @@ import { GridRowEventLookup } from '../models/events';
 import { GridRowId, GridRowModel } from '../models/gridRows';
 import { GridEditModes, GridCellModes } from '../models/gridEditRowModel';
 import { gridClasses } from '../constants/gridClasses';
-import { composeGridClasses } from '../utils/composeGridClasses';
 import { useGridRootProps } from '../hooks/utils/useGridRootProps';
 import { GridPinnedColumnFields, GridPinnedColumns } from '../hooks/features/columns';
 import type { GridStateColDef } from '../models/colDef/gridColDef';

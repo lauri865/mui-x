@@ -13,7 +13,8 @@ const className = {
     base: 'group relative flex-1 flex flex-col overflow-hidden',
     scroller:
       'relative h-full flex-1 overflow-scroll [scrollbar-width:none] flex flex-col [&::-webkit-scrollbar]:hidden print:overflow-hidden z-0',
-    skeleton: '[&_.twg-virtualScroller>.twg-filler]:!hidden',
+    skeleton:
+      '[&_.twg-virtualScroller>.twg-filler]:!hidden [&_.twg-virtualScrollerContent]:invisible [&_.twg-virtualScrollerContent]:fixed',
   },
 
   panelAnchor: {
@@ -41,7 +42,7 @@ const className = {
       'data-[align=center]:justify-center data-[align=right]:flex-row-reverse data-[align=center]:pr-1.5 data-[align=right]:pr-cell data-[align=right]:pl-0.5',
       'hover:bg-grid-hover-bg transition-[background-color] active:bg-grid-hover-bg',
       'data-first:rounded-tl-[calc(var(--radius-grid)-1px)] group-data-fullwidth:data-last:rounded-tr-[calc(var(--radius-grid)-1px)]',
-      //'data-last:overflow-hidden',
+      'data-last:[&:not([data-pinned])]:overflow-hidden',
       '[&:hover_.twg-columnSeparator]:max-h-full',
       `data-[field=«check»]:p-0`,
       'group-data-dragging:[&_*]:pointer-events-none',

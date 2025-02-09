@@ -598,10 +598,20 @@ export const useGridVirtualScroller = () => {
             lastRowId={id}
             onRowsScrollEnd={rootProps.onRowsScrollEnd}
             margin={rootProps.scrollEndThreshold}
+            skeletonRowProps={{
+              index: -1,
+              columns: visibleColumns,
+              dimensions: gridDimensionsSelector(apiRef.current.state),
+              positions: gridColumnPositionsSelector(apiRef),
+              pinnedColumns: pinnedColumns,
+              showCellVerticalBorder: rootProps.showCellVerticalBorder,
+              isLastVisible: true,
+            }}
           />,
         );
       }
     });
+
     return rows;
   };
 

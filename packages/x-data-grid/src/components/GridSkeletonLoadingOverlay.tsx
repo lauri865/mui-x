@@ -7,9 +7,11 @@ import { useGridApiContext } from '../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../hooks/utils/useGridRootProps';
 import {
   gridColumnPositionsSelector,
+  GridDimensions,
   gridDimensionsSelector,
+  GridPinnedColumnFields,
   gridVisibleColumnDefinitionsSelector,
-  gridVisiblePinnedColumnDefinitionsSelector,
+  gridVisiblePinnedColumnsSelector,
   useGridApiEventHandler,
   useGridSelector,
 } from '../hooks';
@@ -22,16 +24,140 @@ import { shouldCellShowLeftBorder, shouldCellShowRightBorder } from '../utils/ce
 import { escapeOperandAttributeSelector } from '../utils/domUtils';
 import { rtlFlipSide } from '../utils/rtlFlipSide';
 import { useThemedComponent } from '../context/GridThemeContext';
+import type { GridStateColDef } from '../models/colDef/gridColDef';
 
 const getColIndex = (el: HTMLElement) => parseInt(el.getAttribute('data-colindex')!, 10);
+
+const getPinnedPosition = (
+  colIndex: number,
+  columns: GridStateColDef[],
+  pinnedColumns: GridPinnedColumnFields,
+) => {
+  if (pinnedColumns.left.length && colIndex < pinnedColumns.left.length) {
+    return PinnedColumnPosition.LEFT;
+  } else if (
+    pinnedColumns.right.length &&
+    colIndex >= columns.length - pinnedColumns.right.length
+  ) {
+    return PinnedColumnPosition.RIGHT;
+  }
+};
+
+export const SkeletonRow = React.memo(function SkeletonRow({
+  index,
+  columns,
+  dimensions,
+  positions,
+  pinnedColumns,
+  showCellVerticalBorder,
+  isLastVisible,
+}: {
+  index: number;
+  columns: GridStateColDef[];
+  dimensions: GridDimensions;
+  positions: number[];
+  pinnedColumns: GridPinnedColumnFields;
+  showCellVerticalBorder: boolean;
+  isLastVisible: boolean;
+}) {
+  const rowClasses = useThemedComponent('row');
+  const rootProps = useGridRootProps();
+  const { slots } = rootProps;
+  const isRtl = useRtl();
+
+  const rowCells: React.ReactNode[] = [];
+
+  for (let colIndex = 0; colIndex < columns.length; colIndex += 1) {
+    const column = columns[colIndex];
+    const pinnedPosition = getPinnedPosition(colIndex, columns, pinnedColumns);
+    const isPinnedLeft = pinnedPosition === PinnedColumnPosition.LEFT;
+    const isPinnedRight = pinnedPosition === PinnedColumnPosition.RIGHT;
+    const pinnedSide = rtlFlipSide(pinnedPosition, isRtl);
+    const sectionLength = pinnedSide
+      ? pinnedColumns[pinnedSide].length
+      : columns.length - pinnedColumns.left.length - pinnedColumns.right.length;
+    const sectionIndex = pinnedSide
+      ? pinnedColumns[pinnedSide].indexOf(column.field)
+      : colIndex - pinnedColumns.left.length;
+    const scrollbarWidth = dimensions.hasScrollY ? dimensions.scrollbarSize : 0;
+    const pinnedOffset = getPinnedCellOffset(
+      pinnedPosition,
+      column.computedWidth,
+      colIndex,
+      positions,
+      dimensions.columnsTotalWidth,
+      scrollbarWidth,
+    );
+
+    const gridHasFiller = dimensions.columnsTotalWidth < dimensions.viewportOuterSize.width;
+    const showRightBorder = shouldCellShowRightBorder(
+      pinnedPosition,
+      sectionIndex,
+      sectionLength,
+      showCellVerticalBorder,
+      gridHasFiller,
+    );
+    const showLeftBorder = shouldCellShowLeftBorder(pinnedPosition, sectionIndex);
+    const isLastColumn = colIndex === columns.length - 1;
+    const isFirstPinnedRight = isPinnedRight && sectionIndex === 0;
+    const hasFillerBefore = isFirstPinnedRight && gridHasFiller;
+    const hasFillerAfter = isLastColumn && !isFirstPinnedRight && gridHasFiller;
+    const expandedWidth = dimensions.viewportOuterSize.width - dimensions.columnsTotalWidth;
+    const emptyCellWidth = Math.max(0, expandedWidth);
+    const emptyCell = (
+      <slots.skeletonCell
+        key={`skeleton-filler-column-${index}`}
+        pinnedPosition={pinnedPosition}
+        pinnedOffset={pinnedOffset}
+        width={emptyCellWidth}
+        empty
+        data-empty="true"
+      />
+    );
+
+    if (hasFillerBefore) {
+      rowCells.push(emptyCell);
+    }
+
+    rowCells.push(
+      <slots.skeletonCell
+        key={`skeleton-column-${index}-${column.field}`}
+        colIndex={colIndex}
+        field={column.field}
+        type={column.type}
+        align={column.align}
+        width="var(--width)"
+        height={dimensions.rowHeight}
+        data-colindex={colIndex}
+        pinnedOffset={pinnedOffset}
+        pinnedPosition={pinnedPosition}
+        showLeftBorder={showLeftBorder}
+        showRightBorder={showRightBorder}
+        data-align={column.align}
+        style={{ '--width': `${column.computedWidth}px` } as React.CSSProperties}
+      />,
+    );
+
+    if (hasFillerAfter) {
+      rowCells.push(emptyCell);
+    }
+  }
+
+  return (
+    <div
+      className={clsx(rowClasses.root)}
+      data-first-visible={index === 0 ? true : undefined}
+      data-last-visible={isLastVisible}
+    >
+      {rowCells}
+    </div>
+  );
+});
 
 const GridSkeletonLoadingOverlay = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   function GridSkeletonLoadingOverlay(props, forwardedRef) {
     const rootProps = useGridRootProps();
-    const { slots } = rootProps;
-    const isRtl = useRtl();
     const classes = useThemedComponent('skeletonLoadingOverlay');
-    const rowClasses = useThemedComponent('row');
     const ref = React.useRef<HTMLDivElement>(null);
     const handleRef = useForkRef(ref, forwardedRef);
     const apiRef = useGridApiContext();
@@ -49,125 +175,33 @@ const GridSkeletonLoadingOverlay = forwardRef<HTMLDivElement, React.HTMLAttribut
       () => allVisibleColumns.slice(0, inViewportCount),
       [allVisibleColumns, inViewportCount],
     );
-    const pinnedColumns = useGridSelector(apiRef, gridVisiblePinnedColumnDefinitionsSelector);
-
-    const getPinnedPosition = React.useCallback(
-      (field: string) => {
-        if (pinnedColumns.left.findIndex((col) => col.field === field) !== -1) {
-          return PinnedColumnPosition.LEFT;
-        }
-        if (pinnedColumns.right.findIndex((col) => col.field === field) !== -1) {
-          return PinnedColumnPosition.RIGHT;
-        }
-        return undefined;
-      },
-      [pinnedColumns.left, pinnedColumns.right],
-    );
+    const pinnedColumns = useGridSelector(apiRef, gridVisiblePinnedColumnsSelector);
 
     const children = React.useMemo(() => {
       const array: React.ReactNode[] = [];
 
       for (let i = 0; i < skeletonRowsCount; i += 1) {
-        const rowCells: React.ReactNode[] = [];
-
-        for (let colIndex = 0; colIndex < columns.length; colIndex += 1) {
-          const column = columns[colIndex];
-          const pinnedPosition = getPinnedPosition(column.field);
-          const isPinnedLeft = pinnedPosition === PinnedColumnPosition.LEFT;
-          const isPinnedRight = pinnedPosition === PinnedColumnPosition.RIGHT;
-          const pinnedSide = rtlFlipSide(pinnedPosition, isRtl);
-          const sectionLength = pinnedSide
-            ? pinnedColumns[pinnedSide].length // pinned section
-            : columns.length - pinnedColumns.left.length - pinnedColumns.right.length; // middle section
-          const sectionIndex = pinnedSide
-            ? pinnedColumns[pinnedSide].findIndex((col) => col.field === column.field) // pinned section
-            : colIndex - pinnedColumns.left.length; // middle section
-          const scrollbarWidth = dimensions.hasScrollY ? dimensions.scrollbarSize : 0;
-          const pinnedOffset = getPinnedCellOffset(
-            pinnedPosition,
-            column.computedWidth,
-            colIndex,
-            positions,
-            dimensions.columnsTotalWidth,
-            scrollbarWidth,
-          );
-
-          const gridHasFiller = dimensions.columnsTotalWidth < dimensions.viewportOuterSize.width;
-          const showRightBorder = shouldCellShowRightBorder(
-            pinnedPosition,
-            sectionIndex,
-            sectionLength,
-            rootProps.showCellVerticalBorder,
-            gridHasFiller,
-          );
-          const showLeftBorder = shouldCellShowLeftBorder(pinnedPosition, sectionIndex);
-          const isLastColumn = colIndex === columns.length - 1;
-          const isFirstPinnedRight = isPinnedRight && sectionIndex === 0;
-          const hasFillerBefore = isFirstPinnedRight && gridHasFiller;
-          const hasFillerAfter = isLastColumn && !isFirstPinnedRight && gridHasFiller;
-          const expandedWidth = dimensions.viewportOuterSize.width - dimensions.columnsTotalWidth;
-          const emptyCellWidth = Math.max(0, expandedWidth);
-          const emptyCell = (
-            <slots.skeletonCell
-              key={`skeleton-filler-column-${i}`}
-              pinnedPosition={pinnedPosition}
-              pinnedOffset={pinnedOffset}
-              width={emptyCellWidth}
-              empty
-              data-empty="true"
-            />
-          );
-
-          if (hasFillerBefore) {
-            rowCells.push(emptyCell);
-          }
-
-          rowCells.push(
-            <slots.skeletonCell
-              key={`skeleton-column-${i}-${column.field}`}
-              colIndex={colIndex}
-              field={column.field}
-              type={column.type}
-              align={column.align}
-              width="var(--width)"
-              height={dimensions.rowHeight}
-              data-colindex={colIndex}
-              pinnedOffset={pinnedOffset}
-              pinnedPosition={pinnedPosition}
-              showLeftBorder={showLeftBorder}
-              showRightBorder={showRightBorder}
-              data-align={column.align}
-              style={{ '--width': `${column.computedWidth}px` } as React.CSSProperties}
-            />,
-          );
-
-          if (hasFillerAfter) {
-            rowCells.push(emptyCell);
-          }
-        }
-
         array.push(
-          <div
+          <SkeletonRow
             key={`skeleton-row-${i}`}
-            className={clsx(rowClasses.root)}
-            data-first-visible={i === 0 ? true : undefined}
-            data-last-visible={i === skeletonRowsCount - 1 ? true : undefined}
-          >
-            {rowCells}
-          </div>,
+            index={i}
+            columns={columns}
+            dimensions={dimensions}
+            positions={positions}
+            pinnedColumns={pinnedColumns}
+            showCellVerticalBorder={rootProps.showCellVerticalBorder}
+            isLastVisible={i === skeletonRowsCount - 1}
+          />,
         );
       }
       return array;
     }, [
-      slots,
       columns,
       pinnedColumns,
       skeletonRowsCount,
       rootProps.showCellVerticalBorder,
       dimensions,
       positions,
-      getPinnedPosition,
-      isRtl,
     ]);
 
     // Sync the column resize of the overlay columns with the grid
@@ -184,7 +218,7 @@ const GridSkeletonLoadingOverlay = forwardRef<HTMLDivElement, React.HTMLAttribut
       }
 
       const resizedColIndex = columns.findIndex((col) => col.field === colDef.field);
-      const pinnedPosition = getPinnedPosition(colDef.field);
+      const pinnedPosition = getPinnedPosition(resizedColIndex, columns, pinnedColumns);
       const isPinnedLeft = pinnedPosition === PinnedColumnPosition.LEFT;
       const isPinnedRight = pinnedPosition === PinnedColumnPosition.RIGHT;
       const currentWidth = getComputedStyle(cells[0]).getPropertyValue('--width');

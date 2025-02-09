@@ -49,6 +49,8 @@ const rows = [
   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
 ];
 
+let index = rows.length;
+
 const detailPanel = (row) => {
   return <div style={{ height: 100, width: 600 }}>{row.id}</div>;
 };
@@ -58,7 +60,6 @@ export default function DataGridDemo() {
   return (
     <Box sx={{ height: 400, width: '100%' }}>
       <DataGrid
-        rowCount={100}
         autoFocus="lastName"
         rows={data}
         columns={columns}
@@ -77,23 +78,33 @@ export default function DataGridDemo() {
             bottom: [2],
           }, */
         }}
+        onSortModelChange={(model, detail) => {
+          detail.api.scrollToIndexes({ rowIndex: 0 });
+          detail.api.setRows([]);
+        }}
         pageSizeOptions={[5]}
         // checkboxSelection
         disableRowSelectionOnClick
         checkboxSelection
         loading={isLoading}
         getDetailPanelContent={detailPanel}
-        onRowsScrollEnd={(params) => {
-          console.log(params);
-          setIsLoading(true);
-          setTimeout(() => {
-            const newRows = rows
-              .slice(0, 5)
-              .map((row) => ({ ...row, id: row.id + data.length }));
-
-            setData((prevData) => [...prevData, ...newRows]);
-            setIsLoading(false);
-          }, 1000);
+        onRowsScrollEnd={async (params) => {
+          if (params.visibleRowsCount >= 40) {
+            return;
+          }
+          return new Promise((resolve) => {
+            setTimeout(() => {
+              setIsLoading(false);
+              const rowsToFetch = Math.min(
+                40 - params.visibleRowsCount,
+                rows.length,
+              );
+              const newRows = rows
+                .slice(0, rowsToFetch)
+                .map((row, i) => ({ ...row, id: params.visibleRowsCount + i + 1 }));
+              resolve(newRows);
+            }, 1000);
+          });
         }}
       />
     </Box>
