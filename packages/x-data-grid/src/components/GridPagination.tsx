@@ -1,5 +1,4 @@
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import {
   gridPageCountSelector,
@@ -150,13 +149,5 @@ const GridPagination = forwardRef<unknown, GridPaginationOwnProps>(
     );
   },
 );
-
-GridPagination.propTypes = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // | To update them edit the TypeScript types and run "pnpm proptypes"  |
-  // ----------------------------------------------------------------------
-  component: PropTypes.elementType,
-} as any;
 
 export { GridPagination };

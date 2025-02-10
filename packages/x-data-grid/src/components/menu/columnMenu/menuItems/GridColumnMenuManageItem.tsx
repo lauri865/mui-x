@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import { GridPreferencePanelsValue } from '../../../../hooks/features/preferencesPanel/gridPreferencePanelsValue';
 import { useGridApiContext } from '../../../../hooks/utils/useGridApiContext';
@@ -30,14 +29,5 @@ function GridColumnMenuManageItem(props: GridColumnMenuItemProps) {
     </DropdownMenu.Item>
   );
 }
-
-GridColumnMenuManageItem.propTypes = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // | To update them edit the TypeScript types and run "pnpm proptypes"  |
-  // ----------------------------------------------------------------------
-  colDef: PropTypes.object.isRequired,
-  onClick: PropTypes.func.isRequired,
-} as any;
 
 export { GridColumnMenuManageItem };

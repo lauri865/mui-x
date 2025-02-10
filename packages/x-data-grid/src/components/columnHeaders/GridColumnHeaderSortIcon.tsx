@@ -1,6 +1,5 @@
 import composeClasses from '@mui/utils/composeClasses';
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import { getDataGridUtilityClass } from '../../constants/gridClasses';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
@@ -92,17 +91,5 @@ function GridColumnHeaderSortIconRaw(props: GridColumnHeaderSortIconProps) {
 }
 
 const GridColumnHeaderSortIcon = React.memo(GridColumnHeaderSortIconRaw);
-
-GridColumnHeaderSortIconRaw.propTypes = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // | To update them edit the TypeScript types and run "pnpm proptypes"  |
-  // ----------------------------------------------------------------------
-  direction: PropTypes.oneOf(['asc', 'desc']),
-  disabled: PropTypes.bool,
-  field: PropTypes.string.isRequired,
-  index: PropTypes.number,
-  sortingOrder: PropTypes.arrayOf(PropTypes.oneOf(['asc', 'desc'])).isRequired,
-} as any;
 
 export { GridColumnHeaderSortIcon };

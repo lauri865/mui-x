@@ -1,5 +1,4 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import { refType, unstable_useId as useId } from '@mui/utils';
 import { useGridRootProps } from '../../../hooks/utils/useGridRootProps';
 import { TextFieldProps } from '../../../models/gridBaseSlots';
@@ -120,50 +119,5 @@ export function sanitizeFilterItemValue(value: any): boolean | undefined {
   }
   return undefined;
 }
-
-GridFilterInputBoolean.propTypes = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // | To update them edit the TypeScript types and run "pnpm proptypes"  |
-  // ----------------------------------------------------------------------
-  apiRef: PropTypes.shape({
-    current: PropTypes.object.isRequired,
-  }).isRequired,
-  applyValue: PropTypes.func.isRequired,
-  className: PropTypes.string,
-  clearButton: PropTypes.node,
-  disabled: PropTypes.bool,
-  focusElementRef: refType,
-  headerFilterMenu: PropTypes.node,
-  inputRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({
-      current: (props, propName) => {
-        if (props[propName] == null) {
-          return null;
-        }
-        if (typeof props[propName] !== 'object' || props[propName].nodeType !== 1) {
-          return new Error(`Expected prop '${propName}' to be of type Element`);
-        }
-        return null;
-      },
-    }),
-  ]),
-  /**
-   * It is `true` if the filter either has a value or an operator with no value
-   * required is selected (for example `isEmpty`)
-   */
-  isFilterActive: PropTypes.bool,
-  item: PropTypes.shape({
-    field: PropTypes.string.isRequired,
-    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    operator: PropTypes.string.isRequired,
-    value: PropTypes.any,
-  }).isRequired,
-  onBlur: PropTypes.func,
-  onFocus: PropTypes.func,
-  slotProps: PropTypes.object,
-  tabIndex: PropTypes.number,
-} as any;
 
 export { GridFilterInputBoolean };

@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import { GridColumnMenuItemProps } from '../GridColumnMenuItemProps';
 import { GridColumnMenuAutoSizeAllItem } from './GridColumnMenuAutoSizeAllItem';
@@ -16,14 +15,5 @@ function GridColumnMenuColumnsItem(props: GridColumnMenuItemProps) {
     </React.Fragment>
   );
 }
-
-GridColumnMenuColumnsItem.propTypes = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // | To update them edit the TypeScript types and run "pnpm proptypes"  |
-  // ----------------------------------------------------------------------
-  colDef: PropTypes.object.isRequired,
-  onClick: PropTypes.func.isRequired,
-} as any;
 
 export { GridColumnMenuColumnsItem };

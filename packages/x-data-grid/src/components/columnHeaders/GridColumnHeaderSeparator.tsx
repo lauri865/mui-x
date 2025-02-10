@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import { createPortal } from 'react-dom';
 import { useThemedComponent } from '../../context/GridThemeContext';
@@ -40,7 +39,7 @@ function GridColumnHeaderSeparatorRaw(props: GridColumnHeaderSeparatorProps) {
 
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
-    <div
+    (<div
       className={clsx(
         classes.root,
         'group/resizer text-grid-border hover:text-white active:text-white active:max-h-full h-full absolute cursor-col-resize px-1 z-1 active:z-20 hover:z-20 group-focus-within/cell:text-highlight-border active:[anchor-name:--resizer]',
@@ -77,21 +76,10 @@ function GridColumnHeaderSeparatorRaw(props: GridColumnHeaderSeparatorProps) {
           />,
           document.body,
         )}
-    </div>
+    </div>)
   );
 }
 
 const GridColumnHeaderSeparator = React.memo(GridColumnHeaderSeparatorRaw);
-
-GridColumnHeaderSeparatorRaw.propTypes = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // | To update them edit the TypeScript types and run "pnpm proptypes"  |
-  // ----------------------------------------------------------------------
-  height: PropTypes.number.isRequired,
-  resizable: PropTypes.bool.isRequired,
-  resizing: PropTypes.bool.isRequired,
-  side: PropTypes.oneOf(['left', 'right']),
-} as any;
 
 export { GridColumnHeaderSeparator, GridColumnHeaderSeparatorSides };

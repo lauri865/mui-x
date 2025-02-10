@@ -1,10 +1,9 @@
-'use client';
+'use client';;
 import { unstable_useForkRef as useForkRef } from '@mui/utils';
 import { fastMemo } from '@mui/x-internals/fastMemo';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import { isObjectEmpty } from '@mui/x-internals/isObjectEmpty';
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import { GRID_ACTIONS_COLUMN_TYPE } from '../colDef/gridActionsColDef';
 import { GRID_CHECKBOX_SELECTION_COL_DEF } from '../colDef/gridCheckboxSelectionColDef';
@@ -484,43 +483,6 @@ const GridRow = forwardRef<HTMLDivElement, GridRowProps>(function GridRow(props,
     </>
   );
 });
-
-GridRow.propTypes = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // | To update them edit the TypeScript types and run "pnpm proptypes"  |
-  // ----------------------------------------------------------------------
-  columnsTotalWidth: PropTypes.number.isRequired,
-  firstColumnIndex: PropTypes.number.isRequired,
-  /**
-   * Determines which cell has focus.
-   * If `null`, no cell in this row has focus.
-   */
-  focusedColumnIndex: PropTypes.number,
-  gridHasFiller: PropTypes.bool.isRequired,
-  /**
-   * Index of the row in the whole sorted and filtered dataset.
-   * If some rows above have expanded children, this index also take those children into account.
-   */
-  index: PropTypes.number.isRequired,
-  isFirstVisible: PropTypes.bool.isRequired,
-  isLastVisible: PropTypes.bool.isRequired,
-  isNotVisible: PropTypes.bool.isRequired,
-  lastColumnIndex: PropTypes.number.isRequired,
-  offsetLeft: PropTypes.number.isRequired,
-  onClick: PropTypes.func,
-  onDoubleClick: PropTypes.func,
-  onMouseEnter: PropTypes.func,
-  onMouseLeave: PropTypes.func,
-  pinnedColumns: PropTypes.object.isRequired,
-  row: PropTypes.object.isRequired,
-  rowHeight: PropTypes.oneOfType([PropTypes.oneOf(['auto']), PropTypes.number]).isRequired,
-  rowId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  scrollbarWidth: PropTypes.number.isRequired,
-  selected: PropTypes.bool.isRequired,
-  showBottomBorder: PropTypes.bool.isRequired,
-  visibleColumns: PropTypes.arrayOf(PropTypes.object).isRequired,
-} as any;
 
 const MemoizedGridRow = fastMemo(GridRow);
 

@@ -1,7 +1,6 @@
 import composeClasses from '@mui/utils/composeClasses';
 import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import { getDataGridUtilityClass } from '../../constants/gridClasses';
 import { gridExpandedSortedRowIdsSelector } from '../../hooks/features/filter/gridFilterSelector';
@@ -157,20 +156,5 @@ const GridHeaderCheckbox = forwardRef<HTMLButtonElement, GridColumnHeaderParams>
     );
   },
 );
-
-GridHeaderCheckbox.propTypes = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // | To update them edit the TypeScript types and run "pnpm proptypes"  |
-  // ----------------------------------------------------------------------
-  /**
-   * The column of the current header component.
-   */
-  colDef: PropTypes.object.isRequired,
-  /**
-   * The column field of the column that triggered the event
-   */
-  field: PropTypes.string.isRequired,
-} as any;
 
 export { GridHeaderCheckbox };

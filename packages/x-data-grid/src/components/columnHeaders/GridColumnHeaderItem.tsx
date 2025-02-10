@@ -1,7 +1,6 @@
 import { unstable_composeClasses as composeClasses, unstable_useId as useId } from '@mui/utils';
 import { fastMemo } from '@mui/x-internals/fastMemo';
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import { GRID_CHECKBOX_SELECTION_FIELD } from '../../colDef';
 import { getDataGridUtilityClass, gridClasses } from '../../constants/gridClasses';
@@ -332,34 +331,6 @@ function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
     />
   );
 }
-
-GridColumnHeaderItem.propTypes = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // | To update them edit the TypeScript types and run "pnpm proptypes"  |
-  // ----------------------------------------------------------------------
-  colDef: PropTypes.object.isRequired,
-  colIndex: PropTypes.number.isRequired,
-  columnMenuOpen: PropTypes.bool.isRequired,
-  disableReorder: PropTypes.bool,
-  filterItemsCounter: PropTypes.number,
-  hasFocus: PropTypes.bool,
-  headerHeight: PropTypes.number.isRequired,
-  isDragging: PropTypes.bool.isRequired,
-  isLast: PropTypes.bool.isRequired,
-  isLastUnpinned: PropTypes.bool.isRequired,
-  isResizing: PropTypes.bool.isRequired,
-  isSiblingFocused: PropTypes.bool.isRequired,
-  pinnedOffset: PropTypes.number,
-  pinnedPosition: PropTypes.oneOf([0, 1, 2, 3]),
-  separatorSide: PropTypes.oneOf(['left', 'right']),
-  showLeftBorder: PropTypes.bool.isRequired,
-  showRightBorder: PropTypes.bool.isRequired,
-  sortDirection: PropTypes.oneOf(['asc', 'desc']),
-  sortIndex: PropTypes.number,
-  style: PropTypes.object,
-  tabIndex: PropTypes.oneOf([-1, 0]).isRequired,
-} as any;
 
 const Memoized = fastMemo(GridColumnHeaderItem);
 

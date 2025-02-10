@@ -8,7 +8,6 @@ import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
 import { fastMemo } from '@mui/x-internals/fastMemo';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import { getDataGridUtilityClass, gridClasses } from '../../constants/gridClasses';
 import { useThemedComponent } from '../../context/GridThemeContext';
@@ -528,27 +527,6 @@ const hideOverflow = (event: Event) => {
   el.style.borderRight = '';
   el.style.borderBottom = '';
 };
-
-GridCell.propTypes = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // | To update them edit the TypeScript types and run "pnpm proptypes"  |
-  // ----------------------------------------------------------------------
-  align: PropTypes.oneOf(['center', 'left', 'right']).isRequired,
-  colIndex: PropTypes.number.isRequired,
-  colSpan: PropTypes.number,
-  column: PropTypes.object.isRequired,
-  disableDragEvents: PropTypes.bool,
-  isNotVisible: PropTypes.bool.isRequired,
-  pinnedOffset: PropTypes.number,
-  pinnedPosition: PropTypes.oneOf([0, 1, 2, 3]).isRequired,
-  row: PropTypes.object.isRequired,
-  rowId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  rowNode: PropTypes.object.isRequired,
-  showLeftBorder: PropTypes.bool.isRequired,
-  showRightBorder: PropTypes.bool.isRequired,
-  width: PropTypes.number.isRequired,
-} as any;
 
 const MemoizedGridCell = fastMemo(GridCell);
 

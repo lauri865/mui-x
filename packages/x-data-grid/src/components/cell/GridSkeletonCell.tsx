@@ -1,6 +1,5 @@
 import { fastMemo } from '@mui/x-internals/fastMemo';
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import { useThemedComponent } from '../../context/GridThemeContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
@@ -125,32 +124,6 @@ function GridSkeletonCell(props: GridSkeletonCellProps) {
     </div>
   );
 }
-
-GridSkeletonCell.propTypes = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // | To update them edit the TypeScript types and run "pnpm proptypes"  |
-  // ----------------------------------------------------------------------
-  align: PropTypes.string,
-  /**
-   * If `true`, the cell will not display the skeleton but still reserve the cell space.
-   * @default false
-   */
-  empty: PropTypes.bool,
-  field: PropTypes.string,
-  height: PropTypes.oneOfType([PropTypes.oneOf(['auto']), PropTypes.number]),
-  type: PropTypes.oneOf([
-    'actions',
-    'boolean',
-    'custom',
-    'date',
-    'dateTime',
-    'number',
-    'singleSelect',
-    'string',
-  ]),
-  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-} as any;
 
 const Memoized = fastMemo(GridSkeletonCell);
 

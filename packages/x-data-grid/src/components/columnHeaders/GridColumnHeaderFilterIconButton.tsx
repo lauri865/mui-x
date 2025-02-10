@@ -1,5 +1,4 @@
 import { unstable_composeClasses as composeClasses, unstable_useId as useId } from '@mui/utils';
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import { getDataGridUtilityClass } from '../../constants/gridClasses';
 import { useGridSelector } from '../../hooks';
@@ -39,16 +38,6 @@ function GridColumnHeaderFilterIconButtonWrapped(props: ColumnHeaderFilterIconBu
   }
   return <GridColumnHeaderFilterIconButton {...props} />;
 }
-
-GridColumnHeaderFilterIconButtonWrapped.propTypes = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // | To update them edit the TypeScript types and run "pnpm proptypes"  |
-  // ----------------------------------------------------------------------
-  counter: PropTypes.number,
-  field: PropTypes.string.isRequired,
-  onClick: PropTypes.func,
-} as any;
 
 function GridColumnHeaderFilterIconButton(props: ColumnHeaderFilterIconButtonProps) {
   const { counter, field, onClick } = props;
@@ -122,15 +111,5 @@ function GridColumnHeaderFilterIconButton(props: ColumnHeaderFilterIconButtonPro
     </rootProps.slots.baseTooltip>
   );
 }
-
-GridColumnHeaderFilterIconButton.propTypes = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // | To update them edit the TypeScript types and run "pnpm proptypes"  |
-  // ----------------------------------------------------------------------
-  counter: PropTypes.number,
-  field: PropTypes.string.isRequired,
-  onClick: PropTypes.func,
-} as any;
 
 export { GridColumnHeaderFilterIconButtonWrapped as GridColumnHeaderFilterIconButton };

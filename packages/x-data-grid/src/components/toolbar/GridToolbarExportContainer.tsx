@@ -1,6 +1,5 @@
 import { unstable_useForkRef as useForkRef, unstable_useId as useId } from '@mui/utils';
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import { gridClasses } from '../../constants/gridClasses';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
@@ -101,17 +100,5 @@ const GridToolbarExportContainer = forwardRef<
     </React.Fragment>
   );
 });
-
-GridToolbarExportContainer.propTypes = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // | To update them edit the TypeScript types and run "pnpm proptypes"  |
-  // ----------------------------------------------------------------------
-  /**
-   * The props used for each slot inside.
-   * @default {}
-   */
-  slotProps: PropTypes.object,
-} as any;
 
 export { GridToolbarExportContainer };

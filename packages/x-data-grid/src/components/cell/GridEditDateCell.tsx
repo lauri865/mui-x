@@ -2,7 +2,6 @@ import {
   unstable_composeClasses as composeClasses,
   unstable_useEnhancedEffect as useEnhancedEffect,
 } from '@mui/utils';
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import { getDataGridUtilityClass } from '../../constants/gridClasses';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
@@ -161,72 +160,6 @@ function GridEditDateCell(props: GridEditDateCellProps) {
     />
   );
 }
-
-GridEditDateCell.propTypes = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // | To update them edit the TypeScript types and run "pnpm proptypes"  |
-  // ----------------------------------------------------------------------
-  /**
-   * GridApi that let you manipulate the grid.
-   */
-  api: PropTypes.object.isRequired,
-  /**
-   * The mode of the cell.
-   */
-  cellMode: PropTypes.oneOf(['edit', 'view']).isRequired,
-  changeReason: PropTypes.oneOf(['debouncedSetEditCellValue', 'setEditCellValue']),
-  /**
-   * The column of the row that the current cell belongs to.
-   */
-  colDef: PropTypes.object.isRequired,
-  /**
-   * The column field of the cell that triggered the event.
-   */
-  field: PropTypes.string.isRequired,
-  /**
-   * The cell value formatted with the column valueFormatter.
-   */
-  formattedValue: PropTypes.any,
-  /**
-   * If true, the cell is the active element.
-   */
-  hasFocus: PropTypes.bool.isRequired,
-  /**
-   * The grid row id.
-   */
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  /**
-   * If true, the cell is editable.
-   */
-  isEditable: PropTypes.bool,
-  isProcessingProps: PropTypes.bool,
-  isValidating: PropTypes.bool,
-  /**
-   * Callback called when the value is changed by the user.
-   * @param {React.ChangeEvent<HTMLInputElement>} event The event source of the callback.
-   * @param {Date | null} newValue The value that is going to be passed to `apiRef.current.setEditCellValue`.
-   * @returns {Promise<void> | void} A promise to be awaited before calling `apiRef.current.setEditCellValue`
-   */
-  onValueChange: PropTypes.func,
-  /**
-   * The row model of the row that the current cell belongs to.
-   */
-  row: PropTypes.any.isRequired,
-  /**
-   * The node of the row that the current cell belongs to.
-   */
-  rowNode: PropTypes.object.isRequired,
-  /**
-   * the tabIndex value.
-   */
-  tabIndex: PropTypes.oneOf([-1, 0]).isRequired,
-  /**
-   * The cell value.
-   * If the column has `valueGetter`, use `params.row` to directly access the fields.
-   */
-  value: PropTypes.any,
-} as any;
 
 export { GridEditDateCell };
 

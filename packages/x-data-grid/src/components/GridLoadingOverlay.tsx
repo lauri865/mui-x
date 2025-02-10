@@ -1,5 +1,4 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import type { DataGridProcessedProps } from '../models/props/DataGridProps';
 import { useGridRootProps } from '../hooks/utils/useGridRootProps';
@@ -60,27 +59,5 @@ const GridLoadingOverlay = forwardRef<HTMLDivElement, GridLoadingOverlayProps>(
     );
   },
 );
-
-GridLoadingOverlay.propTypes = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // | To update them edit the TypeScript types and run "pnpm proptypes"  |
-  // ----------------------------------------------------------------------
-  /**
-   * The variant of the overlay when no rows are displayed.
-   * @default 'skeleton'
-   */
-  noRowsVariant: PropTypes.oneOf(['circular-progress', 'linear-progress', 'skeleton']),
-  sx: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.func, PropTypes.object, PropTypes.bool])),
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-  /**
-   * The variant of the overlay.
-   * @default 'linear-progress'
-   */
-  variant: PropTypes.oneOf(['circular-progress', 'linear-progress', 'skeleton']),
-} as any;
 
 export { GridLoadingOverlay };

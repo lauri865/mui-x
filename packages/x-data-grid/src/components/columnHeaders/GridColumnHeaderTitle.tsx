@@ -1,6 +1,5 @@
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import { useThemedComponent } from '../../context/GridThemeContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
@@ -52,15 +51,5 @@ function GridColumnHeaderTitle(props: GridColumnHeaderTitleProps) {
     </rootProps.slots.baseTooltip>
   );
 }
-
-GridColumnHeaderTitle.propTypes = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // | To update them edit the TypeScript types and run "pnpm proptypes"  |
-  // ----------------------------------------------------------------------
-  columnWidth: PropTypes.number.isRequired,
-  description: PropTypes.node,
-  label: PropTypes.string.isRequired,
-} as any;
 
 export { GridColumnHeaderTitle };

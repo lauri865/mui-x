@@ -1,6 +1,5 @@
 import { unstable_useForkRef as useForkRef, unstable_useId as useId } from '@mui/utils';
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import { gridClasses } from '../../constants/gridClasses';
 import { gridDensitySelector } from '../../hooks/features/density/densitySelector';
@@ -145,17 +144,5 @@ const GridToolbarDensitySelector = forwardRef<HTMLButtonElement, GridToolbarDens
     );
   },
 );
-
-GridToolbarDensitySelector.propTypes = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // | To update them edit the TypeScript types and run "pnpm proptypes"  |
-  // ----------------------------------------------------------------------
-  /**
-   * The props used for each slot inside.
-   * @default {}
-   */
-  slotProps: PropTypes.object,
-} as any;
 
 export { GridToolbarDensitySelector };

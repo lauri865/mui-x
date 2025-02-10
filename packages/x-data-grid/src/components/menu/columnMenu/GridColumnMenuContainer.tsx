@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import { useGridRootProps } from '../../../hooks/utils/useGridRootProps';
 import { isHideMenuKey } from '../../../utils/keyboardUtils';
@@ -44,17 +43,5 @@ function GridColumnMenuContainer(props: GridColumnMenuContainerProps) {
     </DropdownMenu.Root>
   );
 }
-
-GridColumnMenuContainer.propTypes = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // | To update them edit the TypeScript types and run "pnpm proptypes"  |
-  // ----------------------------------------------------------------------
-  colDef: PropTypes.object.isRequired,
-  hideMenu: PropTypes.func.isRequired,
-  id: PropTypes.string,
-  labelledby: PropTypes.string,
-  open: PropTypes.bool.isRequired,
-} as any;
 
 export { GridColumnMenuContainer };

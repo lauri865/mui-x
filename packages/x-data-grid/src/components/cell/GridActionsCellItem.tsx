@@ -1,5 +1,4 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import { GridSlotProps } from '../../models/gridSlotsComponentsProps';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
@@ -74,19 +73,5 @@ const GridActionsCellItem = forwardRef<HTMLElement, GridActionsCellItemProps>((p
     </rootProps.slots.baseMenuItem>
   );
 });
-
-GridActionsCellItem.propTypes = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // | To update them edit the TypeScript types and run "pnpm proptypes"  |
-  // ----------------------------------------------------------------------
-  /**
-   * from https://mui.com/material-ui/api/button-base/#ButtonBase-prop-component
-   */
-  component: PropTypes.elementType,
-  icon: PropTypes.element,
-  label: PropTypes.string.isRequired,
-  showInMenu: PropTypes.bool,
-} as any;
 
 export { GridActionsCellItem };

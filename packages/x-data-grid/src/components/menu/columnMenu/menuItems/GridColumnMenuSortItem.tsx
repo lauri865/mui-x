@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import { gridSortModelSelector } from '../../../../hooks/features/sorting/gridSortingSelector';
 import { useGridApiContext } from '../../../../hooks/utils/useGridApiContext';
@@ -73,14 +72,5 @@ function GridColumnMenuSortItem(props: GridColumnMenuItemProps) {
     </React.Fragment>
   );
 }
-
-GridColumnMenuSortItem.propTypes = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // | To update them edit the TypeScript types and run "pnpm proptypes"  |
-  // ----------------------------------------------------------------------
-  colDef: PropTypes.object.isRequired,
-  onClick: PropTypes.func.isRequired,
-} as any;
 
 export { GridColumnMenuSortItem };

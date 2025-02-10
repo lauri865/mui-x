@@ -1,7 +1,6 @@
 import { unstable_debounce as debounce } from '@mui/utils';
 import composeClasses from '@mui/utils/composeClasses';
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import { getDataGridUtilityClass } from '../../constants';
 import { gridQuickFilterValuesSelector } from '../../hooks/features/filter';
@@ -136,36 +135,6 @@ function GridToolbarQuickFilter(props: GridToolbarQuickFilterProps) {
     />
   );
 }
-
-GridToolbarQuickFilter.propTypes = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // | To update them edit the TypeScript types and run "pnpm proptypes"  |
-  // ----------------------------------------------------------------------
-  className: PropTypes.string,
-  /**
-   * The debounce time in milliseconds.
-   * @default 150
-   */
-  debounceMs: PropTypes.number,
-  /**
-   * Function responsible for formatting values of quick filter in a string when the model is modified
-   * @param {any[]} values The new values passed to the quick filter model
-   * @returns {string} The string to display in the text field
-   * @default (values: string[]) => values.join(' ')
-   */
-  quickFilterFormatter: PropTypes.func,
-  /**
-   * Function responsible for parsing text input in an array of independent values for quick filtering.
-   * @param {string} input The value entered by the user
-   * @returns {any[]} The array of value on which quick filter is applied
-   * @default (searchText: string) => searchText
-   *   .split(' ')
-   *   .filter((word) => word !== '')
-   */
-  quickFilterParser: PropTypes.func,
-  slotProps: PropTypes.object,
-} as any;
 
 /**
  * Demos:

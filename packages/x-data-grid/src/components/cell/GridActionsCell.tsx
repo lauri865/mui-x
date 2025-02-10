@@ -1,5 +1,4 @@
 import { unstable_useId as useId } from '@mui/utils';
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import { gridClasses } from '../../constants/gridClasses';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
@@ -225,86 +224,6 @@ function GridActionsCell(props: GridActionsCellProps) {
     </div>
   );
 }
-
-GridActionsCell.propTypes = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // | To update them edit the TypeScript types and run "pnpm proptypes"  |
-  // ----------------------------------------------------------------------
-  api: PropTypes.object,
-  /**
-   * The mode of the cell.
-   */
-  cellMode: PropTypes.oneOf(['edit', 'view']).isRequired,
-  /**
-   * The column of the row that the current cell belongs to.
-   */
-  colDef: PropTypes.object.isRequired,
-  /**
-   * The column field of the cell that triggered the event.
-   */
-  field: PropTypes.string.isRequired,
-  /**
-   * A ref allowing to set imperative focus.
-   * It can be passed to the element that should receive focus.
-   * @ignore - do not document.
-   */
-  focusElementRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({
-      current: PropTypes.shape({
-        focus: PropTypes.func.isRequired,
-      }),
-    }),
-  ]),
-  /**
-   * The cell value formatted with the column valueFormatter.
-   */
-  formattedValue: PropTypes.any,
-  /**
-   * If true, the cell is the active element.
-   */
-  hasFocus: PropTypes.bool.isRequired,
-  /**
-   * The grid row id.
-   */
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  /**
-   * If true, the cell is editable.
-   */
-  isEditable: PropTypes.bool,
-  position: PropTypes.oneOf([
-    'bottom-end',
-    'bottom-start',
-    'bottom',
-    'left-end',
-    'left-start',
-    'left',
-    'right-end',
-    'right-start',
-    'right',
-    'top-end',
-    'top-start',
-    'top',
-  ]),
-  /**
-   * The row model of the row that the current cell belongs to.
-   */
-  row: PropTypes.any.isRequired,
-  /**
-   * The node of the row that the current cell belongs to.
-   */
-  rowNode: PropTypes.object.isRequired,
-  /**
-   * the tabIndex value.
-   */
-  tabIndex: PropTypes.oneOf([-1, 0]).isRequired,
-  /**
-   * The cell value.
-   * If the column has `valueGetter`, use `params.row` to directly access the fields.
-   */
-  value: PropTypes.any,
-} as any;
 
 export { GridActionsCell };
 
