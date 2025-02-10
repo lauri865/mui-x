@@ -1,9 +1,9 @@
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import * as React from 'react';
+import { useGridRootProps } from '../../../hooks/utils/useGridRootProps';
 import { isHideMenuKey } from '../../../utils/keyboardUtils';
 import { GridColumnMenuContainerProps } from './GridColumnMenuProps';
-import { useGridRootProps } from '../../../hooks/utils/useGridRootProps';
 
 function GridColumnMenuContainer(props: GridColumnMenuContainerProps) {
   const { hideMenu, colDef, id, labelledby, className, children, open, ...other } = props;

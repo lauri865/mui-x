@@ -1,16 +1,15 @@
-import { createMDXSource } from 'fumadocs-mdx';
+import { blog as blogPosts, docs } from '@/.source';
 import type { InferMetaType, InferPageType } from 'fumadocs-core/source';
 import { loader } from 'fumadocs-core/source';
-import { icons } from 'lucide-react';
+import { createMDXSource } from 'fumadocs-mdx';
 import { attachFile, createOpenAPI } from 'fumadocs-openapi/server';
+import { icons } from 'lucide-react';
 import { createElement } from 'react';
-import { docs, blog as blogPosts } from '@/.source';
 
 export const source = loader({
   baseUrl: '/docs',
   icon(icon) {
-    if (icon && icon in icons)
-      return createElement(icons[icon as keyof typeof icons]);
+    if (icon && icon in icons) return createElement(icons[icon as keyof typeof icons]);
   },
   source: docs.toFumadocsSource(),
   pageTree: {

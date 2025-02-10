@@ -1,18 +1,18 @@
 import { RefObject } from '@mui/x-internals/types';
+import type {
+  GridApiCommunity,
+  GridPrivateApiCommunity,
+} from '../../../models/api/gridApiCommunity';
+import type { GridGroupNode, GridRowId, GridRowTreeConfig } from '../../../models/gridRows';
+import type { GridRowSelectionPropagation } from '../../../models/gridRowSelectionModel';
+import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
+import { createSelector } from '../../../utils/createSelector';
 import { GridSignature } from '../../utils/useGridApiEventHandler';
-import { GRID_ROOT_GROUP_ID } from '../rows/gridRowsUtils';
 import { gridFilteredRowsLookupSelector } from '../filter/gridFilterSelector';
+import { gridRowTreeSelector } from '../rows/gridRowsSelector';
+import { GRID_ROOT_GROUP_ID } from '../rows/gridRowsUtils';
 import { gridSortedRowIdsSelector } from '../sorting/gridSortingSelector';
 import { selectedIdsLookupSelector } from './gridRowSelectionSelector';
-import { gridRowTreeSelector } from '../rows/gridRowsSelector';
-import { createSelector } from '../../../utils/createSelector';
-import type { GridGroupNode, GridRowId, GridRowTreeConfig } from '../../../models/gridRows';
-import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
-import type {
-  GridPrivateApiCommunity,
-  GridApiCommunity,
-} from '../../../models/api/gridApiCommunity';
-import type { GridRowSelectionPropagation } from '../../../models/gridRowSelectionModel';
 
 export const ROW_SELECTION_PROPAGATION_DEFAULT: GridRowSelectionPropagation = {
   parents: true,

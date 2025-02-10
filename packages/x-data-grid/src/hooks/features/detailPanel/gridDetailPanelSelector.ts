@@ -1,6 +1,6 @@
-import { createSelector } from '../../../utils/createSelector';
-import { GridStateCommunity } from '../../../models/gridStateCommunity';
 import { GridRowId } from '../../../models/gridRows';
+import { GridStateCommunity } from '../../../models/gridStateCommunity';
+import { createSelector } from '../../../utils/createSelector';
 
 export const gridDetailPanelExpandedRowIdsSelector = (state: GridStateCommunity) =>
   state.detailPanel.expandedRowIds;

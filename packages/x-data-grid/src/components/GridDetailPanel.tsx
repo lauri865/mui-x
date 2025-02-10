@@ -1,14 +1,11 @@
 import { fastMemo } from '@mui/x-internals/fastMemo';
-import { gridDetailPanelIsExpandedForRowIdSelector } from '../hooks/features/detailPanel/gridDetailPanelSelector';
-import { useGridApiContext } from '../hooks/utils/useGridApiContext';
-import { useGridRootProps } from '../hooks/utils/useGridRootProps';
-import { useGridSelector } from '../hooks/utils/useGridSelector';
-import { GridRowId } from '../models';
-import { useThemedComponent } from '../context/GridThemeContext';
 import clsx from 'clsx';
 import * as React from 'react';
-import { useGridPrivateApiContext } from '../hooks/utils/useGridPrivateApiContext';
+import { useThemedComponent } from '../context/GridThemeContext';
 import { gridDimensionsSelector } from '../hooks';
+import { useGridPrivateApiContext } from '../hooks/utils/useGridPrivateApiContext';
+import { useGridRootProps } from '../hooks/utils/useGridRootProps';
+import { GridRowId } from '../models';
 
 export interface GridDetailPanelsProps {
   rowId: GridRowId;

@@ -1,25 +1,25 @@
-import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
 import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
-import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
-import { GridPaginationModelApi, GridPaginationState } from './gridPaginationInterfaces';
 import { GridEventListener } from '../../../models/events';
 import { GridPaginationModel } from '../../../models/gridPaginationProps';
-import { gridDensityFactorSelector } from '../density';
+import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
+import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
 import {
+  useGridApiEventHandler,
+  useGridApiMethod,
   useGridLogger,
   useGridSelector,
-  useGridApiMethod,
-  useGridApiEventHandler,
 } from '../../utils';
-import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
+import { gridDensityFactorSelector } from '../density';
+import { GridPaginationModelApi, GridPaginationState } from './gridPaginationInterfaces';
 import { gridPageCountSelector, gridPaginationModelSelector } from './gridPaginationSelector';
 import {
-  getPageCount,
   defaultPageSize,
-  throwIfPageSizeExceedsTheLimit,
   getDefaultGridPaginationModel,
+  getPageCount,
   getValidPage,
+  throwIfPageSizeExceedsTheLimit,
 } from './gridPaginationUtils';
 
 export const getDerivedPaginationModel = (

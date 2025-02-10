@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
+import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 
 export interface GridMenuProps {
   open: boolean;

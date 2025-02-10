@@ -1,14 +1,14 @@
 'use client';
+import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Card } from 'fumadocs-ui/components/card';
+import { Heading } from 'fumadocs-ui/components/heading';
+import { RootToggle } from 'fumadocs-ui/components/layout/root-toggle';
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+import { TypeTable } from 'fumadocs-ui/components/type-table';
 import { Home } from 'lucide-react';
 import dynamic from 'next/dynamic';
-import { Heading } from 'fumadocs-ui/components/heading';
-import { Card } from 'fumadocs-ui/components/card';
-import { Callout } from 'fumadocs-ui/components/callout';
-import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
-import { RootToggle } from 'fumadocs-ui/components/layout/root-toggle';
-import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
-import { Step, Steps } from 'fumadocs-ui/components/steps';
-import { TypeTable } from 'fumadocs-ui/components/type-table';
 import { type ReactNode } from 'react';
 import { Wrapper } from './wrapper';
 
@@ -46,11 +46,7 @@ export function tabs(): ReactNode {
   return (
     <Wrapper>
       <div className="space-y-4 rounded-xl bg-fd-background p-4 text-sm">
-        <Tabs
-          groupId="language"
-          persist
-          items={['Javascript', 'Rust', 'Typescript']}
-        >
+        <Tabs groupId="language" persist items={['Javascript', 'Rust', 'Typescript']}>
           <Tab value="Javascript">Hello World in Javascript</Tab>
           <Tab value="Rust">Hello World in Rust</Tab>
           <Tab value="Typescript">Also works if items are not the same</Tab>
@@ -60,9 +56,7 @@ export function tabs(): ReactNode {
           <Tab value="Javascript">
             Value is shared! Try refresh and see if the value is persisted
           </Tab>
-          <Tab value="Rust">
-            Value is shared! Try refresh and see if the value is persisted
-          </Tab>
+          <Tab value="Rust">Value is shared! Try refresh and see if the value is persisted</Tab>
         </Tabs>
       </div>
     </Wrapper>
@@ -76,8 +70,7 @@ export function typeTable(): ReactNode {
         <TypeTable
           type={{
             percentage: {
-              description:
-                'The percentage of scroll position to display the roll button',
+              description: 'The percentage of scroll position to display the roll button',
               type: 'number',
               default: '0.2',
             },

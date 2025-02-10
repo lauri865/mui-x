@@ -1,22 +1,22 @@
-import * as React from 'react';
-import { RefObject } from '@mui/x-internals/types';
+import { styled } from '@mui/system';
+import useEventCallback from '@mui/utils/useEventCallback';
 import {
-  useGridSelector,
-  useGridApiOptionHandler,
   gridVisibleColumnDefinitionsSelector,
   useGridApiMethod,
+  useGridApiOptionHandler,
+  useGridSelector,
 } from '@mui/x-data-grid';
 import {
-  useGridVisibleRows,
-  GridInfiniteLoaderPrivateApi,
-  useTimeout,
   gridHorizontalScrollbarHeightSelector,
+  GridInfiniteLoaderPrivateApi,
+  useGridVisibleRows,
+  useTimeout,
 } from '@mui/x-data-grid/internals';
-import useEventCallback from '@mui/utils/useEventCallback';
-import { styled } from '@mui/system';
+import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
 import { GridRowScrollEndParams } from '../../../models';
-import { GridPrivateApiPro } from '../../../models/gridApiPro';
 import { DataGridProProcessedProps } from '../../../models/dataGridProProps';
+import { GridPrivateApiPro } from '../../../models/gridApiPro';
 
 const InfiniteLoadingTriggerElement = styled('div')({
   position: 'sticky',

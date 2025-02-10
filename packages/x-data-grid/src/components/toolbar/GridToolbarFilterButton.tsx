@@ -1,23 +1,23 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
 import {
-  unstable_composeClasses as composeClasses,
   unstable_capitalize as capitalize,
+  unstable_composeClasses as composeClasses,
   unstable_useId as useId,
 } from '@mui/utils';
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import { BadgeProps } from '../../models/gridBaseSlots';
+import PropTypes from 'prop-types';
+import * as React from 'react';
+import { getDataGridUtilityClass } from '../../constants/gridClasses';
 import { gridColumnLookupSelector } from '../../hooks/features/columns/gridColumnsSelector';
-import { useGridSelector } from '../../hooks/utils/useGridSelector';
 import { gridFilterActiveItemsSelector } from '../../hooks/features/filter/gridFilterSelector';
 import { gridPreferencePanelStateSelector } from '../../hooks/features/preferencesPanel/gridPreferencePanelSelector';
 import { GridPreferencePanelsValue } from '../../hooks/features/preferencesPanel/gridPreferencePanelsValue';
-import { GridTranslationKeys } from '../../models/api/gridLocaleTextApi';
-import { GridFilterItem } from '../../models/gridFilterItem';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import { useGridSelector } from '../../hooks/utils/useGridSelector';
+import { GridTranslationKeys } from '../../models/api/gridLocaleTextApi';
+import { BadgeProps } from '../../models/gridBaseSlots';
+import { GridFilterItem } from '../../models/gridFilterItem';
 import type { DataGridProcessedProps } from '../../models/props/DataGridProps';
-import { getDataGridUtilityClass } from '../../constants/gridClasses';
 
 type OwnerState = DataGridProcessedProps;
 

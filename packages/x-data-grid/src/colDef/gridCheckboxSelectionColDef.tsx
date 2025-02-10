@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { GridCellCheckboxRenderer } from '../components/columnSelection/GridCellCheckboxRenderer';
 import { GridHeaderCheckbox } from '../components/columnSelection/GridHeaderCheckbox';
 import { selectedIdsLookupSelector } from '../hooks/features/rowSelection/gridRowSelectionSelector';

@@ -1,17 +1,11 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import {
-  unstable_composeClasses as composeClasses,
-  unstable_capitalize as capitalize,
-} from '@mui/utils';
 import clsx from 'clsx';
-import { getDataGridUtilityClass } from '../../constants/gridClasses';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-import { DataGridProcessedProps } from '../../models/props/DataGridProps';
-import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
-import { gridDimensionsSelector } from '../../hooks/features/dimensions/gridDimensionsSelectors';
-import { useThemedComponent } from '../../context/GridThemeContext';
+import PropTypes from 'prop-types';
+import * as React from 'react';
 import { createPortal } from 'react-dom';
+import { useThemedComponent } from '../../context/GridThemeContext';
+import { gridDimensionsSelector } from '../../hooks/features/dimensions/gridDimensionsSelectors';
+import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
+import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 
 enum GridColumnHeaderSeparatorSides {
   Left = 'left',

@@ -1,5 +1,5 @@
-import { type ReactNode } from 'react';
 import { InlineTOC } from 'fumadocs-ui/components/inline-toc';
+import { type ReactNode } from 'react';
 
 export default function Preview(): ReactNode {
   return (

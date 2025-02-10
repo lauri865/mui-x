@@ -1,35 +1,35 @@
-import * as React from 'react';
-import { RefObject } from '@mui/x-internals/types';
 import {
-  createRenderer,
-  screen,
   ErrorBoundary,
-  waitFor,
+  createRenderer,
   reactMajor,
+  screen,
+  waitFor,
 } from '@mui/internal-test-utils';
-import { stub, spy } from 'sinon';
-import { expect } from 'chai';
 import {
   DataGrid,
-  GridToolbar,
   DataGridProps,
+  GridApi,
   GridColDef,
+  GridToolbar,
   gridClasses,
   useGridApiRef,
-  GridApi,
 } from '@mui/x-data-grid';
 import { useBasicDemoData } from '@mui/x-data-grid-generator';
+import { RefObject } from '@mui/x-internals/types';
+import { expect } from 'chai';
+import * as React from 'react';
+import { spy, stub } from 'sinon';
 import {
   $,
-  grid,
-  gridVar,
+  getCell,
   getColumnHeaderCell,
   getColumnValues,
-  getCell,
   getRow,
+  grid,
+  gridVar,
   sleep,
 } from 'test/utils/helperFn';
-import { describeSkipIf, testSkipIf, isJSDOM, isOSX } from 'test/utils/skipIf';
+import { describeSkipIf, isJSDOM, isOSX, testSkipIf } from 'test/utils/skipIf';
 
 const getVariable = (name: string) => $('.MuiDataGrid-root')!.style.getPropertyValue(name);
 

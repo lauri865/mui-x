@@ -1,12 +1,12 @@
-import { createSelector, createSelectorMemoized } from '../../../utils/createSelector';
 import { GridStateCommunity } from '../../../models/gridStateCommunity';
+import { createSelector, createSelectorMemoized } from '../../../utils/createSelector';
+import { roundToDecimalPlaces } from '../../../utils/roundToDecimalPlaces';
+import { gridIsRtlSelector } from '../../core/gridCoreSelector';
 import {
+  EMPTY_PINNED_COLUMN_FIELDS,
   GridColumnLookup,
   GridPinnedColumnFields,
-  EMPTY_PINNED_COLUMN_FIELDS,
 } from './gridColumnsInterfaces';
-import { gridIsRtlSelector } from '../../core/gridCoreSelector';
-import { roundToDecimalPlaces } from '../../../utils/roundToDecimalPlaces';
 
 /**
  * Get the columns state

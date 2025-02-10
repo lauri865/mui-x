@@ -1,35 +1,38 @@
+import { CodeBlock } from '@/components/code-block';
+import ContributorCounter from '@/components/contributor-count';
+import { HeroDataGrid } from '@/components/home/HeroDatagrid';
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/cn';
+import SourceImage from '@/public/source.png';
 import { cva } from 'class-variance-authority';
-import { Heart, type LucideIcon, MousePointer, Terminal } from 'lucide-react';
+import { File, Files, Folder } from 'fumadocs-ui/components/files';
+import { TypeTable } from 'fumadocs-ui/components/type-table';
 import {
   BatteryChargingIcon,
   CpuIcon,
   FileEditIcon,
   FileTextIcon,
+  Heart,
   KeyboardIcon,
   LayoutIcon,
   LibraryIcon,
+  type LucideIcon,
+  MousePointer,
   PaperclipIcon,
   PersonStandingIcon,
   RocketIcon,
   SearchIcon,
+  Terminal,
   TimerIcon,
 } from 'lucide-react';
-import { File, Files, Folder } from 'fumadocs-ui/components/files';
+import Image from 'next/image';
 import Link from 'next/link';
 import type { HTMLAttributes, ReactNode } from 'react';
-import Image from 'next/image';
-import { cn } from '@/lib/cn';
-import { buttonVariants } from '@/components/ui/button';
-import { CodeBlock } from '@/components/code-block';
-import SourceImage from '@/public/source.png';
-import ContributorCounter from '@/components/contributor-count';
-import { CreateAppAnimation, WhyInteractive } from './page.client';
-import { VercelLogo, NetlifyLogo, NextSVG, OpenAPIIcon, EarthIcon } from './icons';
-import Img from './img.png';
-import ArchImg from './arch.png';
-import { TypeTable } from 'fumadocs-ui/components/type-table';
 import { BackgroundBeams } from '../../components/home/background-beams';
-import { HeroDataGrid } from '@/components/home/HeroDatagrid';
+import ArchImg from './arch.png';
+import { EarthIcon, NetlifyLogo, NextSVG, OpenAPIIcon, VercelLogo } from './icons';
+import Img from './img.png';
+import { CreateAppAnimation, WhyInteractive } from './page.client';
 
 const badgeVariants = cva(
   'inline-flex size-7 items-center justify-center rounded-full bg-fd-primary font-medium text-fd-primary-foreground',

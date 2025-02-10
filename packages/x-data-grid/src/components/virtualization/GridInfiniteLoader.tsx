@@ -1,16 +1,16 @@
 'use client';
 
-import * as React from 'react';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-import { GridRowId } from '../../models/gridRows';
-import { gridDimensionsSelector } from '../../hooks/features/dimensions';
-import { gridVisibleColumnDefinitionsSelector } from '../../hooks/features/columns';
-import { useGridPrivateApiContext } from '../../hooks/utils/useGridPrivateApiContext';
-import { getVisibleRows } from '../../hooks/utils/useGridVisibleRows';
-import { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { unstable_useEventCallback } from '@mui/utils';
-import { GridSkeletonLoadingOverlay, SkeletonRow } from '../GridSkeletonLoadingOverlay';
+import * as React from 'react';
 import { flushSync } from 'react-dom';
+import { gridVisibleColumnDefinitionsSelector } from '../../hooks/features/columns';
+import { gridDimensionsSelector } from '../../hooks/features/dimensions';
+import { useGridPrivateApiContext } from '../../hooks/utils/useGridPrivateApiContext';
+import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import { getVisibleRows } from '../../hooks/utils/useGridVisibleRows';
+import { GridRowId } from '../../models/gridRows';
+import { DataGridProcessedProps } from '../../models/props/DataGridProps';
+import { GridSkeletonLoadingOverlay, SkeletonRow } from '../GridSkeletonLoadingOverlay';
 
 export type InfiniteLoaderPayload = {
   viewportPageSize: number;

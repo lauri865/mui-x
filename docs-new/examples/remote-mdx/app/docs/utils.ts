@@ -1,6 +1,6 @@
+import FastGlob from 'fast-glob';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
-import FastGlob from 'fast-glob';
 
 export interface Frontmatter {
   title: string;

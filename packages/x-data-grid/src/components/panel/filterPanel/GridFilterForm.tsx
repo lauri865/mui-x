@@ -1,28 +1,28 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
 import {
+  unstable_capitalize as capitalize,
   unstable_composeClasses as composeClasses,
   unstable_useId as useId,
-  unstable_capitalize as capitalize,
 } from '@mui/utils';
-import clsx from 'clsx';
 import { forwardRef } from '@mui/x-internals/forwardRef';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import * as React from 'react';
+import { getDataGridUtilityClass } from '../../../constants/gridClasses';
 import {
-  gridFilterableColumnDefinitionsSelector,
   gridColumnLookupSelector,
+  gridFilterableColumnDefinitionsSelector,
 } from '../../../hooks/features/columns/gridColumnsSelector';
 import { gridFilterModelSelector } from '../../../hooks/features/filter/gridFilterSelector';
-import { useGridSelector } from '../../../hooks/utils/useGridSelector';
-import { GridFilterItem, GridLogicOperator } from '../../../models/gridFilterItem';
 import { useGridApiContext } from '../../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../../hooks/utils/useGridRootProps';
-import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
-import { getDataGridUtilityClass } from '../../../constants/gridClasses';
+import { useGridSelector } from '../../../hooks/utils/useGridSelector';
 import {
   GridColDef,
   GridSingleSelectColDef,
   GridStateColDef,
 } from '../../../models/colDef/gridColDef';
+import { GridFilterItem, GridLogicOperator } from '../../../models/gridFilterItem';
+import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { getValueFromValueOptions, getValueOptions } from './filterPanelUtils';
 
 export interface FilterColumnsArgs {

@@ -1,9 +1,7 @@
-import type { HTMLAttributes } from 'react';
 import { cn } from '@/lib/cn';
+import type { HTMLAttributes } from 'react';
 
-export function Wrapper(
-  props: HTMLAttributes<HTMLDivElement>,
-): React.ReactElement {
+export function Wrapper(props: HTMLAttributes<HTMLDivElement>): React.ReactElement {
   return (
     <div
       {...props}

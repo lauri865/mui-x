@@ -1,79 +1,79 @@
 import { RefObject } from '@mui/x-internals/types';
-import { DataGridProcessedProps } from '../models/props/DataGridProps';
-import { GridApiCommunity, GridPrivateApiCommunity } from '../models/api/gridApiCommunity';
 import { useGridInitialization } from '../hooks/core/useGridInitialization';
-import { useGridInitializeState } from '../hooks/utils/useGridInitializeState';
 import { useGridClipboard } from '../hooks/features/clipboard/useGridClipboard';
+import {
+  columnGroupsStateInitializer,
+  useGridColumnGrouping,
+} from '../hooks/features/columnGrouping/useGridColumnGrouping';
 import {
   columnMenuStateInitializer,
   useGridColumnMenu,
 } from '../hooks/features/columnMenu/useGridColumnMenu';
-import { useGridColumns, columnsStateInitializer } from '../hooks/features/columns/useGridColumns';
-import { densityStateInitializer, useGridDensity } from '../hooks/features/density/useGridDensity';
-import { useGridCsvExport } from '../hooks/features/export/useGridCsvExport';
-import { useGridPrintExport } from '../hooks/features/export/useGridPrintExport';
-import { useGridFilter, filterStateInitializer } from '../hooks/features/filter/useGridFilter';
-import { focusStateInitializer, useGridFocus } from '../hooks/features/focus/useGridFocus';
-import { useGridKeyboardNavigation } from '../hooks/features/keyboardNavigation/useGridKeyboardNavigation';
 import {
-  useGridPagination,
-  paginationStateInitializer,
-} from '../hooks/features/pagination/useGridPagination';
-import {
-  useGridPreferencesPanel,
-  preferencePanelStateInitializer,
-} from '../hooks/features/preferencesPanel/useGridPreferencesPanel';
-import { useGridEditing, editingStateInitializer } from '../hooks/features/editing/useGridEditing';
-import { useGridRows, rowsStateInitializer } from '../hooks/features/rows/useGridRows';
-import { useGridRowsPreProcessors } from '../hooks/features/rows/useGridRowsPreProcessors';
-import { useGridParamsApi } from '../hooks/features/rows/useGridParamsApi';
-import {
-  rowSelectionStateInitializer,
-  useGridRowSelection,
-} from '../hooks/features/rowSelection/useGridRowSelection';
-import { useGridRowSelectionPreProcessors } from '../hooks/features/rowSelection/useGridRowSelectionPreProcessors';
-import { useGridSorting, sortingStateInitializer } from '../hooks/features/sorting/useGridSorting';
-import { useGridScroll } from '../hooks/features/scroll/useGridScroll';
-import { useGridEvents } from '../hooks/features/events/useGridEvents';
-import {
-  dimensionsStateInitializer,
-  useGridDimensions,
-} from '../hooks/features/dimensions/useGridDimensions';
-import { rowsMetaStateInitializer, useGridRowsMeta } from '../hooks/features/rows/useGridRowsMeta';
-import { useGridStatePersistence } from '../hooks/features/statePersistence/useGridStatePersistence';
-import { useGridColumnSpanning } from '../hooks/features/columns/useGridColumnSpanning';
-import {
-  useGridColumnGrouping,
-  columnGroupsStateInitializer,
-} from '../hooks/features/columnGrouping/useGridColumnGrouping';
-import {
-  useGridVirtualization,
-  virtualizationStateInitializer,
-} from '../hooks/features/virtualization';
+  columnPinningStateInitializer,
+  useGridColumnPinning,
+} from '../hooks/features/columnPinning/useGridColumnPinning';
 import {
   columnResizeStateInitializer,
   useGridColumnResize,
 } from '../hooks/features/columnResize/useGridColumnResize';
+import { columnsStateInitializer, useGridColumns } from '../hooks/features/columns/useGridColumns';
+import { useGridColumnSpanning } from '../hooks/features/columns/useGridColumnSpanning';
+import { densityStateInitializer, useGridDensity } from '../hooks/features/density/useGridDensity';
 import {
-  rowSpanningStateInitializer,
-  useGridRowSpanning,
-} from '../hooks/features/rows/useGridRowSpanning';
+  detailPanelStateInitializer,
+  useGridDetailPanel,
+} from '../hooks/features/detailPanel/useGridDetailPanel';
+import {
+  dimensionsStateInitializer,
+  useGridDimensions,
+} from '../hooks/features/dimensions/useGridDimensions';
+import { editingStateInitializer, useGridEditing } from '../hooks/features/editing/useGridEditing';
+import { useGridEvents } from '../hooks/features/events/useGridEvents';
+import { useGridCsvExport } from '../hooks/features/export/useGridCsvExport';
+import { useGridPrintExport } from '../hooks/features/export/useGridPrintExport';
+import { filterStateInitializer, useGridFilter } from '../hooks/features/filter/useGridFilter';
+import { focusStateInitializer, useGridFocus } from '../hooks/features/focus/useGridFocus';
+import { useGridKeyboardNavigation } from '../hooks/features/keyboardNavigation/useGridKeyboardNavigation';
 import {
   listViewStateInitializer,
   useGridListView,
 } from '../hooks/features/listView/useGridListView';
 import {
-  useGridColumnPinning,
-  columnPinningStateInitializer,
-} from '../hooks/features/columnPinning/useGridColumnPinning';
+  paginationStateInitializer,
+  useGridPagination,
+} from '../hooks/features/pagination/useGridPagination';
 import {
-  useGridRowPinning,
+  preferencePanelStateInitializer,
+  useGridPreferencesPanel,
+} from '../hooks/features/preferencesPanel/useGridPreferencesPanel';
+import {
   rowPinningStateInitializer,
+  useGridRowPinning,
 } from '../hooks/features/rowPinning/useGridRowPinning';
+import { useGridParamsApi } from '../hooks/features/rows/useGridParamsApi';
+import { rowsStateInitializer, useGridRows } from '../hooks/features/rows/useGridRows';
+import { rowsMetaStateInitializer, useGridRowsMeta } from '../hooks/features/rows/useGridRowsMeta';
 import {
-  detailPanelStateInitializer,
-  useGridDetailPanel,
-} from '../hooks/features/detailPanel/useGridDetailPanel';
+  rowSpanningStateInitializer,
+  useGridRowSpanning,
+} from '../hooks/features/rows/useGridRowSpanning';
+import { useGridRowsPreProcessors } from '../hooks/features/rows/useGridRowsPreProcessors';
+import {
+  rowSelectionStateInitializer,
+  useGridRowSelection,
+} from '../hooks/features/rowSelection/useGridRowSelection';
+import { useGridRowSelectionPreProcessors } from '../hooks/features/rowSelection/useGridRowSelectionPreProcessors';
+import { useGridScroll } from '../hooks/features/scroll/useGridScroll';
+import { sortingStateInitializer, useGridSorting } from '../hooks/features/sorting/useGridSorting';
+import { useGridStatePersistence } from '../hooks/features/statePersistence/useGridStatePersistence';
+import {
+  useGridVirtualization,
+  virtualizationStateInitializer,
+} from '../hooks/features/virtualization';
+import { useGridInitializeState } from '../hooks/utils/useGridInitializeState';
+import { GridApiCommunity, GridPrivateApiCommunity } from '../models/api/gridApiCommunity';
+import { DataGridProcessedProps } from '../models/props/DataGridProps';
 
 export const useDataGridComponent = (
   inputApiRef: RefObject<GridApiCommunity | null> | undefined,

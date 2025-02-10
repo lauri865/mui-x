@@ -1,2 +1,2 @@
-export * from './rowPinningInterfaces';
 export * from './gridRowPinningSelector';
+export * from './rowPinningInterfaces';

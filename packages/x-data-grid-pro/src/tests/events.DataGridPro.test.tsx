@@ -1,24 +1,24 @@
-import * as React from 'react';
-import { RefObject } from '@mui/x-internals/types';
-import { createRenderer, fireEvent, screen, act } from '@mui/internal-test-utils';
-import { expect } from 'chai';
+import { act, createRenderer, fireEvent, screen } from '@mui/internal-test-utils';
 import {
   DataGridPro,
-  GridColumnHeaderParams,
-  useGridApiRef,
   DataGridProProps,
-  GridRowParams,
-  GridCellParams,
-  GridRowsProp,
-  GridColDef,
-  gridClasses,
   GridActionsCellItem,
   GridApi,
+  GridCellParams,
+  GridColDef,
+  GridColumnHeaderParams,
   GridEventListener,
+  GridRowParams,
+  GridRowsProp,
+  gridClasses,
+  useGridApiRef,
 } from '@mui/x-data-grid-pro';
-import { getCell, getColumnHeaderCell } from 'test/utils/helperFn';
+import { RefObject } from '@mui/x-internals/types';
+import { expect } from 'chai';
+import * as React from 'react';
 import { spy } from 'sinon';
-import { testSkipIf, isJSDOM } from 'test/utils/skipIf';
+import { getCell, getColumnHeaderCell } from 'test/utils/helperFn';
+import { isJSDOM, testSkipIf } from 'test/utils/skipIf';
 
 describe('<DataGridPro /> - Events params', () => {
   const { render, clock } = createRenderer();

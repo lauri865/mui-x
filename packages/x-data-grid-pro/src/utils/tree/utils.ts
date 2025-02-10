@@ -10,12 +10,12 @@ import {
   GridTreeNode,
 } from '@mui/x-data-grid';
 import {
-  GridTreeDepths,
   GridRowTreeUpdateGroupAction,
   GridRowTreeUpdatedGroupsManager,
+  GridTreeDepths,
 } from '@mui/x-data-grid/internals';
-import { RowTreeBuilderGroupingCriterion } from './models';
 import { DataGridProProps } from '../../models/dataGridProProps';
+import { RowTreeBuilderGroupingCriterion } from './models';
 
 export const getGroupRowIdFromPath = (path: RowTreeBuilderGroupingCriterion[]) => {
   const pathStr = path

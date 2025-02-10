@@ -1,9 +1,9 @@
-import * as React from 'react';
 import { forwardRef } from '@mui/x-internals/forwardRef';
+import * as React from 'react';
 import { useThemedComponent } from '../../context/GridThemeContext';
-import { DataGridProcessedProps } from '../../models/props/DataGridProps';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { useGridConfiguration } from '../../hooks/utils/useGridConfiguration';
+import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { GridLoadingOverlayVariant } from '../GridLoadingOverlay';
 
 type OwnerState = Pick<DataGridProcessedProps, 'classes'> & {

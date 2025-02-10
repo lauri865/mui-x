@@ -1,11 +1,9 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import { unstable_generateUtilityClasses as generateUtilityClasses } from '@mui/utils';
 import { forwardRef } from '@mui/x-internals/forwardRef';
+import * as React from 'react';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
-import type { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import type { DataGridProcessedProps } from '../../models/props/DataGridProps';
 
 type OwnerState = DataGridProcessedProps;
 

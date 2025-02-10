@@ -1,21 +1,21 @@
-import * as React from 'react';
-import { RefObject } from '@mui/x-internals/types';
-import { spy, stub, SinonStub, SinonSpy } from 'sinon';
-import { expect } from 'chai';
 import { createRenderer, fireEvent, reactMajor, screen, waitFor } from '@mui/internal-test-utils';
 import {
   DataGrid,
   DataGridProps,
+  GridApi,
   gridClasses,
   GridLogicOperator,
   GridRowsProp,
-  GridApi,
   useGridApiRef,
 } from '@mui/x-data-grid';
 import { useBasicDemoData } from '@mui/x-data-grid-generator';
-import { getCell, getColumnValues, getRows } from 'test/utils/helperFn';
+import { RefObject } from '@mui/x-internals/types';
+import { expect } from 'chai';
+import * as React from 'react';
+import { SinonSpy, SinonStub, spy, stub } from 'sinon';
 import { fireUserEvent } from 'test/utils/fireUserEvent';
-import { isJSDOM, describeSkipIf } from 'test/utils/skipIf';
+import { getCell, getColumnValues, getRows } from 'test/utils/helperFn';
+import { describeSkipIf, isJSDOM } from 'test/utils/skipIf';
 
 describe('<DataGrid /> - Pagination', () => {
   const { render } = createRenderer();

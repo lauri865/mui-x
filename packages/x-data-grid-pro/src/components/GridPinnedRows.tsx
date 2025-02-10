@@ -1,12 +1,12 @@
-import * as React from 'react';
-import clsx from 'clsx';
 import { gridClasses, useGridSelector } from '@mui/x-data-grid';
+import { useThemedComponent } from '@mui/x-data-grid/context/GridThemeContext';
 import {
   GridPinnedRowsProps,
   gridPinnedRowsSelector,
   useGridPrivateApiContext,
 } from '@mui/x-data-grid/internals';
-import { useThemedComponent } from '@mui/x-data-grid/context/GridThemeContext';
+import clsx from 'clsx';
+import * as React from 'react';
 
 export function GridPinnedRows({ position, virtualScroller }: GridPinnedRowsProps) {
   const classes = useThemedComponent('pinnedRows');

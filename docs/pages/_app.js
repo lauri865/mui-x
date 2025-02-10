@@ -1,27 +1,27 @@
 import 'docs/src/modules/components/bootstrap';
 // --- Post bootstrap -----
-import pages from 'docsx/data/pages'; // DO NOT REMOVE
-import { postProcessImport } from 'docsx/src/modules/utils/postProcessImport';
-import * as React from 'react';
-import { loadCSS } from 'fg-loadcss/src/loadCSS';
-import NextHead from 'next/head';
-import PropTypes from 'prop-types';
-import { useRouter } from 'next/router';
-import { LicenseInfo } from '@mui/x-license';
-import { ponyfillGlobal } from '@mui/utils';
-import PageContext from 'docs/src/modules/components/PageContext';
-import GoogleAnalytics from 'docs/src/modules/components/GoogleAnalytics';
 import { CodeCopyProvider } from '@mui/docs/CodeCopy';
-import { ThemeProvider } from 'docs/src/modules/components/ThemeContext';
-import { CodeVariantProvider } from 'docs/src/modules/utils/codeVariant';
-import { CodeStylingProvider } from 'docs/src/modules/utils/codeStylingSolution';
-import DocsStyledEngineProvider from 'docs/src/modules/utils/StyledEngineProvider';
-import createEmotionCache from 'docs/src/createEmotionCache';
-import findActivePage from 'docs/src/modules/utils/findActivePage';
-import { pathnameToLanguage } from 'docs/src/modules/utils/helpers';
-import getProductInfoFromUrl from 'docs/src/modules/utils/getProductInfoFromUrl';
 import { DocsProvider } from '@mui/docs/DocsProvider';
 import { mapTranslations } from '@mui/docs/i18n';
+import { ponyfillGlobal } from '@mui/utils';
+import { LicenseInfo } from '@mui/x-license';
+import createEmotionCache from 'docs/src/createEmotionCache';
+import GoogleAnalytics from 'docs/src/modules/components/GoogleAnalytics';
+import PageContext from 'docs/src/modules/components/PageContext';
+import { ThemeProvider } from 'docs/src/modules/components/ThemeContext';
+import { CodeStylingProvider } from 'docs/src/modules/utils/codeStylingSolution';
+import { CodeVariantProvider } from 'docs/src/modules/utils/codeVariant';
+import findActivePage from 'docs/src/modules/utils/findActivePage';
+import getProductInfoFromUrl from 'docs/src/modules/utils/getProductInfoFromUrl';
+import { pathnameToLanguage } from 'docs/src/modules/utils/helpers';
+import DocsStyledEngineProvider from 'docs/src/modules/utils/StyledEngineProvider';
+import pages from 'docsx/data/pages'; // DO NOT REMOVE
+import { postProcessImport } from 'docsx/src/modules/utils/postProcessImport';
+import { loadCSS } from 'fg-loadcss/src/loadCSS';
+import NextHead from 'next/head';
+import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
+import * as React from 'react';
 import config from '../config';
 import '../styles/global.css';
 

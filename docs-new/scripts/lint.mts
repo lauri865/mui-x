@@ -1,16 +1,14 @@
 import fg from 'fast-glob';
-import { printErrors, scanURLs, validateFiles } from 'next-validate-link';
-import { getSlugs, parseFilePath } from 'fumadocs-core/source';
 import { getTableOfContents } from 'fumadocs-core/server';
+import { getSlugs, parseFilePath } from 'fumadocs-core/source';
+import { remarkInclude } from 'fumadocs-mdx/config';
+import matter from 'gray-matter';
+import { printErrors, scanURLs, validateFiles } from 'next-validate-link';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import matter from 'gray-matter';
-import { remarkInclude } from 'fumadocs-mdx/config';
 
 async function readFromPath(file: string) {
-  const content = await fs
-    .readFile(path.resolve(file))
-    .then((res) => res.toString());
+  const content = await fs.readFile(path.resolve(file)).then((res) => res.toString());
   const parsed = matter(content);
 
   return {
@@ -70,9 +68,7 @@ async function checkLinks() {
     },
   });
 
-  console.log(
-    `collected ${scanned.urls.size} URLs, ${scanned.fallbackUrls.length} fallbacks`,
-  );
+  console.log(`collected ${scanned.urls.size} URLs, ${scanned.fallbackUrls.length} fallbacks`);
 
   printErrors(
     await validateFiles([...docsFiles, ...blogFiles], {

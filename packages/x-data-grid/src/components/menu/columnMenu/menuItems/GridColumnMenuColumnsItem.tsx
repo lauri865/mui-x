@@ -1,10 +1,10 @@
-import * as React from 'react';
 import PropTypes from 'prop-types';
+import * as React from 'react';
 import { GridColumnMenuItemProps } from '../GridColumnMenuItemProps';
+import { GridColumnMenuAutoSizeAllItem } from './GridColumnMenuAutoSizeAllItem';
+import { GridColumnMenuAutoSizeItem } from './GridColumnMenuAutoSizeItem';
 import { GridColumnMenuHideItem } from './GridColumnMenuHideItem';
 import { GridColumnMenuManageItem } from './GridColumnMenuManageItem';
-import { GridColumnMenuAutoSizeItem } from './GridColumnMenuAutoSizeItem';
-import { GridColumnMenuAutoSizeAllItem } from './GridColumnMenuAutoSizeAllItem';
 
 function GridColumnMenuColumnsItem(props: GridColumnMenuItemProps) {
   return (

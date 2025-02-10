@@ -1,21 +1,21 @@
-import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
-import { useGridApiMethod } from '../../utils/useGridApiMethod';
+import * as React from 'react';
+import {
+  GRID_DETAIL_PANEL_COL_DEF,
+  GRID_DETAIL_PANEL_TOGGLE_FIELD,
+} from '../../../colDef/gridDetailPanelColDef';
 import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridRowId } from '../../../models/gridRows';
 import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
+import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
+import { useGridApiMethod } from '../../utils/useGridApiMethod';
 import { GridStateInitializer } from '../../utils/useGridInitializeState';
 import {
   EMPTY_EXPANDED_DETAIL_PANELS,
   GridDetailPanelApi,
   GridDetailPanelPrivateApi,
 } from './gridDetailPanelInterface';
-import { GridRowId } from '../../../models/gridRows';
-import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
 import { gridDetailPanelExpandedRowIdsSelector } from './gridDetailPanelSelector';
-import {
-  GRID_DETAIL_PANEL_TOGGLE_FIELD,
-  GRID_DETAIL_PANEL_COL_DEF,
-} from '../../../colDef/gridDetailPanelColDef';
 
 export const detailPanelStateInitializer: GridStateInitializer<
   Pick<DataGridProcessedProps, 'detailPanelExpandedRowIds' | 'initialState'>

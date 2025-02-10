@@ -6,10 +6,7 @@ interface SponsorEntity {
   websiteUrl?: string;
 }
 
-export async function getSponsors(
-  login: string,
-  excluded: string[],
-): Promise<SponsorEntity[]> {
+export async function getSponsors(login: string, excluded: string[]): Promise<SponsorEntity[]> {
   const query = `query {
   user(login:${JSON.stringify(login)}) {
     ... on Sponsorable {
@@ -24,8 +21,7 @@ export async function getSponsors(
   }
 }`;
   const headers = new Headers();
-  if (process.env.GITHUB_TOKEN)
-    headers.set('Authorization', `Bearer ${process.env.GITHUB_TOKEN}`);
+  if (process.env.GITHUB_TOKEN) headers.set('Authorization', `Bearer ${process.env.GITHUB_TOKEN}`);
   else
     console.warn(
       'Highly suggested to add a `GITHUB_TOKEN` environment variable to avoid rate limits.',

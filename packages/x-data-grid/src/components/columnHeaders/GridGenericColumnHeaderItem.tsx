@@ -1,18 +1,18 @@
-import * as React from 'react';
-import clsx from 'clsx';
 import { unstable_useForkRef as useForkRef } from '@mui/utils';
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import { GridStateColDef } from '../../models/colDef/gridColDef';
-import { GridSortDirection } from '../../models/gridSortModel';
+import clsx from 'clsx';
+import * as React from 'react';
+import { gridClasses } from '../../constants/gridClasses';
 import { useGridPrivateApiContext } from '../../hooks/utils/useGridPrivateApiContext';
+import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import { GridStateColDef } from '../../models/colDef/gridColDef';
+import { GridColumnGroup } from '../../models/gridColumnGrouping';
+import { GridSortDirection } from '../../models/gridSortModel';
+import { isOverflown } from '../../utils/domUtils';
 import {
   GridColumnHeaderSeparator,
   GridColumnHeaderSeparatorProps,
 } from './GridColumnHeaderSeparator';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-import { GridColumnGroup } from '../../models/gridColumnGrouping';
-import { isOverflown } from '../../utils/domUtils';
-import { gridClasses } from '../../constants/gridClasses';
 
 interface GridGenericColumnHeaderItemProps
   extends Pick<GridStateColDef, 'headerClassName' | 'description' | 'resizable'> {

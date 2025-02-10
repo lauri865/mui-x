@@ -1,9 +1,9 @@
-import * as React from 'react';
 import PropTypes from 'prop-types';
-import { GridColumnMenuItemProps } from '../GridColumnMenuItemProps';
+import * as React from 'react';
+import { gridVisibleColumnDefinitionsSelector } from '../../../../hooks/features/columns';
 import { useGridApiContext } from '../../../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../../../hooks/utils/useGridRootProps';
-import { gridVisibleColumnDefinitionsSelector } from '../../../../hooks/features/columns';
+import { GridColumnMenuItemProps } from '../GridColumnMenuItemProps';
 
 function GridColumnMenuHideItem(props: GridColumnMenuItemProps) {
   const { colDef, onClick } = props;

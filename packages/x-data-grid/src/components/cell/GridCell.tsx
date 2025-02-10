@@ -1,51 +1,50 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import {
-  unstable_useForkRef as useForkRef,
+  unstable_capitalize as capitalize,
   unstable_composeClasses as composeClasses,
   unstable_ownerDocument as ownerDocument,
-  unstable_capitalize as capitalize,
+  unstable_useForkRef as useForkRef,
 } from '@mui/utils';
+import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
 import { fastMemo } from '@mui/x-internals/fastMemo';
-import { useRtl } from '../../hooks/utils/useRtl';
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import { useThemedComponent } from '../../context/GridThemeContext';
-import { doesSupportPreventScroll } from '../../utils/doesSupportPreventScroll';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import * as React from 'react';
 import { getDataGridUtilityClass, gridClasses } from '../../constants/gridClasses';
-import {
-  GridCellEventLookup,
-  GridEvents,
-  GridCellModes,
-  GridRowId,
-  GridEditCellProps,
-  GridActionsColDef,
-} from '../../models';
-import {
-  GridRenderEditCellParams,
-  FocusElement,
-  GridCellParams,
-} from '../../models/params/gridCellParams';
-import { GridAlignment, GridStateColDef } from '../../models/colDef/gridColDef';
-import { GridRowModel, GridTreeNode, GridTreeNodeWithRender } from '../../models/gridRows';
-import { useGridSelector } from '../../hooks/utils/useGridSelector';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import { useThemedComponent } from '../../context/GridThemeContext';
+import { GridPinnedColumnPosition } from '../../hooks/features/columns/gridColumnsInterfaces';
+import { gridEditCellStateSelector } from '../../hooks/features/editing/gridEditingSelectors';
 import {
   gridFocusCellSelector,
   gridTabIndexCellSelector,
 } from '../../hooks/features/focus/gridFocusStateSelector';
-import type { DataGridProcessedProps } from '../../models/props/DataGridProps';
-import { GridPinnedColumnPosition } from '../../hooks/features/columns/gridColumnsInterfaces';
-import { PinnedColumnPosition } from '../../internals/constants';
 import {
   gridRowSpanningHiddenCellsSelector,
   gridRowSpanningSpannedCellsSelector,
 } from '../../hooks/features/rows/gridRowSpanningSelectors';
 import { useGridPrivateApiContext } from '../../hooks/utils/useGridPrivateApiContext';
-import { gridEditCellStateSelector } from '../../hooks/features/editing/gridEditingSelectors';
+import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import { useGridSelector } from '../../hooks/utils/useGridSelector';
+import { useRtl } from '../../hooks/utils/useRtl';
+import { PinnedColumnPosition } from '../../internals/constants';
 import { attachPinnedStyle } from '../../internals/utils';
-import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
-import { useGridApiEventHandler } from '../../hooks/utils/useGridApiEventHandler';
+import {
+  GridActionsColDef,
+  GridCellEventLookup,
+  GridCellModes,
+  GridEditCellProps,
+  GridEvents,
+  GridRowId,
+} from '../../models';
+import { GridAlignment, GridStateColDef } from '../../models/colDef/gridColDef';
+import { GridRowModel, GridTreeNode, GridTreeNodeWithRender } from '../../models/gridRows';
+import {
+  FocusElement,
+  GridCellParams,
+  GridRenderEditCellParams,
+} from '../../models/params/gridCellParams';
+import type { DataGridProcessedProps } from '../../models/props/DataGridProps';
+import { doesSupportPreventScroll } from '../../utils/doesSupportPreventScroll';
 
 export const gridPinnedColumnPositionLookup = {
   [PinnedColumnPosition.LEFT]: GridPinnedColumnPosition.LEFT,

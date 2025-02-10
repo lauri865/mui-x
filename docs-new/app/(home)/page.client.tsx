@@ -1,19 +1,19 @@
 'use client';
 
-import {
-  useEffect,
-  useState,
-  Fragment,
-  type ReactElement,
-  type HTMLAttributes,
-  type ReactNode,
-  type HTMLProps,
-} from 'react';
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/cn';
 import { TerminalIcon } from 'lucide-react';
 import Link from 'next/link';
+import {
+  Fragment,
+  useEffect,
+  useState,
+  type HTMLAttributes,
+  type HTMLProps,
+  type ReactElement,
+  type ReactNode,
+} from 'react';
 import scrollIntoView from 'scroll-into-view-if-needed';
-import { cn } from '@/lib/cn';
-import { buttonVariants } from '@/components/ui/button';
 
 export function CreateAppAnimation() {
   const installCmd = 'npm create fumadocs-app';
@@ -41,9 +41,7 @@ export function CreateAppAnimation() {
   lines.push(
     <span key="command_type">
       {installCmd.substring(0, tick)}
-      {tick < timeCommandEnter && (
-        <div className="inline-block h-3 w-1 animate-pulse bg-white" />
-      )}
+      {tick < timeCommandEnter && <div className="inline-block h-3 w-1 animate-pulse bg-white" />}
     </span>,
   );
 
@@ -91,8 +89,7 @@ export function CreateAppAnimation() {
       )}
       <pre className="overflow-hidden rounded-xl border text-xs">
         <div className="flex flex-row items-center gap-2 border-b px-4 py-2">
-          <TerminalIcon className="size-4" />{' '}
-          <span className="font-bold">Terminal</span>
+          <TerminalIcon className="size-4" /> <span className="font-bold">Terminal</span>
           <div className="grow" />
           <div className="size-2 rounded-full bg-red-400" />
         </div>
@@ -104,9 +101,7 @@ export function CreateAppAnimation() {
   );
 }
 
-function LaunchAppWindow(
-  props: HTMLAttributes<HTMLDivElement>,
-): React.ReactElement {
+function LaunchAppWindow(props: HTMLAttributes<HTMLDivElement>): React.ReactElement {
   return (
     <div
       {...props}
@@ -229,13 +224,13 @@ export function WhyInteractive(props: {
               Implementing search is difficult, we made it simple.
             </h3>
             <p>
-              Fumadocs offers native support for Orama and Algolia Search, it is
-              as easy as plugging a route handler.
+              Fumadocs offers native support for Orama and Algolia Search, it is as easy as plugging
+              a route handler.
             </p>
             {props.codeblockSearchRouter}
             <p className="mb-4 text-fd-muted-foreground">
-              In addition, you can plug your own search modal to allow full
-              control over the search UI.
+              In addition, you can plug your own search modal to allow full control over the search
+              UI.
             </p>
             <div className="flex flex-row items-center gap-1.5">
               <Link
@@ -244,10 +239,7 @@ export function WhyInteractive(props: {
               >
                 Check the docs
               </Link>
-              <Link
-                href="/docs/ui/search"
-                className={cn(buttonVariants({ variant: 'ghost' }))}
-              >
+              <Link href="/docs/ui/search" className={cn(buttonVariants({ variant: 'ghost' }))}>
                 Customise UI?
               </Link>
             </div>
@@ -258,14 +250,11 @@ export function WhyInteractive(props: {
           <WhyPanel>
             <h3 className="mb-2 text-lg font-medium">Tailwind CSS Plugin</h3>
             <p>
-              Share the same design system cross the docs and your app with
-              Tailwind CSS. Works great with <b>Shadcn UI</b>.
+              Share the same design system cross the docs and your app with Tailwind CSS. Works
+              great with <b>Shadcn UI</b>.
             </p>
             {props.codeblockTheme}
-            <Link
-              href="/docs/ui/theme"
-              className={cn(buttonVariants({ variant: 'outline' }))}
-            >
+            <Link href="/docs/ui/theme" className={cn(buttonVariants({ variant: 'outline' }))}>
               See Themes
             </Link>
           </WhyPanel>
@@ -277,14 +266,11 @@ export function WhyInteractive(props: {
               From the source of truth, never repeat yourself again.
             </h3>
             <p>
-              Fumadocs has a smart Type Table component that renders the
-              properties of interface/type automatically, powered by the
-              TypeScript Compiler API.
+              Fumadocs has a smart Type Table component that renders the properties of
+              interface/type automatically, powered by the TypeScript Compiler API.
             </p>
             {props.typeTable}
-            <p>
-              We also have a built-in OpenAPI playground and docs generator.
-            </p>
+            <p>We also have a built-in OpenAPI playground and docs generator.</p>
 
             <div className="mt-4 flex flex-row items-center gap-1.5">
               <Link
@@ -293,10 +279,7 @@ export function WhyInteractive(props: {
               >
                 Type Table
               </Link>
-              <Link
-                href="/docs/ui/openapi"
-                className={cn(buttonVariants({ variant: 'ghost' }))}
-              >
+              <Link href="/docs/ui/openapi" className={cn(buttonVariants({ variant: 'ghost' }))}>
                 OpenAPI Integration
               </Link>
             </div>
@@ -304,32 +287,21 @@ export function WhyInteractive(props: {
         ) : null}
         {active === 3 ? (
           <WhyPanel>
-            <h3 className="mb-2 text-lg font-medium">
-              Interactive docs with React.
-            </h3>
-            <p>
-              Fumadocs offers many useful components, from File Tree, Tabs, to
-              Zoomable Image.
-            </p>
+            <h3 className="mb-2 text-lg font-medium">Interactive docs with React.</h3>
+            <p>Fumadocs offers many useful components, from File Tree, Tabs, to Zoomable Image.</p>
             {props.codeblockInteractive}
-            <Link
-              href="/docs/ui/components"
-              className={cn(buttonVariants({ variant: 'outline' }))}
-            >
+            <Link href="/docs/ui/components" className={cn(buttonVariants({ variant: 'outline' }))}>
               View Components
             </Link>
           </WhyPanel>
         ) : null}
         {active === 4 ? (
           <WhyPanel>
-            <h3 className="mb-2 text-lg font-medium">
-              Connect your content and server.
-            </h3>
+            <h3 className="mb-2 text-lg font-medium">Connect your content and server.</h3>
 
             <p>
-              React Server Component made it very easy to automate docs. Use
-              server data, server components, and even client components in MDX
-              documents.
+              React Server Component made it very easy to automate docs. Use server data, server
+              components, and even client components in MDX documents.
             </p>
 
             {props.codeblockMdx}
@@ -341,19 +313,17 @@ export function WhyInteractive(props: {
               Your own content source, search solution, everything.
             </h3>
             <p>
-              Fumadocs is designed to be flexible, working with any content
-              sources, offering powerful utilities.
+              Fumadocs is designed to be flexible, working with any content sources, offering
+              powerful utilities.
               <br />
               <br />
-              With our remark plugins, you can parse documents into search
-              indexes, and integrate with different search solutions seamlessly.
+              With our remark plugins, you can parse documents into search indexes, and integrate
+              with different search solutions seamlessly.
             </p>
 
             <Link
               href="/docs/headless/mdx/structure"
-              className={cn(
-                buttonVariants({ className: 'mt-4', variant: 'outline' }),
-              )}
+              className={cn(buttonVariants({ className: 'mt-4', variant: 'outline' }))}
             >
               See MDX Plugins
             </Link>

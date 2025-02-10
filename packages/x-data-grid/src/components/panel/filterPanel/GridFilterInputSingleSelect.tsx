@@ -1,16 +1,16 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
 import { unstable_useId as useId } from '@mui/utils';
+import PropTypes from 'prop-types';
+import * as React from 'react';
+import { useGridRootProps } from '../../../hooks/utils/useGridRootProps';
+import { GridSingleSelectColDef } from '../../../models/colDef/gridColDef';
 import { TextFieldProps } from '../../../models/gridBaseSlots';
 import { GridFilterInputValueProps } from '../../../models/gridFilterInputComponent';
-import { GridSingleSelectColDef } from '../../../models/colDef/gridColDef';
-import { useGridRootProps } from '../../../hooks/utils/useGridRootProps';
+import type { GridSlotsComponentsProps } from '../../../models/gridSlotsComponentsProps';
 import {
   getValueFromValueOptions,
   getValueOptions,
   isSingleSelectColDef,
 } from './filterPanelUtils';
-import type { GridSlotsComponentsProps } from '../../../models/gridSlotsComponentsProps';
 
 const renderSingleSelectOptions = ({
   column,

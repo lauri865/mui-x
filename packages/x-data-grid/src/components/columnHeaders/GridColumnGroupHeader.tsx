@@ -1,20 +1,20 @@
+import { unstable_composeClasses as composeClasses, unstable_useId as useId } from '@mui/utils';
 import * as React from 'react';
-import { unstable_useId as useId, unstable_composeClasses as composeClasses } from '@mui/utils';
-import { useRtl } from '../../hooks/utils/useRtl';
-import { GridAlignment } from '../../models/colDef/gridColDef';
 import { getDataGridUtilityClass } from '../../constants/gridClasses';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-import { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { gridColumnGroupsLookupSelector } from '../../hooks/features/columnGrouping/gridColumnGroupsSelector';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
+import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { useGridSelector } from '../../hooks/utils/useGridSelector';
-import { GridGenericColumnHeaderItem } from './GridGenericColumnHeaderItem';
-import { GridColumnGroup } from '../../models/gridColumnGrouping';
-import { GridColumnGroupHeaderEventLookup } from '../../models/events';
-import { GridColumnGroupHeaderParams } from '../../models/params';
-import { isEventTargetInPortal } from '../../utils/domUtils';
+import { useRtl } from '../../hooks/utils/useRtl';
 import { PinnedColumnPosition } from '../../internals/constants';
 import { attachPinnedStyle } from '../../internals/utils';
+import { GridAlignment } from '../../models/colDef/gridColDef';
+import { GridColumnGroupHeaderEventLookup } from '../../models/events';
+import { GridColumnGroup } from '../../models/gridColumnGrouping';
+import { GridColumnGroupHeaderParams } from '../../models/params';
+import { DataGridProcessedProps } from '../../models/props/DataGridProps';
+import { isEventTargetInPortal } from '../../utils/domUtils';
+import { GridGenericColumnHeaderItem } from './GridGenericColumnHeaderItem';
 
 interface GridColumnGroupHeaderProps {
   groupId: string | null;

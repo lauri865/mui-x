@@ -27,10 +27,7 @@ export default defineConfig({
         light: 'github-light',
         dark: 'github-dark',
       },
-      transformers: [
-        ...(rehypeCodeDefaultOptions.transformers ?? []),
-        transformerTwoslash(),
-      ],
+      transformers: [...(rehypeCodeDefaultOptions.transformers ?? []), transformerTwoslash()],
     },
   },
 });
@@ -159,13 +156,7 @@ import { getSingletonHighlighter, bundledLanguages } from 'shiki';
 import { toJsxRuntime } from 'hast-util-to-jsx-runtime';
 import { Fragment, jsx, jsxs } from 'react/jsx-runtime';
 
-export async function Code({
-  code,
-  lang = 'ts',
-}: {
-  lang?: string;
-  code: string;
-}) {
+export async function Code({ code, lang = 'ts' }: { lang?: string; code: string }) {
   const highlighter = await getSingletonHighlighter({
     langs: Object.keys(bundledLanguages),
     themes: ['vesper'],

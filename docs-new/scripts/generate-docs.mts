@@ -10,8 +10,7 @@ export async function generateDocs() {
     },
   });
 
-  const demoRegex =
-    /^---type-table-demo---\r?\n(?<content>.+)\r?\n---end---$/gm;
+  const demoRegex = /^---type-table-demo---\r?\n(?<content>.+)\r?\n---end---$/gm;
 
   await Promise.all([
     OpenAPI.generateFiles({
@@ -26,10 +25,7 @@ export async function generateDocs() {
         return content.replace(demoRegex, '---type-table---\n$1\n---end---');
       },
       output: (file) =>
-        path.resolve(
-          path.dirname(file),
-          `${path.basename(file).split('.')[0]}.mdx`,
-        ),
+        path.resolve(path.dirname(file), `${path.basename(file).split('.')[0]}.mdx`),
     }),
   ]);
 }

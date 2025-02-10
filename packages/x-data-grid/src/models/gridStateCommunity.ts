@@ -1,9 +1,10 @@
 import type {
+  GridColumnIdentifier,
   GridColumnMenuState,
+  GridColumnPinningState,
+  GridColumnsGroupingState,
   GridColumnsInitialState,
   GridColumnsState,
-  GridColumnsGroupingState,
-  GridColumnPinningState,
   GridDensityState,
   GridDimensionsState,
   GridFilterInitialState,
@@ -18,23 +19,22 @@ import type {
   GridSortingState,
   GridTabIndexState,
   GridVirtualizationState,
-  GridColumnIdentifier,
 } from '../hooks';
-import type { GridRowsMetaState } from '../hooks/features/rows/gridRowsMetaState';
-import type { GridEditingState } from './gridEditRowModel';
-import { GridHeaderFilteringState } from './gridHeaderFilteringModel';
-import type { GridRowSelectionModel } from './gridRowSelectionModel';
-import type { GridVisibleRowsLookupState } from '../hooks/features/filter/gridFilterState';
 import type { GridColumnResizeState } from '../hooks/features/columnResize';
-import type { GridRowSpanningState } from '../hooks/features/rows/useGridRowSpanning';
-import type { GridListViewState } from '../hooks/features/listView/useGridListView';
 import { GridPinnedColumnFields } from '../hooks/features/columns/gridColumnsInterfaces';
+import { GridDetailPanelInitialState, GridDetailPanelState } from '../hooks/features/detailPanel';
+import type { GridVisibleRowsLookupState } from '../hooks/features/filter/gridFilterState';
+import type { GridListViewState } from '../hooks/features/listView/useGridListView';
 import {
   GridPinnedRowsModel,
   GridPinnedRowsState,
 } from '../hooks/features/rowPinning/rowPinningInterfaces';
+import type { GridRowsMetaState } from '../hooks/features/rows/gridRowsMetaState';
+import type { GridRowSpanningState } from '../hooks/features/rows/useGridRowSpanning';
 import { GridCellCoordinates } from '../models/gridCell';
-import { GridDetailPanelInitialState, GridDetailPanelState } from '../hooks/features/detailPanel';
+import type { GridEditingState } from './gridEditRowModel';
+import { GridHeaderFilteringState } from './gridHeaderFilteringModel';
+import type { GridRowSelectionModel } from './gridRowSelectionModel';
 
 /**
  * The state of Data Grid.

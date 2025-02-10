@@ -1,8 +1,8 @@
 import { RefObject } from '@mui/x-internals/types';
-import { lruMemoize, createSelectorCreator, Selector, SelectorResultArray } from 'reselect';
 import { warnOnce } from '@mui/x-internals/warning';
-import type { GridCoreApi } from '../models/api/gridCoreApi';
+import { createSelectorCreator, lruMemoize, Selector, SelectorResultArray } from 'reselect';
 import { argsEqual } from '../hooks/utils/useGridSelector';
+import type { GridCoreApi } from '../models/api/gridCoreApi';
 
 type CacheKey = { id: number };
 

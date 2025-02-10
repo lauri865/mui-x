@@ -1,13 +1,9 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import {
-  unstable_useForkRef as useForkRef,
-  unstable_capitalize as capitalize,
-  unstable_composeClasses as composeClasses,
-} from '@mui/utils';
+import { unstable_useForkRef as useForkRef } from '@mui/utils';
 import { fastMemo } from '@mui/x-internals/fastMemo';
 import { forwardRef } from '@mui/x-internals/forwardRef';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import * as React from 'react';
 import { useThemedComponent } from '../../context/GridThemeContext';
 import { useGridPrivateApiContext } from '../../hooks/utils/useGridPrivateApiContext';
 import { useIsSSR } from '../../hooks/utils/useIsSSR';

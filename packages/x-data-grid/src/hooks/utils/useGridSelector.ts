@@ -1,12 +1,11 @@
-import * as React from 'react';
-import { RefObject } from '@mui/x-internals/types';
 import { fastObjectShallowCompare } from '@mui/x-internals/fastObjectShallowCompare';
+import { RefObject } from '@mui/x-internals/types';
 import { warnOnce } from '@mui/x-internals/warning';
-import { useSyncExternalStore } from 'use-sync-external-store/shim';
+import * as React from 'react';
 import type { GridApiCommon } from '../../models/api/gridApiCommon';
+import type { GridCoreApi } from '../../models/api/gridCoreApi';
 import type { OutputSelector } from '../../utils/createSelector';
 import { useLazyRef } from './useLazyRef';
-import type { GridCoreApi } from '../../models/api/gridCoreApi';
 
 function isOutputSelector<Api extends GridApiCommon, Args, T>(
   selector: any,
@@ -124,7 +123,6 @@ export const useGridSelector = <Api extends GridApiCommon, Args, T>(
         refs.current.state = newState;
         setState(newState);
       }
-       
     });
   }, [enabled]);
 

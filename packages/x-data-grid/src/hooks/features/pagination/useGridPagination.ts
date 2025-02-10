@@ -3,12 +3,12 @@ import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
 import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { GridStateInitializer } from '../../utils/useGridInitializeState';
 import {
-  throwIfPageSizeExceedsTheLimit,
   getDefaultGridPaginationModel,
+  throwIfPageSizeExceedsTheLimit,
 } from './gridPaginationUtils';
+import { useGridPaginationMeta } from './useGridPaginationMeta';
 import { useGridPaginationModel } from './useGridPaginationModel';
 import { useGridRowCount } from './useGridRowCount';
-import { useGridPaginationMeta } from './useGridPaginationMeta';
 
 export const paginationStateInitializer: GridStateInitializer<
   Pick<

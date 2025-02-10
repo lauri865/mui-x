@@ -1,15 +1,15 @@
-import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
-import { useGridLogger, useGridApiMethod, useGridApiEventHandler } from '../../utils';
-import { gridColumnMenuSelector } from './columnMenuSelector';
+import * as React from 'react';
 import { GridColumnMenuApi } from '../../../models';
+import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { useGridApiEventHandler, useGridApiMethod, useGridLogger } from '../../utils';
 import { GridStateInitializer } from '../../utils/useGridInitializeState';
 import {
+  gridColumnFieldsSelector,
   gridColumnLookupSelector,
   gridColumnVisibilityModelSelector,
-  gridColumnFieldsSelector,
 } from '../columns/gridColumnsSelector';
+import { gridColumnMenuSelector } from './columnMenuSelector';
 
 export const columnMenuStateInitializer: GridStateInitializer = (state) => ({
   ...state,

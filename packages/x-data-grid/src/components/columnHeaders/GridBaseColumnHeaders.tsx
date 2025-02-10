@@ -1,6 +1,6 @@
-import * as React from 'react';
-import clsx from 'clsx';
 import { forwardRef } from '@mui/x-internals/forwardRef';
+import clsx from 'clsx';
+import * as React from 'react';
 import { useThemedComponent } from '../../context/GridThemeContext';
 
 interface GridBaseColumnHeadersProps extends React.HTMLAttributes<HTMLDivElement> {}

@@ -1,15 +1,15 @@
 import * as React from 'react';
+import { GRID_DEFAULT_LOCALE_TEXT } from '../constants';
+import { DATA_GRID_PROPS_DEFAULT_VALUES } from '../constants/dataGridPropsDefaultValues';
+import { DATA_GRID_DEFAULT_SLOTS_COMPONENTS } from '../constants/defaultGridSlotsComponents';
+import { computeSlots } from '../internals/utils';
+import { GridSlotsComponent, GridValidRowModel } from '../models';
 import {
+  DataGridForcedPropsKey,
   DataGridProcessedProps,
   DataGridProps,
-  DataGridForcedPropsKey,
   DataGridPropsWithDefaultValues,
 } from '../models/props/DataGridProps';
-import { GRID_DEFAULT_LOCALE_TEXT } from '../constants';
-import { DATA_GRID_DEFAULT_SLOTS_COMPONENTS } from '../constants/defaultGridSlotsComponents';
-import { GridSlotsComponent, GridValidRowModel } from '../models';
-import { computeSlots } from '../internals/utils';
-import { DATA_GRID_PROPS_DEFAULT_VALUES } from '../constants/dataGridPropsDefaultValues';
 
 const DATA_GRID_FORCED_PROPS: { [key in DataGridForcedPropsKey]?: DataGridProcessedProps[key] } = {
   disableMultipleColumnsFiltering: true,

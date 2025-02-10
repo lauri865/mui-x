@@ -1,29 +1,29 @@
-import * as React from 'react';
-import { RefObject } from '@mui/x-internals/types';
 import {
-  useGridSelector,
-  gridVisibleColumnDefinitionsSelector,
-  gridColumnsTotalWidthSelector,
-  gridColumnPositionsSelector,
-  useGridApiMethod,
-  useGridApiEventHandler,
+  EMPTY_PINNED_COLUMN_FIELDS,
   GridEventListener,
   GridPinnedColumnPosition,
   gridColumnFieldsSelector,
-  EMPTY_PINNED_COLUMN_FIELDS,
+  gridColumnPositionsSelector,
+  gridColumnsTotalWidthSelector,
+  gridVisibleColumnDefinitionsSelector,
+  useGridApiEventHandler,
+  useGridApiMethod,
+  useGridSelector,
 } from '@mui/x-data-grid';
 import {
-  useGridRegisterPipeProcessor,
-  gridPinnedColumnsSelector,
-  gridVisiblePinnedColumnDefinitionsSelector,
+  GridPinnedColumnFields,
   GridPipeProcessor,
   GridRestoreStatePreProcessingContext,
   GridStateInitializer,
-  GridPinnedColumnFields,
+  gridPinnedColumnsSelector,
+  gridVisiblePinnedColumnDefinitionsSelector,
+  useGridRegisterPipeProcessor,
 } from '@mui/x-data-grid/internals';
+import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
+import { DataGridProProcessedProps } from '../../../models/dataGridProProps';
 import { GridPrivateApiPro } from '../../../models/gridApiPro';
 import { GridInitialStatePro } from '../../../models/gridStatePro';
-import { DataGridProProcessedProps } from '../../../models/dataGridProProps';
 import { GridColumnPinningApi } from './gridColumnPinningInterface';
 
 export const columnPinningStateInitializer: GridStateInitializer<

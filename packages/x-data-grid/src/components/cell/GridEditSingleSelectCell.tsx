@@ -1,16 +1,16 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
 import { unstable_useEnhancedEffect as useEnhancedEffect } from '@mui/utils';
-import { GridCellEditStopReasons } from '../../models/params/gridEditCellParams';
-import { GridRenderEditCellParams } from '../../models/params/gridCellParams';
+import PropTypes from 'prop-types';
+import * as React from 'react';
+import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { GridEditModes } from '../../models/gridEditRowModel';
+import { GridRenderEditCellParams } from '../../models/params/gridCellParams';
+import { GridCellEditStopReasons } from '../../models/params/gridEditCellParams';
 import {
   getValueFromValueOptions,
   getValueOptions,
   isSingleSelectColDef,
 } from '../panel/filterPanel/filterPanelUtils';
-import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 
 export interface GridEditSingleSelectCellProps extends GridRenderEditCellParams {
   /**

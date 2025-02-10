@@ -16,24 +16,24 @@ import type { InputLabelProps } from '@mui/material/InputLabel';
 import type { PopperProps } from '@mui/material/Popper';
 import type { TablePaginationProps } from '@mui/material/TablePagination';
 import type { ChipProps } from '@mui/material/Chip'; */
-import type { GridToolbarProps } from '../components/toolbar/GridToolbar';
-import type { ColumnHeaderFilterIconButtonProps } from '../components/columnHeaders/GridColumnHeaderFilterIconButton';
-import type { GridColumnMenuProps } from '../components/menu/columnMenu/GridColumnMenuProps';
-import type { GridColumnsPanelProps } from '../components/panel/GridColumnsPanel';
-import type { GridFilterPanelProps } from '../components/panel/filterPanel/GridFilterPanel';
-import type { GridFooterContainerProps } from '../components/containers/GridFooterContainer';
-import type { GridOverlayProps } from '../components/containers/GridOverlay';
-import type { GridPanelProps } from '../components/panel/GridPanel';
-import type { GridSkeletonCellProps } from '../components/cell/GridSkeletonCell';
-import type { GridRowProps } from '../components/GridRow';
-import type { GridCellProps } from '../components/cell/GridCell';
 import type { GridColumnHeadersProps } from '../components/GridColumnHeaders';
 import type { GridDetailPanelsProps } from '../components/GridDetailPanel';
-import type { GridPinnedRowsProps } from '../components/GridPinnedRows';
-import type { GridColumnsManagementProps } from '../components/columnsManagement/GridColumnsManagement';
 import type { GridLoadingOverlayProps } from '../components/GridLoadingOverlay';
+import type { GridPinnedRowsProps } from '../components/GridPinnedRows';
+import type { GridRowProps } from '../components/GridRow';
 import type { GridRowCountProps } from '../components/GridRowCount';
+import type { GridCellProps } from '../components/cell/GridCell';
+import type { GridSkeletonCellProps } from '../components/cell/GridSkeletonCell';
+import type { ColumnHeaderFilterIconButtonProps } from '../components/columnHeaders/GridColumnHeaderFilterIconButton';
 import type { GridColumnHeaderSortIconProps } from '../components/columnHeaders/GridColumnHeaderSortIcon';
+import type { GridColumnsManagementProps } from '../components/columnsManagement/GridColumnsManagement';
+import type { GridFooterContainerProps } from '../components/containers/GridFooterContainer';
+import type { GridOverlayProps } from '../components/containers/GridOverlay';
+import type { GridColumnMenuProps } from '../components/menu/columnMenu/GridColumnMenuProps';
+import type { GridColumnsPanelProps } from '../components/panel/GridColumnsPanel';
+import type { GridPanelProps } from '../components/panel/GridPanel';
+import type { GridFilterPanelProps } from '../components/panel/filterPanel/GridFilterPanel';
+import type { GridToolbarProps } from '../components/toolbar/GridToolbar';
 import type {
   BadgeProps,
   ButtonProps,
@@ -43,8 +43,8 @@ import type {
   LinearProgressProps,
   MenuItemProps,
   SkeletonProps,
-  TooltipProps,
   TextFieldProps,
+  TooltipProps,
 } from './gridBaseSlots';
 
 type RootProps = React.HTMLAttributes<HTMLDivElement> & Record<`data-${string}`, string>;

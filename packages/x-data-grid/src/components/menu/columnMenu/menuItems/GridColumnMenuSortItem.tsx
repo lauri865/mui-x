@@ -1,11 +1,11 @@
-import * as React from 'react';
 import PropTypes from 'prop-types';
-import { useGridSelector } from '../../../../hooks/utils/useGridSelector';
+import * as React from 'react';
 import { gridSortModelSelector } from '../../../../hooks/features/sorting/gridSortingSelector';
-import { GridSortDirection } from '../../../../models/gridSortModel';
 import { useGridApiContext } from '../../../../hooks/utils/useGridApiContext';
-import { GridColumnMenuItemProps } from '../GridColumnMenuItemProps';
 import { useGridRootProps } from '../../../../hooks/utils/useGridRootProps';
+import { useGridSelector } from '../../../../hooks/utils/useGridSelector';
+import { GridSortDirection } from '../../../../models/gridSortModel';
+import { GridColumnMenuItemProps } from '../GridColumnMenuItemProps';
 
 function GridColumnMenuSortItem(props: GridColumnMenuItemProps) {
   const { colDef, onClick } = props;

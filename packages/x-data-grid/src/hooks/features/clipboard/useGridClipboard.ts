@@ -1,11 +1,11 @@
-import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
 import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
-import { useGridApiOptionHandler, useGridNativeEventListener } from '../../utils';
-import { gridFocusCellSelector } from '../focus/gridFocusStateSelector';
-import { serializeCellValue } from '../export/serializers/csvSerializer';
 import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { isCopyShortcut } from '../../../utils/keyboardUtils';
+import { useGridApiOptionHandler, useGridNativeEventListener } from '../../utils';
+import { serializeCellValue } from '../export/serializers/csvSerializer';
+import { gridFocusCellSelector } from '../focus/gridFocusStateSelector';
 
 function writeToClipboardPolyfill(data: string) {
   const span = document.createElement('span');

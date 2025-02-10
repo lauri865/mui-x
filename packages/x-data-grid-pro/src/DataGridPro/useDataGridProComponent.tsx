@@ -1,88 +1,87 @@
-import { RefObject } from '@mui/x-internals/types';
 import {
+  columnGroupsStateInitializer,
+  columnMenuStateInitializer,
+  columnPinningStateInitializer,
+  columnResizeStateInitializer,
+  columnsStateInitializer,
+  densityStateInitializer,
+  dimensionsStateInitializer,
+  editingStateInitializer,
+  filterStateInitializer,
+  focusStateInitializer,
+  headerFilteringStateInitializer,
+  listViewStateInitializer,
+  paginationStateInitializer,
+  preferencePanelStateInitializer,
+  rowSelectionStateInitializer,
+  rowsMetaStateInitializer,
+  rowSpanningStateInitializer,
+  rowsStateInitializer,
+  sortingStateInitializer,
+  useGridClipboard,
+  useGridColumnGrouping,
+  useGridColumnMenu,
+  useGridColumnPinning,
+  useGridColumnResize,
+  useGridColumns,
+  useGridColumnSpanning,
+  useGridCsvExport,
+  useGridDensity,
+  useGridDimensions,
+  useGridEditing,
+  useGridEvents,
+  useGridFilter,
+  useGridFocus,
+  useGridHeaderFiltering,
   useGridInitialization,
   useGridInitializeState,
-  useGridClipboard,
-  useGridColumnMenu,
-  useGridColumns,
-  columnsStateInitializer,
-  useGridDensity,
-  useGridCsvExport,
-  useGridPrintExport,
-  useGridFilter,
-  filterStateInitializer,
-  useGridFocus,
   useGridKeyboardNavigation,
-  useGridPagination,
-  paginationStateInitializer,
-  useGridPreferencesPanel,
-  useGridEditing,
-  editingStateInitializer,
-  useGridRows,
-  useGridRowsPreProcessors,
-  rowsStateInitializer,
-  useGridRowsMeta,
-  useGridParamsApi,
-  useGridRowSelection,
-  useGridSorting,
-  sortingStateInitializer,
-  useGridScroll,
-  useGridEvents,
-  dimensionsStateInitializer,
-  useGridDimensions,
-  useGridStatePersistence,
-  useGridRowSelectionPreProcessors,
-  useGridColumnSpanning,
-  columnMenuStateInitializer,
-  densityStateInitializer,
-  focusStateInitializer,
-  preferencePanelStateInitializer,
-  rowsMetaStateInitializer,
-  rowSelectionStateInitializer,
-  useGridColumnGrouping,
-  columnGroupsStateInitializer,
-  headerFilteringStateInitializer,
-  useGridHeaderFiltering,
-  virtualizationStateInitializer,
-  useGridVirtualization,
-  useGridColumnResize,
-  columnResizeStateInitializer,
-  useGridRowSpanning,
-  rowSpanningStateInitializer,
   useGridListView,
-  listViewStateInitializer,
-  useGridColumnPinning,
-  columnPinningStateInitializer,
+  useGridPagination,
+  useGridParamsApi,
+  useGridPreferencesPanel,
+  useGridPrintExport,
+  useGridRows,
+  useGridRowSelection,
+  useGridRowSelectionPreProcessors,
+  useGridRowsMeta,
+  useGridRowSpanning,
+  useGridRowsPreProcessors,
+  useGridScroll,
+  useGridSorting,
+  useGridStatePersistence,
+  useGridVirtualization,
+  virtualizationStateInitializer,
 } from '@mui/x-data-grid/internals';
-import { GridApiPro, GridPrivateApiPro } from '../models/gridApiPro';
+import { RefObject } from '@mui/x-internals/types';
 import { DataGridProProcessedProps } from '../models/dataGridProProps';
+import { GridApiPro, GridPrivateApiPro } from '../models/gridApiPro';
 // Pro-only features
-import { useGridInfiniteLoader } from '../hooks/features/infiniteLoader/useGridInfiniteLoader';
 import {
-  useGridColumnReorder,
   columnReorderStateInitializer,
+  useGridColumnReorder,
 } from '../hooks/features/columnReorder/useGridColumnReorder';
-import { useGridTreeData } from '../hooks/features/treeData/useGridTreeData';
-import { useGridTreeDataPreProcessors } from '../hooks/features/treeData/useGridTreeDataPreProcessors';
-import { useGridDataSourceTreeDataPreProcessors } from '../hooks/features/serverSideTreeData/useGridDataSourceTreeDataPreProcessors';
-import { useGridColumnPinningPreProcessors } from '../hooks/features/columnPinning/useGridColumnPinningPreProcessors';
+import { dataSourceStateInitializer } from '../hooks/features/dataSource/useGridDataSourceBase';
+import { useGridDataSourcePro as useGridDataSource } from '../hooks/features/dataSource/useGridDataSourcePro';
 import {
-  useGridDetailPanel,
   detailPanelStateInitializer,
+  useGridDetailPanel,
 } from '../hooks/features/detailPanel/useGridDetailPanel';
 import { useGridDetailPanelPreProcessors } from '../hooks/features/detailPanel/useGridDetailPanelPreProcessors';
-import { useGridRowReorder } from '../hooks/features/rowReorder/useGridRowReorder';
-import { useGridRowReorderPreProcessors } from '../hooks/features/rowReorder/useGridRowReorderPreProcessors';
+import { useGridInfiniteLoader } from '../hooks/features/infiniteLoader/useGridInfiniteLoader';
 import { useGridLazyLoader } from '../hooks/features/lazyLoader/useGridLazyLoader';
 import { useGridLazyLoaderPreProcessors } from '../hooks/features/lazyLoader/useGridLazyLoaderPreProcessors';
 import {
-  useGridRowPinning,
   rowPinningStateInitializer,
+  useGridRowPinning,
 } from '../hooks/features/rowPinning/useGridRowPinning';
 import { useGridRowPinningPreProcessors } from '../hooks/features/rowPinning/useGridRowPinningPreProcessors';
-import { useGridDataSourcePro as useGridDataSource } from '../hooks/features/dataSource/useGridDataSourcePro';
-import { dataSourceStateInitializer } from '../hooks/features/dataSource/useGridDataSourceBase';
+import { useGridRowReorder } from '../hooks/features/rowReorder/useGridRowReorder';
+import { useGridRowReorderPreProcessors } from '../hooks/features/rowReorder/useGridRowReorderPreProcessors';
 import { useGridDataSourceLazyLoader } from '../hooks/features/serverSideLazyLoader/useGridDataSourceLazyLoader';
+import { useGridDataSourceTreeDataPreProcessors } from '../hooks/features/serverSideTreeData/useGridDataSourceTreeDataPreProcessors';
+import { useGridTreeData } from '../hooks/features/treeData/useGridTreeData';
+import { useGridTreeDataPreProcessors } from '../hooks/features/treeData/useGridTreeDataPreProcessors';
 
 export const useDataGridProComponent = (
   inputApiRef: RefObject<GridApiPro | null> | undefined,

@@ -1,10 +1,10 @@
-import React from 'react';
-import { gridVisiblePinnedRowsSelector } from '../hooks/features/rowPinning';
 import clsx from 'clsx';
-import type { VirtualScroller } from '../hooks/features/virtualization/useGridVirtualScroller';
-import { useGridSelector } from '../hooks/utils/useGridSelector';
-import { useGridPrivateApiContext } from '../hooks/utils/useGridPrivateApiContext';
+import React from 'react';
 import { useThemedComponent } from '../context/GridThemeContext';
+import { gridVisiblePinnedRowsSelector } from '../hooks/features/rowPinning';
+import type { VirtualScroller } from '../hooks/features/virtualization/useGridVirtualScroller';
+import { useGridPrivateApiContext } from '../hooks/utils/useGridPrivateApiContext';
+import { useGridSelector } from '../hooks/utils/useGridSelector';
 
 export interface GridPinnedRowsProps {
   position: 'top' | 'bottom';

@@ -150,14 +150,12 @@ const findPinnedCells = ({
       return;
     }
 
-    rowElement
-      .querySelectorAll(`.${gridClasses.cell}[data-pinned=${position}]`)
-      .forEach((cell) => {
-        const currentColIndex = parseCellColIndex(cell);
-        if (currentColIndex !== null && filterFn(currentColIndex)) {
-          cells.push(cell as HTMLElement);
-        }
-      });
+    rowElement.querySelectorAll(`.${gridClasses.cell}[data-pinned=${position}]`).forEach((cell) => {
+      const currentColIndex = parseCellColIndex(cell);
+      if (currentColIndex !== null && filterFn(currentColIndex)) {
+        cells.push(cell as HTMLElement);
+      }
+    });
   });
 
   return cells;

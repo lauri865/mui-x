@@ -1,13 +1,13 @@
-import * as React from 'react';
 import { unstable_useForkRef as useForkRef } from '@mui/utils';
+import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
 import { forwardRef } from '@mui/x-internals/forwardRef';
+import clsx from 'clsx';
+import * as React from 'react';
+import { gridDetailPanelIsExpandedForRowIdSelector } from '../../hooks/features/detailPanel/gridDetailPanelSelector';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { useGridSelector } from '../../hooks/utils/useGridSelector';
 import type { GridRenderCellParams } from '../../models/params/gridCellParams';
-import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
-import { gridDetailPanelIsExpandedForRowIdSelector } from '../../hooks/features/detailPanel/gridDetailPanelSelector';
-import clsx from 'clsx';
 
 export const GridDetailPanelCell = forwardRef<HTMLInputElement, GridRenderCellParams>(
   function GridCellCheckboxRenderer(props, ref) {

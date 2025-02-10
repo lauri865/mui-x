@@ -872,13 +872,7 @@
                           "description": "The name of the connected analytics service"
                         }
                       },
-                      "required": [
-                        "metrics",
-                        "logger",
-                        "ratelimit",
-                        "usagelimit",
-                        "analytics"
-                      ]
+                      "required": ["metrics", "logger", "ratelimit", "usagelimit", "analytics"]
                     }
                   },
                   "required": ["status", "services"]
@@ -2136,12 +2130,7 @@
                             "example": 0
                           }
                         },
-                        "required": [
-                          "time",
-                          "success",
-                          "rateLimited",
-                          "usageExceeded"
-                        ]
+                        "required": ["time", "success", "rateLimited", "usageExceeded"]
                       }
                     }
                   },

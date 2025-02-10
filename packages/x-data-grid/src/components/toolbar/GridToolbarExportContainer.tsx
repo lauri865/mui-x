@@ -1,12 +1,12 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import { unstable_useId as useId, unstable_useForkRef as useForkRef } from '@mui/utils';
+import { unstable_useForkRef as useForkRef, unstable_useId as useId } from '@mui/utils';
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import { isHideMenuKey } from '../../utils/keyboardUtils';
-import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
-import { GridMenu } from '../menu/GridMenu';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import PropTypes from 'prop-types';
+import * as React from 'react';
 import { gridClasses } from '../../constants/gridClasses';
+import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
+import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import { isHideMenuKey } from '../../utils/keyboardUtils';
+import { GridMenu } from '../menu/GridMenu';
 
 interface GridToolbarExportContainerProps {
   /**

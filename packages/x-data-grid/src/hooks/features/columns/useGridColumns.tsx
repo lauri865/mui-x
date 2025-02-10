@@ -1,42 +1,42 @@
-import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
-import { GridEventListener } from '../../../models/events';
+import * as React from 'react';
 import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
 import { GridColumnApi, GridColumnReorderApi } from '../../../models/api/gridColumnApi';
+import type { GridStateColDef } from '../../../models/colDef/gridColDef';
+import { GridEventListener } from '../../../models/events';
 import { GridStateCommunity } from '../../../models/gridStateCommunity';
-import { useGridApiMethod } from '../../utils/useGridApiMethod';
-import { useGridLogger } from '../../utils/useGridLogger';
-import {
-  gridColumnFieldsSelector,
-  gridColumnDefinitionsSelector,
-  gridColumnLookupSelector,
-  gridColumnsStateSelector,
-  gridColumnVisibilityModelSelector,
-  gridVisibleColumnDefinitionsSelector,
-  gridColumnPositionsSelector,
-} from './gridColumnsSelector';
-import { GridSignature, useGridApiEventHandler } from '../../utils/useGridApiEventHandler';
+import { GridColumnOrderChangeParams } from '../../../models/params/gridColumnOrderChangeParams';
 import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import {
   GridPipeProcessor,
-  useGridRegisterPipeProcessor,
   useGridRegisterPipeApplier,
+  useGridRegisterPipeProcessor,
 } from '../../core/pipeProcessing';
+import { useGridApiEventHandler } from '../../utils/useGridApiEventHandler';
+import { useGridApiMethod } from '../../utils/useGridApiMethod';
+import { GridStateInitializer } from '../../utils/useGridInitializeState';
+import { useGridLogger } from '../../utils/useGridLogger';
+import { GridPreferencePanelsValue } from '../preferencesPanel';
 import {
   GridColumnDimensions,
   GridColumnsInitialState,
   GridColumnsState,
   GridColumnVisibilityModel,
 } from './gridColumnsInterfaces';
-import { GridStateInitializer } from '../../utils/useGridInitializeState';
 import {
-  hydrateColumnsWidth,
-  createColumnsState,
+  gridColumnDefinitionsSelector,
+  gridColumnFieldsSelector,
+  gridColumnLookupSelector,
+  gridColumnPositionsSelector,
+  gridColumnsStateSelector,
+  gridColumnVisibilityModelSelector,
+  gridVisibleColumnDefinitionsSelector,
+} from './gridColumnsSelector';
+import {
   COLUMNS_DIMENSION_PROPERTIES,
+  createColumnsState,
+  hydrateColumnsWidth,
 } from './gridColumnsUtils';
-import { GridPreferencePanelsValue } from '../preferencesPanel';
-import { GridColumnOrderChangeParams } from '../../../models/params/gridColumnOrderChangeParams';
-import type { GridStateColDef } from '../../../models/colDef/gridColDef';
 
 export const columnsStateInitializer: GridStateInitializer<
   Pick<DataGridProcessedProps, 'columnVisibilityModel' | 'initialState' | 'columns'>

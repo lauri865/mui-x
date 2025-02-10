@@ -1,6 +1,6 @@
+import { CloudManager } from '@oramacloud/client';
 import { sync } from 'fumadocs-core/search/orama-cloud';
 import * as fs from 'node:fs/promises';
-import { CloudManager } from '@oramacloud/client';
 
 export async function updateSearchIndexes() {
   const apiKey = process.env.ORAMA_PRIVATE_API_KEY; // private API key [!code highlight]

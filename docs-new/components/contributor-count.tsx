@@ -1,10 +1,9 @@
-import type { HTMLAttributes } from 'react';
-import Image from 'next/image';
 import { cn } from '@/lib/cn';
 import { fetchContributors } from '@/lib/get-contributors';
+import Image from 'next/image';
+import type { HTMLAttributes } from 'react';
 
-export interface ContributorCounterProps
-  extends HTMLAttributes<HTMLDivElement> {
+export interface ContributorCounterProps extends HTMLAttributes<HTMLDivElement> {
   repoOwner: string;
   repoName: string;
   displayCount?: number;
@@ -22,10 +21,7 @@ export default async function ContributorCounter({
     .slice(0, displayCount);
 
   return (
-    <div
-      {...props}
-      className={cn('flex flex-col items-center gap-4', props.className)}
-    >
+    <div {...props} className={cn('flex flex-col items-center gap-4', props.className)}>
       <div className="flex flex-row flex-wrap items-center justify-center md:pe-4">
         {topContributors.map((contributor, i) => (
           <a

@@ -1,14 +1,14 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
 import {
   unstable_composeClasses as composeClasses,
   unstable_useEnhancedEffect as useEnhancedEffect,
 } from '@mui/utils';
-import { GridRenderEditCellParams } from '../../models/params/gridCellParams';
+import PropTypes from 'prop-types';
+import * as React from 'react';
 import { getDataGridUtilityClass } from '../../constants/gridClasses';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-import { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
+import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import { GridRenderEditCellParams } from '../../models/params/gridCellParams';
+import { DataGridProcessedProps } from '../../models/props/DataGridProps';
 
 type OwnerState = { classes: DataGridProcessedProps['classes'] };
 

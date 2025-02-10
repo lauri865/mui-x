@@ -1,5 +1,5 @@
-import { InkeepAI } from '@inkeep/ai-api/sdk';
 import type { Engine, MessageRecord } from '@/components/ai/context';
+import { InkeepAI } from '@inkeep/ai-api/sdk';
 
 const integrationId = process.env.NEXT_PUBLIC_INKEEP_INTEGRATION_ID;
 const apiKey = process.env.NEXT_PUBLIC_INKEEP_API_KEY;
@@ -15,10 +15,7 @@ export async function createInkeepEngine(): Promise<Engine> {
   let sessionId: string | undefined;
   let aborted = true;
 
-  async function generateNew(
-    onUpdate?: (full: string) => void,
-    onEnd?: (full: string) => void,
-  ) {
+  async function generateNew(onUpdate?: (full: string) => void, onEnd?: (full: string) => void) {
     let result;
     if (sessionId) {
       result = await ai.chatSession.continue(sessionId, {
@@ -31,16 +28,14 @@ export async function createInkeepEngine(): Promise<Engine> {
         integrationId: integrationId!,
         stream: true,
         chatSession: {
-          guidance:
-            'make sure to format code blocks, and add language/title to it',
+          guidance: 'make sure to format code blocks, and add language/title to it',
           messages,
         },
       });
     }
 
     if (result.chatResultStream == null) {
-      const content =
-        "Sorry, I don't have enough details to answer your question.";
+      const content = "Sorry, I don't have enough details to answer your question.";
       messages.push({
         role: 'assistant',
         content,

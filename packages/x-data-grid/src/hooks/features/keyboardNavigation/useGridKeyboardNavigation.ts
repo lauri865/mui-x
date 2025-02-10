@@ -1,36 +1,36 @@
-import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
-import { useRtl } from '../../utils/useRtl';
-import { GRID_TREE_DATA_GROUPING_FIELD } from '../../../internals/constants';
+import * as React from 'react';
+import { GRID_CHECKBOX_SELECTION_COL_DEF } from '../../../colDef/gridCheckboxSelectionColDef';
 import { GRID_DETAIL_PANEL_TOGGLE_FIELD } from '../../../colDef/gridDetailPanelColDef';
+import { gridClasses } from '../../../constants/gridClasses';
+import { GRID_TREE_DATA_GROUPING_FIELD } from '../../../internals/constants';
 import { isGroupingColumn } from '../../../internals/utils/gridRowGroupingUtils';
-import { GridEventListener } from '../../../models/events';
+import { GridRowId } from '../../../models';
 import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridEventListener } from '../../../models/events';
+import { GridCellModes } from '../../../models/gridEditRowModel';
 import { GridCellParams } from '../../../models/params/gridCellParams';
+import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
+import { isEventTargetInPortal } from '../../../utils/domUtils';
+import { isNavigationKey } from '../../../utils/keyboardUtils';
+import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
+import { useGridApiEventHandler } from '../../utils/useGridApiEventHandler';
+import { useGridLogger } from '../../utils/useGridLogger';
+import { useRtl } from '../../utils/useRtl';
+import { gridColumnGroupsHeaderMaxDepthSelector } from '../columnGrouping/gridColumnGroupsSelector';
 import {
   gridVisibleColumnDefinitionsSelector,
   gridVisibleColumnFieldsSelector,
 } from '../columns/gridColumnsSelector';
-import { useGridLogger } from '../../utils/useGridLogger';
-import { useGridApiEventHandler } from '../../utils/useGridApiEventHandler';
-import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { gridExpandedSortedRowEntriesSelector } from '../filter/gridFilterSelector';
-import { GRID_CHECKBOX_SELECTION_COL_DEF } from '../../../colDef/gridCheckboxSelectionColDef';
-import { gridClasses } from '../../../constants/gridClasses';
-import { GridCellModes } from '../../../models/gridEditRowModel';
-import { isNavigationKey } from '../../../utils/keyboardUtils';
-import { GridRowId } from '../../../models';
 import { gridFocusColumnGroupHeaderSelector } from '../focus';
-import { gridColumnGroupsHeaderMaxDepthSelector } from '../columnGrouping/gridColumnGroupsSelector';
 import {
   gridHeaderFilteringEditFieldSelector,
   gridHeaderFilteringMenuSelector,
 } from '../headerFiltering/gridHeaderFilteringSelectors';
-import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
-import { isEventTargetInPortal } from '../../../utils/domUtils';
-import { getLeftColumnIndex, getRightColumnIndex, findNonRowSpannedCell } from './utils';
 import { gridListColumnSelector } from '../listView/gridListViewSelectors';
 import { gridVisibleRowsWithPinnedRowsSelector } from '../rowPinning/gridRowPinningInternalSelector';
+import { findNonRowSpannedCell, getLeftColumnIndex, getRightColumnIndex } from './utils';
 
 /**
  * @requires useGridSorting (method) - can be after

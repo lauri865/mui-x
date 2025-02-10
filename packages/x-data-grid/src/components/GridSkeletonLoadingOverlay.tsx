@@ -1,10 +1,9 @@
-import * as React from 'react';
-import clsx from 'clsx';
 import useForkRef from '@mui/utils/useForkRef';
-import { useRtl } from '../hooks/utils/useRtl';
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import { useGridApiContext } from '../hooks/utils/useGridApiContext';
-import { useGridRootProps } from '../hooks/utils/useGridRootProps';
+import clsx from 'clsx';
+import * as React from 'react';
+import { gridClasses } from '../constants/gridClasses';
+import { useThemedComponent } from '../context/GridThemeContext';
 import {
   gridColumnPositionsSelector,
   GridDimensions,
@@ -15,16 +14,17 @@ import {
   useGridApiEventHandler,
   useGridSelector,
 } from '../hooks';
+import { useGridApiContext } from '../hooks/utils/useGridApiContext';
+import { useGridRootProps } from '../hooks/utils/useGridRootProps';
+import { useRtl } from '../hooks/utils/useRtl';
 import { PinnedColumnPosition } from '../internals/constants';
 import { gridDimensionsColumnsTotalWidthSelector } from '../internals/selectors/dimensionSelectors';
-import { GridEventListener } from '../models';
-import { gridClasses } from '../constants/gridClasses';
 import { getPinnedCellOffset } from '../internals/utils/getPinnedCellOffset';
+import { GridEventListener } from '../models';
+import type { GridStateColDef } from '../models/colDef/gridColDef';
 import { shouldCellShowLeftBorder, shouldCellShowRightBorder } from '../utils/cellBorderUtils';
 import { escapeOperandAttributeSelector } from '../utils/domUtils';
 import { rtlFlipSide } from '../utils/rtlFlipSide';
-import { useThemedComponent } from '../context/GridThemeContext';
-import type { GridStateColDef } from '../models/colDef/gridColDef';
 
 const getColIndex = (el: HTMLElement) => parseInt(el.getAttribute('data-colindex')!, 10);
 

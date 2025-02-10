@@ -1,16 +1,16 @@
 'use client';
-import * as React from 'react';
-import PropTypes from 'prop-types';
 import { forwardRef } from '@mui/x-internals/forwardRef';
+import PropTypes from 'prop-types';
+import * as React from 'react';
 import { GridRoot } from '../components';
-import { useGridAriaAttributes } from '../hooks/utils/useGridAriaAttributes';
-import { useGridRowAriaAttributes } from '../hooks/features/rows/useGridRowAriaAttributes';
-import { DataGridProps } from '../models/props/DataGridProps';
 import { GridContextProvider } from '../context/GridContextProvider';
+import { useGridRowAriaAttributes } from '../hooks/features/rows/useGridRowAriaAttributes';
+import { useGridAriaAttributes } from '../hooks/utils/useGridAriaAttributes';
+import { propValidatorsDataGrid, validateProps } from '../internals/utils/propValidation';
+import { GridValidRowModel } from '../models/gridRows';
+import { DataGridProps } from '../models/props/DataGridProps';
 import { useDataGridComponent } from './useDataGridComponent';
 import { useDataGridProps } from './useDataGridProps';
-import { GridValidRowModel } from '../models/gridRows';
-import { propValidatorsDataGrid, validateProps } from '../internals/utils/propValidation';
 
 export type { GridSlotsComponent as GridSlots } from '../models';
 

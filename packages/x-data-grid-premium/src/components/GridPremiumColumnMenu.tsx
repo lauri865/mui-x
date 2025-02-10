@@ -1,14 +1,13 @@
-import * as React from 'react';
 import {
-  GridGenericColumnMenu,
-  GridColumnMenuProps,
   GRID_COLUMN_MENU_SLOTS,
   GRID_COLUMN_MENU_SLOT_PROPS,
   GridColumnMenuItemProps,
+  GridColumnMenuProps,
+  GridGenericColumnMenu,
 } from '@mui/x-data-grid-pro';
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import { GridColumnMenuAggregationItem } from './GridColumnMenuAggregationItem';
 import { isGroupingColumn } from '../hooks/features/rowGrouping';
+import { GridColumnMenuAggregationItem } from './GridColumnMenuAggregationItem';
 import { GridColumnMenuRowGroupItem } from './GridColumnMenuRowGroupItem';
 import { GridColumnMenuRowUngroupItem } from './GridColumnMenuRowUngroupItem';
 

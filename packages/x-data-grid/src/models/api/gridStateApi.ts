@@ -1,6 +1,6 @@
-import { GridStateCommunity } from '../gridStateCommunity';
-import { GridControlledStateEventLookup, GridControlledStateReasonLookup } from '../events';
 import { GridControlStateItem } from '../controlStateItem';
+import { GridControlledStateEventLookup, GridControlledStateReasonLookup } from '../events';
+import { GridStateCommunity } from '../gridStateCommunity';
 
 export interface GridStateApi<State extends GridStateCommunity> {
   /**

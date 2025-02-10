@@ -1,4 +1,4 @@
-import { GridPinnedColumnPosition, GridPinnedColumnFields } from '../columns/gridColumnsInterfaces';
+import { GridPinnedColumnFields, GridPinnedColumnPosition } from '../columns/gridColumnsInterfaces';
 
 export interface GridColumnPinningApi {
   pinColumn: (field: string, side: GridPinnedColumnPosition) => void;

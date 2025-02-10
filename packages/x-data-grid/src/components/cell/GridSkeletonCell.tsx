@@ -1,14 +1,14 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import { fastMemo } from '@mui/x-internals/fastMemo';
-import { createRandomNumberGenerator } from '../../utils/utils';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-import { GridColType } from '../../models';
-import { PinnedColumnPosition } from '../../internals/constants';
-import { useRtl } from '../../hooks/utils/useRtl';
-import { attachPinnedStyle } from '../../internals/utils';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import * as React from 'react';
 import { useThemedComponent } from '../../context/GridThemeContext';
+import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import { useRtl } from '../../hooks/utils/useRtl';
+import { PinnedColumnPosition } from '../../internals/constants';
+import { attachPinnedStyle } from '../../internals/utils';
+import { GridColType } from '../../models';
+import { createRandomNumberGenerator } from '../../utils/utils';
 import { gridPinnedColumnPositionLookup } from './GridCell';
 
 const CIRCULAR_CONTENT_SIZE = '1.3em';

@@ -12,16 +12,16 @@ import {
   GridSkeletonRowNode,
   GridTreeNode,
 } from '../../../models';
-import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { GridApiCommunity, GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import {
+  GridRowIdToModelLookup,
   GridRowsFullUpdate,
   GridRowsInternalCache,
+  GridRowsPartialUpdateAction,
   GridRowsPartialUpdates,
   GridRowsState,
   GridRowTreeCreationParams,
-  GridRowIdToModelLookup,
-  GridRowsPartialUpdateAction,
 } from './gridRowsInterfaces';
 
 export const GRID_ROOT_GROUP_ID: GridRowId = `auto-generated-group-node-root`;

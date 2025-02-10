@@ -1,6 +1,6 @@
-import { createSelector, createSelectorMemoized } from '../../../utils/createSelector';
-import { GridStateCommunity } from '../../../models/gridStateCommunity';
 import { GridRowEntry, GridValidRowModel } from '../../../models/gridRows';
+import { GridStateCommunity } from '../../../models/gridStateCommunity';
+import { createSelector, createSelectorMemoized } from '../../../utils/createSelector';
 
 export const gridPinnedRowsModelSelector = (state: GridStateCommunity) => state.pinnedRows;
 

@@ -1,31 +1,31 @@
-import * as React from 'react';
+import composeClasses from '@mui/utils/composeClasses';
 import {
-  gridFocusColumnHeaderFilterSelector,
-  useGridSelector,
-  gridFilterModelSelector,
-  gridTabIndexColumnHeaderFilterSelector,
   getDataGridUtilityClass,
   GridFilterItem,
+  gridFilterModelSelector,
+  gridFocusColumnHeaderFilterSelector,
+  gridTabIndexColumnHeaderFilterSelector,
+  useGridSelector,
 } from '@mui/x-data-grid';
 import {
+  getGridFilter,
+  GetHeadersParams,
+  GridColumnHeaderRow,
   gridDimensionsColumnsTotalWidthSelector,
   gridHasFillerSelector,
   gridHeaderFilterHeightSelector,
-  gridVerticalScrollbarWidthSelector,
-  useGridColumnHeaders as useGridColumnHeadersCommunity,
-  UseGridColumnHeadersProps,
-  GetHeadersParams,
-  useGridPrivateApiContext,
-  getGridFilter,
   GridStateColDef,
-  GridColumnHeaderRow,
+  gridVerticalScrollbarWidthSelector,
+  PinnedColumnPosition,
   shouldCellShowLeftBorder,
   shouldCellShowRightBorder,
-  PinnedColumnPosition,
+  useGridColumnHeaders as useGridColumnHeadersCommunity,
+  UseGridColumnHeadersProps,
+  useGridPrivateApiContext,
 } from '@mui/x-data-grid/internals';
-import composeClasses from '@mui/utils/composeClasses';
-import { useGridRootProps } from '../../utils/useGridRootProps';
+import * as React from 'react';
 import { DataGridProProcessedProps } from '../../../models/dataGridProProps';
+import { useGridRootProps } from '../../utils/useGridRootProps';
 
 type OwnerState = DataGridProProcessedProps;
 

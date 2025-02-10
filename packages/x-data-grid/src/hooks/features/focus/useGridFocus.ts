@@ -1,32 +1,32 @@
-import * as React from 'react';
-import { RefObject } from '@mui/x-internals/types';
 import {
   unstable_ownerDocument as ownerDocument,
   unstable_useEventCallback as useEventcallback,
 } from '@mui/utils';
+import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
+import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
 import { gridClasses } from '../../../constants/gridClasses';
-import { GridEventListener, GridEventLookup } from '../../../models/events';
 import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
 import { GridFocusApi, GridFocusPrivateApi } from '../../../models/api/gridFocusApi';
+import { GridEventListener, GridEventLookup } from '../../../models/events';
+import { GridCellCoordinates } from '../../../models/gridCell';
+import type { GridRowEntry, GridRowId } from '../../../models/gridRows';
 import { GridCellParams } from '../../../models/params/gridCellParams';
-import { useGridApiMethod } from '../../utils/useGridApiMethod';
-import { useGridLogger } from '../../utils/useGridLogger';
-import { useGridApiEventHandler } from '../../utils/useGridApiEventHandler';
 import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { isNavigationKey } from '../../../utils/keyboardUtils';
+import { clamp } from '../../../utils/utils';
+import { useGridApiEventHandler } from '../../utils/useGridApiEventHandler';
+import { useGridApiMethod } from '../../utils/useGridApiMethod';
+import { GridStateInitializer } from '../../utils/useGridInitializeState';
+import { useGridLogger } from '../../utils/useGridLogger';
+import { getVisibleRows } from '../../utils/useGridVisibleRows';
+import { gridVisibleColumnDefinitionsSelector } from '../columns/gridColumnsSelector';
+import { gridVisiblePinnedRowsSelector } from '../rowPinning';
+import { gridVisibleRowIdsWithPinnedRowsSelector } from '../rowPinning/gridRowPinningInternalSelector';
 import {
   gridFocusCellSelector,
   gridFocusColumnGroupHeaderSelector,
 } from './gridFocusStateSelector';
-import { GridStateInitializer } from '../../utils/useGridInitializeState';
-import { gridVisibleColumnDefinitionsSelector } from '../columns/gridColumnsSelector';
-import { getVisibleRows } from '../../utils/useGridVisibleRows';
-import { clamp } from '../../../utils/utils';
-import { GridCellCoordinates } from '../../../models/gridCell';
-import type { GridRowEntry, GridRowId } from '../../../models/gridRows';
-import { gridVisiblePinnedRowsSelector } from '../rowPinning';
-import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
-import { gridVisibleRowIdsWithPinnedRowsSelector } from '../rowPinning/gridRowPinningInternalSelector';
 
 export const focusStateInitializer: GridStateInitializer = (state, props) => {
   return {

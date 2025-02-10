@@ -1,13 +1,13 @@
-import * as React from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import { unstable_debounce as debounce } from '@mui/utils';
 import composeClasses from '@mui/utils/composeClasses';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import * as React from 'react';
 import { getDataGridUtilityClass } from '../../constants';
+import { gridQuickFilterValuesSelector } from '../../hooks/features/filter';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { useGridSelector } from '../../hooks/utils/useGridSelector';
-import { gridQuickFilterValuesSelector } from '../../hooks/features/filter';
 import { TextFieldProps } from '../../models/gridBaseSlots';
 import { GridFilterModel } from '../../models/gridFilterModel';
 import type { DataGridProcessedProps } from '../../models/props/DataGridProps';

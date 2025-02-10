@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { GridColDef } from '../../../models/colDef/gridColDef';
 import { GridColumnMenuRootProps } from '../../../hooks/features/columnMenu';
+import { GridColDef } from '../../../models/colDef/gridColDef';
 
 export interface GridColumnMenuContainerProps extends React.HTMLAttributes<HTMLUListElement> {
   showMenu: () => void;

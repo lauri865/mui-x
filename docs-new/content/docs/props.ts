@@ -1,17 +1,13 @@
+import type { AutoTypeTable } from 'fumadocs-typescript/ui';
 import type { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
 import type { Callout } from 'fumadocs-ui/components/callout';
+import type { Card } from 'fumadocs-ui/components/card';
 import type { File, Folder } from 'fumadocs-ui/components/files';
 import type { InlineTOC } from 'fumadocs-ui/components/inline-toc';
 import type { TypeTable } from 'fumadocs-ui/components/type-table';
-import type { Card } from 'fumadocs-ui/components/card';
 import type { DocsLayoutProps } from 'fumadocs-ui/layouts/docs';
-import type {
-  AnchorHTMLAttributes,
-  ComponentPropsWithoutRef,
-  HTMLAttributes,
-} from 'react';
 import type { DocsPageProps } from 'fumadocs-ui/page';
-import type { AutoTypeTable } from 'fumadocs-typescript/ui';
+import type { AnchorHTMLAttributes, ComponentPropsWithoutRef, HTMLAttributes } from 'react';
 
 export type AccordionsProps = Omit<
   ComponentPropsWithoutRef<typeof Accordions>,
@@ -50,9 +46,7 @@ export type CardProps = Omit<
 
 export type TypeTableProps = ComponentPropsWithoutRef<typeof TypeTable>;
 
-export type ObjectTypeProps = ComponentPropsWithoutRef<
-  typeof TypeTable
->['type'][string];
+export type ObjectTypeProps = ComponentPropsWithoutRef<typeof TypeTable>['type'][string];
 
 export type { DocsLayoutProps };
 
@@ -68,9 +62,7 @@ export type PageProps = DocsPageProps;
 export type BreadcrumbProps = NonNullable<DocsPageProps['breadcrumb']>;
 
 export type TOCProps = NonNullable<DocsPageProps['tableOfContent']>;
-export type TOCPopoverProps = NonNullable<
-  DocsPageProps['tableOfContentPopover']
->;
+export type TOCPopoverProps = NonNullable<DocsPageProps['tableOfContentPopover']>;
 
 export type FooterProps = NonNullable<DocsPageProps['footer']>;
 

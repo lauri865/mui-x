@@ -1,14 +1,13 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import { useGridSelector } from '../hooks/utils/useGridSelector';
+import PropTypes from 'prop-types';
+import { gridFilteredTopLevelRowCountSelector } from '../hooks/features/filter/gridFilterSelector';
 import { gridTopLevelRowCountSelector } from '../hooks/features/rows/gridRowsSelector';
 import { selectedGridRowsCountSelector } from '../hooks/features/rowSelection/gridRowSelectionSelector';
-import { gridFilteredTopLevelRowCountSelector } from '../hooks/features/filter/gridFilterSelector';
 import { useGridApiContext } from '../hooks/utils/useGridApiContext';
-import { GridSelectedRowCount } from './GridSelectedRowCount';
-import { GridFooterContainer, GridFooterContainerProps } from './containers/GridFooterContainer';
 import { useGridRootProps } from '../hooks/utils/useGridRootProps';
+import { useGridSelector } from '../hooks/utils/useGridSelector';
+import { GridFooterContainer, GridFooterContainerProps } from './containers/GridFooterContainer';
+import { GridSelectedRowCount } from './GridSelectedRowCount';
 
 const GridFooter = forwardRef<HTMLDivElement, GridFooterContainerProps>(
   function GridFooter(props, ref) {

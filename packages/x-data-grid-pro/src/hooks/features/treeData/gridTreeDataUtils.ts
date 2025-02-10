@@ -1,15 +1,15 @@
-import { RefObject } from '@mui/x-internals/types';
 import {
+  GridFilterModel,
+  GridFilterState,
   GridRowTreeConfig,
   GridTreeNode,
-  GridFilterState,
-  GridFilterModel,
 } from '@mui/x-data-grid';
 import {
   GridAggregatedFilterItemApplier,
   GridAggregatedFilterItemApplierResult,
   passFilterLogic,
 } from '@mui/x-data-grid/internals';
+import { RefObject } from '@mui/x-internals/types';
 import type { GridPrivateApiPro } from '../../../models/gridApiPro';
 
 interface FilterRowTreeFromTreeDataParams {

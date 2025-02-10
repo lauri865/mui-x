@@ -1,16 +1,12 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import {
-  unstable_composeClasses as composeClasses,
-  unstable_useEnhancedEffect as useEnhancedEffect,
-} from '@mui/utils';
+import { unstable_useEnhancedEffect as useEnhancedEffect } from '@mui/utils';
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import { GridRenderEditCellParams } from '../../models/params/gridCellParams';
-import { getDataGridUtilityClass } from '../../constants/gridClasses';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-import { DataGridProcessedProps } from '../../models/props/DataGridProps';
-import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
+import PropTypes from 'prop-types';
+import * as React from 'react';
 import { useThemedComponent } from '../../context/GridThemeContext';
+import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
+import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import { GridRenderEditCellParams } from '../../models/params/gridCellParams';
+import { DataGridProcessedProps } from '../../models/props/DataGridProps';
 
 type OwnerState = DataGridProcessedProps;
 

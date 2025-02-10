@@ -1,8 +1,8 @@
-import * as React from 'react';
 import { forwardRef } from '@mui/x-internals/forwardRef';
+import * as React from 'react';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
-import { GridStateColDef } from '../../models/colDef/gridColDef';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import { GridStateColDef } from '../../models/colDef/gridColDef';
 
 export interface ColumnHeaderMenuIconProps {
   colDef: GridStateColDef;

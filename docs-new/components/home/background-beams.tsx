@@ -1,6 +1,6 @@
 'use client';
-import React from 'react';
 import { cn } from '@/lib/cn';
+import React from 'react';
 
 export const BackgroundBeams = React.memo(({ className }: { className?: string }) => {
   return (

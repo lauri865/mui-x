@@ -1,28 +1,28 @@
-import * as React from 'react';
-import { expect } from 'chai';
-import { spy } from 'sinon';
-import { RefObject } from '@mui/x-internals/types';
 import {
-  DataGridPro,
-  GridApi,
-  useGridApiRef,
-  DataGridProProps,
-  GridRowParams,
-  gridClasses,
-  GRID_DETAIL_PANEL_TOGGLE_FIELD,
-} from '@mui/x-data-grid-pro';
-import { useBasicDemoData } from '@mui/x-data-grid-generator';
-import {
+  act,
   createRenderer,
   fireEvent,
+  reactMajor,
   screen,
   waitFor,
-  act,
-  reactMajor,
 } from '@mui/internal-test-utils';
-import { $, $$, grid, getRow, getCell, getColumnValues } from 'test/utils/helperFn';
+import { useBasicDemoData } from '@mui/x-data-grid-generator';
+import {
+  DataGridPro,
+  DataGridProProps,
+  GRID_DETAIL_PANEL_TOGGLE_FIELD,
+  GridApi,
+  GridRowParams,
+  gridClasses,
+  useGridApiRef,
+} from '@mui/x-data-grid-pro';
+import { RefObject } from '@mui/x-internals/types';
+import { expect } from 'chai';
+import * as React from 'react';
+import { spy } from 'sinon';
 import { fireUserEvent } from 'test/utils/fireUserEvent';
-import { testSkipIf, isJSDOM } from 'test/utils/skipIf';
+import { $, $$, getCell, getColumnValues, getRow, grid } from 'test/utils/helperFn';
+import { isJSDOM, testSkipIf } from 'test/utils/skipIf';
 
 describe('<DataGridPro /> - Detail panel', () => {
   const { render } = createRenderer();

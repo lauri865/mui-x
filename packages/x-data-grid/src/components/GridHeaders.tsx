@@ -1,25 +1,24 @@
-import * as React from 'react';
 import { fastMemo } from '@mui/x-internals/fastMemo';
-import { useGridPrivateApiContext } from '../hooks/utils/useGridPrivateApiContext';
-import { useGridSelector } from '../hooks/utils/useGridSelector';
-import { useGridRootProps } from '../hooks/utils/useGridRootProps';
+import {
+  gridColumnGroupsHeaderMaxDepthSelector,
+  gridColumnGroupsHeaderStructureSelector,
+} from '../hooks/features/columnGrouping/gridColumnGroupsSelector';
 import {
   gridColumnVisibilityModelSelector,
   gridVisibleColumnDefinitionsSelector,
 } from '../hooks/features/columns/gridColumnsSelector';
 import { gridFilterActiveItemsLookupSelector } from '../hooks/features/filter/gridFilterSelector';
-import { gridSortColumnLookupSelector } from '../hooks/features/sorting/gridSortingSelector';
 import {
-  gridTabIndexColumnHeaderSelector,
-  gridTabIndexCellSelector,
-  gridFocusColumnHeaderSelector,
-  gridTabIndexColumnGroupHeaderSelector,
   gridFocusColumnGroupHeaderSelector,
+  gridFocusColumnHeaderSelector,
+  gridTabIndexCellSelector,
+  gridTabIndexColumnGroupHeaderSelector,
+  gridTabIndexColumnHeaderSelector,
 } from '../hooks/features/focus/gridFocusStateSelector';
-import {
-  gridColumnGroupsHeaderMaxDepthSelector,
-  gridColumnGroupsHeaderStructureSelector,
-} from '../hooks/features/columnGrouping/gridColumnGroupsSelector';
+import { gridSortColumnLookupSelector } from '../hooks/features/sorting/gridSortingSelector';
+import { useGridPrivateApiContext } from '../hooks/utils/useGridPrivateApiContext';
+import { useGridRootProps } from '../hooks/utils/useGridRootProps';
+import { useGridSelector } from '../hooks/utils/useGridSelector';
 
 function GridHeaders() {
   const apiRef = useGridPrivateApiContext();

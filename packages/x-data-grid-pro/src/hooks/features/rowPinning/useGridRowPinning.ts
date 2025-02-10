@@ -1,10 +1,10 @@
-import * as React from 'react';
-import { RefObject } from '@mui/x-internals/types';
 import { useGridApiMethod } from '@mui/x-data-grid';
 import { getRowIdFromRowModel, GridStateInitializer } from '@mui/x-data-grid/internals';
+import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
 
-import { GridPrivateApiPro } from '../../../models/gridApiPro';
 import { DataGridProProcessedProps, DataGridProProps } from '../../../models/dataGridProProps';
+import { GridPrivateApiPro } from '../../../models/gridApiPro';
 import {
   GridPinnedRowsProp,
   GridRowPinningApi,

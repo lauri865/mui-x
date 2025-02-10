@@ -1,27 +1,27 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 import {
-  DataGridPro,
-  GridColDef,
-  useGridApiContext,
-  GridRowParams,
-  GRID_DETAIL_PANEL_TOGGLE_FIELD,
-  GridDimensions,
-} from '@mui/x-data-grid-pro';
-import {
-  randomCreatedDate,
-  randomPrice,
-  randomCurrency,
-  randomCountry,
+  randomAddress,
   randomCity,
+  randomCommodity,
+  randomCountry,
+  randomCreatedDate,
+  randomCurrency,
   randomEmail,
   randomInt,
-  randomAddress,
-  randomCommodity,
+  randomPrice,
 } from '@mui/x-data-grid-generator';
+import {
+  DataGridPro,
+  GRID_DETAIL_PANEL_TOGGLE_FIELD,
+  GridColDef,
+  GridDimensions,
+  GridRowParams,
+  useGridApiContext,
+} from '@mui/x-data-grid-pro';
+import * as React from 'react';
 
 const getDetailPanelWidth = (gridDimensions: GridDimensions) => {
   return gridDimensions.viewportInnerSize.width;

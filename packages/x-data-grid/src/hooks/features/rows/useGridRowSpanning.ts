@@ -1,21 +1,21 @@
-import * as React from 'react';
-import { RefObject } from '@mui/x-internals/types';
 import useLazyRef from '@mui/utils/useLazyRef';
-import { GRID_DETAIL_PANEL_TOGGLE_FIELD } from '../../../colDef/gridDetailPanelColDef';
-import { gridVisibleColumnDefinitionsSelector } from '../columns/gridColumnsSelector';
-import { getVisibleRows } from '../../utils/useGridVisibleRows';
-import { gridRenderContextSelector } from '../virtualization/gridVirtualizationSelectors';
-import { GridRenderContext } from '../../../models';
-import type { GridColDef } from '../../../models/colDef';
-import type { GridRowId, GridValidRowModel, GridRowEntry } from '../../../models/gridRows';
-import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
-import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
-import type { GridStateInitializer } from '../../utils/useGridInitializeState';
-import { getUnprocessedRange, isRowContextInitialized, getCellValue } from './gridRowSpanningUtils';
+import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
 import { GRID_CHECKBOX_SELECTION_FIELD } from '../../../colDef/gridCheckboxSelectionColDef';
-import { useGridApiEventHandler } from '../../utils/useGridApiEventHandler';
+import { GRID_DETAIL_PANEL_TOGGLE_FIELD } from '../../../colDef/gridDetailPanelColDef';
+import { GridRenderContext } from '../../../models';
+import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import type { GridColDef } from '../../../models/colDef';
+import type { GridRowEntry, GridRowId, GridValidRowModel } from '../../../models/gridRows';
+import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { runIf } from '../../../utils/utils';
+import { useGridApiEventHandler } from '../../utils/useGridApiEventHandler';
+import type { GridStateInitializer } from '../../utils/useGridInitializeState';
+import { getVisibleRows } from '../../utils/useGridVisibleRows';
+import { gridVisibleColumnDefinitionsSelector } from '../columns/gridColumnsSelector';
 import { gridPageSizeSelector } from '../pagination';
+import { gridRenderContextSelector } from '../virtualization/gridVirtualizationSelectors';
+import { getCellValue, getUnprocessedRange, isRowContextInitialized } from './gridRowSpanningUtils';
 import { gridDataRowIdsSelector } from './gridRowsSelector';
 
 export interface GridRowSpanningState {

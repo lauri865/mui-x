@@ -1,24 +1,24 @@
 'use client';
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import { useLicenseVerifier, Watermark } from '@mui/x-license';
-import { GridRoot, GridContextProvider, GridValidRowModel } from '@mui/x-data-grid-pro';
+import { GridContextProvider, GridRoot, GridValidRowModel } from '@mui/x-data-grid-pro';
 import {
+  PropValidator,
   propValidatorsDataGrid,
   propValidatorsDataGridPro,
-  PropValidator,
   validateProps,
 } from '@mui/x-data-grid-pro/internals';
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import { useDataGridPremiumComponent } from './useDataGridPremiumComponent';
+import { useLicenseVerifier, Watermark } from '@mui/x-license';
+import PropTypes from 'prop-types';
+import * as React from 'react';
+import { useGridRowAriaAttributes } from '../hooks/features/rows/useGridRowAriaAttributes';
+import { useGridAriaAttributes } from '../hooks/utils/useGridAriaAttributes';
 import {
   DataGridPremiumProcessedProps,
   DataGridPremiumProps,
 } from '../models/dataGridPremiumProps';
-import { useDataGridPremiumProps } from './useDataGridPremiumProps';
 import { getReleaseInfo } from '../utils/releaseInfo';
-import { useGridAriaAttributes } from '../hooks/utils/useGridAriaAttributes';
-import { useGridRowAriaAttributes } from '../hooks/features/rows/useGridRowAriaAttributes';
+import { useDataGridPremiumComponent } from './useDataGridPremiumComponent';
+import { useDataGridPremiumProps } from './useDataGridPremiumProps';
 
 export type { GridPremiumSlotsComponent as GridSlots } from '../models';
 

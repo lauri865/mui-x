@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { GridColumnMenuRootProps } from './columnMenuInterfaces';
 import { GridColDef } from '../../../models/colDef/gridColDef';
-import { useGridRootProps } from '../../utils/useGridRootProps';
 import { useGridPrivateApiContext } from '../../utils/useGridPrivateApiContext';
+import { useGridRootProps } from '../../utils/useGridRootProps';
+import { GridColumnMenuRootProps } from './columnMenuInterfaces';
 
 interface UseGridColumnMenuSlotsProps extends GridColumnMenuRootProps {
   colDef: GridColDef;

@@ -1,20 +1,6 @@
 'use client';
-import {
-  type HTMLAttributes,
-  type ReactNode,
-  type TextareaHTMLAttributes,
-  use,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-import { Loader2, RefreshCw, Send, X } from 'lucide-react';
-import defaultMdxComponents from 'fumadocs-ui/mdx';
-import { cn } from '@/lib/cn';
-import { buttonVariants } from 'fumadocs-ui/components/ui/button';
-import type { Processor } from './markdown-processor';
-import Link from 'fumadocs-core/link';
 import { AIProvider, Context, type MessageRecord } from '@/components/ai/context';
+import { cn } from '@/lib/cn';
 import {
   Dialog,
   DialogClose,
@@ -24,6 +10,20 @@ import {
   type DialogProps,
   DialogTitle,
 } from '@radix-ui/react-dialog';
+import Link from 'fumadocs-core/link';
+import { buttonVariants } from 'fumadocs-ui/components/ui/button';
+import defaultMdxComponents from 'fumadocs-ui/mdx';
+import { Loader2, RefreshCw, Send, X } from 'lucide-react';
+import {
+  type HTMLAttributes,
+  type ReactNode,
+  type TextareaHTMLAttributes,
+  use,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import type { Processor } from './markdown-processor';
 
 const listeners: (() => void)[] = [];
 

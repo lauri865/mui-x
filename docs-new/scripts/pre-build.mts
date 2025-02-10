@@ -1,5 +1,5 @@
-import { generateDocs } from '@/scripts/generate-docs.mjs';
 import { buildRegistry } from '@/scripts/build-registry.mjs';
+import { generateDocs } from '@/scripts/generate-docs.mjs';
 
 async function main() {
   await Promise.all([generateDocs(), buildRegistry()]);

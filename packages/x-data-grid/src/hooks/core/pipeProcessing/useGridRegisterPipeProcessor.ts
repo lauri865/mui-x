@@ -1,8 +1,8 @@
-import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
-import { useFirstRender } from '../../utils/useFirstRender';
+import * as React from 'react';
 import { GridPrivateApiCommon } from '../../../models/api/gridApiCommon';
-import { GridPipeProcessorGroup, GridPipeProcessor } from './gridPipeProcessingApi';
+import { useFirstRender } from '../../utils/useFirstRender';
+import { GridPipeProcessor, GridPipeProcessorGroup } from './gridPipeProcessingApi';
 
 export const useGridRegisterPipeProcessor = <
   PrivateApi extends GridPrivateApiCommon,

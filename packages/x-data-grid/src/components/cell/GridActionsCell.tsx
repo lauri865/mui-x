@@ -1,13 +1,13 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import { useRtl } from '../../hooks/utils/useRtl';
 import { unstable_useId as useId } from '@mui/utils';
-import { GridRenderCellParams } from '../../models/params/gridCellParams';
+import PropTypes from 'prop-types';
+import * as React from 'react';
 import { gridClasses } from '../../constants/gridClasses';
-import { GridMenu, GridMenuProps } from '../menu/GridMenu';
-import { GridActionsColDef } from '../../models/colDef/gridColDef';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
+import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import { useRtl } from '../../hooks/utils/useRtl';
+import { GridActionsColDef } from '../../models/colDef/gridColDef';
+import { GridRenderCellParams } from '../../models/params/gridCellParams';
+import { GridMenu, GridMenuProps } from '../menu/GridMenu';
 
 const hasActions = (colDef: any): colDef is GridActionsColDef =>
   typeof colDef.getActions === 'function';

@@ -1,7 +1,6 @@
 import {
   ArrowLeftRightIcon,
   ChevronDownIcon,
-  ChevronRight,
   ChevronRightIcon,
   ChevronUpIcon,
   Columns3Icon,
@@ -13,11 +12,11 @@ import {
 } from 'lucide-react';
 import './index.css';
 
-export { Checkbox } from './components/ui/checkbox';
-export { Tooltip } from './components/ui/tooltip';
 export { Button } from './components/ui/button';
+export { Checkbox } from './components/ui/checkbox';
 export * as ContextMenu from './components/ui/context-menu';
 export * as DropdownMenu from './components/ui/dropdown-menu';
+export { Tooltip } from './components/ui/tooltip';
 
 export const icons = {
   pin: PinIcon,

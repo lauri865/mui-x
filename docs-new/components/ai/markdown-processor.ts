@@ -1,15 +1,15 @@
-import { remark } from 'remark';
-import remarkGfm from 'remark-gfm';
-import remarkRehype from 'remark-rehype';
-import remarkMath from 'remark-math';
-import rehypeKatex from 'rehype-katex';
 import rehypeShikiFromHighlighter from '@shikijs/rehype/core';
+import type { Root } from 'hast';
 import { type Components, toJsxRuntime } from 'hast-util-to-jsx-runtime';
 import { type ReactNode } from 'react';
 import { Fragment, jsx, jsxs } from 'react/jsx-runtime';
+import rehypeKatex from 'rehype-katex';
+import { remark } from 'remark';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import remarkRehype from 'remark-rehype';
 import { createHighlighter } from 'shiki/bundle/web';
 import { createJavaScriptRegexEngine } from 'shiki/engine/javascript';
-import type { Root } from 'hast';
 
 interface MetaValue {
   name: string;
@@ -27,10 +27,7 @@ const metaValues: MetaValue[] = [
 ];
 
 export interface Processor {
-  process: (
-    content: string,
-    components: Partial<Components>,
-  ) => Promise<ReactNode>;
+  process: (content: string, components: Partial<Components>) => Promise<ReactNode>;
 }
 
 export function createProcessor(): Processor {

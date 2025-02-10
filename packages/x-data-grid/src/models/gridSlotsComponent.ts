@@ -1,7 +1,7 @@
-import * as React from 'react';
 import { Checkbox, ContextMenu, DropdownMenu } from '@twgrid/x-data-grid-shadcn';
-import type { GridSlotProps } from './gridSlotsComponentsProps';
+import * as React from 'react';
 import type { GridIconSlotsComponent } from './gridIconSlotsComponent';
+import type { GridSlotProps } from './gridSlotsComponentsProps';
 
 export type { GridSlotProps } from './gridSlotsComponentsProps';
 

@@ -1,18 +1,11 @@
-import type { Metadata } from 'next';
-import {
-  DocsPage,
-  DocsBody,
-  DocsTitle,
-  DocsDescription,
-} from 'fumadocs-ui/page';
-import { notFound } from 'next/navigation';
-import defaultComponents from 'fumadocs-ui/mdx';
-import { compileMDX, parseFrontmatter } from '@fumadocs/mdx-remote';
 import { type Frontmatter, getPage, getPages } from '@/app/docs/utils';
+import { compileMDX, parseFrontmatter } from '@fumadocs/mdx-remote';
+import defaultComponents from 'fumadocs-ui/mdx';
+import { DocsBody, DocsDescription, DocsPage, DocsTitle } from 'fumadocs-ui/page';
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
-export default async function Page(props: {
-  params: Promise<{ slug?: string[] }>;
-}) {
+export default async function Page(props: { params: Promise<{ slug?: string[] }> }) {
   const params = await props.params;
   const page = await getPage(params.slug);
   if (!page) notFound();
@@ -41,9 +34,7 @@ export async function generateStaticParams() {
   return (await getPages()).map((page) => ({ slug: page.slug }));
 }
 
-export async function generateMetadata(props: {
-  params: Promise<{ slug?: string[] }>;
-}) {
+export async function generateMetadata(props: { params: Promise<{ slug?: string[] }> }) {
   const params = await props.params;
   const page = await getPage(params.slug);
   if (!page) notFound();

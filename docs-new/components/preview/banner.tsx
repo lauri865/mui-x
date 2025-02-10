@@ -1,5 +1,5 @@
-import { type ReactNode } from 'react';
 import { Banner } from 'fumadocs-ui/components/banner';
+import { type ReactNode } from 'react';
 
 export default function Preview(): ReactNode {
   return (
@@ -8,12 +8,7 @@ export default function Preview(): ReactNode {
         Be careful, Fumadocs v99 has released
       </Banner>
 
-      <Banner
-        className="z-0"
-        id="test-rainbow"
-        variant="rainbow"
-        changeLayout={false}
-      >
+      <Banner className="z-0" id="test-rainbow" variant="rainbow" changeLayout={false}>
         Using the <code>rainbow</code> variant
       </Banner>
 

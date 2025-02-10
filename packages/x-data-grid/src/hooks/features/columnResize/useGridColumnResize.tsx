@@ -1,35 +1,40 @@
-import * as React from 'react';
-import { RefObject } from '@mui/x-internals/types';
 import {
   unstable_ownerDocument as ownerDocument,
   unstable_useEventCallback as useEventCallback,
 } from '@mui/utils';
 import useLazyRef from '@mui/utils/useLazyRef';
-import { useRtl } from '../../../hooks/utils/useRtl';
-import {
-  findGridCellElementsFromCol,
-  findGridElement,
-  findLeftPinnedCellsAfterCol,
-  findRightPinnedCellsBeforeCol,
-  getFieldFromHeaderElem,
-  findHeaderElementFromField,
-  getFieldsFromGroupHeaderElem,
-  findGroupHeaderElementsFromField,
-  findGridHeader,
-  findGridCells,
-  findParentElementFromClassName,
-  findLeftPinnedHeadersAfterCol,
-  findRightPinnedHeadersBeforeCol,
-  escapeOperandAttributeSelector,
-} from '../../../utils/domUtils';
-import {
-  GridAutosizeOptions,
-  GridColumnResizeApi,
-  DEFAULT_GRID_AUTOSIZE_OPTIONS,
-} from './gridColumnResizeApi';
-import { CursorCoordinates } from '../../../models/cursorCoordinates';
+import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
 import { GridColumnHeaderSeparatorSides } from '../../../components/columnHeaders/GridColumnHeaderSeparator';
 import { gridClasses } from '../../../constants/gridClasses';
+import { useRtl } from '../../../hooks/utils/useRtl';
+import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import type { GridStateColDef } from '../../../models/colDef/gridColDef';
+import { CursorCoordinates } from '../../../models/cursorCoordinates';
+import type { GridEventListener } from '../../../models/events/gridEventListener';
+import type { GridColumnResizeParams } from '../../../models/params/gridColumnResizeParams';
+import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
+import {
+  ControllablePromise,
+  createControllablePromise,
+} from '../../../utils/createControllablePromise';
+import {
+  escapeOperandAttributeSelector,
+  findGridCellElementsFromCol,
+  findGridCells,
+  findGridElement,
+  findGridHeader,
+  findGroupHeaderElementsFromField,
+  findHeaderElementFromField,
+  findLeftPinnedCellsAfterCol,
+  findLeftPinnedHeadersAfterCol,
+  findParentElementFromClassName,
+  findRightPinnedCellsBeforeCol,
+  findRightPinnedHeadersBeforeCol,
+  getFieldFromHeaderElem,
+  getFieldsFromGroupHeaderElem,
+} from '../../../utils/domUtils';
+import { clamp } from '../../../utils/utils';
 import {
   useGridApiEventHandler,
   useGridApiMethod,
@@ -39,21 +44,16 @@ import {
   useGridSelector,
   useOnMount,
 } from '../../utils';
+import { GridStateInitializer } from '../../utils/useGridInitializeState';
+import { useTimeout } from '../../utils/useTimeout';
+import { gridColumnsStateSelector } from '../columns';
+import { GridPinnedColumnPosition } from '../columns/gridColumnsInterfaces';
 import { gridVirtualizationColumnEnabledSelector } from '../virtualization';
 import {
-  ControllablePromise,
-  createControllablePromise,
-} from '../../../utils/createControllablePromise';
-import { GridStateInitializer } from '../../utils/useGridInitializeState';
-import { clamp } from '../../../utils/utils';
-import { useTimeout } from '../../utils/useTimeout';
-import { GridPinnedColumnPosition } from '../columns/gridColumnsInterfaces';
-import { gridColumnsStateSelector } from '../columns';
-import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
-import type { GridColumnResizeParams } from '../../../models/params/gridColumnResizeParams';
-import type { GridStateColDef } from '../../../models/colDef/gridColDef';
-import type { GridEventListener } from '../../../models/events/gridEventListener';
-import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+  DEFAULT_GRID_AUTOSIZE_OPTIONS,
+  GridAutosizeOptions,
+  GridColumnResizeApi,
+} from './gridColumnResizeApi';
 
 type AutosizeOptionsRequired = Required<GridAutosizeOptions>;
 

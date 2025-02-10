@@ -1,52 +1,52 @@
-import * as React from 'react';
-import { RefObject } from '@mui/x-internals/types';
 import {
-  unstable_useEventCallback as useEventCallback,
   unstable_useEnhancedEffect as useEnhancedEffect,
+  unstable_useEventCallback as useEventCallback,
 } from '@mui/utils';
+import { RefObject } from '@mui/x-internals/types';
 import { warnOnce } from '@mui/x-internals/warning';
+import * as React from 'react';
+import { GRID_ACTIONS_COLUMN_TYPE } from '../../../colDef';
+import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import {
+  GridEditingSharedApi,
+  GridEditingSharedPrivateApi,
+  GridRowEditingApi,
+  GridRowEditingPrivateApi,
+  GridRowModesModel,
+  GridRowModesModelProps,
+  GridStartRowEditModeParams,
+  GridStopRowEditModeParams,
+} from '../../../models/api/gridEditingApi';
+import { GridEventListener } from '../../../models/events/gridEventListener';
+import {
+  GridEditCellProps,
+  GridEditingState,
+  GridEditModes,
+  GridEditRowProps,
+  GridRowModes,
+} from '../../../models/gridEditRowModel';
+import { GridRowId } from '../../../models/gridRows';
+import { GridCellParams } from '../../../models/params/gridCellParams';
+import {
+  GridRowEditStartParams,
+  GridRowEditStartReasons,
+  GridRowEditStopParams,
+  GridRowEditStopReasons,
+} from '../../../models/params/gridRowParams';
+import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
+import { isPasteShortcut, isPrintableKey } from '../../../utils/keyboardUtils';
+import { deepClone } from '../../../utils/utils';
 import {
   useGridApiEventHandler,
   useGridApiOptionHandler,
 } from '../../utils/useGridApiEventHandler';
-import { GridEventListener } from '../../../models/events/gridEventListener';
-import {
-  GridEditModes,
-  GridRowModes,
-  GridEditingState,
-  GridEditCellProps,
-  GridEditRowProps,
-} from '../../../models/gridEditRowModel';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
-import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
-import {
-  GridRowEditingApi,
-  GridEditingSharedApi,
-  GridStopRowEditModeParams,
-  GridStartRowEditModeParams,
-  GridRowModesModel,
-  GridRowModesModelProps,
-  GridRowEditingPrivateApi,
-  GridEditingSharedPrivateApi,
-} from '../../../models/api/gridEditingApi';
 import { useGridApiMethod } from '../../utils/useGridApiMethod';
-import { gridEditRowsStateSelector, gridRowIsEditingSelector } from './gridEditingSelectors';
-import { GridRowId } from '../../../models/gridRows';
-import { isPrintableKey, isPasteShortcut } from '../../../utils/keyboardUtils';
 import {
   gridColumnFieldsSelector,
   gridVisibleColumnFieldsSelector,
 } from '../columns/gridColumnsSelector';
-import { GridCellParams } from '../../../models/params/gridCellParams';
 import { gridRowsLookupSelector } from '../rows/gridRowsSelector';
-import { deepClone } from '../../../utils/utils';
-import {
-  GridRowEditStopParams,
-  GridRowEditStartParams,
-  GridRowEditStopReasons,
-  GridRowEditStartReasons,
-} from '../../../models/params/gridRowParams';
-import { GRID_ACTIONS_COLUMN_TYPE } from '../../../colDef';
+import { gridEditRowsStateSelector, gridRowIsEditingSelector } from './gridEditingSelectors';
 import { getDefaultCellValue } from './utils';
 
 export const useGridRowEditing = (

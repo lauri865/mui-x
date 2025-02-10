@@ -1,6 +1,6 @@
 'use client';
-import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid/DataGrid';
+import * as React from 'react';
 
 const columns: GridColDef<(typeof rows)[number]>[] = [
   { field: 'id', headerName: 'ID', width: 90 },

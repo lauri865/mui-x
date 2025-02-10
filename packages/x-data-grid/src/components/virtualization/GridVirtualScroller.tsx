@@ -1,6 +1,11 @@
+import clsx from 'clsx';
 import * as React from 'react';
-import { gridDimensionsSelector } from '@mui/x-data-grid-pro';
 import { useThemedComponent } from '../../context/GridThemeContext';
+import { useGridOverlays } from '../../hooks/features/overlays/useGridOverlays';
+import { useGridVirtualScroller } from '../../hooks/features/virtualization/useGridVirtualScroller';
+import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
+import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import { useGridSelector } from '../../hooks/utils/useGridSelector';
 import {
   gridHasBottomFillerSelector,
   gridHasFillerSelector,
@@ -8,23 +13,17 @@ import {
   gridHasScrollYSelector,
   gridVerticalScrollbarWidthSelector,
 } from '../../internals/selectors/dimensionSelectors';
-import { GridScrollArea } from '../GridScrollArea';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
-import { useGridSelector } from '../../hooks/utils/useGridSelector';
-import { useGridVirtualScroller } from '../../hooks/features/virtualization/useGridVirtualScroller';
-import { useGridOverlays } from '../../hooks/features/overlays/useGridOverlays';
+import { GridStateCommunity } from '../../models/gridStateCommunity';
+import { GridContextMenu } from '../contextMenu/GridContextMenu';
+import { GridDragDrop } from '../dragdrop/GridDragDrop';
 import { GridHeaders } from '../GridHeaders';
-import { GridTopContainer as TopContainer } from './GridTopContainer';
+import { GridScrollArea } from '../GridScrollArea';
 import { GridBottomContainer as BottomContainer } from './GridBottomContainer';
+import { GridTopContainer as TopContainer } from './GridTopContainer';
+import { GridVirtualScrollbar as Scrollbar } from './GridVirtualScrollbar';
 import { GridVirtualScrollerContent as Content } from './GridVirtualScrollerContent';
 import { GridVirtualScrollerFiller as SpaceFiller } from './GridVirtualScrollerFiller';
 import { GridVirtualScrollerRenderZone as RenderZone } from './GridVirtualScrollerRenderZone';
-import { GridVirtualScrollbar as Scrollbar } from './GridVirtualScrollbar';
-import { GridStateCommunity } from '../../models/gridStateCommunity';
-import { GridDragDrop } from '../dragdrop/GridDragDrop';
-import { GridContextMenu } from '../contextMenu/GridContextMenu';
-import clsx from 'clsx';
 
 const hasPinnedRightSelector = (state: GridStateCommunity) => state.dimensions.rightPinnedWidth > 0;
 

@@ -1,6 +1,7 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
 import { unstable_composeClasses as composeClasses, unstable_useId as useId } from '@mui/utils';
+import PropTypes from 'prop-types';
+import * as React from 'react';
+import { getDataGridUtilityClass } from '../../constants/gridClasses';
 import { useGridSelector } from '../../hooks';
 import {
   gridPreferencePanelSelectorWithLabel,
@@ -8,10 +9,9 @@ import {
 } from '../../hooks/features/preferencesPanel/gridPreferencePanelSelector';
 import { GridPreferencePanelsValue } from '../../hooks/features/preferencesPanel/gridPreferencePanelsValue';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
-import { getDataGridUtilityClass } from '../../constants/gridClasses';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-import type { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { GridColumnHeaderParams } from '../../models/params/gridColumnHeaderParams';
+import type { DataGridProcessedProps } from '../../models/props/DataGridProps';
 
 export interface ColumnHeaderFilterIconButtonProps {
   field: string;

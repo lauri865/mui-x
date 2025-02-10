@@ -1,42 +1,39 @@
 'use client';
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import { unstable_useForkRef as useForkRef } from '@mui/utils';
 import { fastMemo } from '@mui/x-internals/fastMemo';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import { isObjectEmpty } from '@mui/x-internals/isObjectEmpty';
-import { GridRowEventLookup } from '../models/events';
-import { GridRowId, GridRowModel } from '../models/gridRows';
-import { GridEditModes, GridCellModes } from '../models/gridEditRowModel';
-import { gridClasses } from '../constants/gridClasses';
-import { useGridRootProps } from '../hooks/utils/useGridRootProps';
-import { GridPinnedColumnFields, GridPinnedColumns } from '../hooks/features/columns';
-import type { GridStateColDef } from '../models/colDef/gridColDef';
-import { shouldCellShowLeftBorder, shouldCellShowRightBorder } from '../utils/cellBorderUtils';
-import { gridColumnPositionsSelector } from '../hooks/features/columns/gridColumnsSelector';
-import { useGridSelector, objectShallowCompare } from '../hooks/utils/useGridSelector';
-import { GridRowClassNameParams } from '../models/params/gridRowParams';
-import { getVisibleRows, useGridVisibleRows } from '../hooks/utils/useGridVisibleRows';
-import { findParentElementFromClassName, isEventTargetInPortal } from '../utils/domUtils';
-import { GRID_CHECKBOX_SELECTION_COL_DEF } from '../colDef/gridCheckboxSelectionColDef';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import * as React from 'react';
 import { GRID_ACTIONS_COLUMN_TYPE } from '../colDef/gridActionsColDef';
+import { GRID_CHECKBOX_SELECTION_COL_DEF } from '../colDef/gridCheckboxSelectionColDef';
 import { GRID_DETAIL_PANEL_TOGGLE_FIELD } from '../colDef/gridDetailPanelColDef';
-import { PinnedColumnPosition } from '../internals/constants';
-import { gridSortModelSelector } from '../hooks/features/sorting/gridSortingSelector';
-import { gridRowMaximumTreeDepthSelector } from '../hooks/features/rows/gridRowsSelector';
+import { gridClasses } from '../constants/gridClasses';
+import { useThemedComponent } from '../context/GridThemeContext';
+import { GridPinnedColumnFields } from '../hooks/features/columns';
+import { gridColumnPositionsSelector } from '../hooks/features/columns/gridColumnsSelector';
 import {
   gridEditRowsStateSelector,
   gridRowIsEditingSelector,
 } from '../hooks/features/editing/gridEditingSelectors';
-import { GridScrollbarFillerCell as ScrollbarFiller } from './GridScrollbarFillerCell';
-import { getPinnedCellOffset } from '../internals/utils/getPinnedCellOffset';
+import { gridRowMaximumTreeDepthSelector } from '../hooks/features/rows/gridRowsSelector';
+import { gridSortModelSelector } from '../hooks/features/sorting/gridSortingSelector';
 import { useGridConfiguration } from '../hooks/utils/useGridConfiguration';
 import { useGridPrivateApiContext } from '../hooks/utils/useGridPrivateApiContext';
+import { useGridRootProps } from '../hooks/utils/useGridRootProps';
+import { objectShallowCompare, useGridSelector } from '../hooks/utils/useGridSelector';
+import { getVisibleRows } from '../hooks/utils/useGridVisibleRows';
+import { PinnedColumnPosition } from '../internals/constants';
+import { getPinnedCellOffset } from '../internals/utils/getPinnedCellOffset';
+import type { GridStateColDef } from '../models/colDef/gridColDef';
+import { GridRowEventLookup } from '../models/events';
+import { GridCellModes, GridEditModes } from '../models/gridEditRowModel';
+import { GridRowId, GridRowModel } from '../models/gridRows';
+import { GridRowClassNameParams } from '../models/params/gridRowParams';
+import { shouldCellShowLeftBorder, shouldCellShowRightBorder } from '../utils/cellBorderUtils';
 import { createSelector } from '../utils/createSelector';
-import { useThemedComponent } from '../context/GridThemeContext';
-import { GridDetailPanel } from './GridDetailPanel';
-import { gridPinnedColumnPositionLookup } from './cell/GridCell';
+import { findParentElementFromClassName, isEventTargetInPortal } from '../utils/domUtils';
 
 const isRowReorderingEnabledSelector = createSelector(
   gridEditRowsStateSelector,

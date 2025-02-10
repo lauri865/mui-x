@@ -1,21 +1,21 @@
-import type { Metadata } from 'next';
-import { DocsPage, DocsBody, DocsTitle, DocsDescription, DocsCategory } from 'fumadocs-ui/page';
-import { notFound } from 'next/navigation';
-import { type ComponentProps, type FC, type ReactElement, type ReactNode } from 'react';
-import defaultComponents from 'fumadocs-ui/mdx';
-import { Popup, PopupContent, PopupTrigger } from 'fumadocs-twoslash/ui';
-import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
-import { Callout } from 'fumadocs-ui/components/callout';
-import { TypeTable } from 'fumadocs-ui/components/type-table';
-import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
 import * as Preview from '@/components/preview';
-import { createMetadata } from '@/lib/metadata';
-import { openapi, source } from '@/lib/source';
 import { Wrapper } from '@/components/preview/wrapper';
 import { AutoTypeTable } from '@/components/type-table';
+import { createMetadata } from '@/lib/metadata';
 import { metadataImage } from '@/lib/metadata-image';
-import { File, Folder, Files } from 'fumadocs-ui/components/files';
+import { openapi, source } from '@/lib/source';
 import { Mermaid } from '@theguild/remark-mermaid/mermaid';
+import { Popup, PopupContent, PopupTrigger } from 'fumadocs-twoslash/ui';
+import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+import { Callout } from 'fumadocs-ui/components/callout';
+import { File, Files, Folder } from 'fumadocs-ui/components/files';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+import { TypeTable } from 'fumadocs-ui/components/type-table';
+import defaultComponents from 'fumadocs-ui/mdx';
+import { DocsBody, DocsCategory, DocsDescription, DocsPage, DocsTitle } from 'fumadocs-ui/page';
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { type ComponentProps, type FC, type ReactElement, type ReactNode } from 'react';
 
 function PreviewRenderer({ preview }: { preview: string }): ReactNode {
   if (preview && preview in Preview) {

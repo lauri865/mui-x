@@ -1,17 +1,12 @@
-import * as React from 'react';
 import clsx from 'clsx';
-import { useThemedComponent } from '../../../context/GridThemeContext';
-import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
-import { useGridSelector } from '../../utils';
-import { useGridRootProps } from '../../utils/useGridRootProps';
-import { useGridPrivateApiContext } from '../../utils/useGridPrivateApiContext';
-import type { GridColumnsRenderContext } from '../../../models/params/gridScrollParams';
-import {
-  useGridApiEventHandler,
-  useGridApiOptionHandler,
-} from '../../utils/useGridApiEventHandler';
-import { GridEventListener } from '../../../models/events';
+import * as React from 'react';
+import { GridColumnGroupHeader } from '../../../components/columnHeaders/GridColumnGroupHeader';
 import { GridColumnHeaderItem } from '../../../components/columnHeaders/GridColumnHeaderItem';
+import { GridColumnHeaderSeparatorSides } from '../../../components/columnHeaders/GridColumnHeaderSeparator';
+import { GridScrollbarFillerCell as ScrollbarFiller } from '../../../components/GridScrollbarFillerCell';
+import { gridClasses } from '../../../constants/gridClasses';
+import { useThemedComponent } from '../../../context/GridThemeContext';
+import { PinnedColumnPosition } from '../../../internals/constants';
 import {
   gridDimensionsColumnsTotalWidthSelector,
   gridGroupHeaderHeightSelector,
@@ -19,33 +14,37 @@ import {
   gridHeaderHeightSelector,
   gridVerticalScrollbarWidthSelector,
 } from '../../../internals/selectors/dimensionSelectors';
-import { gridRenderContextColumnsSelector } from '../virtualization';
-import { computeOffsetLeft } from '../virtualization/useGridVirtualScroller';
-import { GridColumnGroupHeader } from '../../../components/columnHeaders/GridColumnGroupHeader';
-import { GridColumnGroup } from '../../../models/gridColumnGrouping';
-import { GridStateColDef } from '../../../models/colDef/gridColDef';
-import { GridSortColumnLookup } from '../sorting';
-import { GridFilterActiveItemsLookup } from '../filter';
-import { GridColumnGroupIdentifier, GridColumnIdentifier } from '../focus';
-import { GridColumnMenuState } from '../columnMenu';
-import {
-  GridColumnVisibilityModel,
-  gridColumnPositionsSelector,
-  gridColumnLookupSelector,
-  gridPinnedColumnsSelector,
-  gridVisiblePinnedColumnsSelector,
-} from '../columns';
-import { GridGroupingStructure } from '../columnGrouping/gridColumnGroupsInterfaces';
-import { gridColumnGroupsUnwrappedModelSelector } from '../columnGrouping/gridColumnGroupsSelector';
-import { GridScrollbarFillerCell as ScrollbarFiller } from '../../../components/GridScrollbarFillerCell';
 import { getPinnedCellOffset } from '../../../internals/utils/getPinnedCellOffset';
-import { GridColumnHeaderSeparatorSides } from '../../../components/columnHeaders/GridColumnHeaderSeparator';
-import { gridClasses } from '../../../constants/gridClasses';
+import { GridStateColDef } from '../../../models/colDef/gridColDef';
+import { GridEventListener } from '../../../models/events';
+import { GridColumnGroup } from '../../../models/gridColumnGrouping';
+import type { GridColumnsRenderContext } from '../../../models/params/gridScrollParams';
+import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import {
   shouldCellShowLeftBorder,
   shouldCellShowRightBorder,
 } from '../../../utils/cellBorderUtils';
-import { PinnedColumnPosition } from '../../../internals/constants';
+import { useGridSelector } from '../../utils';
+import {
+  useGridApiEventHandler,
+  useGridApiOptionHandler,
+} from '../../utils/useGridApiEventHandler';
+import { useGridPrivateApiContext } from '../../utils/useGridPrivateApiContext';
+import { useGridRootProps } from '../../utils/useGridRootProps';
+import { GridGroupingStructure } from '../columnGrouping/gridColumnGroupsInterfaces';
+import { gridColumnGroupsUnwrappedModelSelector } from '../columnGrouping/gridColumnGroupsSelector';
+import { GridColumnMenuState } from '../columnMenu';
+import {
+  GridColumnVisibilityModel,
+  gridColumnLookupSelector,
+  gridColumnPositionsSelector,
+  gridVisiblePinnedColumnsSelector,
+} from '../columns';
+import { GridFilterActiveItemsLookup } from '../filter';
+import { GridColumnGroupIdentifier, GridColumnIdentifier } from '../focus';
+import { GridSortColumnLookup } from '../sorting';
+import { gridRenderContextColumnsSelector } from '../virtualization';
+import { computeOffsetLeft } from '../virtualization/useGridVirtualScroller';
 
 interface HeaderInfo {
   groupId: GridColumnGroup['groupId'] | null;

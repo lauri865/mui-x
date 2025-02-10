@@ -1,9 +1,9 @@
-import * as React from 'react';
 import PropTypes from 'prop-types';
+import * as React from 'react';
 import { GridPreferencePanelsValue } from '../../../../hooks/features/preferencesPanel/gridPreferencePanelsValue';
 import { useGridApiContext } from '../../../../hooks/utils/useGridApiContext';
-import { GridColumnMenuItemProps } from '../GridColumnMenuItemProps';
 import { useGridRootProps } from '../../../../hooks/utils/useGridRootProps';
+import { GridColumnMenuItemProps } from '../GridColumnMenuItemProps';
 
 function GridColumnMenuManageItem(props: GridColumnMenuItemProps) {
   const { onClick } = props;

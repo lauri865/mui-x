@@ -1,10 +1,10 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import { forwardRef } from '@mui/x-internals/forwardRef';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import * as React from 'react';
+import { useThemedComponent } from '../context/GridThemeContext';
 import { useGridApiContext } from '../hooks/utils/useGridApiContext';
 import { DataGridProcessedProps } from '../models/props/DataGridProps';
-import { useThemedComponent } from '../context/GridThemeContext';
 
 interface RowCountProps {
   rowCount: number;

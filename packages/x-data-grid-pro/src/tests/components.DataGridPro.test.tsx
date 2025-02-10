@@ -1,16 +1,15 @@
-import * as React from 'react';
 import { createRenderer, EventType, fireEvent } from '@mui/internal-test-utils';
-import { spy } from 'sinon';
-import { expect } from 'chai';
-import { RefObject } from '@mui/x-internals/types';
+import { useBasicDemoData } from '@mui/x-data-grid-generator';
 import {
   DataGridPro,
-  gridClasses,
-  useGridApiRef,
   DataGridProProps,
   GridApi,
+  gridClasses,
+  useGridApiRef,
 } from '@mui/x-data-grid-pro';
-import { useBasicDemoData } from '@mui/x-data-grid-generator';
+import { RefObject } from '@mui/x-internals/types';
+import { expect } from 'chai';
+import { spy } from 'sinon';
 import { getCell, getRow } from 'test/utils/helperFn';
 
 describe('<DataGridPro/> - Components', () => {

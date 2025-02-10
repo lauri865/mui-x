@@ -1,17 +1,17 @@
 'use client';
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import { useLicenseVerifier, Watermark } from '@mui/x-license';
-import { GridRoot, GridContextProvider, GridValidRowModel } from '@mui/x-data-grid';
+import { GridContextProvider, GridRoot, GridValidRowModel } from '@mui/x-data-grid';
 import { validateProps } from '@mui/x-data-grid/internals';
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import { useDataGridProComponent } from './useDataGridProComponent';
-import { DataGridProProps } from '../models/dataGridProProps';
-import { useDataGridProProps } from './useDataGridProProps';
-import { getReleaseInfo } from '../utils/releaseInfo';
-import { propValidatorsDataGridPro } from '../internals/propValidation';
-import { useGridAriaAttributes } from '../hooks/utils/useGridAriaAttributes';
+import { useLicenseVerifier, Watermark } from '@mui/x-license';
+import PropTypes from 'prop-types';
+import * as React from 'react';
 import { useGridRowAriaAttributes } from '../hooks/features/rows/useGridRowAriaAttributes';
+import { useGridAriaAttributes } from '../hooks/utils/useGridAriaAttributes';
+import { propValidatorsDataGridPro } from '../internals/propValidation';
+import { DataGridProProps } from '../models/dataGridProProps';
+import { getReleaseInfo } from '../utils/releaseInfo';
+import { useDataGridProComponent } from './useDataGridProComponent';
+import { useDataGridProProps } from './useDataGridProProps';
 
 export type { GridProSlotsComponent as GridSlots } from '../models';
 

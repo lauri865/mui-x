@@ -1,9 +1,8 @@
-import * as React from 'react';
 import { createRenderer } from '@mui/internal-test-utils';
-import { GridApiCommunity } from '@mui/x-data-grid/internals';
-import { GridPanel, gridPanelClasses as classes, GridApiContext } from '@mui/x-data-grid';
+import { GridApiContext } from '@mui/x-data-grid';
 import { GridRootPropsContext } from '@mui/x-data-grid/context/GridRootPropsContext';
-import { describeConformance } from 'test/utils/describeConformance';
+import { GridApiCommunity } from '@mui/x-data-grid/internals';
+import * as React from 'react';
 
 describe('<GridPanel />', () => {
   const { render } = createRenderer();

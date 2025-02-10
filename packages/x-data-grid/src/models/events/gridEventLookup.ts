@@ -1,31 +1,31 @@
 import * as React from 'react';
+import type { GridStrategyProcessorName } from '../../hooks/core/strategyProcessing';
+import type { GridColumnVisibilityModel } from '../../hooks/features/columns';
+import { GridCellModesModel, GridRowModesModel } from '../api/gridEditingApi';
+import type { ElementSize } from '../elementSize';
+import { GridDensity } from '../gridDensity';
+import type { GridFilterModel } from '../gridFilterModel';
+import { GridPaginationMeta, GridPaginationModel } from '../gridPaginationProps';
+import type { GridGroupNode } from '../gridRows';
+import type { GridRowSelectionModel } from '../gridRowSelectionModel';
+import type { GridSortModel } from '../gridSortModel';
+import type { MuiBaseEvent } from '../muiEvent';
 import type {
+  GridColumnGroupHeaderParams,
   GridColumnHeaderParams,
   GridColumnOrderChangeParams,
   GridColumnResizeParams,
   GridHeaderSelectionCheckboxParams,
   GridMenuParams,
   GridPreferencePanelParams,
+  GridRenderContext,
   GridRowParams,
   GridRowSelectionCheckboxParams,
   GridScrollParams,
-  GridColumnGroupHeaderParams,
-  GridRenderContext,
 } from '../params';
-import { GridCellEditStartParams, GridCellEditStopParams } from '../params/gridEditCellParams';
 import { GridCellParams } from '../params/gridCellParams';
-import type { GridFilterModel } from '../gridFilterModel';
-import type { GridSortModel } from '../gridSortModel';
-import type { GridRowSelectionModel } from '../gridRowSelectionModel';
-import type { ElementSize } from '../elementSize';
-import type { MuiBaseEvent } from '../muiEvent';
-import type { GridGroupNode } from '../gridRows';
-import type { GridColumnVisibilityModel } from '../../hooks/features/columns';
-import type { GridStrategyProcessorName } from '../../hooks/core/strategyProcessing';
+import { GridCellEditStartParams, GridCellEditStopParams } from '../params/gridEditCellParams';
 import { GridRowEditStartParams, GridRowEditStopParams } from '../params/gridRowParams';
-import { GridCellModesModel, GridRowModesModel } from '../api/gridEditingApi';
-import { GridPaginationMeta, GridPaginationModel } from '../gridPaginationProps';
-import { GridDensity } from '../gridDensity';
 
 export interface GridRowEventLookup {
   /**

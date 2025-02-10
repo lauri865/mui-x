@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { gridVisibleColumnDefinitionsSelector } from '../features/columns/gridColumnsSelector';
-import { useGridSelector } from './useGridSelector';
-import { useGridRootProps } from './useGridRootProps';
 import { gridColumnGroupsHeaderMaxDepthSelector } from '../features/columnGrouping/gridColumnGroupsSelector';
-import { gridVisiblePinnedRowsCountSelector } from '../features/rowPinning';
-import { useGridPrivateApiContext } from './useGridPrivateApiContext';
-import { isMultipleRowSelectionEnabled } from '../features/rowSelection/utils';
+import { gridVisibleColumnDefinitionsSelector } from '../features/columns/gridColumnsSelector';
 import { gridExpandedRowCountSelector } from '../features/filter/gridFilterSelector';
+import { gridVisiblePinnedRowsCountSelector } from '../features/rowPinning';
+import { isMultipleRowSelectionEnabled } from '../features/rowSelection/utils';
+import { useGridPrivateApiContext } from './useGridPrivateApiContext';
+import { useGridRootProps } from './useGridRootProps';
+import { useGridSelector } from './useGridSelector';
 
 export const useGridAriaAttributes = (): React.HTMLAttributes<HTMLElement> => {
   const apiRef = useGridPrivateApiContext();

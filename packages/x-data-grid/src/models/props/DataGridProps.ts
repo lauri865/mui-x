@@ -1,11 +1,26 @@
-import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
+import { InfiniteLoaderPayload } from '../../components/virtualization/GridInfiniteLoader';
+import { GridClasses } from '../../constants/gridClasses';
+import type { GridAutosizeOptions } from '../../hooks/features/columnResize';
+import {
+  GridColumnVisibilityModel,
+  GridPinnedColumnFields,
+} from '../../hooks/features/columns/gridColumnsInterfaces';
+import { GridExpandedRowIds } from '../../hooks/features/detailPanel';
+import { GridPinnedRowsModel } from '../../hooks/features/rowPinning/rowPinningInterfaces';
+import { GridCallbackDetails, GridLocaleText } from '../api';
+import { GridApiCommunity } from '../api/gridApiCommunity';
+import { GridCellModesModel, GridRowModesModel } from '../api/gridEditingApi';
+import type { GridColDef, GridListColDef } from '../colDef/gridColDef';
+import { GridEventListener } from '../events';
+import { GridColumnGroupingModel } from '../gridColumnGrouping';
+import type { GridDataSource } from '../gridDataSource';
 import { GridDensity } from '../gridDensity';
 import { GridEditMode } from '../gridEditRowModel';
 import { GridFeatureMode } from '../gridFeatureMode';
-import { Logger } from '../logger';
-import { GridSortDirection, GridSortModel } from '../gridSortModel';
-import { GridSlotsComponent } from '../gridSlotsComponent';
+import { GridFilterModel } from '../gridFilterModel';
+import { GridPaginationMeta, GridPaginationModel } from '../gridPaginationProps';
 import {
   GridRowId,
   GridRowIdGetter,
@@ -13,40 +28,22 @@ import {
   GridRowsProp,
   GridValidRowModel,
 } from '../gridRows';
-import { GridEventListener } from '../events';
-import { GridCallbackDetails, GridLocaleText } from '../api';
-import { GridApiCommunity } from '../api/gridApiCommunity';
-import type { GridColDef, GridListColDef } from '../colDef/gridColDef';
-import { GridClasses } from '../../constants/gridClasses';
+import type { GridRowSelectionPropagation } from '../gridRowSelectionModel';
+import { GridInputRowSelectionModel, GridRowSelectionModel } from '../gridRowSelectionModel';
+import { GridSlotsComponent } from '../gridSlotsComponent';
+import { GridSlotsComponentsProps } from '../gridSlotsComponentsProps';
+import { GridSortDirection, GridSortModel } from '../gridSortModel';
+import { GridInitialStateCommunity } from '../gridStateCommunity';
+import { Logger } from '../logger';
 import {
+  GridRowClassNameParams,
   GridRowHeightParams,
   GridRowHeightReturnValue,
   GridRowParams,
   GridRowSpacing,
   GridRowSpacingParams,
-  GridRowClassNameParams,
 } from '../params';
 import { GridCellParams } from '../params/gridCellParams';
-import { GridFilterModel } from '../gridFilterModel';
-import { GridInputRowSelectionModel, GridRowSelectionModel } from '../gridRowSelectionModel';
-import { GridInitialStateCommunity } from '../gridStateCommunity';
-import { GridSlotsComponentsProps } from '../gridSlotsComponentsProps';
-import {
-  GridColumnVisibilityModel,
-  GridPinnedColumnFields,
-} from '../../hooks/features/columns/gridColumnsInterfaces';
-import { GridCellModesModel, GridRowModesModel } from '../api/gridEditingApi';
-import { GridColumnGroupingModel } from '../gridColumnGrouping';
-import { GridPaginationMeta, GridPaginationModel } from '../gridPaginationProps';
-import type { GridAutosizeOptions } from '../../hooks/features/columnResize';
-import type { GridDataSource } from '../gridDataSource';
-import type { GridRowSelectionPropagation } from '../gridRowSelectionModel';
-import {
-  GridPinnedRowsModel,
-  GridRowPinningProps,
-} from '../../hooks/features/rowPinning/rowPinningInterfaces';
-import { GridExpandedRowIds } from '../../hooks/features/detailPanel';
-import { InfiniteLoaderPayload } from '../../components/virtualization/GridInfiniteLoader';
 
 export interface GridExperimentalFeatures {
   /**

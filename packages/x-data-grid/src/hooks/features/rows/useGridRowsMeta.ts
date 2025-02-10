@@ -1,27 +1,26 @@
-import * as React from 'react';
-import { RefObject } from '@mui/x-internals/types';
-import useLazyRef from '@mui/utils/useLazyRef';
 import { unstable_useEnhancedEffect as useEnhancedEffect } from '@mui/utils';
+import useLazyRef from '@mui/utils/useLazyRef';
+import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
 import { gridRowHeightSelector } from '../../../internals/selectors/dimensionSelectors';
-import { ResizeObserver } from '../../../utils/ResizeObserver';
 import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
 import { GridRowsMetaApi, GridRowsMetaPrivateApi } from '../../../models/api/gridRowsMetaApi';
-import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
-import { useGridVisibleRows } from '../../utils/useGridVisibleRows';
-import { eslintUseValue } from '../../../utils/utils';
-import { useGridApiMethod } from '../../utils/useGridApiMethod';
 import { GridRowEntry } from '../../../models/gridRows';
-import { useGridSelector } from '../../utils/useGridSelector';
-import { gridDensityFactorSelector } from '../density/densitySelector';
-import { gridPaginationSelector } from '../pagination/gridPaginationSelector';
-import { GridStateInitializer } from '../../utils/useGridInitializeState';
+import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
+import { ResizeObserver } from '../../../utils/ResizeObserver';
+import { eslintUseValue } from '../../../utils/utils';
 import { useGridRegisterPipeApplier } from '../../core/pipeProcessing';
-import { gridRowCountSelector } from './gridRowsSelector';
-import { gridVisiblePinnedRowsSelector } from '../rowPinning';
+import { useGridApiMethod } from '../../utils/useGridApiMethod';
+import { GridStateInitializer } from '../../utils/useGridInitializeState';
+import { useGridSelector } from '../../utils/useGridSelector';
+import { useGridVisibleRows } from '../../utils/useGridVisibleRows';
+import { gridDensityFactorSelector } from '../density/densitySelector';
 import { gridDimensionsSelector } from '../dimensions/gridDimensionsSelectors';
-import { getValidRowHeight, getRowHeightWarning } from './gridRowsUtils';
+import { gridPaginationSelector } from '../pagination/gridPaginationSelector';
+import { gridVisiblePinnedRowsSelector } from '../rowPinning';
 import type { HeightEntry } from './gridRowsMetaInterfaces';
-import { gridVisibleRowsWithPinnedRowsSelector } from '../rowPinning/gridRowPinningInternalSelector';
+import { gridRowCountSelector } from './gridRowsSelector';
+import { getRowHeightWarning, getValidRowHeight } from './gridRowsUtils';
 
 /* eslint-disable no-underscore-dangle */
 

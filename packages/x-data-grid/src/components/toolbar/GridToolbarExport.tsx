@@ -1,8 +1,8 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import PropTypes from 'prop-types';
+import * as React from 'react';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
+import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { GridCsvExportOptions, GridPrintExportOptions } from '../../models/gridExport';
 import { GridToolbarExportContainer } from './GridToolbarExportContainer';
 
@@ -157,4 +157,4 @@ GridToolbarExport.propTypes = {
   slotProps: PropTypes.object,
 } as any;
 
-export { GridToolbarExport, GridCsvExportMenuItem, GridPrintExportMenuItem };
+export { GridCsvExportMenuItem, GridPrintExportMenuItem, GridToolbarExport };

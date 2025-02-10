@@ -1,20 +1,20 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import * as React from 'react';
 import composeClasses from '@mui/utils/composeClasses';
-import { TextFieldProps } from '../../models/gridBaseSlots';
+import clsx from 'clsx';
+import * as React from 'react';
+import { getDataGridUtilityClass } from '../../constants/gridClasses';
 import {
   gridColumnDefinitionsSelector,
   gridColumnVisibilityModelSelector,
 } from '../../hooks/features/columns/gridColumnsSelector';
-import { useGridSelector } from '../../hooks/utils/useGridSelector';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-import type { DataGridProcessedProps } from '../../models/props/DataGridProps';
-import type { GridColDef } from '../../models/colDef/gridColDef';
-import { getDataGridUtilityClass } from '../../constants/gridClasses';
+import { useGridSelector } from '../../hooks/utils/useGridSelector';
 import { useLazyRef } from '../../hooks/utils/useLazyRef';
+import type { GridColDef } from '../../models/colDef/gridColDef';
+import { TextFieldProps } from '../../models/gridBaseSlots';
+import type { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { checkColumnVisibilityModelsSame, defaultSearchPredicate } from './utils';
-import clsx from 'clsx';
 
 export interface GridColumnsManagementProps {
   /*

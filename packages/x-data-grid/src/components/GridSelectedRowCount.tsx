@@ -1,9 +1,9 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import { useGridApiContext } from '../hooks/utils/useGridApiContext';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import * as React from 'react';
 import { useThemedComponent } from '../context/GridThemeContext';
+import { useGridApiContext } from '../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../hooks/utils/useGridRootProps';
 
 interface SelectedRowCountProps {

@@ -1,8 +1,8 @@
-import { createMDXSource } from 'fumadocs-mdx';
-import { loader } from 'fumadocs-core/source';
-import { attachFile, createOpenAPI } from 'fumadocs-openapi/server';
 import { docs, meta } from '@/.source';
+import { loader } from 'fumadocs-core/source';
+import { createMDXSource } from 'fumadocs-mdx';
 import { APIPlayground } from 'fumadocs-openapi/scalar';
+import { attachFile, createOpenAPI } from 'fumadocs-openapi/server';
 
 export const source = loader({
   baseUrl: '/docs',

@@ -1,8 +1,8 @@
 'use client';
 
-import { useParams } from 'next/navigation';
-import { type ReactNode, useId } from 'react';
 import { cn } from '@/lib/cn';
+import { useParams } from 'next/navigation';
+import { type ReactNode } from 'react';
 
 export function Body({ children }: { children: ReactNode }): React.ReactElement {
   const mode = useMode();

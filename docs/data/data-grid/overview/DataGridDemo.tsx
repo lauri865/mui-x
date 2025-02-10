@@ -1,11 +1,10 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import {
   DataGrid,
-  GRID_CHECKBOX_SELECTION_FIELD,
   GRID_DETAIL_PANEL_TOGGLE_FIELD,
   GridColDef,
 } from '@mui/x-data-grid';
+import * as React from 'react';
 
 const columns: GridColDef<(typeof rows)[number]>[] = [
   { field: 'id', headerName: 'ID', width: 90 },

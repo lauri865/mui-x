@@ -1,5 +1,5 @@
-import * as React from 'react';
 import clsx from 'clsx';
+import * as React from 'react';
 import { useThemedComponent } from '../../context/GridThemeContext';
 
 export function GridTopContainer(props: React.PropsWithChildren) {

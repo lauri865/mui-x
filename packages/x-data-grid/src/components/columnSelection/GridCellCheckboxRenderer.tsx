@@ -1,14 +1,14 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
 import { unstable_useForkRef as useForkRef } from '@mui/utils';
+import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
 import { forwardRef } from '@mui/x-internals/forwardRef';
+import PropTypes from 'prop-types';
+import * as React from 'react';
+import { getCheckboxPropsSelector } from '../../hooks/features/rowSelection/utils';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { objectShallowCompare, useGridSelector } from '../../hooks/utils/useGridSelector';
-import { getCheckboxPropsSelector } from '../../hooks/features/rowSelection/utils';
-import type { GridRowSelectionCheckboxParams } from '../../models/params/gridRowSelectionCheckboxParams';
 import type { GridRenderCellParams } from '../../models/params/gridCellParams';
-import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
+import type { GridRowSelectionCheckboxParams } from '../../models/params/gridRowSelectionCheckboxParams';
 
 const GridCellCheckboxForwardRef = forwardRef<HTMLInputElement, GridRenderCellParams>(
   function GridCellCheckboxRenderer(props, ref) {

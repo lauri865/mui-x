@@ -1,6 +1,7 @@
-import { GridSlotsComponent } from '../models';
 import {
-  GridSkeletonCell,
+  GridColumnHeaderFilterIconButton,
+  GridColumnHeaderSortIcon,
+  GridColumnsManagement,
   GridColumnsPanel,
   GridFilterPanel,
   GridFooter,
@@ -9,16 +10,15 @@ import {
   GridPagination,
   GridPanel,
   GridRow,
-  GridColumnHeaderFilterIconButton,
   GridRowCount,
-  GridColumnsManagement,
-  GridColumnHeaderSortIcon,
+  GridSkeletonCell,
 } from '../components';
 import { GridCell } from '../components/cell/GridCell';
 import { GridColumnHeaders } from '../components/GridColumnHeaders';
-import { GridColumnMenu } from '../components/menu/columnMenu/GridColumnMenu';
-import { GridPinnedRows } from '../components/GridPinnedRows';
 import { GridNoResultsOverlay } from '../components/GridNoResultsOverlay';
+import { GridPinnedRows } from '../components/GridPinnedRows';
+import { GridColumnMenu } from '../components/menu/columnMenu/GridColumnMenu';
+import { GridSlotsComponent } from '../models';
 import materialSlots from '../slots';
 
 // TODO: camelCase these key. It's a private helper now.

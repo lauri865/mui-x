@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import {
   Button,
   Checkbox,
@@ -8,31 +6,30 @@ import {
   icons,
   Tooltip,
 } from '@twgrid/x-data-grid-shadcn';
-import { GridColumnUnsortedIcon } from './icons/GridColumnUnsortedIcon';
+import clsx from 'clsx';
+import type { GridIconSlotsComponent } from '../models';
+import type { GridBaseSlots } from '../models/gridSlotsComponent';
 import {
   GridAddIcon,
   GridCheckIcon,
+  GridClearIcon,
   GridCloseIcon,
   GridColumnIcon,
+  GridDeleteForeverIcon,
   GridDragIcon,
   GridExpandMoreIcon,
   GridFilterAltIcon,
   GridFilterListIcon,
   GridKeyboardArrowRight,
+  GridLoadIcon,
   GridMoreVertIcon,
-  GridRemoveIcon,
   GridSaveAltIcon,
   GridSearchIcon,
   GridTableRowsIcon,
   GridViewHeadlineIcon,
   GridViewStreamIcon,
-  GridClearIcon,
-  GridLoadIcon,
-  GridDeleteForeverIcon,
 } from './icons';
-import type { GridIconSlotsComponent } from '../models';
-import type { GridBaseSlots } from '../models/gridSlotsComponent';
-import clsx from 'clsx';
+import { GridColumnUnsortedIcon } from './icons/GridColumnUnsortedIcon';
 
 const iconSlots: GridIconSlotsComponent = {
   booleanCellTrueIcon: GridCheckIcon,

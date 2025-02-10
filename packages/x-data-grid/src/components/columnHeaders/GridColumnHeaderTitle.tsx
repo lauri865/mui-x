@@ -1,10 +1,10 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import { isOverflown } from '../../utils/domUtils';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import * as React from 'react';
 import { useThemedComponent } from '../../context/GridThemeContext';
+import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import { isOverflown } from '../../utils/domUtils';
 
 const ColumnHeaderInnerTitle = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   function ColumnHeaderInnerTitle(props, ref) {

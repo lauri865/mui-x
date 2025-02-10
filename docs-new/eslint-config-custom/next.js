@@ -1,7 +1,7 @@
 import js from '@eslint/js';
-import ts from 'typescript-eslint';
 import reactPlugin from 'eslint-plugin-react';
 import hooksPlugin from 'eslint-plugin-react-hooks';
+import ts from 'typescript-eslint';
 
 export default [
   {

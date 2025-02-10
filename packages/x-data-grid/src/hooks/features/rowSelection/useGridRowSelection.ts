@@ -1,20 +1,34 @@
-import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
-import { GridEventListener } from '../../../models/events';
-import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
+import * as React from 'react';
+import { GRID_ACTIONS_COLUMN_TYPE, GRID_CHECKBOX_SELECTION_COL_DEF } from '../../../colDef';
+import { GRID_DETAIL_PANEL_TOGGLE_FIELD } from '../../../colDef/gridDetailPanelColDef';
+import { gridClasses } from '../../../constants/gridClasses';
+import { GridRowSelectionModel } from '../../../models';
 import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
 import {
-  GridRowSelectionApi,
   GridRowMultiSelectionApi,
+  GridRowSelectionApi,
 } from '../../../models/api/gridRowSelectionApi';
+import { GridEventListener } from '../../../models/events';
+import { GridCellModes } from '../../../models/gridEditRowModel';
 import { GridGroupNode, GridRowId } from '../../../models/gridRows';
+import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
+import { isEventTargetInPortal } from '../../../utils/domUtils';
+import { isKeyboardEvent, isNavigationKey } from '../../../utils/keyboardUtils';
 import { GridSignature, useGridApiEventHandler } from '../../utils/useGridApiEventHandler';
 import { useGridApiMethod } from '../../utils/useGridApiMethod';
+import { GridStateInitializer } from '../../utils/useGridInitializeState';
 import { useGridLogger } from '../../utils/useGridLogger';
 import { useGridSelector } from '../../utils/useGridSelector';
+import { gridFilteredRowsLookupSelector } from '../filter/gridFilterSelector';
+import { gridFocusCellSelector } from '../focus/gridFocusStateSelector';
 import {
-  gridRowsLookupSelector,
+  gridVisiblePaginatedRowIdsWithPinnedRowsSelector,
+  gridVisibleRowIdsWithPinnedRowsSelector,
+} from '../rowPinning/gridRowPinningInternalSelector';
+import {
   gridRowMaximumTreeDepthSelector,
+  gridRowsLookupSelector,
   gridRowTreeSelector,
 } from '../rows/gridRowsSelector';
 import {
@@ -22,21 +36,7 @@ import {
   selectedGridRowsSelector,
   selectedIdsLookupSelector,
 } from './gridRowSelectionSelector';
-import { gridFocusCellSelector } from '../focus/gridFocusStateSelector';
-import { gridFilteredRowsLookupSelector } from '../filter/gridFilterSelector';
-import { GRID_CHECKBOX_SELECTION_COL_DEF, GRID_ACTIONS_COLUMN_TYPE } from '../../../colDef';
-import { GridCellModes } from '../../../models/gridEditRowModel';
-import { isKeyboardEvent, isNavigationKey } from '../../../utils/keyboardUtils';
-import { GridStateInitializer } from '../../utils/useGridInitializeState';
-import { GridRowSelectionModel } from '../../../models';
-import { GRID_DETAIL_PANEL_TOGGLE_FIELD } from '../../../colDef/gridDetailPanelColDef';
-import { gridClasses } from '../../../constants/gridClasses';
-import { isEventTargetInPortal } from '../../../utils/domUtils';
-import { isMultipleRowSelectionEnabled, findRowsToSelect, findRowsToDeselect } from './utils';
-import {
-  gridVisiblePaginatedRowIdsWithPinnedRowsSelector,
-  gridVisibleRowIdsWithPinnedRowsSelector,
-} from '../rowPinning/gridRowPinningInternalSelector';
+import { findRowsToDeselect, findRowsToSelect, isMultipleRowSelectionEnabled } from './utils';
 
 const getSelectionModelPropValue = (
   selectionModelProp: DataGridProcessedProps['rowSelectionModel'],

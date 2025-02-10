@@ -1,4 +1,4 @@
-import { GridRowId, GridRowTreeConfig, GRID_ROOT_GROUP_ID } from '@mui/x-data-grid';
+import { GRID_ROOT_GROUP_ID, GridRowId, GridRowTreeConfig } from '@mui/x-data-grid';
 import { defaultGridFilterLookup, getTreeNodeDescendants } from '@mui/x-data-grid/internals';
 
 export function skipFiltering(rowTree: GridRowTreeConfig) {

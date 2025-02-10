@@ -1,19 +1,19 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import { GridFilterItem, GridLogicOperator } from '../../../models/gridFilterItem';
-import { useGridApiContext } from '../../../hooks/utils/useGridApiContext';
-import { GridPanelContent } from '../GridPanelContent';
-import { GridPanelFooter } from '../GridPanelFooter';
-import { GridFilterForm, GridFilterFormProps } from './GridFilterForm';
-import { useGridRootProps } from '../../../hooks/utils/useGridRootProps';
-import { useGridSelector } from '../../../hooks/utils/useGridSelector';
-import { gridFilterModelSelector } from '../../../hooks/features/filter/gridFilterSelector';
+import PropTypes from 'prop-types';
+import * as React from 'react';
 import {
   gridFilterableColumnDefinitionsSelector,
   gridFilterableColumnLookupSelector,
 } from '../../../hooks/features/columns/gridColumnsSelector';
+import { gridFilterModelSelector } from '../../../hooks/features/filter/gridFilterSelector';
+import { useGridApiContext } from '../../../hooks/utils/useGridApiContext';
+import { useGridRootProps } from '../../../hooks/utils/useGridRootProps';
+import { useGridSelector } from '../../../hooks/utils/useGridSelector';
 import { GridColDef, GridStateColDef } from '../../../models/colDef/gridColDef';
+import { GridFilterItem, GridLogicOperator } from '../../../models/gridFilterItem';
+import { GridPanelContent } from '../GridPanelContent';
+import { GridPanelFooter } from '../GridPanelFooter';
+import { GridFilterForm, GridFilterFormProps } from './GridFilterForm';
 
 export interface GetColumnForNewFilterArgs {
   currentFilters: GridFilterItem[];
@@ -363,4 +363,4 @@ GridFilterPanel.propTypes = {
  * API:
  * - [GridFilterPanel API](https://mui.com/x/api/data-grid/grid-filter-panel/)
  */
-export { GridFilterPanel, getGridFilter };
+export { getGridFilter, GridFilterPanel };

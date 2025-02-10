@@ -1,12 +1,12 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
 import composeClasses from '@mui/utils/composeClasses';
 import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import * as React from 'react';
+import { getDataGridUtilityClass } from '../../constants/gridClasses';
+import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
+import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { GridSlotsComponent } from '../../models/gridSlotsComponent';
 import { GridSortDirection } from '../../models/gridSortModel';
-import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
-import { getDataGridUtilityClass } from '../../constants/gridClasses';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { DataGridProcessedProps } from '../../models/props/DataGridProps';
 
 export interface GridColumnHeaderSortIconProps {

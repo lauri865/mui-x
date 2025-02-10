@@ -1,15 +1,15 @@
-import * as React from 'react';
 import { unstable_useEventCallback as useEventCallback } from '@mui/utils';
-import { GridColumnHeaderParams } from '../../models/params/gridColumnHeaderParams';
-import { useGridApiEventHandler } from '../../hooks/utils/useGridApiEventHandler';
-import { useGridPrivateApiContext } from '../../hooks/utils/useGridPrivateApiContext';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-import { findGridCellElementsFromCol } from '../../utils/domUtils';
+import * as React from 'react';
 import { GridPinnedColumnPosition } from '../../hooks/features/columns/gridColumnsInterfaces';
 import {
   gridColumnVisibilityModelSelector,
   gridVisiblePinnedColumnsSelector,
 } from '../../hooks/features/columns/gridColumnsSelector';
+import { useGridApiEventHandler } from '../../hooks/utils/useGridApiEventHandler';
+import { useGridPrivateApiContext } from '../../hooks/utils/useGridPrivateApiContext';
+import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import { GridColumnHeaderParams } from '../../models/params/gridColumnHeaderParams';
+import { findGridCellElementsFromCol } from '../../utils/domUtils';
 
 export function GridDragDrop() {
   const originalIndex = React.useRef<number>(0);

@@ -1,21 +1,21 @@
-import {
-  defineConfig,
-  defineDocs,
-  defineCollections,
-  frontmatterSchema,
-  metaSchema,
-} from 'fumadocs-mdx/config';
-import { transformerTwoslash } from 'fumadocs-twoslash';
-import remarkMath from 'remark-math';
+import { rehypeCodeDefaultOptions } from 'fumadocs-core/mdx-plugins';
 import {
   fileGenerator,
   remarkDocGen,
   remarkInstall,
   remarkTypeScriptToJavaScript,
 } from 'fumadocs-docgen';
+import {
+  defineCollections,
+  defineConfig,
+  defineDocs,
+  frontmatterSchema,
+  metaSchema,
+} from 'fumadocs-mdx/config';
+import { transformerTwoslash } from 'fumadocs-twoslash';
 import rehypeKatex from 'rehype-katex';
+import remarkMath from 'remark-math';
 import { z } from 'zod';
-import { rehypeCodeDefaultOptions } from 'fumadocs-core/mdx-plugins';
 
 export const docs = defineDocs({
   docs: {
@@ -67,9 +67,7 @@ export default defineConfig({
             for (const line of hast.children) {
               if (line.type !== 'element') continue;
 
-              const lastSpan = line.children.findLast(
-                (v) => v.type === 'element',
-              );
+              const lastSpan = line.children.findLast((v) => v.type === 'element');
 
               const head = lastSpan?.children[0];
               if (head?.type !== 'text') return;

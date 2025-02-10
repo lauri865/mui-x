@@ -1,36 +1,36 @@
-import * as React from 'react';
-import { RefObject } from '@mui/x-internals/types';
 import {
   unstable_ownerDocument as ownerDocument,
   unstable_useEnhancedEffect as useEnhancedEffect,
   unstable_useEventCallback as useEventCallback,
 } from '@mui/utils';
 import { throttle } from '@mui/x-internals/throttle';
-import { GridEventListener } from '../../../models/events';
+import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
+import { DATA_GRID_PROPS_DEFAULT_VALUES } from '../../../constants/dataGridPropsDefaultValues';
 import { ElementSize } from '../../../models';
 import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridEventListener } from '../../../models/events';
+import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
+import { isJSDOM } from '../../../utils/isJSDOM';
+import { roundToDecimalPlaces } from '../../../utils/roundToDecimalPlaces';
+import { isDeepEqual } from '../../../utils/utils';
+import { useGridSelector } from '../../utils';
 import { useGridApiOptionHandler } from '../../utils/useGridApiEventHandler';
 import { useGridApiMethod } from '../../utils/useGridApiMethod';
+import { GridStateInitializer } from '../../utils/useGridInitializeState';
 import { useGridLogger } from '../../utils/useGridLogger';
-import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
-import { GridDimensions, GridDimensionsApi, GridDimensionsPrivateApi } from './gridDimensionsApi';
+import { getVisibleRows } from '../../utils/useGridVisibleRows';
 import {
   gridColumnsTotalWidthSelector,
   gridVisiblePinnedColumnDefinitionsSelector,
 } from '../columns';
-import { gridDimensionsSelector } from './gridDimensionsSelectors';
+import { getTotalHeaderHeight } from '../columns/gridColumnsUtils';
 import { gridDensityFactorSelector } from '../density';
-import { gridRenderContextSelector } from '../virtualization';
-import { useGridSelector } from '../../utils';
-import { getVisibleRows } from '../../utils/useGridVisibleRows';
 import { gridRowsMetaSelector } from '../rows/gridRowsMetaSelector';
 import { getValidRowHeight, rowHeightWarning } from '../rows/gridRowsUtils';
-import { getTotalHeaderHeight } from '../columns/gridColumnsUtils';
-import { GridStateInitializer } from '../../utils/useGridInitializeState';
-import { DATA_GRID_PROPS_DEFAULT_VALUES } from '../../../constants/dataGridPropsDefaultValues';
-import { roundToDecimalPlaces } from '../../../utils/roundToDecimalPlaces';
-import { isJSDOM } from '../../../utils/isJSDOM';
-import { isDeepEqual } from '../../../utils/utils';
+import { gridRenderContextSelector } from '../virtualization';
+import { GridDimensions, GridDimensionsApi, GridDimensionsPrivateApi } from './gridDimensionsApi';
+import { gridDimensionsSelector } from './gridDimensionsSelectors';
 
 type RootProps = Pick<
   DataGridProcessedProps,

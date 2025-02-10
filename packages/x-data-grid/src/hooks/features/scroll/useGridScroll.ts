@@ -1,24 +1,24 @@
-import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
-import { useRtl } from '../../utils/useRtl';
-import { GridCellIndexCoordinates } from '../../../models/gridCell';
+import * as React from 'react';
 import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridScrollApi } from '../../../models/api/gridScrollApi';
+import { GridCellIndexCoordinates } from '../../../models/gridCell';
+import { GridScrollParams } from '../../../models/params/gridScrollParams';
+import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
+import { useGridApiMethod } from '../../utils/useGridApiMethod';
 import { useGridLogger } from '../../utils/useGridLogger';
+import { useGridSelector } from '../../utils/useGridSelector';
+import { useRtl } from '../../utils/useRtl';
 import {
   gridColumnPositionsSelector,
   gridVisibleColumnDefinitionsSelector,
 } from '../columns/gridColumnsSelector';
-import { useGridSelector } from '../../utils/useGridSelector';
-import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
-import { gridPageSelector, gridPageSizeSelector } from '../pagination/gridPaginationSelector';
-import { gridRowCountSelector } from '../rows/gridRowsSelector';
-import { gridRowsMetaSelector } from '../rows/gridRowsMetaSelector';
-import { GridScrollParams } from '../../../models/params/gridScrollParams';
-import { GridScrollApi } from '../../../models/api/gridScrollApi';
-import { useGridApiMethod } from '../../utils/useGridApiMethod';
-import { gridExpandedSortedRowEntriesSelector } from '../filter/gridFilterSelector';
 import { gridDimensionsSelector } from '../dimensions';
+import { gridExpandedSortedRowEntriesSelector } from '../filter/gridFilterSelector';
 import { gridListColumnSelector } from '../listView/gridListViewSelectors';
+import { gridPageSelector, gridPageSizeSelector } from '../pagination/gridPaginationSelector';
+import { gridRowsMetaSelector } from '../rows/gridRowsMetaSelector';
+import { gridRowCountSelector } from '../rows/gridRowsSelector';
 
 // Logic copied from https://www.w3.org/TR/wai-aria-practices/examples/listbox/js/listbox.js
 // Similar to https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView

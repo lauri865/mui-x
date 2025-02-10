@@ -1,13 +1,13 @@
-import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
 import { GridApiContext } from '../components/GridApiContext';
+import { GridConfigurationContext } from '../components/GridConfigurationContext';
 import { GridPrivateApiContext } from '../hooks/utils/useGridPrivateApiContext';
 import { GridPrivateApiCommunity } from '../models/api/gridApiCommunity';
-import { GridRootPropsContext } from './GridRootPropsContext';
 import { GridConfiguration } from '../models/configuration/gridConfiguration';
-import { GridConfigurationContext } from '../components/GridConfigurationContext';
-import { GridThemeContext } from './GridThemeContext';
 import { theme } from '../theme';
+import { GridRootPropsContext } from './GridRootPropsContext';
+import { GridThemeContext } from './GridThemeContext';
 
 type GridContextProviderProps = {
   privateApiRef: RefObject<GridPrivateApiCommunity>;

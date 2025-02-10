@@ -1,40 +1,40 @@
-import * as React from 'react';
-import { RefObject } from '@mui/x-internals/types';
-import { lruMemoize } from 'reselect';
 import { unstable_useEnhancedEffect as useEnhancedEffect } from '@mui/utils';
-import { GridEventListener } from '../../../models/events';
-import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
+import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
+import { lruMemoize } from 'reselect';
 import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
 import { GridFilterApi } from '../../../models/api/gridFilterApi';
+import { GridEventListener } from '../../../models/events';
 import { GridFilterItem } from '../../../models/gridFilterItem';
 import { GridRowId } from '../../../models/gridRows';
 import { GridStateCommunity } from '../../../models/gridStateCommunity';
-import { useLazyRef } from '../../utils/useLazyRef';
-import { useGridApiEventHandler } from '../../utils/useGridApiEventHandler';
-import { useGridApiMethod } from '../../utils/useGridApiMethod';
-import { useGridLogger } from '../../utils/useGridLogger';
-import { gridColumnLookupSelector } from '../columns/gridColumnsSelector';
-import { GridPreferencePanelsValue } from '../preferencesPanel/gridPreferencePanelsValue';
-import { defaultGridFilterLookup, getDefaultGridFilterModel } from './gridFilterState';
-import { gridFilterModelSelector } from './gridFilterSelector';
-import { useFirstRender } from '../../utils/useFirstRender';
-import { gridRowsLookupSelector } from '../rows';
+import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
+import { isDeepEqual } from '../../../utils/utils';
 import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
 import {
   GRID_DEFAULT_STRATEGY,
   GridStrategyProcessor,
   useGridRegisterStrategyProcessor,
 } from '../../core/strategyProcessing';
+import { useFirstRender } from '../../utils/useFirstRender';
+import { useGridApiEventHandler } from '../../utils/useGridApiEventHandler';
+import { useGridApiMethod } from '../../utils/useGridApiMethod';
+import { GridStateInitializer } from '../../utils/useGridInitializeState';
+import { useGridLogger } from '../../utils/useGridLogger';
+import { useLazyRef } from '../../utils/useLazyRef';
+import { gridColumnLookupSelector } from '../columns/gridColumnsSelector';
+import { GridPreferencePanelsValue } from '../preferencesPanel/gridPreferencePanelsValue';
+import { gridRowsLookupSelector } from '../rows';
+import { gridFilterModelSelector } from './gridFilterSelector';
+import { defaultGridFilterLookup, getDefaultGridFilterModel } from './gridFilterState';
 import {
   buildAggregatedFilterApplier,
-  sanitizeFilterModel,
-  mergeStateWithFilterModel,
   cleanFilterItem,
+  mergeStateWithFilterModel,
   passFilterLogic,
+  sanitizeFilterModel,
   shouldQuickFilterExcludeHiddenColumns,
 } from './gridFilterUtils';
-import { GridStateInitializer } from '../../utils/useGridInitializeState';
-import { isDeepEqual } from '../../../utils/utils';
 
 export const filterStateInitializer: GridStateInitializer<
   Pick<DataGridProcessedProps, 'filterModel' | 'initialState' | 'disableMultipleColumnsFiltering'>

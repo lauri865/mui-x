@@ -1,6 +1,6 @@
-import * as React from 'react';
 import * as Primitive from '@radix-ui/react-dropdown-menu';
 import { Check, ChevronRight, Circle } from 'lucide-react';
+import * as React from 'react';
 
 import { cn } from '../../lib/utils';
 
@@ -169,19 +169,19 @@ function Shortcut({ className, ...props }: React.HTMLAttributes<HTMLSpanElement>
 Shortcut.displayName = 'Shortcut';
 
 export {
-  Root,
-  Trigger,
-  Content,
-  Item,
   CheckboxItem,
-  RadioItem,
+  Content,
+  Group,
+  Item,
   Label,
+  Portal,
+  RadioGroup,
+  RadioItem,
+  Root,
   Separator,
   Shortcut,
-  Group,
-  Portal,
   Sub,
   SubContent,
   SubTrigger,
-  RadioGroup,
+  Trigger,
 };

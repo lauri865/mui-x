@@ -1,25 +1,19 @@
-import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
 import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
-import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
-import { GridStateInitializer } from '../../utils/useGridInitializeState';
-import { useGridApiMethod } from '../../utils/useGridApiMethod';
-import { useGridRegisterPipeProcessor, GridPipeProcessor } from '../../core/pipeProcessing';
-import {
-  EMPTY_PINNED_ROWS,
-  GridRowPinningApi,
-  GridPinnedRowPosition,
-  GridPinnedRowsModel,
-} from './rowPinningInterfaces';
+import { GridEventListener } from '../../../models/events';
 import { GridRowId } from '../../../models/gridRows';
+import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
+import { useGridApiOptionHandler } from '../../utils/useGridApiEventHandler';
+import { useGridApiMethod } from '../../utils/useGridApiMethod';
+import { GridStateInitializer } from '../../utils/useGridInitializeState';
 import { gridPinnedRowsModelSelector } from './gridRowPinningSelector';
 import {
-  GRID_DEFAULT_STRATEGY,
-  GridStrategyProcessor,
-  useGridRegisterStrategyProcessor,
-} from '../../core/strategyProcessing';
-import { GridEventListener } from '../../../models/events';
-import { useGridApiOptionHandler } from '../../utils/useGridApiEventHandler';
+  EMPTY_PINNED_ROWS,
+  GridPinnedRowPosition,
+  GridPinnedRowsModel,
+  GridRowPinningApi,
+} from './rowPinningInterfaces';
 
 export const rowPinningStateInitializer: GridStateInitializer<
   Pick<DataGridProcessedProps, 'pinnedRows' | 'initialState'>

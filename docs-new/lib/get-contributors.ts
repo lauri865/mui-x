@@ -9,8 +9,7 @@ export async function fetchContributors(
   repoName: string,
 ): Promise<Contributor[]> {
   const headers = new Headers();
-  if (process.env.GITHUB_TOKEN)
-    headers.set('Authorization', `Bearer ${process.env.GITHUB_TOKEN}`);
+  if (process.env.GITHUB_TOKEN) headers.set('Authorization', `Bearer ${process.env.GITHUB_TOKEN}`);
 
   const response = await fetch(
     `https://api.github.com/repos/${repoOwner}/${repoName}/contributors?per_page=50`,

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { GridPinnedColumnPosition } from '../../../../hooks/features/columns/gridColumnsInterfaces';
 import { useGridApiContext } from '../../../../hooks/utils/useGridApiContext';
-import { GridColumnMenuItemProps } from '../GridColumnMenuItemProps';
 import { useGridRootProps } from '../../../../hooks/utils/useGridRootProps';
+import { GridColumnMenuItemProps } from '../GridColumnMenuItemProps';
 
 function GridColumnMenuColumnPinningItem(props: GridColumnMenuItemProps) {
   const { colDef } = props;

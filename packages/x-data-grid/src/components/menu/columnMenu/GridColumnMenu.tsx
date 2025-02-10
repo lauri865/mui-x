@@ -1,12 +1,11 @@
-import * as React from 'react';
 import { useGridColumnMenuSlots } from '../../../hooks/features/columnMenu/useGridColumnMenuSlots';
+import { useGridApiContext } from '../../../hooks/utils/useGridApiContext';
+import { useGridRootProps } from '../../../hooks/utils/useGridRootProps';
+import { GridColumnMenuProps } from './GridColumnMenuProps';
+import { GridColumnMenuColumnPinningItem } from './menuItems/GridColumnMenuColumnPinningItem';
 import { GridColumnMenuColumnsItem } from './menuItems/GridColumnMenuColumnsItem';
 import { GridColumnMenuFilterItem } from './menuItems/GridColumnMenuFilterItem';
 import { GridColumnMenuSortItem } from './menuItems/GridColumnMenuSortItem';
-import { GridColumnMenuColumnPinningItem } from './menuItems/GridColumnMenuColumnPinningItem';
-import { GridColumnMenuProps } from './GridColumnMenuProps';
-import { useGridRootProps } from '../../../hooks/utils/useGridRootProps';
-import { useGridApiContext } from '../../../hooks/utils/useGridApiContext';
 
 export const GRID_COLUMN_MENU_SLOTS = {
   columnMenuSortItem: GridColumnMenuSortItem,

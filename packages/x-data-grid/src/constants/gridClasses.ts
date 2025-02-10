@@ -1,6 +1,6 @@
 import {
-  unstable_generateUtilityClasses as generateUtilityClasses,
   unstable_generateUtilityClass as generateUtilityClass,
+  unstable_generateUtilityClasses as generateUtilityClasses,
 } from '@mui/utils';
 
 export interface GridClasses {

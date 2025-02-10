@@ -1,25 +1,25 @@
-import * as React from 'react';
-import { RefObject } from '@mui/x-internals/types';
 import {
   gridColumnLookupSelector,
   useGridApiEventHandler,
   useGridApiMethod,
 } from '@mui/x-data-grid-pro';
 import {
-  useGridRegisterPipeProcessor,
-  GridStateInitializer,
   GridPipeProcessor,
+  GridStateInitializer,
+  useGridRegisterPipeProcessor,
 } from '@mui/x-data-grid-pro/internals';
+import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
 import { DataGridPremiumProcessedProps } from '../../../models/dataGridPremiumProps';
 import { GridPrivateApiPremium } from '../../../models/gridApiPremium';
-import { gridAggregationModelSelector } from './gridAggregationSelectors';
+import { createAggregationLookup } from './createAggregationLookup';
 import { GridAggregationApi, GridAggregationPrivateApi } from './gridAggregationInterfaces';
+import { gridAggregationModelSelector } from './gridAggregationSelectors';
 import {
+  areAggregationRulesEqual,
   getAggregationRules,
   mergeStateWithAggregationModel,
-  areAggregationRulesEqual,
 } from './gridAggregationUtils';
-import { createAggregationLookup } from './createAggregationLookup';
 
 export const aggregationStateInitializer: GridStateInitializer<
   Pick<DataGridPremiumProcessedProps, 'aggregationModel' | 'initialState'>,

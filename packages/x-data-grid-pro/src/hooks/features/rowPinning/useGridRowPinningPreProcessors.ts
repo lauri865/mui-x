@@ -1,10 +1,3 @@
-import * as React from 'react';
-import { RefObject } from '@mui/x-internals/types';
-import {
-  GridHydrateRowsValue,
-  GridPipeProcessor,
-  useGridRegisterPipeProcessor,
-} from '@mui/x-data-grid/internals';
 import {
   GRID_ROOT_GROUP_ID,
   GridGroupNode,
@@ -13,9 +6,16 @@ import {
   GridRowId,
   GridRowModel,
 } from '@mui/x-data-grid';
+import {
+  GridHydrateRowsValue,
+  GridPipeProcessor,
+  useGridRegisterPipeProcessor,
+} from '@mui/x-data-grid/internals';
+import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
 import { GridPrivateApiPro } from '../../../models/gridApiPro';
-import type { GridPinnedRowsProp, GridRowPinningInternalCache } from './gridRowPinningInterface';
 import { insertNodeInTree } from '../../../utils/tree/utils';
+import type { GridPinnedRowsProp, GridRowPinningInternalCache } from './gridRowPinningInterface';
 
 type GridPinnedRowPosition = keyof GridPinnedRowsProp;
 

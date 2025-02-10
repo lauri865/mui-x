@@ -1,72 +1,70 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import { RefObject } from '@mui/x-internals/types';
 import {
   unstable_useEnhancedEffect as useEnhancedEffect,
   unstable_useEventCallback as useEventCallback,
 } from '@mui/utils';
 import useLazyRef from '@mui/utils/useLazyRef';
 import useTimeout from '@mui/utils/useTimeout';
-import { useRtl } from '../../utils/useRtl';
 import reactMajor from '@mui/x-internals/reactMajor';
+import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import { GridDetailPanel } from '../../../components/GridDetailPanel';
+import { GridInfiniteLoader } from '../../../components/virtualization/GridInfiniteLoader';
 import {
-  gridDimensionsColumnsTotalWidthSelector,
   gridContentHeightSelector,
+  gridDimensionsColumnsTotalWidthSelector,
   gridHasFillerSelector,
   gridRowHeightSelector,
   gridVerticalScrollbarWidthSelector,
 } from '../../../internals/selectors/dimensionSelectors';
+import {
+  type GridColumnsRenderContext,
+  type GridRenderContext,
+  type GridRowEntry,
+} from '../../../models';
 import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridInfiniteLoaderPrivateApi } from '../../../models/api/gridInfiniteLoaderApi';
+import { GridStateCommunity } from '../../../models/gridStateCommunity';
+import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
+import { isJSDOM } from '../../../utils/isJSDOM';
+import * as platform from '../../../utils/platform';
+import { roundToDecimalPlaces } from '../../../utils/roundToDecimalPlaces';
+import { clamp, range } from '../../../utils/utils';
+import { useGridApiOptionHandler } from '../../utils';
 import { useGridPrivateApiContext } from '../../utils/useGridPrivateApiContext';
 import { useGridRootProps } from '../../utils/useGridRootProps';
 import { useGridSelector } from '../../utils/useGridSelector';
+import { getVisibleRows, useGridVisibleRows } from '../../utils/useGridVisibleRows';
+import { useRtl } from '../../utils/useRtl';
 import { useRunOnce } from '../../utils/useRunOnce';
+import { EMPTY_PINNED_COLUMN_FIELDS, GridPinnedColumnFields } from '../columns';
 import {
-  gridVisibleColumnDefinitionsSelector,
-  gridVisiblePinnedColumnDefinitionsSelector,
   gridColumnPositionsSelector,
   gridHasColSpanSelector,
-  gridPinnedColumnsSelector,
+  gridVisibleColumnDefinitionsSelector,
+  gridVisiblePinnedColumnDefinitionsSelector,
   gridVisiblePinnedColumnsSelector,
 } from '../columns/gridColumnsSelector';
-import { gridDimensionsSelector } from '../dimensions/gridDimensionsSelectors';
-import { gridVisiblePinnedRowsSelector } from '../rowPinning';
-import { GridPinnedRowsPosition } from '../rows/gridRowsInterfaces';
-import { useGridVisibleRows, getVisibleRows } from '../../utils/useGridVisibleRows';
-import { useGridApiOptionHandler } from '../../utils';
-import * as platform from '../../../utils/platform';
-import { clamp, range } from '../../../utils/utils';
-import {
-  type GridRenderContext,
-  type GridColumnsRenderContext,
-  type GridRowEntry,
-  type GridRowId,
-} from '../../../models';
-import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
-import { selectedIdsLookupSelector } from '../rowSelection/gridRowSelectionSelector';
-import { gridRowsMetaSelector } from '../rows/gridRowsMetaSelector';
 import { getFirstNonSpannedColumnToRender } from '../columns/gridColumnsUtils';
-import { GridInfiniteLoaderPrivateApi } from '../../../models/api/gridInfiniteLoaderApi';
-import {
-  gridRenderContextSelector,
-  gridVirtualizationRowEnabledSelector,
-  gridVirtualizationColumnEnabledSelector,
-} from './gridVirtualizationSelectors';
-import { EMPTY_RENDER_CONTEXT } from './useGridVirtualization';
-import { gridRowSpanningHiddenCellsOriginMapSelector } from '../rows/gridRowSpanningSelectors';
+import { gridDetailPanelExpandedRowIdsSelector } from '../detailPanel/gridDetailPanelSelector';
+import { gridDimensionsSelector } from '../dimensions/gridDimensionsSelectors';
 import { gridListColumnSelector } from '../listView/gridListViewSelectors';
+import { gridVisiblePinnedRowsSelector } from '../rowPinning';
+import { selectedIdsLookupSelector } from '../rowSelection/gridRowSelectionSelector';
+import { gridRowSpanningHiddenCellsOriginMapSelector } from '../rows/gridRowSpanningSelectors';
+import { GridPinnedRowsPosition } from '../rows/gridRowsInterfaces';
+import { gridRowsMetaSelector } from '../rows/gridRowsMetaSelector';
 import { minimalContentHeight } from '../rows/gridRowsUtils';
-import { EMPTY_PINNED_COLUMN_FIELDS, GridPinnedColumnFields, GridPinnedColumns } from '../columns';
 import {
   gridFocusedVirtualCellSelector,
   gridIsFocusedCellOutOfContext,
 } from './gridFocusedVirtualCellSelector';
-import { roundToDecimalPlaces } from '../../../utils/roundToDecimalPlaces';
-import { isJSDOM } from '../../../utils/isJSDOM';
-import { GridStateCommunity } from '../../../models/gridStateCommunity';
-import { gridDetailPanelExpandedRowIdsSelector } from '../detailPanel/gridDetailPanelSelector';
-import { GridDetailPanel } from '../../../components/GridDetailPanel';
-import { GridInfiniteLoader } from '../../../components/virtualization/GridInfiniteLoader';
+import {
+  gridRenderContextSelector,
+  gridVirtualizationColumnEnabledSelector,
+  gridVirtualizationRowEnabledSelector,
+} from './gridVirtualizationSelectors';
+import { EMPTY_RENDER_CONTEXT } from './useGridVirtualization';
 
 const MINIMUM_COLUMN_WIDTH = 50;
 

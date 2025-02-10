@@ -1,17 +1,12 @@
-import * as fs from 'node:fs/promises';
 import fg from 'fast-glob';
+import { fileGenerator, remarkDocGen, remarkInstall, typescriptGenerator } from 'fumadocs-docgen';
 import matter from 'gray-matter';
+import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import { remark } from 'remark';
 import remarkGfm from 'remark-gfm';
-import {
-  fileGenerator,
-  remarkDocGen,
-  remarkInstall,
-  typescriptGenerator,
-} from 'fumadocs-docgen';
-import remarkStringify from 'remark-stringify';
 import remarkMdx from 'remark-mdx';
+import remarkStringify from 'remark-stringify';
 
 export const revalidate = false;
 

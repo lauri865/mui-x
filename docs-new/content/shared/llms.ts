@@ -1,12 +1,12 @@
-import * as fs from 'node:fs/promises';
 import fg from 'fast-glob';
+import { remarkInstall } from 'fumadocs-docgen';
+import { remarkInclude } from 'fumadocs-mdx/config';
 import matter from 'gray-matter';
+import * as fs from 'node:fs/promises';
 import { remark } from 'remark';
 import remarkGfm from 'remark-gfm';
-import { remarkInstall } from 'fumadocs-docgen';
-import remarkStringify from 'remark-stringify';
 import remarkMdx from 'remark-mdx';
-import { remarkInclude } from 'fumadocs-mdx/config';
+import remarkStringify from 'remark-stringify';
 
 export const revalidate = false;
 

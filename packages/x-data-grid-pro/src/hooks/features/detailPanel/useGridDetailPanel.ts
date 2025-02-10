@@ -1,32 +1,32 @@
-import * as React from 'react';
-import { RefObject } from '@mui/x-internals/types';
 import {
-  GridEventListener,
-  GridRowId,
-  useGridSelector,
-  useGridApiEventHandler,
-  useGridApiMethod,
   GridCellParams,
   gridDataRowIdsSelector,
+  GridEventListener,
+  GridRowId,
+  useGridApiEventHandler,
+  useGridApiMethod,
+  useGridSelector,
 } from '@mui/x-data-grid';
 import {
-  useGridRegisterPipeProcessor,
   GridPipeProcessor,
   GridStateInitializer,
+  useGridRegisterPipeProcessor,
 } from '@mui/x-data-grid/internals';
-import { GridApiPro, GridPrivateApiPro } from '../../../models/gridApiPro';
-import { GRID_DETAIL_PANEL_TOGGLE_FIELD } from './gridDetailPanelToggleColDef';
-import {
-  gridDetailPanelExpandedRowIdsSelector,
-  gridDetailPanelExpandedRowsContentCacheSelector,
-  gridDetailPanelRawHeightCacheSelector,
-} from './gridDetailPanelSelector';
+import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
 import { DataGridProProcessedProps } from '../../../models/dataGridProProps';
+import { GridApiPro, GridPrivateApiPro } from '../../../models/gridApiPro';
 import {
   GridDetailPanelApi,
   GridDetailPanelPrivateApi,
   GridDetailPanelState,
 } from './gridDetailPanelInterface';
+import {
+  gridDetailPanelExpandedRowIdsSelector,
+  gridDetailPanelExpandedRowsContentCacheSelector,
+  gridDetailPanelRawHeightCacheSelector,
+} from './gridDetailPanelSelector';
+import { GRID_DETAIL_PANEL_TOGGLE_FIELD } from './gridDetailPanelToggleColDef';
 
 const emptySet = new Set();
 

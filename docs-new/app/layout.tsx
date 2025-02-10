@@ -1,15 +1,11 @@
-import './global.css';
-import type { Viewport } from 'next';
-import { GeistSans } from 'geist/font/sans';
-import { GeistMono } from 'geist/font/mono';
-import { baseUrl, createMetadata } from '@/lib/metadata';
 import { Body } from '@/app/layout.client';
-import { Provider } from './provider';
-import { AISearchTrigger } from '@/components/ai';
-import { cn } from '@/lib/cn';
-import { buttonVariants } from '@/components/ui/button';
-import { MessageCircle } from 'lucide-react';
+import { baseUrl, createMetadata } from '@/lib/metadata';
+import { GeistMono } from 'geist/font/mono';
+import { GeistSans } from 'geist/font/sans';
+import type { Viewport } from 'next';
 import type { ReactNode } from 'react';
+import './global.css';
+import { Provider } from './provider';
 
 export const metadata = createMetadata({
   title: {

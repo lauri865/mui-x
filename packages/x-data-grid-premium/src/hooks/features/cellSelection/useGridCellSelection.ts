@@ -1,7 +1,22 @@
-import * as React from 'react';
-import { RefObject } from '@mui/x-internals/types';
 import ownerDocument from '@mui/utils/ownerDocument';
 import useEventCallback from '@mui/utils/useEventCallback';
+import {
+  GRID_ACTIONS_COLUMN_TYPE,
+  GRID_CHECKBOX_SELECTION_COL_DEF,
+  GRID_DETAIL_PANEL_TOGGLE_FIELD,
+  GRID_REORDER_COL_DEF,
+  GridCellCoordinates,
+  GridCellParams,
+  GridEventListener,
+  GridEventLookup,
+  GridRowId,
+  gridClasses,
+  gridDimensionsSelector,
+  gridFocusCellSelector,
+  gridSortedRowIdsSelector,
+  useGridApiEventHandler,
+  useGridApiMethod,
+} from '@mui/x-data-grid-pro';
 import {
   GridPipeProcessor,
   GridStateInitializer,
@@ -11,27 +26,12 @@ import {
   serializeCellValue,
   useGridRegisterPipeProcessor,
 } from '@mui/x-data-grid-pro/internals';
-import {
-  useGridApiEventHandler,
-  useGridApiMethod,
-  GridEventListener,
-  GridEventLookup,
-  GRID_ACTIONS_COLUMN_TYPE,
-  GRID_CHECKBOX_SELECTION_COL_DEF,
-  GRID_DETAIL_PANEL_TOGGLE_FIELD,
-  GridCellCoordinates,
-  GridRowId,
-  gridClasses,
-  gridFocusCellSelector,
-  GridCellParams,
-  GRID_REORDER_COL_DEF,
-  gridSortedRowIdsSelector,
-  gridDimensionsSelector,
-} from '@mui/x-data-grid-pro';
-import { gridCellSelectionStateSelector } from './gridCellSelectionSelector';
-import { GridCellSelectionApi } from './gridCellSelectionInterfaces';
+import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
 import { DataGridPremiumProcessedProps } from '../../../models/dataGridPremiumProps';
 import { GridPrivateApiPremium } from '../../../models/gridApiPremium';
+import { GridCellSelectionApi } from './gridCellSelectionInterfaces';
+import { gridCellSelectionStateSelector } from './gridCellSelectionSelector';
 
 export const cellSelectionStateInitializer: GridStateInitializer<
   Pick<DataGridPremiumProcessedProps, 'cellSelectionModel' | 'initialState'>

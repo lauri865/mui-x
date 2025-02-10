@@ -17,12 +17,7 @@ const config: NextConfig = {
     // Replaced by root workspace command
     ignoreDuringBuilds: true,
   },
-  serverExternalPackages: [
-    'ts-morph',
-    'typescript',
-    'oxc-transform',
-    '@shikijs/twoslash',
-  ],
+  serverExternalPackages: ['ts-morph', 'typescript', 'oxc-transform', '@shikijs/twoslash'],
   images: {
     unoptimized: true,
     remotePatterns: [

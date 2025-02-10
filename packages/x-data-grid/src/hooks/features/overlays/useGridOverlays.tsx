@@ -1,17 +1,13 @@
-import * as React from 'react';
+import { GridLoadingOverlayVariant } from '../../../components/GridLoadingOverlay';
+import type { GridOverlayType } from '../../../components/base/GridOverlays';
+import { GridOverlayWrapper } from '../../../components/base/GridOverlays';
+import { InfiniteLoadingOverlay } from '../../../components/virtualization/GridInfiniteLoader';
+import { gridVisiblePinnedRowsCountSelector } from '../../features/rowPinning';
 import { useGridSelector } from '../../utils';
 import { useGridApiContext } from '../../utils/useGridApiContext';
 import { useGridRootProps } from '../../utils/useGridRootProps';
 import { gridExpandedRowCountSelector } from '../filter';
 import { gridRowCountSelector, gridRowsLoadingSelector } from '../rows';
-import { gridVisiblePinnedRowsCountSelector } from '../../features/rowPinning';
-import { GridLoadingOverlayVariant } from '../../../components/GridLoadingOverlay';
-import { GridOverlayWrapper } from '../../../components/base/GridOverlays';
-import type { GridOverlayType } from '../../../components/base/GridOverlays';
-import {
-  GridInfiniteLoader,
-  InfiniteLoadingOverlay,
-} from '../../../components/virtualization/GridInfiniteLoader';
 
 /**
  * Uses the grid state to determine which overlay to display.

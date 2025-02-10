@@ -1,12 +1,12 @@
 import { isObjectEmpty } from '@mui/x-internals/isObjectEmpty';
-import { createSelector, createSelectorMemoized } from '../../../utils/createSelector';
-import { GridRowId } from '../../../models/gridRows';
 import { GridFilterItem } from '../../../models/gridFilterItem';
+import { GridRowId } from '../../../models/gridRows';
 import { GridStateCommunity } from '../../../models/gridStateCommunity';
-import { gridSortedRowEntriesSelector } from '../sorting/gridSortingSelector';
+import { createSelector, createSelectorMemoized } from '../../../utils/createSelector';
 import { gridColumnLookupSelector } from '../columns/gridColumnsSelector';
-import { gridRowMaximumTreeDepthSelector, gridRowTreeSelector } from '../rows/gridRowsSelector';
 import { gridVisiblePinnedRowsCountSelector } from '../rowPinning/gridRowPinningSelector';
+import { gridRowMaximumTreeDepthSelector, gridRowTreeSelector } from '../rows/gridRowsSelector';
+import { gridSortedRowEntriesSelector } from '../sorting/gridSortingSelector';
 
 /**
  * @category Filtering

@@ -1,19 +1,7 @@
-import { type LinkItemType } from 'fumadocs-ui/layouts/docs';
-import {
-  AlbumIcon,
-  Book,
-  ComponentIcon,
-  Heart,
-  Layout,
-  LayoutTemplate,
-  Pencil,
-  Server,
-} from 'lucide-react';
-import Image from 'next/image';
-import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 import { TWGridIcon } from '@/app/layout.client';
-import Logo from '@/public/logo.png';
-import Preview from '@/public/banner.png';
+import { type LinkItemType } from 'fumadocs-ui/layouts/docs';
+import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
+import { AlbumIcon } from 'lucide-react';
 
 export const linkItems: LinkItemType[] = [
   {

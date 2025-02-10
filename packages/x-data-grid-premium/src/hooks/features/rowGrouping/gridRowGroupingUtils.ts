@@ -1,34 +1,34 @@
-import { RefObject } from '@mui/x-internals/types';
 import {
-  GridRowTreeConfig,
-  GridFilterState,
-  GridFilterModel,
-  GridTreeNode,
-  GridGroupNode,
-  GridRowModel,
   GridColDef,
-  GridKeyValue,
   GridDataSource,
+  GridFilterModel,
+  GridFilterState,
+  GridGroupNode,
+  GridKeyValue,
+  GridRowModel,
+  GridRowTreeConfig,
+  GridTreeNode,
 } from '@mui/x-data-grid-pro';
 import {
-  passFilterLogic,
+  GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD,
   GridAggregatedFilterItemApplier,
   GridAggregatedFilterItemApplierResult,
   GridColumnRawLookup,
-  GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD,
+  GridStrategyGroup,
   getRowGroupingCriteriaFromGroupingField,
   isGroupingColumn,
-  GridStrategyGroup,
+  passFilterLogic,
 } from '@mui/x-data-grid-pro/internals';
+import { RefObject } from '@mui/x-internals/types';
 import { DataGridPremiumProcessedProps } from '../../../models/dataGridPremiumProps';
+import { GridPrivateApiPremium } from '../../../models/gridApiPremium';
+import { GridStatePremium } from '../../../models/gridStatePremium';
 import {
   GridGroupingRule,
   GridGroupingRules,
   GridRowGroupingModel,
 } from './gridRowGroupingInterfaces';
-import { GridStatePremium } from '../../../models/gridStatePremium';
 import { gridRowGroupingSanitizedModelSelector } from './gridRowGroupingSelector';
-import { GridPrivateApiPremium } from '../../../models/gridApiPremium';
 
 export {
   GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD,

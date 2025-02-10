@@ -1,6 +1,6 @@
+import type { ImageResponseOptions } from 'next/dist/compiled/@vercel/og/types';
 import { ImageResponse } from 'next/og';
 import type { ReactElement, ReactNode } from 'react';
-import type { ImageResponseOptions } from 'next/dist/compiled/@vercel/og/types';
 
 interface GenerateProps {
   title: ReactNode;
@@ -11,18 +11,8 @@ interface GenerateProps {
   site?: ReactNode;
 }
 
-export function generateOGImage(
-  options: GenerateProps & ImageResponseOptions,
-): ImageResponse {
-  const {
-    title,
-    description,
-    icon,
-    site,
-    primaryColor,
-    primaryTextColor,
-    ...rest
-  } = options;
+export function generateOGImage(options: GenerateProps & ImageResponseOptions): ImageResponse {
+  const { title, description, icon, site, primaryColor, primaryTextColor, ...rest } = options;
 
   return new ImageResponse(
     generate({
@@ -151,12 +141,7 @@ export function GridPattern({
       {...props}
     >
       <defs>
-        <pattern
-          id="og-pattern"
-          width={width}
-          height={height}
-          patternUnits="userSpaceOnUse"
-        >
+        <pattern id="og-pattern" width={width} height={height} patternUnits="userSpaceOnUse">
           <path
             d={`M.5 ${height.toString()}V.5H${width.toString()}`}
             fill="none"
@@ -165,14 +150,7 @@ export function GridPattern({
           />
         </pattern>
       </defs>
-      <rect
-        width="600"
-        height="600"
-        strokeWidth={0}
-        fill="url(#og-pattern)"
-        x={x}
-        y={y}
-      />
+      <rect width="600" height="600" strokeWidth={0} fill="url(#og-pattern)" x={x} y={y} />
       {squares?.map(([itemX, itemY]) => (
         <rect
           strokeWidth="0"
