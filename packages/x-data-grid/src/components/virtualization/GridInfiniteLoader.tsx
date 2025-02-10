@@ -83,7 +83,9 @@ export const GridInfiniteLoader = ({
               });
 
               // hack to trigger the scrollPosition to update with the new rows / dimensions
-              apiRef.current.virtualScrollerRef.current!.dispatchEvent(new CustomEvent('scroll'));
+              requestAnimationFrame(() => {
+                apiRef.current.virtualScrollerRef.current!.dispatchEvent(new CustomEvent('scroll'));
+              });
             }
           } catch (err) {
           } finally {
