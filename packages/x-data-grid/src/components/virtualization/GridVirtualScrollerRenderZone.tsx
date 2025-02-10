@@ -1,36 +1,9 @@
-import * as React from 'react';
-import clsx from 'clsx';
-import { styled } from '@mui/system';
-import composeClasses from '@mui/utils/composeClasses';
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
+import clsx from 'clsx';
+import * as React from 'react';
 import { gridRowsMetaSelector } from '../../hooks/features/rows';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-import { getDataGridUtilityClass } from '../../constants/gridClasses';
-import { DataGridProcessedProps } from '../../models/props/DataGridProps';
+import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { useGridApiOptionHandler } from '../../hooks/utils/useGridApiEventHandler';
-
-type OwnerState = DataGridProcessedProps;
-
-const useUtilityClasses = (ownerState: OwnerState) => {
-  const { classes } = ownerState;
-
-  const slots = {
-    root: ['virtualScrollerRenderZone'],
-  };
-
-  return composeClasses(slots, getDataGridUtilityClass, classes);
-};
-
-const VirtualScrollerRenderZoneRoot = styled('div', {
-  name: 'MuiDataGrid',
-  slot: 'VirtualScrollerRenderZone',
-  overridesResolver: (props, styles) => styles.virtualScrollerRenderZone,
-})<{ ownerState: OwnerState }>({
-  position: 'absolute',
-  display: 'flex', // Prevents margin collapsing when using `getRowSpacing`
-  flexDirection: 'column',
-});
 
 const GridVirtualScrollerRenderZone = forwardRef<
   HTMLDivElement,
@@ -38,8 +11,6 @@ const GridVirtualScrollerRenderZone = forwardRef<
 >(function GridVirtualScrollerRenderZone(props, ref) {
   const { className, ...other } = props;
   const apiRef = useGridApiContext();
-  const rootProps = useGridRootProps();
-  const classes = useUtilityClasses(rootProps);
   const [offsetTop, setOffsetTop] = React.useState(0);
   const handleRenderContextChange = React.useCallback(
     (renderContext: any) => {
@@ -51,9 +22,8 @@ const GridVirtualScrollerRenderZone = forwardRef<
   useGridApiOptionHandler(apiRef, 'renderContextChange', handleRenderContextChange);
 
   return (
-    <VirtualScrollerRenderZoneRoot
-      className={clsx(classes.root, className)}
-      ownerState={rootProps}
+    <div
+      className={clsx('twg-virtualScrollerRenderZone', 'flex flex-col absolute', className)}
       style={{
         transform: `translate3d(0, ${offsetTop}px, 0)`,
         willChange: 'transform',

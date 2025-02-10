@@ -1,57 +1,26 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import { styled } from '@mui/system';
-import composeClasses from '@mui/utils/composeClasses';
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import { getDataGridUtilityClass } from '../../constants/gridClasses';
-import type { DataGridProcessedProps } from '../../models/props/DataGridProps';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import * as React from 'react';
 
 export type GridToolbarContainerProps = React.HTMLAttributes<HTMLDivElement>;
-
-type OwnerState = DataGridProcessedProps;
-
-const useUtilityClasses = (ownerState: OwnerState) => {
-  const { classes } = ownerState;
-
-  const slots = {
-    root: ['toolbarContainer'],
-  };
-
-  return composeClasses(slots, getDataGridUtilityClass, classes);
-};
-
-const GridToolbarContainerRoot = styled('div', {
-  name: 'MuiDataGrid',
-  slot: 'ToolbarContainer',
-  overridesResolver: (_, styles) => styles.toolbarContainer,
-})<{ ownerState: OwnerState }>(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  flexWrap: 'wrap',
-  gap: theme.spacing(1),
-  padding: theme.spacing(0.5, 0.5, 0),
-}));
 
 const GridToolbarContainer = forwardRef<HTMLDivElement, GridToolbarContainerProps>(
   function GridToolbarContainer(props, ref) {
     const { className, children, ...other } = props;
-    const rootProps = useGridRootProps();
-    const classes = useUtilityClasses(rootProps);
+
     if (!children) {
       return null;
     }
 
     return (
-      <GridToolbarContainerRoot
-        className={clsx(classes.root, className)}
-        ownerState={rootProps}
+      <div
+        className={clsx('flex items-center flex-wrap gap-2 p-1 pb-0', className)}
         {...other}
         ref={ref}
       >
         {children}
-      </GridToolbarContainerRoot>
+      </div>
     );
   },
 );

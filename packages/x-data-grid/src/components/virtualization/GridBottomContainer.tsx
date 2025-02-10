@@ -1,29 +1,15 @@
-import * as React from 'react';
 import clsx from 'clsx';
-import { styled } from '@mui/system';
-import composeClasses from '@mui/utils/composeClasses';
-import { gridClasses, getDataGridUtilityClass } from '../../constants/gridClasses';
-
-const useUtilityClasses = () => {
-  const slots = {
-    root: ['bottomContainer'],
-  };
-  return composeClasses(slots, getDataGridUtilityClass, {});
-};
-
-const Element = styled('div')({
-  position: 'sticky',
-  zIndex: 4,
-  bottom: 'calc(var(--DataGrid-hasScrollX) * var(--DataGrid-scrollbarSize))',
-});
+import * as React from 'react';
+import { gridClasses } from '../../constants/gridClasses';
 
 export function GridBottomContainer(props: React.PropsWithChildren) {
-  const classes = useUtilityClasses();
-
   return (
-    <Element
+    <div
       {...props}
-      className={clsx(classes.root, gridClasses['container--bottom'])}
+      className={clsx(
+        'sticky z-4 bottom-[calc(var(--DataGrid-hasScrollX)*var(--DataGrid-scrollbarSize))]',
+        gridClasses['container--bottom'],
+      )}
       role="presentation"
     />
   );

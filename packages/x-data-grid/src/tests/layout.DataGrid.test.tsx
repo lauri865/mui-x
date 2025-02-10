@@ -18,7 +18,6 @@ import {
   useGridApiRef,
   GridApi,
 } from '@mui/x-data-grid';
-import { ptBR } from '@mui/x-data-grid/locales';
 import { useBasicDemoData } from '@mui/x-data-grid-generator';
 import {
   $,
@@ -1021,33 +1020,10 @@ describe('<DataGrid /> - Layout & warnings', () => {
 
   // Doesn't work with mocked window.getComputedStyle
   testSkipIf(isJSDOM)('should allow style customization using the theme', () => {
-    const theme = createTheme({
-      components: {
-        MuiDataGrid: {
-          styleOverrides: {
-            root: {
-              backgroundColor: 'rgb(255, 0, 0)',
-            },
-            columnHeader: {
-              backgroundColor: 'rgb(255, 255, 0)',
-            },
-            row: {
-              backgroundColor: 'rgb(128, 0, 128)',
-            },
-            cell: {
-              backgroundColor: 'rgb(0, 128, 0)',
-            },
-          },
-        },
-      },
-    });
-
     render(
-      <ThemeProvider theme={theme}>
-        <div style={{ width: 300, height: 300 }}>
-          <DataGrid {...baselineProps} />
-        </div>
-      </ThemeProvider>,
+      <div style={{ width: 300, height: 300 }}>
+        <DataGrid {...baselineProps} />
+      </div>,
     );
 
     expect(window.getComputedStyle(grid('root')!).backgroundColor).to.equal('rgb(255, 0, 0)');
@@ -1060,20 +1036,10 @@ describe('<DataGrid /> - Layout & warnings', () => {
 
   // Doesn't work with mocked window.getComputedStyle
   testSkipIf(isJSDOM)('should support the sx prop', () => {
-    const theme = createTheme({
-      palette: {
-        primary: {
-          main: 'rgb(0, 0, 255)',
-        },
-      },
-    });
-
     render(
-      <ThemeProvider theme={theme}>
-        <div style={{ width: 300, height: 300 }}>
-          <DataGrid columns={[]} rows={[]} sx={{ color: 'primary.main' }} />
-        </div>
-      </ThemeProvider>,
+      <div style={{ width: 300, height: 300 }}>
+        <DataGrid columns={[]} rows={[]} sx={{ color: 'primary.main' }} />
+      </div>,
     );
 
     expect(grid('root')).toHaveComputedStyle({
@@ -1084,24 +1050,9 @@ describe('<DataGrid /> - Layout & warnings', () => {
   it('should have ownerState in the theme style overrides', () => {
     expect(() =>
       render(
-        <ThemeProvider
-          theme={createTheme({
-            components: {
-              MuiDataGrid: {
-                styleOverrides: {
-                  root: ({ ownerState }) => ({
-                    // test that ownerState is not undefined
-                    ...(ownerState.columns && {}),
-                  }),
-                },
-              },
-            },
-          })}
-        >
-          <div style={{ width: 300, height: 300 }}>
-            <DataGrid {...baselineProps} />
-          </div>
-        </ThemeProvider>,
+        <div style={{ width: 300, height: 300 }}>
+          <DataGrid {...baselineProps} />
+        </div>,
       ),
     ).not.to.throw();
   });

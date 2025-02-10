@@ -1,26 +1,20 @@
 'use client';
-import * as React from 'react';
-import clsx from 'clsx';
-import {
-  unstable_composeClasses as composeClasses,
-  unstable_useEventCallback as useEventCallback,
-} from '@mui/utils';
-import { styled } from '@mui/system';
+import { unstable_useEventCallback as useEventCallback } from '@mui/utils';
 import { fastMemo } from '@mui/x-internals/fastMemo';
 import { RefObject } from '@mui/x-internals/types';
-import { DataGridProcessedProps } from '../models/props/DataGridProps';
-import { useGridRootProps } from '../hooks/utils/useGridRootProps';
-import { getDataGridUtilityClass, gridClasses } from '../constants';
+import clsx from 'clsx';
+import * as React from 'react';
+import { getTotalHeaderHeight } from '../hooks/features/columns/gridColumnsUtils';
+import { gridDensityFactorSelector } from '../hooks/features/density/densitySelector';
+import { gridDimensionsSelector } from '../hooks/features/dimensions/gridDimensionsSelectors';
 import { useGridApiContext } from '../hooks/utils/useGridApiContext';
 import { useGridApiEventHandler } from '../hooks/utils/useGridApiEventHandler';
+import { useGridRootProps } from '../hooks/utils/useGridRootProps';
 import { useGridSelector } from '../hooks/utils/useGridSelector';
-import { gridDimensionsSelector } from '../hooks/features/dimensions/gridDimensionsSelectors';
-import { gridDimensionsColumnsTotalWidthSelector } from '../internals/selectors/dimensionSelectors';
-import { gridDensityFactorSelector } from '../hooks/features/density/densitySelector';
-import { GridScrollParams } from '../models/params/gridScrollParams';
-import { GridEventListener } from '../models/events';
 import { useTimeout } from '../hooks/utils/useTimeout';
-import { getTotalHeaderHeight } from '../hooks/features/columns/gridColumnsUtils';
+import { gridDimensionsColumnsTotalWidthSelector } from '../internals/selectors/dimensionSelectors';
+import { GridEventListener } from '../models/events';
+import { GridScrollParams } from '../models/params/gridScrollParams';
 import { createSelector } from '../utils/createSelector';
 
 const CLIFF = 1;
@@ -30,40 +24,6 @@ interface ScrollAreaProps {
   scrollDirection: 'left' | 'right';
   scrollPosition: RefObject<GridScrollParams>;
 }
-
-type OwnerState = DataGridProcessedProps & Pick<ScrollAreaProps, 'scrollDirection'>;
-
-const useUtilityClasses = (ownerState: OwnerState) => {
-  const { scrollDirection, classes } = ownerState;
-
-  const slots = {
-    root: ['scrollArea', `scrollArea--${scrollDirection}`],
-  };
-
-  return composeClasses(slots, getDataGridUtilityClass, classes);
-};
-
-const GridScrollAreaRawRoot = styled('div', {
-  name: 'twg',
-  slot: 'ScrollArea',
-  overridesResolver: (props, styles) => [
-    { [`&.${gridClasses['scrollArea--left']}`]: styles['scrollArea--left'] },
-    { [`&.${gridClasses['scrollArea--right']}`]: styles['scrollArea--right'] },
-    styles.scrollArea,
-  ],
-})<{ ownerState: OwnerState }>(() => ({
-  position: 'absolute',
-  top: 0,
-  zIndex: 101,
-  width: 25,
-  bottom: 0,
-  [`&.${gridClasses['scrollArea--left']}`]: {
-    left: 0,
-  },
-  [`&.${gridClasses['scrollArea--right']}`]: {
-    right: 0,
-  },
-}));
 
 const offsetSelector = createSelector(
   gridDimensionsSelector,
@@ -128,8 +88,6 @@ function GridScrollAreaContent(props: ScrollAreaProps) {
   const [canScrollMore, setCanScrollMore] = React.useState<boolean>(getCanScrollMore);
 
   const rootProps = useGridRootProps();
-  const ownerState = { ...rootProps, scrollDirection };
-  const classes = useUtilityClasses(ownerState);
   const totalHeaderHeight = getTotalHeaderHeight(apiRef, rootProps);
   const headerHeight = Math.floor(rootProps.columnHeaderHeight * densityFactor);
 
@@ -196,10 +154,12 @@ function GridScrollAreaContent(props: ScrollAreaProps) {
   }
 
   return (
-    <GridScrollAreaRawRoot
+    <div
       ref={rootRef}
-      className={clsx(classes.root)}
-      ownerState={ownerState}
+      className={clsx(
+        'flex absolute inset-y-0 z-101 w-[25px]',
+        scrollDirection === 'left' ? 'left-0' : 'right-0',
+      )}
       onPointerEnter={handleDragOver}
       style={style}
     />

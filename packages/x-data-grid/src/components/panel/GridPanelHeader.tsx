@@ -1,44 +1,11 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { styled } from '@mui/system';
-import composeClasses from '@mui/utils/composeClasses';
-import type { DataGridProcessedProps } from '../../models/props/DataGridProps';
-import { getDataGridUtilityClass } from '../../constants/gridClasses';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-
-type OwnerState = DataGridProcessedProps;
-
-const useUtilityClasses = (ownerState: OwnerState) => {
-  const { classes } = ownerState;
-
-  const slots = {
-    root: ['panelHeader'],
-  };
-
-  return composeClasses(slots, getDataGridUtilityClass, classes);
-};
-
-const GridPanelHeaderRoot = styled('div', {
-  name: 'MuiDataGrid',
-  slot: 'PanelHeader',
-  overridesResolver: (props, styles) => styles.panelHeader,
-})<{ ownerState: OwnerState }>(({ theme }) => ({
-  padding: theme.spacing(1),
-}));
+import PropTypes from 'prop-types';
+import * as React from 'react';
 
 function GridPanelHeader(props: React.HTMLAttributes<HTMLDivElement>) {
   const { className, ...other } = props;
-  const rootProps = useGridRootProps();
-  const classes = useUtilityClasses(rootProps);
 
-  return (
-    <GridPanelHeaderRoot
-      className={clsx(classes.root, className)}
-      ownerState={rootProps}
-      {...other}
-    />
-  );
+  return <div className={clsx(className)} {...other} />;
 }
 
 GridPanelHeader.propTypes = {

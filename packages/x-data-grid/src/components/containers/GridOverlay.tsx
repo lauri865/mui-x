@@ -1,50 +1,19 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import composeClasses from '@mui/utils/composeClasses';
-import { styled } from '@mui/system';
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import type { DataGridProcessedProps } from '../../models/props/DataGridProps';
-import { getDataGridUtilityClass } from '../../constants/gridClasses';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import * as React from 'react';
 
 export type GridOverlayProps = React.HTMLAttributes<HTMLDivElement>;
 
-type OwnerState = DataGridProcessedProps;
-
-const useUtilityClasses = (ownerState: OwnerState) => {
-  const { classes } = ownerState;
-
-  const slots = {
-    root: ['overlay'],
-  };
-
-  return composeClasses(slots, getDataGridUtilityClass, classes);
-};
-
-const GridOverlayRoot = styled('div', {
-  name: 'MuiDataGrid',
-  slot: 'Overlay',
-  overridesResolver: (_, styles) => styles.overlay,
-})<{ ownerState: OwnerState }>({
-  width: '100%',
-  height: '100%',
-  display: 'flex',
-  alignSelf: 'center',
-  alignItems: 'center',
-  justifyContent: 'center',
-  backgroundColor: 'var(--unstable_DataGrid-overlayBackground)',
-});
-
 const GridOverlay = forwardRef<HTMLDivElement, GridOverlayProps>(function GridOverlay(props, ref) {
   const { className, ...other } = props;
-  const rootProps = useGridRootProps();
-  const classes = useUtilityClasses(rootProps);
 
   return (
-    <GridOverlayRoot
-      className={clsx(classes.root, className)}
-      ownerState={rootProps}
+    <div
+      className={clsx(
+        className,
+        'w-full h-full flex items-center justify-center bg-[var(--unstable_DataGrid-overlayBackground)] self-center',
+      )}
       {...other}
       ref={ref}
     />

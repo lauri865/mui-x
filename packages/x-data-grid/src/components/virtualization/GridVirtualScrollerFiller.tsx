@@ -1,39 +1,10 @@
-import * as React from 'react';
-import { styled } from '@mui/system';
 import { fastMemo } from '@mui/x-internals/fastMemo';
-import { useGridSelector } from '../../hooks/utils/useGridSelector';
-import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
-import { gridDimensionsSelector } from '../../hooks/features/dimensions';
+import clsx from 'clsx';
+import * as React from 'react';
 import { gridClasses } from '../../constants';
-
-const Filler = styled('div')({
-  display: 'flex',
-  flexDirection: 'row',
-  width: 'var(--DataGrid-rowWidth)',
-  boxSizing: 'border-box',
-  flex: '1 0 auto',
-});
-
-const Pinned = styled('div')({
-  position: 'sticky',
-  height: '100%',
-  boxSizing: 'border-box',
-  borderTop: '1px solid var(--color-grid-border)',
-  backgroundColor: 'var(--DataGrid-pinnedBackground)',
-});
-const PinnedLeft = styled(Pinned)({
-  left: 0,
-  borderRight: '1px solid var(--color-grid-border)',
-});
-const PinnedRight = styled(Pinned)({
-  right: 0,
-  borderLeft: '1px solid var(--color-grid-border)',
-});
-
-const Main = styled('div')({
-  flexGrow: 1,
-  borderTop: '1px solid var(--color-grid-border)',
-});
+import { gridDimensionsSelector } from '../../hooks/features/dimensions';
+import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
+import { useGridSelector } from '../../hooks/utils/useGridSelector';
 
 type Props = {
   /** The number of rows */
@@ -60,8 +31,11 @@ function GridVirtualScrollerFiller({ rowsLength }: Props) {
   }
 
   return (
-    <Filler
-      className={gridClasses.filler}
+    <div
+      className={clsx(
+        gridClasses.filler,
+        'flex flex-row w-[var(--DataGrid-rowWidth)] box-border flex-[1_0_auto]',
+      )}
       role="presentation"
       style={
         {
@@ -71,19 +45,27 @@ function GridVirtualScrollerFiller({ rowsLength }: Props) {
       }
     >
       {leftPinnedWidth > 0 && (
-        <PinnedLeft
-          className={gridClasses['filler--pinnedLeft']}
+        <div
+          className={clsx(
+            'sticky h-full box-border border-t border-t-grid-border bg-grid-pinned-bg',
+            'left-0 border-r- border-r-grid-border',
+            gridClasses['filler--pinnedLeft'],
+          )}
           style={{ width: leftPinnedWidth }}
         />
       )}
-      <Main />
+      <div className="flex-1 border-t border-t-grid-border" />
       {rightPinnedWidth > 0 && (
-        <PinnedRight
-          className={gridClasses['filler--pinnedRight']}
+        <div
+          className={clsx(
+            'sticky h-full box-border border-t border-t-grid-border bg-grid-pinned-bg',
+            'border-l border-l-grid-border right-0',
+            gridClasses['filler--pinnedRight'],
+          )}
           style={{ width: rightPinnedWidth + (hasScrollY ? scrollbarSize : 0) }}
         />
       )}
-    </Filler>
+    </div>
   );
 }
 
