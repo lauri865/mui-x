@@ -846,7 +846,12 @@ export interface DataGridPropsWithoutDefaultValue<R extends GridValidRowModel = 
   pinnedColumns?: GridPinnedColumnFields;
   pinnedRows?: GridPinnedRowsModel;
   detailPanelExpandedRowIds?: GridExpandedRowIds;
-  onRowsScrollEnd?: (params: InfiniteLoaderPayload) => Promise<void | GridRowModel<R>[]>;
+  onRowsScrollEnd?: (
+    params: InfiniteLoaderPayload,
+    detail: {
+      setSkeletonRowCount: (count: number) => void;
+    },
+  ) => Promise<void | GridRowModel<R>[]>;
 }
 
 export interface DataGridProSharedPropsWithDefaultValue {

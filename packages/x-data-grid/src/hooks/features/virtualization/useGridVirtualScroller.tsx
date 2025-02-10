@@ -374,8 +374,10 @@ export const useGridVirtualScroller = () => {
     ) {
       return;
     }
+
     const inputs = inputsSelector(apiRef, rootProps, enabledForRows, enabledForColumns);
     const nextRenderContext = computeRenderContext(inputs, scrollPosition.current, scrollCache);
+
     // Reset the frozen context when the render context changes, see the illustration in https://github.com/mui/mui-x/pull/12353
     frozenContext.current = undefined;
     updateRenderContext(nextRenderContext);

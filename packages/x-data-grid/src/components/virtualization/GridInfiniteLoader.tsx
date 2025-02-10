@@ -8,6 +8,7 @@ import { getVisibleRows } from '../../hooks/utils/useGridVisibleRows';
 import { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { unstable_useEventCallback } from '@mui/utils';
 import { GridSkeletonLoadingOverlay, SkeletonRow } from '../GridSkeletonLoadingOverlay';
+import { flushSync } from 'react-dom';
 
 export type InfiniteLoaderPayload = {
   viewportPageSize: number;
@@ -44,7 +45,7 @@ export const GridInfiniteLoader = ({
   skeletonRowProps,
   empty,
 }: InfiniteLoaderProps) => {
-  const [numberOfRows, setNumberOfRows] = React.useState<number | null>(empty ? 1 : null);
+  const [skeletonRowCount, setSkeletonRowCount] = React.useState<number | null>(empty ? 1 : null);
   const apiRef = useGridPrivateApiContext();
   const observerRef = React.useRef<HTMLDivElement | null>(null);
 
@@ -62,20 +63,31 @@ export const GridInfiniteLoader = ({
           );
           const visibleRows = getVisibleRows(apiRef);
 
-          setNumberOfRows(1);
+          setSkeletonRowCount(1);
           try {
-            const res = await onRowsScrollEndCallback({
-              viewportPageSize,
-              visibleRowsCount: visibleRows.rows.length,
-              visibleColumns: gridVisibleColumnDefinitionsSelector(apiRef),
-              lastRowId,
-            });
+            const res = await onRowsScrollEndCallback(
+              {
+                viewportPageSize,
+                visibleRowsCount: visibleRows.rows.length,
+                visibleColumns: gridVisibleColumnDefinitionsSelector(apiRef),
+                lastRowId,
+              },
+              {
+                setSkeletonRowCount,
+              },
+            );
             if (res) {
-              apiRef.current.updateRows(res.map((row) => ({ ...row, _action: 'insert' })));
+              flushSync(() => {
+                setSkeletonRowCount(null);
+                apiRef.current.updateRows(res.map((row) => ({ ...row, _action: 'insert' })));
+              });
+
+              // hack to trigger the scrollPosition to update with the new rows / dimensions
+              apiRef.current.virtualScrollerRef.current!.dispatchEvent(new CustomEvent('scroll'));
             }
           } catch (err) {
           } finally {
-            setNumberOfRows(null);
+            setSkeletonRowCount(null);
           }
         }
       },
@@ -88,17 +100,17 @@ export const GridInfiniteLoader = ({
     return () => {
       observer.unobserve(element);
     };
-  }, [setNumberOfRows, lastRowId, onRowsScrollEndCallback, margin]);
+  }, [setSkeletonRowCount, lastRowId, onRowsScrollEndCallback, margin]);
 
   return (
     <div ref={observerRef} role="presentation">
       {!empty &&
-        numberOfRows &&
+        skeletonRowCount &&
         skeletonRowProps &&
-        Array.from({ length: numberOfRows }, (_, i) => (
+        Array.from({ length: skeletonRowCount }, (_, i) => (
           <SkeletonRow {...skeletonRowProps} key={i} />
         ))}
-      {empty && numberOfRows && <GridSkeletonLoadingOverlay />}
+      {empty && skeletonRowCount && <GridSkeletonLoadingOverlay />}
     </div>
   );
 };

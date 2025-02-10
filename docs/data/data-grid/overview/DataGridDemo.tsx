@@ -61,7 +61,7 @@ export default function DataGridDemo() {
     <Box sx={{ height: 400, width: '100%' }}>
       <DataGrid
         autoFocus="lastName"
-        rows={data}
+        rows={[]}
         columns={columns}
         initialState={{
           pagination: {
@@ -88,17 +88,15 @@ export default function DataGridDemo() {
         checkboxSelection
         loading={isLoading}
         getDetailPanelContent={detailPanel}
-        onRowsScrollEnd={async (params) => {
+        onRowsScrollEnd={async (params, detail) => {
           if (params.visibleRowsCount >= 40) {
             return;
           }
+          const rowsToFetch = Math.min(40 - params.visibleRowsCount, rows.length);
+          detail.setSkeletonRowCount(rowsToFetch);
           return new Promise((resolve) => {
             setTimeout(() => {
               setIsLoading(false);
-              const rowsToFetch = Math.min(
-                40 - params.visibleRowsCount,
-                rows.length,
-              );
               const newRows = rows
                 .slice(0, rowsToFetch)
                 .map((row, i) => ({ ...row, id: params.visibleRowsCount + i + 1 }));
