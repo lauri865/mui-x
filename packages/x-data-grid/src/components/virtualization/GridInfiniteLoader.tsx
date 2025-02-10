@@ -1,3 +1,5 @@
+'use client';
+
 import * as React from 'react';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { GridRowId } from '../../models/gridRows';
@@ -84,7 +86,11 @@ export const GridInfiniteLoader = ({
 
               // hack to trigger the scrollPosition to update with the new rows / dimensions
               requestAnimationFrame(() => {
-                apiRef.current.virtualScrollerRef.current!.dispatchEvent(new CustomEvent('scroll'));
+                if (apiRef.current.virtualScrollerRef.current) {
+                  apiRef.current.virtualScrollerRef.current.dispatchEvent(
+                    new CustomEvent('scroll'),
+                  );
+                }
               });
             }
           } catch (err) {

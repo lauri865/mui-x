@@ -1,4 +1,3 @@
-import { hrHR as hrHRCore } from '@mui/material/locale';
 import { GridLocaleText } from '../models/api/gridLocaleTextApi';
 import { getGridLocalization } from '../utils/getGridLocalization';
 
@@ -214,4 +213,4 @@ const hrHRGrid: Partial<GridLocaleText> = {
   aggregationFunctionLabelSize: 'veličina',
 };
 
-export const hrHR = getGridLocalization(hrHRGrid, hrHRCore);
+export const hrHR = getGridLocalization(hrHRGrid);

@@ -1,12 +1,10 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { SxProps, Theme } from '@mui/material/styles';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import { GridFilterItem, GridLogicOperator } from '../../../models/gridFilterItem';
 import { useGridApiContext } from '../../../hooks/utils/useGridApiContext';
 import { GridPanelContent } from '../GridPanelContent';
 import { GridPanelFooter } from '../GridPanelFooter';
-import { GridPanelWrapper } from '../GridPanelWrapper';
 import { GridFilterForm, GridFilterFormProps } from './GridFilterForm';
 import { useGridRootProps } from '../../../hooks/utils/useGridRootProps';
 import { useGridSelector } from '../../../hooks/utils/useGridSelector';
@@ -27,7 +25,6 @@ export interface GridFilterPanelProps
   /**
    * The system prop that allows defining system overrides as well as additional CSS styles.
    */
-  sx?: SxProps<Theme>;
   /**
    * Function that returns the next filter item to be picked as default filter.
    * @param {GetColumnForNewFilterArgs} args Currently configured filters and columns.
@@ -235,7 +232,7 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
     }, [validFilters.length]);
 
     return (
-      <GridPanelWrapper {...other} ref={ref}>
+      <>
         <GridPanelContent>
           {readOnlyFilters.map((item, index) => (
             <GridFilterForm
@@ -297,7 +294,7 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
             ) : null}
           </GridPanelFooter>
         ) : null}
-      </GridPanelWrapper>
+      </>
     );
   },
 );

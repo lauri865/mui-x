@@ -95,6 +95,7 @@ export const useDataGridComponent = (
    */
   useGridInitializeState(rowSelectionStateInitializer, apiRef, props);
   useGridInitializeState(columnsStateInitializer, apiRef, props);
+  useGridInitializeState(detailPanelStateInitializer, apiRef, props);
   useGridInitializeState(columnPinningStateInitializer, apiRef, props);
   useGridInitializeState(paginationStateInitializer, apiRef, props);
   useGridInitializeState(rowsStateInitializer, apiRef, props);
@@ -113,7 +114,6 @@ export const useDataGridComponent = (
   useGridInitializeState(rowPinningStateInitializer, apiRef, props);
   useGridInitializeState(rowsMetaStateInitializer, apiRef, props);
   useGridInitializeState(listViewStateInitializer, apiRef, props);
-  useGridInitializeState(detailPanelStateInitializer, apiRef, props);
 
   useGridKeyboardNavigation(apiRef, props);
   useGridRowSelection(apiRef, props);

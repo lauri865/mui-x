@@ -1,13 +1,10 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { styled } from '@mui/material/styles';
 import {
   unstable_composeClasses as composeClasses,
   unstable_capitalize as capitalize,
   unstable_useId as useId,
 } from '@mui/utils';
-import { ButtonProps } from '@mui/material/Button';
-import { TooltipProps } from '@mui/material/Tooltip';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import { BadgeProps } from '../../models/gridBaseSlots';
 import { gridColumnLookupSelector } from '../../hooks/features/columns/gridColumnsSelector';
@@ -34,15 +31,6 @@ const useUtilityClasses = (ownerState: OwnerState) => {
   return composeClasses(slots, getDataGridUtilityClass, classes);
 };
 
-const GridToolbarFilterListRoot = styled('ul', {
-  name: 'MuiDataGrid',
-  slot: 'ToolbarFilterList',
-  overridesResolver: (_props, styles) => styles.toolbarFilterList,
-})<{ ownerState: OwnerState }>(({ theme }) => ({
-  margin: theme.spacing(1, 1, 0.5),
-  padding: theme.spacing(0, 1),
-}));
-
 // FIXME(v8:romgrk): override slotProps
 export interface GridToolbarFilterButtonProps {
   /**
@@ -50,8 +38,8 @@ export interface GridToolbarFilterButtonProps {
    * @default {}
    */
   slotProps?: {
-    button?: Partial<ButtonProps>;
-    tooltip?: Partial<TooltipProps>;
+    button?: any;
+    tooltip?: any;
     badge?: Partial<BadgeProps>;
   };
 }
@@ -97,7 +85,7 @@ const GridToolbarFilterButton = forwardRef<HTMLButtonElement, GridToolbarFilterB
       return (
         <div>
           {apiRef.current.getLocaleText('toolbarFiltersTooltipActive')(activeFilters.length)}
-          <GridToolbarFilterListRoot className={classes.root} ownerState={rootProps}>
+          <div className={classes.root}>
             {activeFilters.map((item, index) => ({
               ...(lookup[item.field!] && (
                 <li key={index}>
@@ -110,7 +98,7 @@ const GridToolbarFilterButton = forwardRef<HTMLButtonElement, GridToolbarFilterB
                 </li>
               )),
             }))}
-          </GridToolbarFilterListRoot>
+          </div>
         </div>
       );
     }, [apiRef, rootProps, preferencePanel.open, activeFilters, lookup, classes]);

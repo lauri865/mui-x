@@ -1,4 +1,3 @@
-import { zhHK as zhHKCore } from '@mui/material/locale';
 import { GridLocaleText } from '../models/api/gridLocaleTextApi';
 import { getGridLocalization } from '../utils/getGridLocalization';
 
@@ -193,4 +192,4 @@ const zhHKGrid: Partial<GridLocaleText> = {
   aggregationFunctionLabelSize: '尺寸',
 };
 
-export const zhHK = getGridLocalization(zhHKGrid, zhHKCore);
+export const zhHK = getGridLocalization(zhHKGrid);

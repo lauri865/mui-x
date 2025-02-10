@@ -1,6 +1,6 @@
 import * as React from 'react';
 import clsx from 'clsx';
-import { styled, SxProps, Theme } from '@mui/system';
+import { styled } from '@mui/system';
 import composeClasses from '@mui/utils/composeClasses';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
@@ -31,23 +31,22 @@ const VirtualScrollerContentRoot = styled('div', {
   },
 })<{ ownerState: OwnerState }>({});
 
-const GridVirtualScrollerContent = forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & { sx?: SxProps<Theme> }
->(function GridVirtualScrollerContent(props, ref) {
-  const rootProps = useGridRootProps();
-  const overflowedContent = !rootProps.autoHeight && props.style?.minHeight === 'auto';
-  const classes = useUtilityClasses(rootProps, overflowedContent);
-  const ownerState = { classes: rootProps.classes, overflowedContent };
+const GridVirtualScrollerContent = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  function GridVirtualScrollerContent(props, ref) {
+    const rootProps = useGridRootProps();
+    const overflowedContent = !rootProps.autoHeight && props.style?.minHeight === 'auto';
+    const classes = useUtilityClasses(rootProps, overflowedContent);
+    const ownerState = { classes: rootProps.classes, overflowedContent };
 
-  return (
-    <VirtualScrollerContentRoot
-      {...props}
-      ownerState={ownerState}
-      className={clsx(classes.root, props.className)}
-      ref={ref}
-    />
-  );
-});
+    return (
+      <VirtualScrollerContentRoot
+        {...props}
+        ownerState={ownerState}
+        className={clsx(classes.root, props.className)}
+        ref={ref}
+      />
+    );
+  },
+);
 
 export { GridVirtualScrollerContent };

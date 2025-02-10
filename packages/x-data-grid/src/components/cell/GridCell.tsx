@@ -8,7 +8,7 @@ import {
   unstable_capitalize as capitalize,
 } from '@mui/utils';
 import { fastMemo } from '@mui/x-internals/fastMemo';
-import { useRtl } from '@mui/system/RtlProvider';
+import { useRtl } from '../../hooks/utils/useRtl';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import { useThemedComponent } from '../../context/GridThemeContext';
 import { doesSupportPreventScroll } from '../../utils/doesSupportPreventScroll';

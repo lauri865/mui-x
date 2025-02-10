@@ -1,4 +1,3 @@
-import { urPKCore } from './coreLocales';
 import { GridLocaleText } from '../models/api/gridLocaleTextApi';
 import { getGridLocalization, Localization } from '../utils/getGridLocalization';
 
@@ -193,4 +192,4 @@ const urPKGrid: Partial<GridLocaleText> = {
   aggregationFunctionLabelSize: 'سائز',
 };
 
-export const urPK: Localization = getGridLocalization(urPKGrid, urPKCore);
+export const urPK: Localization = getGridLocalization(urPKGrid);

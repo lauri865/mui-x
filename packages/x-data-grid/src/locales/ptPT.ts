@@ -1,4 +1,3 @@
-import { ptPT as ptPTCore } from '@mui/material/locale';
 import { GridLocaleText } from '../models/api/gridLocaleTextApi';
 import { getGridLocalization } from '../utils/getGridLocalization';
 
@@ -196,4 +195,4 @@ const ptPTGrid: Partial<GridLocaleText> = {
   aggregationFunctionLabelSize: 'tamanho',
 };
 
-export const ptPT = getGridLocalization(ptPTGrid, ptPTCore);
+export const ptPT = getGridLocalization(ptPTGrid);

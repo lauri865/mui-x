@@ -1,6 +1,5 @@
 import * as React from 'react';
 import clsx from 'clsx';
-import { styled } from '@mui/material/styles';
 import { useThemedComponent } from '../../../context/GridThemeContext';
 import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { useGridSelector } from '../../utils';
@@ -80,14 +79,6 @@ export interface GetHeadersParams {
 }
 
 type OwnerState = DataGridProcessedProps;
-
-export const GridColumnHeaderRow = styled('div', {
-  name: 'MuiDataGrid',
-  slot: 'ColumnHeaderRow',
-  overridesResolver: (_, styles) => styles.columnHeaderRow,
-})<{ ownerState: OwnerState }>({
-  display: 'flex',
-});
 
 export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
   const {
@@ -318,11 +309,10 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
 
   const getColumnHeadersRow = () => {
     return (
-      <GridColumnHeaderRow
+      <div
         role="row"
         aria-rowindex={headerGroupingMaxDepth + 1}
-        ownerState={rootProps}
-        className={gridClasses['row--borderBottom']}
+        className={clsx('flex', gridClasses['row--borderBottom'])}
       >
         {leftRenderContext &&
           getColumnHeaders(
@@ -346,7 +336,7 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
               separatorSide: GridColumnHeaderSeparatorSides.Left,
             },
           )}
-      </GridColumnHeaderRow>
+      </div>
     );
   };
 
@@ -484,12 +474,7 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
 
     for (let depth = 0; depth < headerGroupingMaxDepth; depth += 1) {
       headerRows.push(
-        <GridColumnHeaderRow
-          key={depth}
-          role="row"
-          aria-rowindex={depth + 1}
-          ownerState={rootProps}
-        >
+        <div key={depth} role="row" aria-rowindex={depth + 1} className="flex">
           {leftRenderContext &&
             getColumnGroupHeaders({
               depth,
@@ -509,7 +494,7 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
                 maxLastColumn: rightRenderContext.lastColumnIndex,
               },
             })}
-        </GridColumnHeaderRow>,
+        </div>,
       );
     }
 

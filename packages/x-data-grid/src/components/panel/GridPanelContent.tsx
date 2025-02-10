@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { styled, SxProps, Theme } from '@mui/system';
+import { styled } from '@mui/system';
 import composeClasses from '@mui/utils/composeClasses';
 import type { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { getDataGridUtilityClass } from '../../constants/gridClasses';
@@ -33,7 +33,7 @@ const GridPanelContentRoot = styled('div', {
   gap: theme.spacing(2.5),
 }));
 
-function GridPanelContent(props: React.HTMLAttributes<HTMLDivElement> & { sx?: SxProps<Theme> }) {
+function GridPanelContent(props: React.HTMLAttributes<HTMLDivElement>) {
   const { className, ...other } = props;
   const rootProps = useGridRootProps();
   const classes = useUtilityClasses(rootProps);

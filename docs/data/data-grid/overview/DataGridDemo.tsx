@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import {
   DataGrid,
   GRID_CHECKBOX_SELECTION_FIELD,
+  GRID_DETAIL_PANEL_TOGGLE_FIELD,
   GridColDef,
 } from '@mui/x-data-grid';
 
@@ -70,7 +71,7 @@ export default function DataGridDemo() {
             },
           },
           pinnedColumns: {
-            left: ['lastName'],
+            left: [GRID_DETAIL_PANEL_TOGGLE_FIELD, 'lastName'],
             right: ['id'],
           },
           /* pinnedRows: {
@@ -101,7 +102,7 @@ export default function DataGridDemo() {
                 .slice(0, rowsToFetch)
                 .map((row, i) => ({ ...row, id: params.visibleRowsCount + i + 1 }));
               resolve(newRows);
-            }, 1000);
+            }, 300);
           });
         }}
       />

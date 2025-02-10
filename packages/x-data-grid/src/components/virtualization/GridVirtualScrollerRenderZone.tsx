@@ -1,17 +1,14 @@
 import * as React from 'react';
 import clsx from 'clsx';
-import { positions, styled, SxProps, Theme } from '@mui/system';
+import { styled } from '@mui/system';
 import composeClasses from '@mui/utils/composeClasses';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
-import { useGridSelector } from '../../hooks/utils/useGridSelector';
 import { gridRowsMetaSelector } from '../../hooks/features/rows';
-import { gridRenderContextSelector } from '../../hooks/features/virtualization';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { getDataGridUtilityClass } from '../../constants/gridClasses';
 import { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { useGridApiOptionHandler } from '../../hooks/utils/useGridApiEventHandler';
-import { GridEventListener } from '../../models/events';
 
 type OwnerState = DataGridProcessedProps;
 

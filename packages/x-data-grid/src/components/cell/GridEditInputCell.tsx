@@ -4,43 +4,17 @@ import {
   unstable_composeClasses as composeClasses,
   unstable_useEnhancedEffect as useEnhancedEffect,
 } from '@mui/utils';
-import { styled } from '@mui/material/styles';
-import InputBase, { InputBaseProps } from '@mui/material/InputBase';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import { GridRenderEditCellParams } from '../../models/params/gridCellParams';
 import { getDataGridUtilityClass } from '../../constants/gridClasses';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
+import { useThemedComponent } from '../../context/GridThemeContext';
 
 type OwnerState = DataGridProcessedProps;
 
-const useUtilityClasses = (ownerState: OwnerState) => {
-  const { classes } = ownerState;
-
-  const slots = {
-    root: ['editInputCell'],
-  };
-
-  return composeClasses(slots, getDataGridUtilityClass, classes);
-};
-
-const GridEditInputCellRoot = styled(InputBase, {
-  name: 'MuiDataGrid',
-  slot: 'EditInputCell',
-  overridesResolver: (props, styles) => styles.editInputCell,
-})<{ ownerState: OwnerState }>(({ theme }) => ({
-  ...theme.typography.body2,
-  padding: '1px 0',
-  '& input': {
-    padding: '0 16px',
-    height: '100%',
-  },
-}));
-
-export interface GridEditInputCellProps
-  extends GridRenderEditCellParams,
-    Omit<InputBaseProps, 'id' | 'value' | 'tabIndex' | 'ref'> {
+export interface GridEditInputCellProps extends GridRenderEditCellParams {
   debounceMs?: number;
   /**
    * Callback called when the value is changed by the user.
@@ -80,7 +54,7 @@ const GridEditInputCell = forwardRef<HTMLInputElement, GridEditInputCellProps>((
   const apiRef = useGridApiContext();
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [valueState, setValueState] = React.useState(value);
-  const classes = useUtilityClasses(rootProps);
+  const classes = useThemedComponent('editCell');
 
   const handleChange = React.useCallback(
     async (event: React.ChangeEvent<HTMLInputElement>) => {

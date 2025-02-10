@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { createSvgIcon } from '@mui/material/utils';
+const createSvgIcon = (path: React.ReactNode, displayName: string) => {
+  return (props: any) => (
+    <svg focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation" {...props}>
+      {path}
+    </svg>
+  );
+};
 
 export const GridArrowUpwardIcon = createSvgIcon(
   <path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z" />,

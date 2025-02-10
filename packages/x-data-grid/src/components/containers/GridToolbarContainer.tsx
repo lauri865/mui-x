@@ -1,16 +1,14 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { styled, SxProps, Theme } from '@mui/system';
+import { styled } from '@mui/system';
 import composeClasses from '@mui/utils/composeClasses';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import { getDataGridUtilityClass } from '../../constants/gridClasses';
 import type { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 
-export type GridToolbarContainerProps = React.HTMLAttributes<HTMLDivElement> & {
-  sx?: SxProps<Theme>;
-};
+export type GridToolbarContainerProps = React.HTMLAttributes<HTMLDivElement>;
 
 type OwnerState = DataGridProcessedProps;
 

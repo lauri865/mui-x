@@ -1,7 +1,5 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { ButtonProps } from '@mui/material/Button';
-import { TooltipProps } from '@mui/material/Tooltip';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
@@ -32,7 +30,7 @@ export interface GridToolbarExportProps {
    * The props used for each slot inside.
    * @default {}
    */
-  slotProps?: { button?: Partial<ButtonProps>; tooltip?: Partial<TooltipProps> };
+  slotProps?: { button?: any; tooltip?: any };
   // TODO v8: Remove this loophole
   // Refactored from: [key: string]: any;
   [x: `data-${string}`]: string;

@@ -1,10 +1,8 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { styled } from '@mui/material/styles';
 import { unstable_debounce as debounce } from '@mui/utils';
 import composeClasses from '@mui/utils/composeClasses';
-import { outlinedInputClasses } from '@mui/material/OutlinedInput';
 import { getDataGridUtilityClass } from '../../constants';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
@@ -26,23 +24,6 @@ const useUtilityClasses = (ownerState: OwnerState) => {
 
   return composeClasses(slots, getDataGridUtilityClass, classes);
 };
-
-const GridToolbarQuickFilterRoot = styled('div', {
-  name: 'MuiDataGrid',
-  slot: 'ToolbarQuickFilter',
-  overridesResolver: (props, styles) => styles.toolbarQuickFilter,
-})<{ ownerState: OwnerState }>(({ theme }) => ({
-  [`.${outlinedInputClasses.root}`]: {
-    fontSize: theme.typography.body2.fontSize,
-  },
-  [`& input[type="search"]::-webkit-search-decoration,
-  & input[type="search"]::-webkit-search-cancel-button,
-  & input[type="search"]::-webkit-search-results-button,
-  & input[type="search"]::-webkit-search-results-decoration`]: {
-    /* clears the 'X' icon from Chrome */
-    display: 'none',
-  },
-}));
 
 const defaultSearchValueParser = (searchText: string) =>
   searchText.split(' ').filter((word) => word !== '');
@@ -142,9 +123,7 @@ function GridToolbarQuickFilter(props: GridToolbarQuickFilterProps) {
   }, [updateSearchValue]);
 
   return (
-    <GridToolbarQuickFilterRoot
-      as={rootProps.slots.baseTextField}
-      ownerState={rootProps}
+    <rootProps.slots.baseTextField
       size="small"
       value={searchValue}
       onChange={handleSearchValueChange as any}
@@ -153,39 +132,6 @@ function GridToolbarQuickFilter(props: GridToolbarQuickFilterProps) {
       aria-label={apiRef.current.getLocaleText('toolbarQuickFilterLabel')}
       type="search"
       {...other}
-      slotProps={{
-        ...slotProps?.root.slotProps,
-        input: {
-          startAdornment: (
-            <rootProps.slots.baseInputAdornment position="start">
-              <rootProps.slots.quickFilterIcon fontSize="small" />
-            </rootProps.slots.baseInputAdornment>
-          ),
-          endAdornment: (
-            <rootProps.slots.baseInputAdornment position="end">
-              <rootProps.slots.baseIconButton
-                aria-label={apiRef.current.getLocaleText('toolbarQuickFilterDeleteIconLabel')}
-                size="small"
-                edge="end"
-                style={
-                  searchValue
-                    ? {
-                        visibility: 'visible',
-                      }
-                    : {
-                        visibility: 'hidden',
-                      }
-                }
-                onClick={handleSearchReset}
-                {...rootProps.slotProps?.baseIconButton}
-              >
-                <rootProps.slots.quickFilterClearIcon fontSize="small" />
-              </rootProps.slots.baseIconButton>
-            </rootProps.slots.baseInputAdornment>
-          ),
-          ...slotProps?.root.slotProps?.input,
-        },
-      }}
       {...rootProps.slotProps?.baseTextField}
     />
   );

@@ -1,4 +1,3 @@
-import { elGR as elGRCore } from '@mui/material/locale';
 import { GridLocaleText } from '../models/api/gridLocaleTextApi';
 import { getGridLocalization, Localization } from '../utils/getGridLocalization';
 
@@ -195,4 +194,4 @@ const elGRGrid: Partial<GridLocaleText> = {
   aggregationFunctionLabelSize: 'μέγεθος',
 };
 
-export const elGR: Localization = getGridLocalization(elGRGrid, elGRCore);
+export const elGR: Localization = getGridLocalization(elGRGrid);

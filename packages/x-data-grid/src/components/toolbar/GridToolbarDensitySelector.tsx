@@ -1,8 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { unstable_useId as useId, unstable_useForkRef as useForkRef } from '@mui/utils';
-import { ButtonProps } from '@mui/material/Button';
-import { TooltipProps } from '@mui/material/Tooltip';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import { gridDensitySelector } from '../../hooks/features/density/densitySelector';
 import { GridDensity } from '../../models/gridDensity';
@@ -19,7 +17,7 @@ interface GridToolbarDensitySelectorProps {
    * The props used for each slot inside.
    * @default {}
    */
-  slotProps?: { button?: Partial<ButtonProps>; tooltip?: Partial<TooltipProps> };
+  slotProps?: { button?: any; tooltip?: any };
 }
 
 const GridToolbarDensitySelector = forwardRef<HTMLButtonElement, GridToolbarDensitySelectorProps>(

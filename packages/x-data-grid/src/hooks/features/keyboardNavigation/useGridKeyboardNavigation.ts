@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
-import { useRtl } from '@mui/system/RtlProvider';
-import {
-  GRID_TREE_DATA_GROUPING_FIELD,
-  GRID_DETAIL_PANEL_TOGGLE_FIELD,
-} from '../../../internals/constants';
+import { useRtl } from '../../utils/useRtl';
+import { GRID_TREE_DATA_GROUPING_FIELD } from '../../../internals/constants';
+import { GRID_DETAIL_PANEL_TOGGLE_FIELD } from '../../../colDef/gridDetailPanelColDef';
 import { isGroupingColumn } from '../../../internals/utils/gridRowGroupingUtils';
 import { GridEventListener } from '../../../models/events';
 import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';

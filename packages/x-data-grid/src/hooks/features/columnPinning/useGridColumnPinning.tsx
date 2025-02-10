@@ -196,15 +196,17 @@ function keepVisiblePinnedColumns(
     return EMPTY_PINNED_COLUMN_FIELDS;
   }
 
-  if (isObjectEmpty(columns.columnVisibilityModel)) {
-    return pinnedColumns;
-  }
-
   const left = pinnedColumns.left.length
-    ? pinnedColumns.left.filter((field) => columns.columnVisibilityModel[field] !== false)
+    ? pinnedColumns.left.filter(
+        (field) =>
+          columns.lookup[field] !== undefined && columns.columnVisibilityModel[field] !== false,
+      )
     : EMPTY_PINNED_COLUMN_FIELDS.left;
   const right = pinnedColumns.right.length
-    ? pinnedColumns.right.filter((field) => columns.columnVisibilityModel[field] !== false)
+    ? pinnedColumns.right.filter(
+        (field) =>
+          columns.lookup[field] !== undefined && columns.columnVisibilityModel[field] !== false,
+      )
     : EMPTY_PINNED_COLUMN_FIELDS.right;
 
   if (left.length === 0 && right.length === 0) {

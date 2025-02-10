@@ -7,7 +7,7 @@ import {
 } from '@mui/utils';
 import useLazyRef from '@mui/utils/useLazyRef';
 import useTimeout from '@mui/utils/useTimeout';
-import { useRtl } from '@mui/system/RtlProvider';
+import { useRtl } from '../../utils/useRtl';
 import reactMajor from '@mui/x-internals/reactMajor';
 import {
   gridDimensionsColumnsTotalWidthSelector,

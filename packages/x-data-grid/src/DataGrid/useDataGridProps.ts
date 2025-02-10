@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useThemeProps } from '@mui/material/styles';
 import {
   DataGridProcessedProps,
   DataGridProps,

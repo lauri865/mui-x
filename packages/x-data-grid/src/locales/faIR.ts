@@ -1,4 +1,3 @@
-import { faIR as faIRCore } from '@mui/material/locale';
 import { GridLocaleText } from '../models/api/gridLocaleTextApi';
 import { getGridLocalization, Localization } from '../utils/getGridLocalization';
 
@@ -195,4 +194,4 @@ const faIRGrid: Partial<GridLocaleText> = {
   aggregationFunctionLabelSize: 'اندازه',
 };
 
-export const faIR: Localization = getGridLocalization(faIRGrid, faIRCore);
+export const faIR: Localization = getGridLocalization(faIRGrid);

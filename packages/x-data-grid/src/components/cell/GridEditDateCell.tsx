@@ -4,8 +4,6 @@ import {
   unstable_composeClasses as composeClasses,
   unstable_useEnhancedEffect as useEnhancedEffect,
 } from '@mui/utils';
-import InputBase, { InputBaseProps } from '@mui/material/InputBase';
-import { styled } from '@mui/material/styles';
 import { GridRenderEditCellParams } from '../../models/params/gridCellParams';
 import { getDataGridUtilityClass } from '../../constants/gridClasses';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
@@ -13,10 +11,6 @@ import { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 
 type OwnerState = { classes: DataGridProcessedProps['classes'] };
-
-const StyledInputBase = styled(InputBase)({
-  fontSize: 'inherit',
-});
 
 const useUtilityClasses = (ownerState: OwnerState) => {
   const { classes } = ownerState;
@@ -28,9 +22,7 @@ const useUtilityClasses = (ownerState: OwnerState) => {
   return composeClasses(slots, getDataGridUtilityClass, classes);
 };
 
-export interface GridEditDateCellProps
-  extends GridRenderEditCellParams,
-    Omit<InputBaseProps, 'id' | 'value' | 'tabIndex'> {
+export interface GridEditDateCellProps extends GridRenderEditCellParams {
   /**
    * Callback called when the value is changed by the user.
    * @param {React.ChangeEvent<HTMLInputElement>} event The event source of the callback.
@@ -150,6 +142,9 @@ function GridEditDateCell(props: GridEditDateCellProps) {
       inputRef.current!.focus();
     }
   }, [hasFocus]);
+
+  return null;
+  // TODO: use custom datepicker
   return (
     <StyledInputBase
       inputRef={inputRef}

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import useForkRef from '@mui/utils/useForkRef';
-import { useRtl } from '@mui/system/RtlProvider';
+import { useRtl } from '../hooks/utils/useRtl';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import { useGridApiContext } from '../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../hooks/utils/useGridRootProps';

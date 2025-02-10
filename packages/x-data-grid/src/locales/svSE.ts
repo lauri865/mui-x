@@ -1,4 +1,3 @@
-import { svSE as svSECore } from '@mui/material/locale';
 import { GridLocaleText } from '../models/api/gridLocaleTextApi';
 import { getGridLocalization, Localization } from '../utils/getGridLocalization';
 
@@ -195,4 +194,4 @@ const svSEGrid: Partial<GridLocaleText> = {
   aggregationFunctionLabelSize: 'antal',
 };
 
-export const svSE: Localization = getGridLocalization(svSEGrid, svSECore);
+export const svSE: Localization = getGridLocalization(svSEGrid);

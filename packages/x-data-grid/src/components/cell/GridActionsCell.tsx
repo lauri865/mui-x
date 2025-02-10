@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { useRtl } from '@mui/system/RtlProvider';
+import { useRtl } from '../../hooks/utils/useRtl';
 import { unstable_useId as useId } from '@mui/utils';
 import { GridRenderCellParams } from '../../models/params/gridCellParams';
 import { gridClasses } from '../../constants/gridClasses';

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
-import { useRtl } from '@mui/system/RtlProvider';
+import { useRtl } from '../../hooks/utils/useRtl';
 import { GridPrivateApiCommon } from '../../models/api/gridApiCommon';
 import { GridStateCommunity } from '../../models/gridStateCommunity';
 

@@ -17,7 +17,6 @@ import {
 import { GridCell } from '../components/cell/GridCell';
 import { GridColumnHeaders } from '../components/GridColumnHeaders';
 import { GridColumnMenu } from '../components/menu/columnMenu/GridColumnMenu';
-import { GridDetailPanels } from '../components/GridDetailPanel';
 import { GridPinnedRows } from '../components/GridPinnedRows';
 import { GridNoResultsOverlay } from '../components/GridNoResultsOverlay';
 import materialSlots from '../slots';
@@ -32,7 +31,6 @@ export const DATA_GRID_DEFAULT_SLOTS_COMPONENTS: GridSlotsComponent = {
   columnHeaderSortIcon: GridColumnHeaderSortIcon,
   columnMenu: GridColumnMenu,
   columnHeaders: GridColumnHeaders,
-  detailPanels: GridDetailPanels,
   footer: GridFooter,
   footerRowCount: GridRowCount,
   toolbar: null,

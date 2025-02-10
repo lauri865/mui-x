@@ -1,8 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import useId from '@mui/utils/useId';
-import { ButtonProps } from '@mui/material/Button';
-import { TooltipProps } from '@mui/material/Tooltip';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import { useGridSelector } from '../../hooks/utils/useGridSelector';
 import { gridPreferencePanelStateSelector } from '../../hooks/features/preferencesPanel/gridPreferencePanelSelector';
@@ -15,7 +13,7 @@ interface GridToolbarColumnsButtonProps {
    * The props used for each slot inside.
    * @default {}
    */
-  slotProps?: { button?: Partial<ButtonProps>; tooltip?: Partial<TooltipProps> };
+  slotProps?: { button?: any; tooltip?: any };
 }
 
 const GridToolbarColumnsButton = forwardRef<HTMLButtonElement, GridToolbarColumnsButtonProps>(

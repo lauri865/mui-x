@@ -1,11 +1,5 @@
 import * as React from 'react';
-import { styled } from '@mui/material/styles';
 import PropTypes from 'prop-types';
-import TablePagination, {
-  tablePaginationClasses,
-  TablePaginationProps,
-  LabelDisplayedRowsArgs,
-} from '@mui/material/TablePagination';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import { useGridSelector } from '../hooks/utils/useGridSelector';
 import { useGridApiContext } from '../hooks/utils/useGridApiContext';
@@ -15,23 +9,6 @@ import {
   gridPaginationRowCountSelector,
   gridPageCountSelector,
 } from '../hooks/features/pagination/gridPaginationSelector';
-
-const GridPaginationRoot = styled(TablePagination)(({ theme }) => ({
-  maxHeight: 'calc(100% + 1px)', // border width
-  flexGrow: 1,
-  [`& .${tablePaginationClasses.selectLabel}`]: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
-  },
-  [`& .${tablePaginationClasses.input}`]: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'inline-flex',
-    },
-  },
-})) as typeof TablePagination;
 
 export type WrappedLabelDisplayedRows = (
   args: LabelDisplayedRowsArgs & { estimated?: number },
@@ -61,122 +38,118 @@ interface GridPaginationOwnProps {
   component?: React.ElementType;
 }
 
-const GridPagination = forwardRef<
-  unknown,
-  Partial<
-    // See https://github.com/mui/material-ui/issues/40427
-    Omit<TablePaginationProps, 'component'>
-  > &
-    GridPaginationOwnProps
->(function GridPagination(props, ref) {
-  const apiRef = useGridApiContext();
-  const rootProps = useGridRootProps();
-  const paginationModel = useGridSelector(apiRef, gridPaginationModelSelector);
-  const rowCount = useGridSelector(apiRef, gridPaginationRowCountSelector);
-  const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+const GridPagination = forwardRef<unknown, GridPaginationOwnProps>(
+  function GridPagination(props, ref) {
+    const apiRef = useGridApiContext();
+    const rootProps = useGridRootProps();
+    const paginationModel = useGridSelector(apiRef, gridPaginationModelSelector);
+    const rowCount = useGridSelector(apiRef, gridPaginationRowCountSelector);
+    const pageCount = useGridSelector(apiRef, gridPageCountSelector);
 
-  const { paginationMode, loading, estimatedRowCount } = rootProps;
+    const { paginationMode, loading, estimatedRowCount } = rootProps;
 
-  const computedProps: Partial<TablePaginationProps> = React.useMemo(() => {
-    if (rowCount === -1 && paginationMode === 'server' && loading) {
-      return {
-        backIconButtonProps: { disabled: true },
-        nextIconButtonProps: { disabled: true },
-      };
-    }
+    const computedProps = React.useMemo(() => {
+      if (rowCount === -1 && paginationMode === 'server' && loading) {
+        return {
+          backIconButtonProps: { disabled: true },
+          nextIconButtonProps: { disabled: true },
+        };
+      }
 
-    return {};
-  }, [loading, paginationMode, rowCount]);
+      return {};
+    }, [loading, paginationMode, rowCount]);
 
-  const lastPage = React.useMemo(() => Math.max(0, pageCount - 1), [pageCount]);
+    const lastPage = React.useMemo(() => Math.max(0, pageCount - 1), [pageCount]);
 
-  const computedPage = React.useMemo(() => {
-    if (rowCount === -1) {
-      return paginationModel.page;
-    }
-    return paginationModel.page <= lastPage ? paginationModel.page : lastPage;
-  }, [lastPage, paginationModel.page, rowCount]);
+    const computedPage = React.useMemo(() => {
+      if (rowCount === -1) {
+        return paginationModel.page;
+      }
+      return paginationModel.page <= lastPage ? paginationModel.page : lastPage;
+    }, [lastPage, paginationModel.page, rowCount]);
 
-  const handlePageSizeChange = React.useCallback(
-    (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-      const pageSize = Number(event.target.value);
-      apiRef.current.setPageSize(pageSize);
-    },
-    [apiRef],
-  );
+    const handlePageSizeChange = React.useCallback(
+      (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        const pageSize = Number(event.target.value);
+        apiRef.current.setPageSize(pageSize);
+      },
+      [apiRef],
+    );
 
-  const handlePageChange = React.useCallback<TablePaginationProps['onPageChange']>(
-    (_, page) => {
-      apiRef.current.setPage(page);
-    },
-    [apiRef],
-  );
+    const handlePageChange = React.useCallback(
+      (_, page) => {
+        apiRef.current.setPage(page);
+      },
+      [apiRef],
+    );
 
-  const isPageSizeIncludedInPageSizeOptions = (pageSize: number) => {
-    for (let i = 0; i < rootProps.pageSizeOptions.length; i += 1) {
-      const option = rootProps.pageSizeOptions[i];
-      if (typeof option === 'number') {
-        if (option === pageSize) {
+    const isPageSizeIncludedInPageSizeOptions = (pageSize: number) => {
+      for (let i = 0; i < rootProps.pageSizeOptions.length; i += 1) {
+        const option = rootProps.pageSizeOptions[i];
+        if (typeof option === 'number') {
+          if (option === pageSize) {
+            return true;
+          }
+        } else if (option.value === pageSize) {
           return true;
         }
-      } else if (option.value === pageSize) {
-        return true;
+      }
+      return false;
+    };
+
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const warnedOnceMissingInPageSizeOptions = React.useRef(false);
+
+      const pageSize = rootProps.paginationModel?.pageSize ?? paginationModel.pageSize;
+      if (
+        !warnedOnceMissingInPageSizeOptions.current &&
+        !rootProps.autoPageSize &&
+        !isPageSizeIncludedInPageSizeOptions(pageSize)
+      ) {
+        console.warn(
+          [
+            `MUI X: The page size \`${paginationModel.pageSize}\` is not present in the \`pageSizeOptions\`.`,
+            `Add it to show the pagination select.`,
+          ].join('\n'),
+        );
+
+        warnedOnceMissingInPageSizeOptions.current = true;
       }
     }
-    return false;
-  };
 
-  if (process.env.NODE_ENV !== 'production') {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const warnedOnceMissingInPageSizeOptions = React.useRef(false);
+    const pageSizeOptions = isPageSizeIncludedInPageSizeOptions(paginationModel.pageSize)
+      ? rootProps.pageSizeOptions
+      : [];
 
-    const pageSize = rootProps.paginationModel?.pageSize ?? paginationModel.pageSize;
-    if (
-      !warnedOnceMissingInPageSizeOptions.current &&
-      !rootProps.autoPageSize &&
-      !isPageSizeIncludedInPageSizeOptions(pageSize)
-    ) {
-      console.warn(
-        [
-          `MUI X: The page size \`${paginationModel.pageSize}\` is not present in the \`pageSizeOptions\`.`,
-          `Add it to show the pagination select.`,
-        ].join('\n'),
-      );
+    const locales = apiRef.current.getLocaleText('MuiTablePagination');
+    const wrappedLabelDisplayedRows = wrapLabelDisplayedRows(
+      locales.labelDisplayedRows || defaultLabelDisplayedRows,
+      estimatedRowCount,
+    );
 
-      warnedOnceMissingInPageSizeOptions.current = true;
-    }
-  }
-
-  const pageSizeOptions = isPageSizeIncludedInPageSizeOptions(paginationModel.pageSize)
-    ? rootProps.pageSizeOptions
-    : [];
-
-  const locales = apiRef.current.getLocaleText('MuiTablePagination');
-  const wrappedLabelDisplayedRows = wrapLabelDisplayedRows(
-    locales.labelDisplayedRows || defaultLabelDisplayedRows,
-    estimatedRowCount,
-  );
-
-  return (
-    <GridPaginationRoot
-      component="div"
-      count={rowCount}
-      page={computedPage}
-      // TODO: Remove the cast once the type is fixed in Material UI and that the min Material UI version
-      // for x-data-grid is past the fix.
-      // Note that Material UI will not mutate the array, so this is safe.
-      rowsPerPageOptions={pageSizeOptions as MutableArray<typeof pageSizeOptions>}
-      rowsPerPage={paginationModel.pageSize}
-      onPageChange={handlePageChange}
-      onRowsPerPageChange={handlePageSizeChange}
-      {...computedProps}
-      {...locales}
-      labelDisplayedRows={wrappedLabelDisplayedRows}
-      {...props}
-      ref={ref}
-    />
-  );
-});
+    return null;
+    return (
+      <GridPaginationRoot
+        component="div"
+        count={rowCount}
+        page={computedPage}
+        // TODO: Remove the cast once the type is fixed in Material UI and that the min Material UI version
+        // for x-data-grid is past the fix.
+        // Note that Material UI will not mutate the array, so this is safe.
+        rowsPerPageOptions={pageSizeOptions as MutableArray<typeof pageSizeOptions>}
+        rowsPerPage={paginationModel.pageSize}
+        onPageChange={handlePageChange}
+        onRowsPerPageChange={handlePageSizeChange}
+        {...computedProps}
+        {...locales}
+        labelDisplayedRows={wrappedLabelDisplayedRows}
+        {...props}
+        ref={ref}
+      />
+    );
+  },
+);
 
 GridPagination.propTypes = {
   // ----------------------------- Warning --------------------------------

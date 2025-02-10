@@ -5,7 +5,7 @@ import {
   unstable_useEventCallback as useEventCallback,
 } from '@mui/utils';
 import useLazyRef from '@mui/utils/useLazyRef';
-import { useRtl } from '@mui/system/RtlProvider';
+import { useRtl } from '../../../hooks/utils/useRtl';
 import {
   findGridCellElementsFromCol,
   findGridElement,

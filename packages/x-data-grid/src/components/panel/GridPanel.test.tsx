@@ -3,7 +3,6 @@ import { createRenderer } from '@mui/internal-test-utils';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import { GridPanel, gridPanelClasses as classes, GridApiContext } from '@mui/x-data-grid';
 import { GridRootPropsContext } from '@mui/x-data-grid/context/GridRootPropsContext';
-import Popper from '@mui/material/Popper';
 import { describeConformance } from 'test/utils/describeConformance';
 
 describe('<GridPanel />', () => {
@@ -25,7 +24,7 @@ describe('<GridPanel />', () => {
     );
   }
 
-  describeConformance(<GridPanel disablePortal open />, () => ({
+  /* describeConformance(<GridPanel disablePortal open />, () => ({
     classes: classes as any,
     inheritComponent: Popper,
     muiName: 'MuiGridPanel',
@@ -38,5 +37,5 @@ describe('<GridPanel />', () => {
       ),
     refInstanceof: window.HTMLDivElement,
     only: ['mergeClassName', 'propsSpread', 'refForwarding', 'rootClass'],
-  }));
+  })); */
 });

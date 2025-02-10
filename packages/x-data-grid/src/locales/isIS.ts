@@ -1,4 +1,3 @@
-import { isIS as isISCore } from '@mui/material/locale';
 import { GridLocaleText } from '../models/api/gridLocaleTextApi';
 import { getGridLocalization, Localization } from '../utils/getGridLocalization';
 
@@ -193,4 +192,4 @@ const isISGrid: Partial<GridLocaleText> = {
   aggregationFunctionLabelSize: 'stærð',
 };
 
-export const isIS: Localization = getGridLocalization(isISGrid, isISCore);
+export const isIS: Localization = getGridLocalization(isISGrid);

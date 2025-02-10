@@ -1,7 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { unstable_useId as useId } from '@mui/utils';
-import { SelectChangeEvent } from '@mui/material/Select';
 import { TextFieldProps } from '../../../models/gridBaseSlots';
 import { GridFilterInputValueProps } from '../../../models/gridFilterInputComponent';
 import { GridSingleSelectColDef } from '../../../models/colDef/gridColDef';
@@ -86,7 +85,7 @@ function GridFilterInputSingleSelect(props: GridFilterInputSingleSelectProps) {
   }, [resolvedColumn]);
 
   const onFilterChange = React.useCallback(
-    (event: SelectChangeEvent<any>) => {
+    (event: Event) => {
       let value = event.target.value;
 
       // NativeSelect casts the value to a string.

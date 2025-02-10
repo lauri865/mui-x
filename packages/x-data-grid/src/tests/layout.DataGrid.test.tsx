@@ -20,7 +20,6 @@ import {
 } from '@mui/x-data-grid';
 import { ptBR } from '@mui/x-data-grid/locales';
 import { useBasicDemoData } from '@mui/x-data-grid-generator';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {
   $,
   grid,
@@ -983,17 +982,6 @@ describe('<DataGrid /> - Layout & warnings', () => {
       );
 
       expect(screen.getByText('Size')).not.to.equal(null);
-    });
-
-    it('should support translations in the theme', () => {
-      render(
-        <ThemeProvider theme={createTheme({}, ptBR)}>
-          <div style={{ width: 300, height: 300 }}>
-            <DataGrid {...baselineProps} />
-          </div>
-        </ThemeProvider>,
-      );
-      expect(document.querySelector('[title="Ordenar"]')).not.to.equal(null);
     });
 
     it('should allow to change localeText on the fly', () => {

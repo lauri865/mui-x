@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { unstable_composeClasses as composeClasses, unstable_useId as useId } from '@mui/utils';
 import { fastMemo } from '@mui/x-internals/fastMemo';
-import { useRtl } from '@mui/system/RtlProvider';
+import { useRtl } from '../../hooks/utils/useRtl';
 import { useThemedComponent } from '../../context/GridThemeContext';
 import { GridStateColDef } from '../../models/colDef/gridColDef';
 import { GridSortDirection } from '../../models/gridSortModel';

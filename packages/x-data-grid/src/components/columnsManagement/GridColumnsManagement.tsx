@@ -1,10 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import composeClasses from '@mui/utils/composeClasses';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import { styled } from '@mui/material/styles';
-import { inputBaseClasses } from '@mui/material/InputBase';
 import { TextFieldProps } from '../../models/gridBaseSlots';
 import {
   gridColumnDefinitionsSelector,
@@ -15,11 +11,10 @@ import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import type { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import type { GridColDef } from '../../models/colDef/gridColDef';
-import type { GridSlotProps } from '../../models/gridSlotsComponentsProps';
 import { getDataGridUtilityClass } from '../../constants/gridClasses';
 import { useLazyRef } from '../../hooks/utils/useLazyRef';
 import { checkColumnVisibilityModelsSame, defaultSearchPredicate } from './utils';
-import { NotRendered } from '../../utils/assert';
+import clsx from 'clsx';
 
 export interface GridColumnsManagementProps {
   /*
@@ -221,10 +216,8 @@ function GridColumnsManagement(props: GridColumnsManagementProps) {
 
   return (
     <React.Fragment>
-      <GridColumnsManagementHeader className={classes.header} ownerState={rootProps}>
-        <SearchInput
-          as={rootProps.slots.baseTextField}
-          ownerState={rootProps}
+      <div className={classes.header}>
+        <rootProps.slots.baseTextField
           placeholder={apiRef.current.getLocaleText('columnsManagementSearchTitle')}
           inputRef={searchInputRef}
           className={classes.searchInput}
@@ -232,86 +225,48 @@ function GridColumnsManagement(props: GridColumnsManagementProps) {
           onChange={handleSearchValueChange}
           size="small"
           type="search"
-          slotProps={{
-            input: {
-              startAdornment: (
-                <rootProps.slots.baseInputAdornment position="start">
-                  <rootProps.slots.quickFilterIcon />
-                </rootProps.slots.baseInputAdornment>
-              ),
-              endAdornment: (
-                <rootProps.slots.baseIconButton
-                  aria-label={apiRef.current.getLocaleText('columnsManagementDeleteIconLabel')}
-                  size="small"
-                  style={
-                    searchValue
-                      ? {
-                          visibility: 'visible',
-                        }
-                      : {
-                          visibility: 'hidden',
-                        }
-                  }
-                  tabIndex={-1}
-                  onClick={handleSearchReset}
-                  {...rootProps.slotProps?.baseIconButton}
-                >
-                  <rootProps.slots.quickFilterClearIcon fontSize="small" />
-                </rootProps.slots.baseIconButton>
-              ),
-            },
-            htmlInput: {
-              'aria-label': apiRef.current.getLocaleText('columnsManagementSearchTitle'),
-            },
-          }}
           autoComplete="off"
           fullWidth
           {...rootProps.slotProps?.baseTextField}
           {...searchInputProps}
         />
-      </GridColumnsManagementHeader>
-      <GridColumnsManagementBody className={classes.root} ownerState={rootProps}>
+      </div>
+      <div className={clsx(classes.root, 'flex flex-col overflow-auto max-h-400 flex-1')}>
         {currentColumns.map((column) => (
-          <FormControlLabel
-            key={column.field}
-            className={classes.row}
-            control={
-              <rootProps.slots.baseCheckbox
-                disabled={column.hideable === false}
-                checked={columnVisibilityModel[column.field] !== false}
-                onClick={toggleColumn}
-                name={column.field}
-                sx={{ p: 0.5 }}
-                inputRef={isFirstHideableColumn(column) ? firstSwitchRef : undefined}
-                {...rootProps.slotProps?.baseCheckbox}
-              />
-            }
-            label={column.headerName || column.field}
-          />
+          <React.Fragment key={column.field}>
+            <rootProps.slots.baseCheckbox
+              disabled={column.hideable === false}
+              checked={columnVisibilityModel[column.field] !== false}
+              onClick={toggleColumn}
+              name={column.field}
+              ref={isFirstHideableColumn(column) ? firstSwitchRef : undefined}
+              {...rootProps.slotProps?.baseCheckbox}
+            />
+            <rootProps.slots.baseInputLabel>
+              {column.headerName || column.field}
+            </rootProps.slots.baseInputLabel>
+          </React.Fragment>
         ))}
         {currentColumns.length === 0 && (
-          <GridColumnsManagementEmptyText ownerState={rootProps}>
-            {apiRef.current.getLocaleText('columnsManagementNoColumns')}
-          </GridColumnsManagementEmptyText>
+          <div>{apiRef.current.getLocaleText('columnsManagementNoColumns')}</div>
         )}
-      </GridColumnsManagementBody>
+      </div>
       {(!disableShowHideToggle || !disableResetButton) && currentColumns.length > 0 ? (
-        <GridColumnsManagementFooter ownerState={rootProps} className={classes.footer}>
+        <div className={classes.footer}>
           {!disableShowHideToggle ? (
-            <FormControlLabel
-              control={
-                <rootProps.slots.baseCheckbox
-                  disabled={hideableColumns.length === 0}
-                  checked={allHideableColumnsVisible}
-                  indeterminate={!allHideableColumnsVisible && !allHideableColumnsHidden}
-                  onClick={() => toggleAllColumns(!allHideableColumnsVisible)}
-                  name={apiRef.current.getLocaleText('columnsManagementShowHideAllText')}
-                  sx={{ p: 0.5 }}
-                  {...rootProps.slotProps?.baseCheckbox}
-                />
-              }
-              label={apiRef.current.getLocaleText('columnsManagementShowHideAllText')}
-            />
+            <>
+              <rootProps.slots.baseCheckbox
+                disabled={hideableColumns.length === 0}
+                checked={allHideableColumnsVisible}
+                indeterminate={!allHideableColumnsVisible && !allHideableColumnsHidden}
+                onClick={() => toggleAllColumns(!allHideableColumnsVisible)}
+                name={apiRef.current.getLocaleText('columnsManagementShowHideAllText')}
+                {...rootProps.slotProps?.baseCheckbox}
+              />
+              <rootProps.slots.baseInputLabel>
+                {apiRef.current.getLocaleText('columnsManagementShowHideAllText')}
+              </rootProps.slots.baseInputLabel>
+            </>
           ) : (
             <span />
           )}
@@ -325,158 +280,10 @@ function GridColumnsManagement(props: GridColumnsManagementProps) {
               {apiRef.current.getLocaleText('columnsManagementReset')}
             </rootProps.slots.baseButton>
           ) : null}
-        </GridColumnsManagementFooter>
+        </div>
       ) : null}
     </React.Fragment>
   );
 }
-
-GridColumnsManagement.propTypes = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // | To update them edit the TypeScript types and run "pnpm proptypes"  |
-  // ----------------------------------------------------------------------
-  /**
-   * If `true`, the column search field will be focused automatically.
-   * If `false`, the first column switch input will be focused automatically.
-   * This helps to avoid input keyboard panel to popup automatically on touch devices.
-   * @default true
-   */
-  autoFocusSearchField: PropTypes.bool,
-  /**
-   * If `true`, the `Reset` button will not be disabled
-   * @default false
-   */
-  disableResetButton: PropTypes.bool,
-  /**
-   * If `true`, the `Show/Hide all` toggle checkbox will not be displayed.
-   * @default false
-   */
-  disableShowHideToggle: PropTypes.bool,
-  /**
-   * Returns the list of togglable columns.
-   * If used, only those columns will be displayed in the panel
-   * which are passed as the return value of the function.
-   * @param {GridColDef[]} columns The `ColDef` list of all columns.
-   * @returns {GridColDef['field'][]} The list of togglable columns' field names.
-   */
-  getTogglableColumns: PropTypes.func,
-  searchInputProps: PropTypes.shape({
-    autoComplete: PropTypes.string,
-    className: PropTypes.string,
-    color: PropTypes.oneOf(['error', 'primary']),
-    disabled: PropTypes.bool,
-    error: PropTypes.bool,
-    fullWidth: PropTypes.bool,
-    helperText: PropTypes.string,
-    id: PropTypes.string,
-    inputRef: PropTypes.oneOfType([
-      PropTypes.func,
-      PropTypes.shape({
-        current: PropTypes.object,
-      }),
-    ]),
-    label: PropTypes.node,
-    onChange: PropTypes.func,
-    onKeyDown: PropTypes.func,
-    placeholder: PropTypes.string,
-    size: PropTypes.oneOf(['medium', 'small']),
-    slotProps: PropTypes.object,
-    style: PropTypes.object,
-    tabIndex: PropTypes.number,
-    type: PropTypes.oneOfType([
-      PropTypes.oneOf([
-        'button',
-        'checkbox',
-        'color',
-        'date',
-        'datetime-local',
-        'email',
-        'file',
-        'hidden',
-        'image',
-        'month',
-        'number',
-        'password',
-        'radio',
-        'range',
-        'reset',
-        'search',
-        'submit',
-        'tel',
-        'text',
-        'time',
-        'url',
-        'week',
-      ]),
-      PropTypes.object,
-    ]),
-    value: PropTypes.string,
-  }),
-  searchPredicate: PropTypes.func,
-  sort: PropTypes.oneOf(['asc', 'desc']),
-  /**
-   * Changes the behavior of the `Show/Hide All` toggle when the search field is used:
-   * - `all`: Will toggle all columns.
-   * - `filteredOnly`: Will only toggle columns that match the search criteria.
-   * @default 'all'
-   */
-  toggleAllMode: PropTypes.oneOf(['all', 'filteredOnly']),
-} as any;
-
-const GridColumnsManagementBody = styled('div', {
-  name: 'MuiDataGrid',
-  slot: 'ColumnsManagement',
-  overridesResolver: (props, styles) => styles.columnsManagement,
-})<{ ownerState: OwnerState }>(({ theme }) => ({
-  padding: theme.spacing(0, 3, 1.5),
-  display: 'flex',
-  flexDirection: 'column',
-  overflow: 'auto',
-  flex: '1 1',
-  maxHeight: 400,
-  alignItems: 'flex-start',
-}));
-
-const GridColumnsManagementHeader = styled('div', {
-  name: 'MuiDataGrid',
-  slot: 'ColumnsManagementHeader',
-  overridesResolver: (props, styles) => styles.columnsManagementHeader,
-})<{ ownerState: OwnerState }>(({ theme }) => ({
-  padding: theme.spacing(1.5, 3),
-}));
-
-const SearchInput = styled(NotRendered<GridSlotProps['baseTextField']>, {
-  name: 'MuiDataGrid',
-  slot: 'ColumnsManagementSearchInput',
-  overridesResolver: (props, styles) => styles.columnsManagementSearchInput,
-})<{ ownerState: OwnerState }>(({ theme }) => ({
-  [`& .${inputBaseClasses.root}`]: {
-    padding: theme.spacing(0, 1.5, 0, 1.5),
-  },
-  [`& .${inputBaseClasses.input}::-webkit-search-decoration,
-  & .${inputBaseClasses.input}::-webkit-search-cancel-button,
-  & .${inputBaseClasses.input}::-webkit-search-results-button,
-  & .${inputBaseClasses.input}::-webkit-search-results-decoration`]: {
-    /* clears the 'X' icon from Chrome */
-    display: 'none',
-  },
-}));
-
-const GridColumnsManagementFooter = styled('div', {
-  name: 'MuiDataGrid',
-  slot: 'ColumnsManagementFooter',
-  overridesResolver: (props, styles) => styles.columnsManagementFooter,
-})<{ ownerState: OwnerState }>(({ theme }) => ({
-  padding: theme.spacing(0.5, 1, 0.5, 3),
-  display: 'flex',
-  justifyContent: 'space-between',
-  borderTop: `1px solid ${theme.palette.divider}`,
-}));
-
-const GridColumnsManagementEmptyText = styled('div')<{ ownerState: OwnerState }>(({ theme }) => ({
-  padding: theme.spacing(0.5, 0),
-  color: theme.palette.grey[500],
-}));
 
 export { GridColumnsManagement };

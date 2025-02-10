@@ -1,4 +1,3 @@
-import { nnNO as nnNOCore } from '@mui/material/locale';
 import { GridLocaleText } from '../models/api/gridLocaleTextApi';
 import { getGridLocalization, Localization } from '../utils/getGridLocalization';
 
@@ -193,4 +192,4 @@ const nnNOGrid: Partial<GridLocaleText> = {
   aggregationFunctionLabelSize: 'størrelse',
 };
 
-export const nnNO: Localization = getGridLocalization(nnNOGrid, nnNOCore);
+export const nnNO: Localization = getGridLocalization(nnNOGrid);

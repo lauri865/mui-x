@@ -6,19 +6,11 @@ import {
   unstable_capitalize as capitalize,
   unstable_composeClasses as composeClasses,
 } from '@mui/utils';
-import { SxProps } from '@mui/system';
-import { Theme } from '@mui/material/styles';
 import { fastMemo } from '@mui/x-internals/fastMemo';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import { useThemedComponent } from '../../context/GridThemeContext';
-import { useGridSelector } from '../../hooks/utils/useGridSelector';
 import { useGridPrivateApiContext } from '../../hooks/utils/useGridPrivateApiContext';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-import { getDataGridUtilityClass } from '../../constants/gridClasses';
-import { gridDensitySelector } from '../../hooks/features/density/densitySelector';
-import { DataGridProcessedProps } from '../../models/props/DataGridProps';
-import { GridDensity } from '../../models/gridDensity';
-import { useIsServerRendered, useIsSSR } from '../../hooks/utils/useIsSSR';
+import { useIsSSR } from '../../hooks/utils/useIsSSR';
 import { GridHeader } from '../GridHeader';
 import { GridBody, GridFooterPlaceholder } from '../base';
 

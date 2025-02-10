@@ -1,5 +1,6 @@
 packages:
   - 'packages/*'
   - 'docs'
+  - 'docs-new'
   - 'test'
   - 'test/performance-charts'

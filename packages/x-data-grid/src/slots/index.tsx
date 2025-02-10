@@ -1,19 +1,5 @@
 import * as React from 'react';
-import MUIBadge from '@mui/material/Badge';
-import MUIChip from '@mui/material/Chip';
-import MUICircularProgress from '@mui/material/CircularProgress';
-import MUIDivider from '@mui/material/Divider';
-import MUILinearProgress from '@mui/material/LinearProgress';
-import MUIListItemIcon from '@mui/material/ListItemIcon';
-import MUIListItemText from '@mui/material/ListItemText';
-import MUIMenuItem from '@mui/material/MenuItem';
-import MUITextField from '@mui/material/TextField';
-import MUIFormControl from '@mui/material/FormControl';
-import MUISelect from '@mui/material/Select';
-import MUIInputAdornment from '@mui/material/InputAdornment';
-import MUIPopper from '@mui/material/Popper';
-import MUIInputLabel from '@mui/material/InputLabel';
-import MUISkeleton from '@mui/material/Skeleton';
+
 import {
   Button,
   Checkbox,
@@ -46,8 +32,6 @@ import {
 } from './icons';
 import type { GridIconSlotsComponent } from '../models';
 import type { GridBaseSlots } from '../models/gridSlotsComponent';
-import type { GridSlotProps } from '../models/gridSlotsComponentsProps';
-import MUISelectOption from './components/MUISelectOption';
 import clsx from 'clsx';
 
 const iconSlots: GridIconSlotsComponent = {
@@ -94,24 +78,25 @@ const iconSlots: GridIconSlotsComponent = {
   detailPanelCollapseIcon: icons.arrowDown,
 };
 
+const Missing = () => null;
 const baseSlots: GridBaseSlots = {
-  baseBadge: MUIBadge,
+  baseBadge: () => null,
   baseCheckbox: Checkbox,
-  baseCircularProgress: MUICircularProgress,
-  baseDivider: MUIDivider,
-  baseLinearProgress: MUILinearProgress,
+  baseCircularProgress: Missing,
+  baseDivider: Missing,
+  baseLinearProgress: Missing,
   baseDropdownMenu: DropdownMenu,
-  baseMenuItem: BaseMenuItem,
-  baseTextField: BaseTextField,
-  baseFormControl: MUIFormControl,
-  baseSelect: MUISelect,
+  baseMenuItem: Missing,
+  baseTextField: Missing,
+  baseFormControl: Missing,
+  baseSelect: Missing,
   baseButton: Button,
   baseIconButton: (props) => <Button size="icon" {...props} />,
-  baseInputAdornment: MUIInputAdornment,
+  baseInputAdornment: Missing,
   baseTooltip: Tooltip,
-  basePopper: MUIPopper,
-  baseInputLabel: MUIInputLabel,
-  baseSelectOption: MUISelectOption,
+  basePopper: Missing,
+  baseInputLabel: Missing,
+  baseSelectOption: Missing,
   baseSkeleton: (props) => (
     <div
       className={clsx('bg-white/8 animate-pulse rounded-md text-[10px]')}
@@ -122,43 +107,13 @@ const baseSlots: GridBaseSlots = {
       data-variant={props.variant}
     />
   ),
-  baseChip: MUIChip,
+  baseChip: Missing,
   baseContextMenu: ContextMenu,
 };
 
-const materialSlots: GridBaseSlots & GridIconSlotsComponent = {
+const slots: GridBaseSlots & GridIconSlotsComponent = {
   ...baseSlots,
   ...iconSlots,
 };
 
-export default materialSlots;
-
-function BaseMenuItem(props: GridSlotProps['baseMenuItem']) {
-  const { inert, iconStart, iconEnd, children, ...other } = props;
-  if (inert) {
-    (other as any).disableRipple = true;
-  }
-  return React.createElement(MUIMenuItem, other, [
-    iconStart && <MUIListItemIcon key="1">{iconStart}</MUIListItemIcon>,
-    <MUIListItemText key="2">{children}</MUIListItemText>,
-    iconEnd && <MUIListItemIcon key="3">{iconEnd}</MUIListItemIcon>,
-  ]);
-}
-
-function BaseTextField(props: GridSlotProps['baseTextField']) {
-  // MaterialUI v5 doesn't support slotProps, until we drop v5 support we need to
-  // translate the pattern.
-  const { slotProps, ...rest } = props;
-  return (
-    <MUITextField
-      variant="outlined"
-      {...rest}
-      inputProps={slotProps?.htmlInput}
-      InputProps={slotProps?.input}
-      InputLabelProps={{
-        shrink: true,
-        ...(slotProps as any)?.inputLabel,
-      }}
-    />
-  );
-}
+export default slots;

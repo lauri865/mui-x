@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
-import { useRtl } from '@mui/system/RtlProvider';
+import { useRtl } from '../../utils/useRtl';
 import { GridCellIndexCoordinates } from '../../../models/gridCell';
 import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
 import { useGridLogger } from '../../utils/useGridLogger';

@@ -1,8 +1,5 @@
 import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
-import { SxProps } from '@mui/system';
-import { Theme } from '@mui/material/styles';
-import { CommonProps } from '@mui/material/OverridableComponent';
 import { GridDensity } from '../gridDensity';
 import { GridEditMode } from '../gridEditRowModel';
 import { GridFeatureMode } from '../gridFeatureMode';
@@ -406,6 +403,11 @@ export interface DataGridPropsWithDefaultValues<R extends GridValidRowModel = an
   scrollEndThreshold?: number;
 }
 
+interface CommonProps {
+  className?: string;
+  style?: React.CSSProperties;
+}
+
 /**
  * The Data Grid props with no default value.
  */
@@ -788,10 +790,6 @@ export interface DataGridPropsWithoutDefaultValue<R extends GridValidRowModel = 
    * Overridable components props dynamically passed to the component at rendering.
    */
   slotProps?: GridSlotsComponentsProps;
-  /**
-   * The system prop that allows defining system overrides as well as additional CSS styles.
-   */
-  sx?: SxProps<Theme>;
   /**
    * Unstable features, breaking changes might be introduced.
    * For each feature, if the flag is not explicitly set to `true`, the feature will be fully disabled and any property / method call will not have any effect.

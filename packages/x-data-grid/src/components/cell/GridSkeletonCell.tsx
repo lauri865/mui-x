@@ -1,18 +1,12 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import {
-  unstable_composeClasses as composeClasses,
-  unstable_capitalize as capitalize,
-} from '@mui/utils';
 import { fastMemo } from '@mui/x-internals/fastMemo';
 import { createRandomNumberGenerator } from '../../utils/utils';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-import { getDataGridUtilityClass } from '../../constants/gridClasses';
-import { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { GridColType } from '../../models';
 import { PinnedColumnPosition } from '../../internals/constants';
-import { useRtl } from '@mui/system/RtlProvider';
+import { useRtl } from '../../hooks/utils/useRtl';
 import { attachPinnedStyle } from '../../internals/utils';
 import { useThemedComponent } from '../../context/GridThemeContext';
 import { gridPinnedColumnPositionLookup } from './GridCell';

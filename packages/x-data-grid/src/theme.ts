@@ -1,5 +1,3 @@
-import { borderBottom } from '@mui/system';
-
 export const getThemedClassName = (className: string) => `twg-${className}`;
 
 const className = {
@@ -99,6 +97,10 @@ const className = {
     isSelectionMode: 'cursor-default',
     flex: 'flex items-center',
     empty: 'twg-cell--empty opacity-30',
+  },
+
+  editCell: {
+    base: '',
   },
 
   row: {

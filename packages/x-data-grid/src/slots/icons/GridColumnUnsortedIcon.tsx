@@ -1,9 +1,8 @@
-import { SvgIconProps } from '@mui/material/SvgIcon';
 import * as React from 'react';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { GridSortDirection } from '../../models/gridSortModel';
 
-interface GridColumnUnsortedIconProps extends SvgIconProps {
+interface GridColumnUnsortedIconProps {
   sortingOrder: GridSortDirection[];
 }
 
