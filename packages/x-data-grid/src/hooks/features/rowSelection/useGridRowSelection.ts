@@ -58,11 +58,12 @@ const getSelectionModelPropValue = (
 };
 
 export const rowSelectionStateInitializer: GridStateInitializer<
-  Pick<DataGridProcessedProps, 'rowSelectionModel' | 'rowSelection'>
+  Pick<DataGridProcessedProps, 'rowSelectionModel' | 'rowSelection' | 'initialState'>
 > = (state, props) => ({
   ...state,
   rowSelection: props.rowSelection
-    ? (getSelectionModelPropValue(props.rowSelectionModel) ?? [])
+    ? (getSelectionModelPropValue(props.rowSelectionModel ?? props.initialState?.rowSelection) ??
+      [])
     : [],
 });
 
@@ -94,7 +95,6 @@ export const useGridRowSelection = (
   >,
 ): void => {
   const logger = useGridLogger(apiRef, 'useGridSelection');
-
   const runIfRowSelectionIsEnabled = React.useCallback(
     <Args extends any[]>(callback: (...args: Args) => void) =>
       (...args: Args) => {

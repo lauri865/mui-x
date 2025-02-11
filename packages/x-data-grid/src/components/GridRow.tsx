@@ -1,4 +1,4 @@
-'use client';;
+'use client';
 import { unstable_useForkRef as useForkRef } from '@mui/utils';
 import { fastMemo } from '@mui/x-internals/fastMemo';
 import { forwardRef } from '@mui/x-internals/forwardRef';

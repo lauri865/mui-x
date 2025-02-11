@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import * as React from 'react';
 import { useThemedComponent } from '../context/GridThemeContext';
 import { useGridApiContext } from '../hooks/utils/useGridApiContext';
-import { DataGridProcessedProps } from '../models/props/DataGridProps';
 
 interface RowCountProps {
   rowCount: number;
@@ -11,8 +10,6 @@ interface RowCountProps {
 }
 
 export type GridRowCountProps = React.HTMLAttributes<HTMLDivElement> & RowCountProps;
-
-type OwnerState = DataGridProcessedProps;
 
 const GridRowCount = forwardRef<HTMLDivElement, GridRowCountProps>(
   function GridRowCount(props, ref) {

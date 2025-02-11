@@ -10,7 +10,9 @@ const Trigger = Primitive.Trigger;
 
 const Group = Primitive.Group;
 
-const Portal = Primitive.Portal;
+const Portal = (props: React.ComponentPropsWithoutRef<typeof Primitive.Portal>) => (
+  <Primitive.Portal container={document.getElementById('twg-portal') || document.body} {...props} />
+);
 
 const Sub = Primitive.Sub;
 
@@ -56,7 +58,7 @@ const Content = React.forwardRef<
   React.ElementRef<typeof Primitive.Content>,
   React.ComponentPropsWithoutRef<typeof Primitive.Content>
 >(({ className, ...props }, ref) => (
-  <Primitive.Portal>
+  <Portal>
     <Primitive.Content
       ref={ref}
       className={cn(
@@ -65,7 +67,7 @@ const Content = React.forwardRef<
       )}
       {...props}
     />
-  </Primitive.Portal>
+  </Portal>
 ));
 Content.displayName = Primitive.Content.displayName;
 

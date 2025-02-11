@@ -96,7 +96,7 @@ const baseSlots: GridBaseSlots = {
   baseSelectOption: Missing,
   baseSkeleton: (props) => (
     <div
-      className={clsx('bg-white/8 animate-pulse rounded-md text-[10px]')}
+      className={clsx('bg-black/8 dark:bg-white/8 animate-pulse rounded-md text-[10px]')}
       style={{
         width: props.width,
         height: props.height,

@@ -1,6 +1,12 @@
 'use client';
-import { DataGrid } from '@mui/x-data-grid/DataGrid';
+import {
+  DataGrid,
+  GRID_DETAIL_PANEL_TOGGLE_FIELD,
+  GridColDef,
+  useGridApiRef,
+} from '@mui/x-data-grid';
 import * as React from 'react';
+import { cn } from '../../lib/cn';
 
 const columns: GridColDef<(typeof rows)[number]>[] = [
   { field: 'id', headerName: 'ID', width: 90 },
@@ -51,13 +57,20 @@ const detailPanel = (row) => {
   return <div style={{ height: 100, width: 600 }}>{row.id}</div>;
 };
 export const HeroDataGrid = () => {
+  const apiRef = useGridApiRef();
   const [data, setData] = React.useState(rows);
   const [isLoading, setIsLoading] = React.useState(false);
+
   return (
-    <div className="h-400 w-full">
+    <div
+      className={cn(
+        'h-[400px] w-full',
+        'mb-8 mt-8 min-w-[800px] select-none duration-1000 animate-in fade-in slide-in-from-bottom-12',
+        'shadow-lg shadow-black/10 dark:shadow-black/30 rounded-[6px]',
+      )}
+    >
       <DataGrid
-        autoFocus="lastName"
-        rows={[]}
+        rows={data}
         columns={columns}
         initialState={{
           pagination: {
@@ -69,10 +82,12 @@ export const HeroDataGrid = () => {
             left: [GRID_DETAIL_PANEL_TOGGLE_FIELD, 'lastName'],
             right: ['id'],
           },
+
           /* pinnedRows: {
             top: [1],
             bottom: [2],
           }, */
+          rowSelection: [3],
         }}
         onSortModelChange={(model, detail) => {
           detail.api.scrollToIndexes({ rowIndex: 0 });
@@ -100,6 +115,7 @@ export const HeroDataGrid = () => {
             }, 300);
           });
         }}
+        apiRef={apiRef}
       />
     </div>
   );

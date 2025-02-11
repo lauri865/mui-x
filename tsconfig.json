@@ -1,13 +1,14 @@
 {
-  "extends": "@mui/monorepo/tsconfig.json",
+  //"extends": "@mui/monorepo/tsconfig.json",
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext"],
-    "moduleResolution": "bundler",
+
     // Already tested with eslint
     "noUnusedLocals": false,
     "strict": true,
     "baseUrl": "./",
     "allowJs": true,
+    "jsx": "preserve",
     "paths": {
       "@mui/x-data-grid": ["./packages/x-data-grid/src"],
       "@mui/x-data-grid/*": ["./packages/x-data-grid/src/*"],

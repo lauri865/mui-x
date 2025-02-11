@@ -2,13 +2,16 @@
 @import 'fumadocs-ui/css/neutral.css';
 @import 'fumadocs-ui/css/preset.css';
 @import 'fumadocs-twoslash/twoslash.css';
+@import '@mui/x-data-grid/index.css';
+
+@plugin 'tailwindcss-animate';
 
 @source ".";
 @source "../components";
 @source "../content";
 @source '../node_modules/fumadocs-ui/dist/**/*.js';
 @source '../node_modules/fumadocs-openapi/dist/**/*.js';
-@plugin 'tailwindcss-animate';
+@source '../node_modules/fumadocs-twoslash/dist/**/*.js';
 
 @layer base {
   #nd-sidebar .logo {
@@ -21,8 +24,8 @@
   #nd-nav {
     @apply !max-w-[1100px];
 
-    li a {
-      @apply !text-neutral-950 dark:!text-neutral-200 hover:!text-neutral-600 data-active:text-blue-600;
+    ul:first-of-type li a {
+      @apply !text-neutral-950 dark:!text-neutral-200 hover:!text-neutral-400 data-active:text-blue-600;
     }
   }
 
@@ -75,29 +78,6 @@ body {
 .dark {
   --headless-color: hsl(250 100% 80%);
   --ui-color: hsl(217 92% 76%);
-}
-
-.uwu {
-  --color-fd-background: hsl(240 80% 94%) !important;
-  --color-fd-popover: hsl(240 80% 94%) !important;
-  --color-fd-primary: hsl(230 90% 72%) !important;
-  --color-fd-border: hsl(230 30% 87%) !important;
-  --color-fd-accent: hsl(250 80% 90%) !important;
-  --color-fd-secondary: hsl(230 40% 94%) !important;
-  --color-fd-muted: hsl(230 80% 92%) !important;
-  --color-fd-card: hsl(230 90% 94%) !important;
-}
-
-.uwu.dark {
-  --color-fd-background: hsl(240 40% 20%) !important;
-  --color-fd-primary: hsl(250 70% 94%) !important;
-  --color-fd-popover: hsl(240 20% 20%) !important;
-  --color-fd-border: hsl(230 30% 30%) !important;
-  --color-fd-muted: hsl(230 30% 36.3%) !important;
-  --color-fd-secondary: hsl(250 30% 36.3%) !important;
-  --color-fd-accent: hsl(250 20% 38.3%) !important;
-  --color-fd-muted-foreground: hsl(230 80% 84%) !important;
-  --color-fd-card: hsl(230 40% 26.3%) !important;
 }
 
 @keyframes circuit_1 {

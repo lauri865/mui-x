@@ -225,10 +225,10 @@ export const useGridVirtualScroller = () => {
   const detailPanels = useGridSelector(apiRef, gridDetailPanelExpandedRowIdsSelector);
 
   const focusedVirtualCell = React.useMemo(() => {
-    if (!gridIsFocusedCellOutOfContext(apiRef.current.state)) {
+    if (!gridIsFocusedCellOutOfContext(apiRef)) {
       return null;
     }
-    return gridFocusedVirtualCellSelector(apiRef.current.state);
+    return gridFocusedVirtualCellSelector(apiRef);
   }, [apiRef, renderContext]);
 
   const scrollTimeout = useTimeout();

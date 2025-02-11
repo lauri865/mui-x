@@ -41,14 +41,9 @@ function GridVirtualScroller(props: GridVirtualScrollerProps) {
   const hasPinnedRight = useGridSelector(apiRef, hasPinnedRightSelector);
   const hasBottomFiller = useGridSelector(apiRef, gridHasBottomFillerSelector);
   const { getOverlay, overlaysProps } = useGridOverlays();
-  const ownerState = {
-    classes: rootProps.classes,
-    hasScrollX,
-    hasPinnedRight,
-    loadingOverlayVariant: overlaysProps.loadingOverlayVariant,
-  };
 
   const virtualScroller = useGridVirtualScroller();
+
   const {
     getContainerProps,
     getScrollerProps,

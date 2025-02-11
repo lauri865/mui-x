@@ -2,7 +2,7 @@ export const getThemedClassName = (className: string) => `twg-${className}`;
 
 const className = {
   root: {
-    base: 'group dark flex flex-1 box-border relative border border-solid border-grid-border bg-grid-bg text-white font-sans font-normal text-sm leading-relaxed outline-none h-full min-w-0 min-h-0 flex-col overflow-hidden rounded-grid',
+    base: 'group flex flex-1 box-border relative border border-solid border-grid-border bg-grid-bg text-grid-text font-normal text-sm leading-relaxed outline-none h-full min-w-0 min-h-0 flex-col overflow-hidden rounded-grid',
     autoHeight: 'h-auto',
     noScrollbar: 'scrollbar-none',
   },
@@ -149,14 +149,14 @@ const className = {
     base: 'select-none flex h-10 justify-between items-center border-t border-t-grid-border flex-shrink-0 px-cell text-[13px]',
   },
   rowCount: {
-    base: 'flex items-center gap-1.5 text-white/50',
+    base: 'flex items-center gap-1.5 text-black/50 dark:text-white/50',
     badge:
-      'bg-grid-hover-bg px-1.5 py-0.5 rounded-md text-xs min-w-[20px] text-center border border-grid-border text-white/40 tabular-nums font-medium',
+      'bg-grid-hover-bg px-1.5 py-0.5 rounded-md text-xs min-w-[20px] text-center border border-grid-border text:black/40 dark:text-white/40 tabular-nums font-normal',
   },
   selectedRowCount: {
     base: 'flex items-center gap-1.5 text-highlight-text cursor-pointer hover:bg-grid-hover-bg hover:opacity-50 pl-1.5 pr-1 -mr-1 py-1 rounded-grid transition-all',
     badge:
-      'bg-highlight px-1.5 py-0.5 rounded-md text-xs min-w-[20px] text-center border border-highlight-border/50 text-highlight-text tabular-nums font-medium',
+      'bg-highlight px-1.5 py-0.5 rounded-md text-xs min-w-[20px] text-center border border-highlight-border/50 text-highlight-text tabular-nums font-normal',
   },
   skeletonLoadingOverlay: {
     base: 'min-w-full w-max h-full overflow-clip',

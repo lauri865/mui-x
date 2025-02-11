@@ -1,6 +1,6 @@
-import * as React from 'react';
 import { fastMemo } from '@mui/x-internals/fastMemo';
 import { forwardRef } from '@mui/x-internals/forwardRef';
+import * as React from 'react';
 import {
   useGridColumnHeaders,
   UseGridColumnHeadersProps,

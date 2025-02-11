@@ -1,4 +1,4 @@
-'use client';;
+'use client';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import * as React from 'react';
 import { GridRoot } from '../components';

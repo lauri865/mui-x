@@ -13,7 +13,7 @@ const TooltipContent = React.forwardRef<
   React.ElementRef<typeof TooltipPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>
 >(({ className, sideOffset = 4, ...props }, ref) => (
-  <TooltipPrimitive.Portal>
+  <TooltipPrimitive.Portal container={document.getElementById('twg-portal') || document.body}>
     <TooltipPrimitive.Content
       ref={ref}
       sideOffset={sideOffset}

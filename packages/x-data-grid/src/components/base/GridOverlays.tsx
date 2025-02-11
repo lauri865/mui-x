@@ -52,10 +52,15 @@ export function GridOverlayWrapper(props: React.PropsWithChildren<GridOverlaysPr
 
   const classes = useUtilityClasses({ ...props, classes: rootProps.classes });
 
+  const { loadingOverlayVariant, overlayType, ...other } = props;
+
   return (
     <div
       className={clsx(
-        props.loadingOverlayVariant !== 'skeleton' && 'flex sticky left-0 w-0 h-0 z-5',
+        props.loadingOverlayVariant !== 'skeleton' && 'sticky left-0 w-0 h-0',
+        overlayType === 'loadingOverlay'
+          ? 'z-5' // Should be above pinned columns, pinned rows, and detail panel
+          : 'z-4',
       )}
       style={
         props.loadingOverlayVariant !== 'skeleton'
@@ -72,7 +77,7 @@ export function GridOverlayWrapper(props: React.PropsWithChildren<GridOverlaysPr
           height,
           width: dimensions.viewportOuterSize.width,
         }}
-        {...props}
+        {...other}
       />
     </div>
   );

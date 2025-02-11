@@ -31,7 +31,6 @@ import type { HTMLAttributes, ReactNode } from 'react';
 import { BackgroundBeams } from '../../components/home/background-beams';
 import ArchImg from './arch.png';
 import { EarthIcon, NetlifyLogo, NextSVG, OpenAPIIcon, VercelLogo } from './icons';
-import Img from './img.png';
 import { CreateAppAnimation, WhyInteractive } from './page.client';
 
 const badgeVariants = cva(
@@ -450,12 +449,6 @@ function Hero() {
           />
         </div>
 
-        <Image
-          src={Img}
-          alt="preview"
-          className="mb-[-250px] mt-12 min-w-[800px] select-none duration-1000 animate-in fade-in slide-in-from-bottom-12 md:mb-[-340px] md:min-w-[1100px]"
-          priority
-        />
         <HeroDataGrid />
         <div
           className="absolute inset-0 z-[-1]"
@@ -467,7 +460,7 @@ function Hero() {
           }}
         />
         <div
-          className="absolute inset-x-0 top-0 z-[-1] h-100 opacity-30 duration-1000 animate-in fade-in dark:opacity-15"
+          className="absolute inset-x-0 top-0 z-[-1] h-200 opacity-30 duration-1000 animate-in fade-in dark:opacity-20"
           style={{
             maskImage: 'linear-gradient(to top,transparent,white)',
             backgroundImage: 'linear-gradient(to right, #4ebfff, transparent, #e92a67)',

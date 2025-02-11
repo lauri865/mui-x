@@ -85,4 +85,5 @@ export interface GridInitialStateCommunity {
     columnHeader?: GridColumnIdentifier;
   };
   detailPanel?: GridDetailPanelInitialState;
+  rowSelection?: GridRowSelectionModel;
 }

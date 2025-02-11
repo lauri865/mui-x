@@ -10,7 +10,6 @@ import {
   MoveHorizontalIcon,
   PinIcon,
 } from 'lucide-react';
-import './index.css';
 
 export { Button } from './components/ui/button';
 export { Checkbox } from './components/ui/checkbox';

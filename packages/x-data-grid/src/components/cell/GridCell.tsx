@@ -196,6 +196,7 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
       return focus?.id === rowId && focus.field === field;
     }),
   });
+
   cellParams.api = apiRef.current;
 
   const isSelected = useGridSelector(
@@ -371,7 +372,9 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
       const elementToFocus = focusElementRef.current || focusableElement || cellRef.current;
 
       if (doesSupportPreventScroll()) {
-        elementToFocus.focus({ preventScroll: true });
+        requestAnimationFrame(() => {
+          elementToFocus.focus({ preventScroll: true });
+        });
       } else {
         const scrollPosition = apiRef.current.getScrollPosition();
         elementToFocus.focus();

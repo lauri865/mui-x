@@ -80,7 +80,6 @@ const GridCellCheckboxForwardRef = forwardRef<HTMLInputElement, GridRenderCellPa
         onCheckedChange={handleChange}
         aria-label={label}
         name={'select_row'}
-        indeterminate={isIndeterminate}
         disabled={!isSelectable}
         {...rootProps.slotProps?.baseCheckbox}
         {...other}

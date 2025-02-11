@@ -6,10 +6,11 @@
     "composite": true,
     "declaration": true,
     "noEmit": false,
+    "noEmitOnError": false,
     "emitDeclarationOnly": true,
     "outDir": "build",
     "rootDir": "./src",
-    "types": ["node", "@mui/material/themeCssVarsAugmentation", "@emotion/styled", "@mui/types"]
+    "types": ["node"]
   },
   "references": [{ "path": "../x-internals/tsconfig.build.json" }],
   "include": ["src/**/*.ts*"],

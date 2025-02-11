@@ -103,7 +103,7 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
   const columnGroupsModel = useGridSelector(apiRef, gridColumnGroupsUnwrappedModelSelector);
   const columnPositions = useGridSelector(apiRef, gridColumnPositionsSelector);
   const [renderContext, setRenderContext] = React.useState(
-    gridRenderContextColumnsSelector(apiRef.current.state),
+    gridRenderContextColumnsSelector(apiRef),
   );
   const handleRenderContextChange = React.useCallback<GridEventListener<'renderContextChange'>>(
     (newContext) => {

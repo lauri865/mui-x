@@ -16,7 +16,7 @@
   },
   "publishConfig": {
     "access": "public",
-    "directory": "build"
+    "directory": "src"
   },
   "keywords": [
     "react",
@@ -58,15 +58,8 @@
   },
   "peerDependencies": {
     "react": "^17.0.0 || ^18.0.0 || ^19.0.0",
-    "react-dom": "^17.0.0 || ^18.0.0 || ^19.0.0"
-  },
-  "peerDependenciesMeta": {
-    "@emotion/react": {
-      "optional": true
-    },
-    "@emotion/styled": {
-      "optional": true
-    }
+    "react-dom": "^17.0.0 || ^18.0.0 || ^19.0.0",
+    "tailwindcss": "^4.0.0"
   },
   "devDependencies": {
     "@mui/internal-test-utils": "^1.0.26",

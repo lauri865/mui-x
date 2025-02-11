@@ -258,7 +258,6 @@ function GridColumnsManagement(props: GridColumnsManagementProps) {
               <rootProps.slots.baseCheckbox
                 disabled={hideableColumns.length === 0}
                 checked={allHideableColumnsVisible}
-                indeterminate={!allHideableColumnsVisible && !allHideableColumnsHidden}
                 onClick={() => toggleAllColumns(!allHideableColumnsVisible)}
                 name={apiRef.current.getLocaleText('columnsManagementShowHideAllText')}
                 {...rootProps.slotProps?.baseCheckbox}
