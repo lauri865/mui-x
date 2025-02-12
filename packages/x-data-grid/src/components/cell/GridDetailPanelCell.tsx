@@ -55,8 +55,7 @@ export const GridDetailPanelCell = forwardRef<HTMLInputElement, GridRenderCellPa
 
     useEnhancedEffect(() => {
       if (hasFocus && hasDetailPanel) {
-        const input = buttonRef.current?.querySelector('input');
-        input?.focus({ preventScroll: true });
+        buttonRef.current?.focus({ preventScroll: true });
       }
     }, [hasFocus, hasDetailPanel]);
 
@@ -80,9 +79,12 @@ export const GridDetailPanelCell = forwardRef<HTMLInputElement, GridRenderCellPa
         }}
         data-expanded={isExpanded || undefined}
       >
-        {!isExpanded ? (
+        {!isExpanded || !rootProps.slots.detailPanelCollapseIcon ? (
           <rootProps.slots.detailPanelExpandIcon
-            className={clsx(enableAnimations.current && 'animate-in spin-in-[90deg] duration-150')}
+            className={clsx(
+              enableAnimations.current && 'transition-transform duration-150',
+              isExpanded && 'rotate-45',
+            )}
           />
         ) : (
           <rootProps.slots.detailPanelCollapseIcon

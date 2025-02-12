@@ -22,6 +22,14 @@ const columns: GridColDef<(typeof rows)[number]>[] = [
     headerName: 'Last name',
     width: 150,
     editable: true,
+    renderCell: (params) => {
+      return (
+        <>
+          <span className="size-2 bg-blue-600 rounded-full"></span>
+          {params.value}
+        </>
+      );
+    },
   },
   {
     field: 'age',
@@ -107,7 +115,7 @@ export const HeroDataGrid = () => {
         }}
         onSortModelChange={(model, detail) => {
           detail.api.scrollToIndexes({ rowIndex: 0 });
-          detail.api.setRows([]);
+          //detail.api.setRows([]);
         }}
         pageSizeOptions={[5]}
         // checkboxSelection
@@ -115,7 +123,8 @@ export const HeroDataGrid = () => {
         checkboxSelection
         loading={isLoading}
         getDetailPanelContent={detailPanel}
-        onRowsScrollEnd={async (params, detail) => {
+        defaultGroupingExpansionDepth={-1}
+        /* onRowsScrollEnd={async (params, detail) => {
           if (params.visibleRowsCount >= 40) {
             return;
           }
@@ -130,7 +139,7 @@ export const HeroDataGrid = () => {
               resolve(newRows);
             }, 300);
           });
-        }}
+        }} */
         apiRef={apiRef}
         rowGroupingModel={['lastName', 'firstName']}
       />

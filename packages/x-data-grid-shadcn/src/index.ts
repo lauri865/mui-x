@@ -9,6 +9,7 @@ import {
   FilterIcon,
   MoveHorizontalIcon,
   PinIcon,
+  PlusIcon,
 } from 'lucide-react';
 
 export { Button } from './components/ui/button';
@@ -29,4 +30,5 @@ export const icons = {
   autoSize: MoveHorizontalIcon,
   arrowRight: ChevronRightIcon,
   arrowDown: ChevronDownIcon,
+  plus: PlusIcon,
 };

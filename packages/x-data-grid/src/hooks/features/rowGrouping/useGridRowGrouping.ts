@@ -1,4 +1,4 @@
-import { GridGroupNode, useGridApiEventHandler } from '@mui/x-data-grid-pro';
+import { GridGroupNode } from '@mui/x-data-grid-pro';
 import { isObjectEmpty } from '@mui/x-internals/isObjectEmpty';
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
@@ -7,7 +7,7 @@ import {
   GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD,
 } from '../../../colDef';
 import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
-import { GridRowId, GridRowTreeConfig } from '../../../models/gridRows';
+import { GridLeafNode, GridRowId, GridRowTreeConfig } from '../../../models/gridRows';
 import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
 import {
@@ -126,7 +126,10 @@ export const useGridRowGrouping = (
   }, [apiRef, props.rowGroupingModel]);
 };
 
-export const useGridRowGroupingPreProcessors = (apiRef: RefObject<GridPrivateApiCommunity>) => {
+export const useGridRowGroupingPreProcessors = (
+  apiRef: RefObject<GridPrivateApiCommunity>,
+  props: Pick<DataGridProcessedProps, 'defaultGroupingExpansionDepth' | 'isGroupExpandedByDefault'>,
+) => {
   const createRowTree = React.useCallback<GridStrategyProcessor<'rowTreeCreation'>>(
     (params) => {
       const groupBy = gridFilteredRowGroupingModel(apiRef);
@@ -140,16 +143,6 @@ export const useGridRowGroupingPreProcessors = (apiRef: RefObject<GridPrivateApi
       }
 
       const columnsLookup = gridColumnLookupSelector(apiRef);
-
-      /* treeDepths: Object
-      // 0: top level
-        // 1: second level
-        // 2: third level – total rows comes here
-0: 6 - number of top-level groups
-1: 27 - 6 + number of second level rows
-2: 35  - total rows*/
-
-      /*  */
 
       const tree: GridRowTreeConfig = {
         [GRID_ROOT_GROUP_ID]: buildRootGroup(),
@@ -166,7 +159,13 @@ export const useGridRowGroupingPreProcessors = (apiRef: RefObject<GridPrivateApi
         let groupId = 'auto-generated-row';
 
         for (const key of groupBy) {
-          const groupValue = row[key] ?? 'N/A';
+          const col = columnsLookup[key];
+          const value = row[key];
+          const groupValue = col.groupingValueGetter
+            ? col.groupingValueGetter(value, row, col, apiRef)
+            : col.valueGetter
+              ? col.valueGetter(value as never, row, col, apiRef)
+              : (value ?? 'N/A');
 
           if (depth === 0) {
             groupId += `-${key}`;
@@ -187,6 +186,16 @@ export const useGridRowGroupingPreProcessors = (apiRef: RefObject<GridPrivateApi
               childrenFromPath: {},
               childrenExpanded: (previousTree[groupId] as GridGroupNode)?.childrenExpanded ?? false,
             };
+
+            if (!groupNode.childrenExpanded) {
+              if (props.isGroupExpandedByDefault) {
+                groupNode.childrenExpanded = props.isGroupExpandedByDefault(groupValue);
+              } else if (props.defaultGroupingExpansionDepth === -1) {
+                groupNode.childrenExpanded = true;
+              } else {
+                groupNode.childrenExpanded = props.defaultGroupingExpansionDepth > depth;
+              }
+            }
             tree[groupId] = groupNode;
             const group = tree[parent] as GridGroupNode;
             group.childrenFromPath[key] = {};
@@ -222,7 +231,7 @@ export const useGridRowGroupingPreProcessors = (apiRef: RefObject<GridPrivateApi
         dataRowIds: rowIds,
       };
     },
-    [apiRef],
+    [apiRef, props.defaultGroupingExpansionDepth, props.isGroupExpandedByDefault],
   );
 
   const lastGroupingModelRef = React.useRef<GridRowGroupingModel>([]);
@@ -255,19 +264,22 @@ export const useGridRowGroupingPreProcessors = (apiRef: RefObject<GridPrivateApi
         return columns;
       }
 
+      const width =
+        20 +
+        8 +
+        (rowGroupingModel.length - 1) * 16 +
+        rowGroupingModel.reduce(
+          (acc, field) => Math.max(acc, columns.lookup[field]?.width ?? 0),
+          0,
+        );
       const firstGroup = columns.lookup[rowGroupingModel[0]];
       columns.lookup[GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD] = {
         ...GRID_GROUPING_COLUMN_COL_DEF,
-        headerName: firstGroup.headerName,
+        headerName: firstGroup.headerName ?? 'Group',
         cellClassName: 'gap-2',
-        width:
-          20 +
-          8 +
-          (rowGroupingModel.length - 1) * 16 +
-          rowGroupingModel.reduce(
-            (acc, field) => Math.max(acc, columns.lookup[field]?.width ?? 0),
-            0,
-          ),
+        width,
+        minWidth: firstGroup.minWidth,
+        maxWidth: Math.max(width, firstGroup.maxWidth ?? 0),
         sortingOrder: firstGroup.sortingOrder,
       };
 
@@ -301,8 +313,9 @@ export const useGridRowGroupingPreProcessors = (apiRef: RefObject<GridPrivateApi
         sortedChildren.push(rootGroupNode.footerId);
       }
 
-      const result: GridRowId[] = [];
+      const result: Array<GridRowId | Array<GridRowId>> = [];
       const seenGroups = new Set<GridRowId>();
+      const parentSlots = new Map<GridRowId, number>();
 
       function addAncestors(nodeId: GridRowId) {
         const ancestors: GridRowId[] = [];
@@ -329,14 +342,22 @@ export const useGridRowGroupingPreProcessors = (apiRef: RefObject<GridPrivateApi
       }
 
       for (const leafId of sortedChildren) {
-        if (!tree[leafId]) continue;
+        const node = tree[leafId] as GridLeafNode;
+        if (!node) continue;
+
+        const slotIndex = parentSlots.get(node.parent)!;
+        if (slotIndex != null) {
+          const slotIndex = parentSlots.get(node.parent)!;
+          (result[slotIndex] as GridRowId[]).push(leafId);
+          continue;
+        }
+
         addAncestors(leafId);
-        result.push(leafId);
+        parentSlots.set(node.parent, result.length);
+        result.push([leafId]);
       }
 
-      console.log('result', result);
-
-      return result;
+      return result.flat();
     },
     [apiRef],
   );
@@ -448,7 +469,7 @@ export const useGridRowGroupingPreProcessors = (apiRef: RefObject<GridPrivateApi
     [apiRef],
   );
 
-  useGridApiEventHandler(apiRef, 'cellKeyDown', (params, event) => {
+  /* useGridApiEventHandler(apiRef, 'cellKeyDown', (params, event) => {
     if (event.key !== 'Enter') {
       return;
     }
@@ -459,11 +480,26 @@ export const useGridRowGroupingPreProcessors = (apiRef: RefObject<GridPrivateApi
       const isExpanded = params.rowNode.childrenExpanded;
       apiRef.current.setRowChildrenExpansion(params.rowNode.id, !isExpanded);
     }
-  });
+  }); */
 
-  useFirstRender(() => {
-    apiRef.current.setStrategyAvailability('rowTree', ROW_GROUPING_STRATEGY, () => true);
-  });
+  const setStrategyAvailability = React.useCallback(() => {
+    apiRef.current.setStrategyAvailability(
+      'rowTree',
+      ROW_GROUPING_STRATEGY,
+      () => gridFilteredRowGroupingModel(apiRef).length > 0,
+    );
+  }, []);
+
+  useFirstRender(setStrategyAvailability);
+
+  const isFirstRender = React.useRef(true);
+  React.useEffect(() => {
+    if (!isFirstRender.current) {
+      setStrategyAvailability();
+    } else {
+      isFirstRender.current = false;
+    }
+  }, [apiRef]);
 
   useGridRegisterStrategyProcessor(apiRef, ROW_GROUPING_STRATEGY, 'rowTreeCreation', createRowTree);
   useGridRegisterStrategyProcessor(apiRef, ROW_GROUPING_STRATEGY, 'sorting', sortTree);

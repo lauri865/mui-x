@@ -71,7 +71,7 @@ const className = {
 
   cell: {
     base: [
-      'h-[var(--height)] leading-[calc(var(--height)-1px)]',
+      'group/cell h-[var(--height)] leading-[calc(var(--height)-1px)]',
       'flex-none box-border border-t border-grid-border px-cell truncate',
       'data-[align=center]:justify-center',
       'data-empty:flex-1 data-empty:p-0 ',

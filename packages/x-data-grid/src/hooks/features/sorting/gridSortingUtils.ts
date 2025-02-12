@@ -1,16 +1,16 @@
 import { RefObject } from '@mui/x-internals/types';
 import { warnOnce } from '@mui/x-internals/warning';
-import { GridSortingModelApplier } from './gridSortingState';
 import type { GridRowId, GridTreeNode } from '../../../models';
 import { GridApiCommunity } from '../../../models/api/gridApiCommunity';
-import { GridStateCommunity } from '../../../models/gridStateCommunity';
 import {
   GridComparatorFn,
+  GridSortCellParams,
   GridSortDirection,
   GridSortItem,
   GridSortModel,
-  GridSortCellParams,
 } from '../../../models/gridSortModel';
+import { GridStateCommunity } from '../../../models/gridStateCommunity';
+import { GridSortingModelApplier } from './gridSortingState';
 
 type GridSortingFieldComparator = {
   getSortCellParams: (id: GridRowId) => GridSortCellParams;

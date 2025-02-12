@@ -14,6 +14,9 @@
 @source '../node_modules/fumadocs-twoslash/dist/**/*.js';
 
 @layer base {
+  #nd-nav {
+    @apply !bg-fd-background/80;
+  }
   #nd-sidebar .logo {
     @apply *:text-[20px] [&_svg]:!size-6 [&_svg>path]:!fill-blue-600;
   }

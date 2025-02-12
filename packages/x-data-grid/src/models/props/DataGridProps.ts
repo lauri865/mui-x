@@ -23,6 +23,7 @@ import { GridFeatureMode } from '../gridFeatureMode';
 import { GridFilterModel } from '../gridFilterModel';
 import { GridPaginationMeta, GridPaginationModel } from '../gridPaginationProps';
 import {
+  GridGroupNode,
   GridRowId,
   GridRowIdGetter,
   GridRowModel,
@@ -399,6 +400,21 @@ export interface DataGridPropsWithDefaultValues<R extends GridValidRowModel = an
 
   // TODO: document
   scrollEndThreshold?: number;
+  /**
+   * When `rowSelectionPropagation.descendants` is set to `true`.
+   * - Selecting a parent selects all its filtered descendants automatically.
+   * - Deselecting a parent row deselects all its filtered descendants automatically.
+   *
+   * When `rowSelectionPropagation.parents` is set to `true`
+   * - Selecting all the filtered descendants of a parent selects the parent automatically.
+   * - Deselecting a descendant of a selected parent deselects the parent automatically.
+   *
+   * Works with tree data and row grouping on the client-side only.
+   * @default { parents: true, descendants: true }
+   */
+  rowSelectionPropagation: GridRowSelectionPropagation;
+
+  defaultGroupingExpansionDepth: number;
 }
 
 interface CommonProps {
@@ -849,6 +865,7 @@ export interface DataGridPropsWithoutDefaultValue<R extends GridValidRowModel = 
     },
   ) => Promise<void | GridRowModel<R>[]>;
   rowGroupingModel?: GridRowGroupingModel;
+  isGroupExpandedByDefault?: (node: GridGroupNode) => boolean;
 }
 
 export interface DataGridProSharedPropsWithDefaultValue {
@@ -857,19 +874,7 @@ export interface DataGridProSharedPropsWithDefaultValue {
    * @default false
    */
   headerFilters: boolean;
-  /**
-   * When `rowSelectionPropagation.descendants` is set to `true`.
-   * - Selecting a parent selects all its filtered descendants automatically.
-   * - Deselecting a parent row deselects all its filtered descendants automatically.
-   *
-   * When `rowSelectionPropagation.parents` is set to `true`
-   * - Selecting all the filtered descendants of a parent selects the parent automatically.
-   * - Deselecting a descendant of a selected parent deselects the parent automatically.
-   *
-   * Works with tree data and row grouping on the client-side only.
-   * @default { parents: true, descendants: true }
-   */
-  rowSelectionPropagation: GridRowSelectionPropagation;
+
   /**
    * If `true`, displays the data in a list view.
    * Use in combination with `unstable_listColumn`.

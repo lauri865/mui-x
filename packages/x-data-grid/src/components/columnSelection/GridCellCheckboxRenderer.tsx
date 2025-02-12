@@ -31,8 +31,22 @@ const GridCellCheckboxForwardRef = forwardRef<HTMLInputElement, GridRenderCellPa
 
     const handleRef = useForkRef(checkboxElement, ref);
 
+    const isSelectable = apiRef.current.isRowSelectable(id);
+
+    const checkboxPropsSelector = getCheckboxPropsSelector(
+      id,
+      rootProps.rowSelectionPropagation?.parents ?? false,
+    );
+
+    const { isIndeterminate, isChecked } = useGridSelector(
+      apiRef,
+      checkboxPropsSelector,
+      undefined,
+      objectShallowCompare,
+    );
+
     const handleChange = (checked: boolean) => {
-      const params: GridRowSelectionCheckboxParams = { value: checked, id };
+      const params: GridRowSelectionCheckboxParams = { value: checked && !isIndeterminate, id };
       apiRef.current.publishEvent('rowSelectionCheckboxChange', params, {} as any);
     };
 
@@ -52,19 +66,6 @@ const GridCellCheckboxForwardRef = forwardRef<HTMLInputElement, GridRenderCellPa
       }
     }, [hasFocus]);
 
-    const isSelectable = apiRef.current.isRowSelectable(id);
-
-    const checkboxPropsSelector = getCheckboxPropsSelector(
-      id,
-      rootProps.rowSelectionPropagation?.parents ?? false,
-    );
-    const { isIndeterminate, isChecked } = useGridSelector(
-      apiRef,
-      checkboxPropsSelector,
-      undefined,
-      objectShallowCompare,
-    );
-
     if (rowNode.type === 'footer' || rowNode.type === 'pinnedRow') {
       return null;
     }
@@ -76,7 +77,7 @@ const GridCellCheckboxForwardRef = forwardRef<HTMLInputElement, GridRenderCellPa
     return (
       <rootProps.slots.baseCheckbox
         tabIndex={tabIndex}
-        checked={isChecked && !isIndeterminate}
+        checked={isIndeterminate ? 'indeterminate' : isChecked}
         onCheckedChange={handleChange}
         aria-label={label}
         name={'select_row'}

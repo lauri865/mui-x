@@ -13,6 +13,7 @@ export const DATA_GRID_PROPS_DEFAULT_VALUES: DataGridPropsWithDefaultValues = {
   clipboardCopyCellDelimiter: '\t',
   columnBufferPx: 150,
   columnHeaderHeight: 48,
+  defaultGroupingExpansionDepth: 0,
   disableAutosize: false,
   disableColumnFilter: false,
   disableColumnMenu: false,
@@ -44,6 +45,10 @@ export const DATA_GRID_PROPS_DEFAULT_VALUES: DataGridPropsWithDefaultValues = {
   pageSizeOptions: [25, 50, 100],
   pagination: false,
   paginationMode: 'client',
+  rowSelectionPropagation: {
+    parents: true,
+    descendants: true,
+  },
   resizeThrottleMs: 60,
   rowBufferPx: 150,
   rowHeight: 52,

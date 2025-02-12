@@ -128,6 +128,7 @@ export const useGridColumnPinning = (
 
   const hydratePinnedColumns = React.useCallback<GridPipeProcessor<'hydrateColumns'>>(
     (columns) => {
+      console.log('hydrate columns');
       if (columns.orderedFields.length === 0) {
         return columns;
       }

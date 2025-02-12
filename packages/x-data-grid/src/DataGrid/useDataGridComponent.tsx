@@ -92,9 +92,11 @@ export const useDataGridComponent = (
   /**
    * Register all pre-processors called during state initialization here.
    */
-  useGridRowSelectionPreProcessors(apiRef, props);
   useGridRowsPreProcessors(apiRef);
-  useGridRowGroupingPreProcessors(apiRef);
+  useGridRowGroupingPreProcessors(apiRef, props);
+  useGridRowSelectionPreProcessors(apiRef, props);
+
+  // TO-DO SEPARATE COLUMN PINNING AND ROW PINNING PREPROCESSORS HERe
 
   /**
    * Register all state initializers here.
