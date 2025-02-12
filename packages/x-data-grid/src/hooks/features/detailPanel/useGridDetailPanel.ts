@@ -8,6 +8,7 @@ import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommuni
 import { GridRowId } from '../../../models/gridRows';
 import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
+import { useGridApiEventHandler } from '../../utils/useGridApiEventHandler';
 import { useGridApiMethod } from '../../utils/useGridApiMethod';
 import { GridStateInitializer } from '../../utils/useGridInitializeState';
 import {
@@ -169,6 +170,18 @@ export const useGridDetailPanel = (
     },
     'private',
   );
+
+  useGridApiEventHandler(apiRef, 'cellKeyDown', (params, event) => {
+    if (event.key !== 'Enter') {
+      return;
+    }
+    if (document.activeElement !== event.currentTarget) {
+      return;
+    }
+    if (params.field === GRID_DETAIL_PANEL_TOGGLE_FIELD) {
+      apiRef.current.toggleDetailPanel(params.id);
+    }
+  });
 
   React.useEffect(() => {
     if (props.detailPanelExpandedRowIds) {

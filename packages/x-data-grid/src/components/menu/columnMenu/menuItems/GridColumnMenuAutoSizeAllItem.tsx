@@ -25,7 +25,7 @@ function GridColumnMenuAutoSizeAllItem(props: GridColumnMenuItemProps) {
         return;
       }
       apiRef.current.autosizeColumns({
-        expand: true,
+        expand: false,
       });
     },
     [apiRef, colDef.field, onClick, disabled],

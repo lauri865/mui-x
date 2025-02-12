@@ -5,11 +5,13 @@ import { GridColumnMenuProps } from './GridColumnMenuProps';
 import { GridColumnMenuColumnPinningItem } from './menuItems/GridColumnMenuColumnPinningItem';
 import { GridColumnMenuColumnsItem } from './menuItems/GridColumnMenuColumnsItem';
 import { GridColumnMenuFilterItem } from './menuItems/GridColumnMenuFilterItem';
+import { GridColumnRowGroupingItem } from './menuItems/GridColumnMenuRowGroupingItem';
 import { GridColumnMenuSortItem } from './menuItems/GridColumnMenuSortItem';
 
 export const GRID_COLUMN_MENU_SLOTS = {
   columnMenuSortItem: GridColumnMenuSortItem,
   columnMenuColumnPinning: GridColumnMenuColumnPinningItem,
+  columnMenuRowGrouping: GridColumnRowGroupingItem,
   columnMenuFilterItem: GridColumnMenuFilterItem,
   columnMenuColumnsItem: GridColumnMenuColumnsItem,
 };
@@ -17,8 +19,9 @@ export const GRID_COLUMN_MENU_SLOTS = {
 export const GRID_COLUMN_MENU_SLOT_PROPS = {
   columnMenuSortItem: { displayOrder: 10 },
   columnMenuColumnPinning: { displayOrder: 20 },
-  columnMenuFilterItem: { displayOrder: 30 },
-  columnMenuColumnsItem: { displayOrder: 40 },
+  columnMenuRowGrouping: { displayOrder: 30 },
+  columnMenuFilterItem: { displayOrder: 40 },
+  columnMenuColumnsItem: { displayOrder: 50 },
 };
 
 function GridColumnMenu(props: GridColumnMenuProps) {

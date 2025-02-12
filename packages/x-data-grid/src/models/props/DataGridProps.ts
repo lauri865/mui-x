@@ -866,6 +866,7 @@ export interface DataGridPropsWithoutDefaultValue<R extends GridValidRowModel = 
   ) => Promise<void | GridRowModel<R>[]>;
   rowGroupingModel?: GridRowGroupingModel;
   isGroupExpandedByDefault?: (node: GridGroupNode) => boolean;
+  onRowGroupingModelChange?: (model: GridRowGroupingModel, details: GridCallbackDetails) => void;
 }
 
 export interface DataGridProSharedPropsWithDefaultValue {

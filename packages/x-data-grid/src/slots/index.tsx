@@ -72,6 +72,9 @@ const iconSlots: GridIconSlotsComponent = {
   groupingCriteriaExpandIcon: icons.arrowRight,
   groupingCriteriaCollapseIcon: icons.arrowDown,
   detailPanelExpandIcon: icons.plus,
+  groupIcon: icons.groupIcon,
+  ungroupIcon: icons.ungroup,
+  groupExpandIcon: icons.groupExpand,
 };
 
 const Missing = () => null;

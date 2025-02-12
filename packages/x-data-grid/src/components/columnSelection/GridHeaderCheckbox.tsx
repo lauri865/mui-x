@@ -3,14 +3,13 @@ import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import * as React from 'react';
 import { getDataGridUtilityClass } from '../../constants/gridClasses';
-import { gridExpandedSortedRowIdsSelector } from '../../hooks/features/filter/gridFilterSelector';
 import { gridTabIndexColumnHeaderSelector } from '../../hooks/features/focus/gridFocusStateSelector';
-import { gridPaginatedVisibleSortedGridRowIdsSelector } from '../../hooks/features/pagination/gridPaginationSelector';
 import { gridRowSelectionStateSelector } from '../../hooks/features/rowSelection/gridRowSelectionSelector';
 import { isMultipleRowSelectionEnabled } from '../../hooks/features/rowSelection/utils';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { useGridSelector } from '../../hooks/utils/useGridSelector';
+import { useGridVisibleRows } from '../../hooks/utils/useGridVisibleRows';
 import type { GridRowId } from '../../models/gridRows';
 import type { GridColumnHeaderParams } from '../../models/params/gridColumnHeaderParams';
 import type { GridHeaderSelectionCheckboxParams } from '../../models/params/gridHeaderSelectionCheckboxParams';
@@ -38,11 +37,7 @@ const GridHeaderCheckbox = forwardRef<HTMLButtonElement, GridColumnHeaderParams>
     const classes = useUtilityClasses(ownerState);
     const tabIndexState = useGridSelector(apiRef, gridTabIndexColumnHeaderSelector);
     const selection = useGridSelector(apiRef, gridRowSelectionStateSelector);
-    const visibleRowIds = useGridSelector(apiRef, gridExpandedSortedRowIdsSelector);
-    const paginatedVisibleRowIds = useGridSelector(
-      apiRef,
-      gridPaginatedVisibleSortedGridRowIdsSelector,
-    );
+    const visibleRows = useGridVisibleRows(apiRef).rows;
 
     const filteredSelection = React.useMemo(() => {
       if (typeof rootProps.isRowSelectable !== 'function') {
@@ -64,10 +59,7 @@ const GridHeaderCheckbox = forwardRef<HTMLButtonElement, GridColumnHeaderParams>
 
     // All the rows that could be selected / unselected by toggling this checkbox
     const selectionCandidates = React.useMemo(() => {
-      const rowIds =
-        !rootProps.pagination || !rootProps.checkboxSelectionVisibleOnly
-          ? visibleRowIds
-          : paginatedVisibleRowIds;
+      const rowIds = visibleRows.map((row) => row.id);
 
       // Convert to an object to make O(1) checking if a row exists or not
       // TODO create selector that returns visibleRowIds/paginatedVisibleRowIds as an object
@@ -78,13 +70,7 @@ const GridHeaderCheckbox = forwardRef<HTMLButtonElement, GridColumnHeaderParams>
         acc[id] = true;
         return acc;
       }, {});
-    }, [
-      apiRef,
-      rootProps.pagination,
-      rootProps.checkboxSelectionVisibleOnly,
-      paginatedVisibleRowIds,
-      visibleRowIds,
-    ]);
+    }, [apiRef, rootProps.pagination, rootProps.checkboxSelectionVisibleOnly]);
 
     // Amount of rows selected and that are visible in the current page
     const currentSelectionSize = React.useMemo(

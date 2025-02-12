@@ -20,10 +20,6 @@ function GridColumnMenuColumnPinningItem(props: GridColumnMenuItemProps) {
     [apiRef, colDef.field],
   );
 
-  if (rootProps.disableColumnFilter || !colDef.filterable) {
-    return null;
-  }
-
   const DropdownMenu = rootProps.slots.baseDropdownMenu;
 
   const pinnedPosition = apiRef.current.getColumnPinnedPosition(colDef.field);

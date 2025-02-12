@@ -185,4 +185,7 @@ export interface GridIconSlotsComponent {
   hideIcon: React.JSXElementConstructor<any>;
   reorderIcon: React.JSXElementConstructor<any>;
   autosizeIcon: React.JSXElementConstructor<any>;
+  ungroupIcon: React.JSXElementConstructor<any>;
+  groupIcon: React.JSXElementConstructor<any>;
+  groupExpandIcon: React.JSXElementConstructor<any>;
 }

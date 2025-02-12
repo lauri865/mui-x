@@ -106,6 +106,15 @@ export const useGridStrategyProcessing = (apiRef: RefObject<GridPrivateApiCommon
     [apiRef],
   );
 
+  const requestStrategyProcessor = React.useCallback<
+    GridStrategyProcessingApi['requestStrategyProcessor']
+  >(
+    (group: GridStrategyProcessorName) => {
+      apiRef.current.publishEvent('activeStrategyProcessorChange', group);
+    },
+    [apiRef],
+  );
+
   const applyStrategyProcessor = React.useCallback<
     GridStrategyProcessingApi['applyStrategyProcessor']
   >(
@@ -160,6 +169,7 @@ export const useGridStrategyProcessing = (apiRef: RefObject<GridPrivateApiCommon
     applyStrategyProcessor,
     getActiveStrategy,
     setStrategyAvailability,
+    requestStrategyProcessor,
   };
 
   useGridApiMethod(apiRef, strategyProcessingApi, 'private');

@@ -1,4 +1,3 @@
-import { GridGroupNode } from '@mui/x-data-grid-pro';
 import { isObjectEmpty } from '@mui/x-internals/isObjectEmpty';
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
@@ -7,7 +6,12 @@ import {
   GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD,
 } from '../../../colDef';
 import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
-import { GridLeafNode, GridRowId, GridRowTreeConfig } from '../../../models/gridRows';
+import {
+  GridGroupNode,
+  GridLeafNode,
+  GridRowId,
+  GridRowTreeConfig,
+} from '../../../models/gridRows';
 import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
 import {
@@ -15,6 +19,7 @@ import {
   useGridRegisterStrategyProcessor,
 } from '../../core/strategyProcessing';
 import { useFirstRender } from '../../utils/useFirstRender';
+import { useGridApiEventHandler } from '../../utils/useGridApiEventHandler';
 import { useGridApiMethod } from '../../utils/useGridApiMethod';
 import { GridStateInitializer } from '../../utils/useGridInitializeState';
 import { arrayShallowCompare } from '../../utils/useGridSelector';
@@ -32,14 +37,21 @@ import {
 import { buildRootGroup } from '../rows/gridRowsUtils';
 import { createFlatRowTree } from '../rows/useGridRowsPreProcessors';
 import { GridRowGroupingApi, GridRowGroupingModel } from './gridRowGroupingInterfaces';
-import { gridFilteredRowGroupingModel, gridRowGroupingModelSelector } from './rowGroupingSelector';
+import {
+  gridFilteredRowGroupingModel,
+  gridRowGroupingDefaultExpansionDepthSelector,
+  gridRowGroupingModelSelector,
+} from './rowGroupingSelector';
 
 const EMPTY_ROW_GROUPING_MODEL: GridRowGroupingModel = [];
 
 const ROW_GROUPING_STRATEGY = 'rowGrouping';
 
 export const rowGroupingStateInitializer: GridStateInitializer<
-  Pick<DataGridProcessedProps, 'rowGroupingModel' | 'initialState'>
+  Pick<
+    DataGridProcessedProps,
+    'rowGroupingModel' | 'initialState' | 'defaultGroupingExpansionDepth'
+  >
 > = (state, props, apiRef) => {
   const model =
     props.rowGroupingModel ?? props.initialState?.rowGrouping?.model ?? EMPTY_ROW_GROUPING_MODEL;
@@ -48,14 +60,28 @@ export const rowGroupingStateInitializer: GridStateInitializer<
     ...state,
     rowGrouping: {
       model,
+      defaultExpansionDepth:
+        props.initialState?.rowGrouping?.defaultExpansionDepth ??
+        props.defaultGroupingExpansionDepth,
     },
   };
 };
 
 export const useGridRowGrouping = (
   apiRef: RefObject<GridPrivateApiCommunity>,
-  props: Pick<DataGridProcessedProps, 'rowGroupingModel'>,
+  props: Pick<
+    DataGridProcessedProps,
+    'rowGroupingModel' | 'onRowGroupingModelChange' | 'defaultGroupingExpansionDepth'
+  >,
 ) => {
+  apiRef.current.registerControlState({
+    stateId: 'rowGrouping',
+    propModel: props.rowGroupingModel,
+    propOnChange: props.onRowGroupingModelChange,
+    stateSelector: gridRowGroupingModelSelector,
+    changeEvent: 'rowGroupingModelChange',
+  });
+
   const setRowGroupingModel = React.useCallback(
     (model: GridRowGroupingModel) => {
       const currentModel = gridRowGroupingModelSelector(apiRef.current.state);
@@ -69,7 +95,7 @@ export const useGridRowGrouping = (
           model,
         },
       }));
-      apiRef.current.forceUpdate();
+      setStrategyAvailability(apiRef);
     },
     [apiRef],
   );
@@ -110,28 +136,71 @@ export const useGridRowGrouping = (
     [apiRef],
   );
 
+  const setDefaultGroupingExpansionDepth = React.useCallback(
+    (depth: number) => {
+      const currentDepth = gridRowGroupingDefaultExpansionDepthSelector(apiRef.current.state);
+      if (currentDepth === depth) {
+        return;
+      }
+      apiRef.current.setState((state) => ({
+        ...state,
+        rowGrouping: {
+          ...state.rowGrouping,
+          defaultExpansionDepth: depth,
+        },
+      }));
+      apiRef.current.requestStrategyProcessor('rowTreeCreation');
+    },
+    [apiRef],
+  );
+
   const methods: GridRowGroupingApi = {
     setRowGroupingModel,
     addRowGroupingCriteria,
     removeRowGroupingCriteria,
     setRowGroupingCriteriaIndex,
+    setDefaultGroupingExpansionDepth,
   };
 
   useGridApiMethod(apiRef, methods, 'public');
+
+  const previousModel = React.useRef(gridFilteredRowGroupingModel(apiRef));
+  useGridApiEventHandler(apiRef, 'rowGroupingModelChange', () => {
+    const model = gridFilteredRowGroupingModel(apiRef);
+    if (arrayShallowCompare(previousModel.current, model)) {
+      return;
+    }
+    previousModel.current = model;
+    apiRef.current.requestPipeProcessorsApplication('hydrateColumns');
+    const isActive = setStrategyAvailability(apiRef);
+
+    if (isActive()) {
+      apiRef.current.requestStrategyProcessor('rowTreeCreation');
+    }
+  });
 
   React.useEffect(() => {
     if (props.rowGroupingModel) {
       apiRef.current.setRowGroupingModel(props.rowGroupingModel);
     }
   }, [apiRef, props.rowGroupingModel]);
+
+  React.useEffect(() => {
+    if (props.defaultGroupingExpansionDepth != null) {
+      apiRef.current.setDefaultGroupingExpansionDepth(props.defaultGroupingExpansionDepth);
+    }
+  }, [apiRef, props.defaultGroupingExpansionDepth]);
 };
 
 export const useGridRowGroupingPreProcessors = (
   apiRef: RefObject<GridPrivateApiCommunity>,
-  props: Pick<DataGridProcessedProps, 'defaultGroupingExpansionDepth' | 'isGroupExpandedByDefault'>,
+  props: Pick<DataGridProcessedProps, 'isGroupExpandedByDefault'>,
 ) => {
   const createRowTree = React.useCallback<GridStrategyProcessor<'rowTreeCreation'>>(
     (params) => {
+      const defaultGroupingExpansionDepth = gridRowGroupingDefaultExpansionDepthSelector(
+        apiRef.current.state,
+      );
       const groupBy = gridFilteredRowGroupingModel(apiRef);
       let rowIds =
         params.updates.type === 'full'
@@ -187,15 +256,14 @@ export const useGridRowGroupingPreProcessors = (
               childrenExpanded: (previousTree[groupId] as GridGroupNode)?.childrenExpanded ?? false,
             };
 
-            if (!groupNode.childrenExpanded) {
-              if (props.isGroupExpandedByDefault) {
-                groupNode.childrenExpanded = props.isGroupExpandedByDefault(groupValue);
-              } else if (props.defaultGroupingExpansionDepth === -1) {
-                groupNode.childrenExpanded = true;
-              } else {
-                groupNode.childrenExpanded = props.defaultGroupingExpansionDepth > depth;
-              }
+            if (props.isGroupExpandedByDefault) {
+              groupNode.childrenExpanded = props.isGroupExpandedByDefault(groupValue);
+            } else if (defaultGroupingExpansionDepth === -1) {
+              groupNode.childrenExpanded = true;
+            } else {
+              groupNode.childrenExpanded = defaultGroupingExpansionDepth > depth;
             }
+
             tree[groupId] = groupNode;
             const group = tree[parent] as GridGroupNode;
             group.childrenFromPath[key] = {};
@@ -231,7 +299,7 @@ export const useGridRowGroupingPreProcessors = (
         dataRowIds: rowIds,
       };
     },
-    [apiRef, props.defaultGroupingExpansionDepth, props.isGroupExpandedByDefault],
+    [apiRef, props.isGroupExpandedByDefault],
   );
 
   const lastGroupingModelRef = React.useRef<GridRowGroupingModel>([]);
@@ -469,8 +537,18 @@ export const useGridRowGroupingPreProcessors = (
     [apiRef],
   );
 
-  /* useGridApiEventHandler(apiRef, 'cellKeyDown', (params, event) => {
+  const addGroupingColumnMenuItem = React.useCallback<GridPipeProcessor<'columnMenu'>>(
+    (menuItems) => {
+      return menuItems.concat('columnMenuRowGrouping');
+    },
+    [],
+  );
+
+  useGridApiEventHandler(apiRef, 'cellKeyDown', (params, event) => {
     if (event.key !== 'Enter') {
+      return;
+    }
+    if (document.activeElement !== event.currentTarget) {
       return;
     }
     if (
@@ -480,27 +558,20 @@ export const useGridRowGroupingPreProcessors = (
       const isExpanded = params.rowNode.childrenExpanded;
       apiRef.current.setRowChildrenExpansion(params.rowNode.id, !isExpanded);
     }
-  }); */
+  });
 
-  const setStrategyAvailability = React.useCallback(() => {
-    apiRef.current.setStrategyAvailability(
-      'rowTree',
-      ROW_GROUPING_STRATEGY,
-      () => gridFilteredRowGroupingModel(apiRef).length > 0,
-    );
-  }, []);
-
-  useFirstRender(setStrategyAvailability);
+  useFirstRender(() => setStrategyAvailability(apiRef));
 
   const isFirstRender = React.useRef(true);
   React.useEffect(() => {
     if (!isFirstRender.current) {
-      setStrategyAvailability();
+      setStrategyAvailability(apiRef);
     } else {
       isFirstRender.current = false;
     }
   }, [apiRef]);
 
+  useGridRegisterPipeProcessor(apiRef, 'columnMenu', addGroupingColumnMenuItem);
   useGridRegisterStrategyProcessor(apiRef, ROW_GROUPING_STRATEGY, 'rowTreeCreation', createRowTree);
   useGridRegisterStrategyProcessor(apiRef, ROW_GROUPING_STRATEGY, 'sorting', sortTree);
   useGridRegisterStrategyProcessor(apiRef, ROW_GROUPING_STRATEGY, 'filtering', filterTree);
@@ -512,6 +583,12 @@ export const useGridRowGroupingPreProcessors = (
   );
   useGridRegisterPipeProcessor(apiRef, 'hydrateColumns', addGroupingColumn);
 };
+
+function setStrategyAvailability(apiRef: RefObject<GridPrivateApiCommunity>) {
+  const isActive = () => gridFilteredRowGroupingModel(apiRef).length > 0;
+  apiRef.current.setStrategyAvailability('rowTree', ROW_GROUPING_STRATEGY, isActive);
+  return isActive;
+}
 
 /* {
     "1": {

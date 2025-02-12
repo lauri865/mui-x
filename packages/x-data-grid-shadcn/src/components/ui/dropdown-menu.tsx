@@ -159,7 +159,11 @@ const Separator = React.forwardRef<
   React.ElementRef<typeof Primitive.Separator>,
   React.ComponentPropsWithoutRef<typeof Primitive.Separator>
 >(({ className, ...props }, ref) => (
-  <Primitive.Separator ref={ref} className={cn('-mx-1 my-1 h-px bg-muted', className)} {...props} />
+  <Primitive.Separator
+    ref={ref}
+    className={cn('separator -mx-1 my-1 h-px bg-muted [&+.separator]:hidden', className)}
+    {...props}
+  />
 ));
 Separator.displayName = Primitive.Separator.displayName;
 

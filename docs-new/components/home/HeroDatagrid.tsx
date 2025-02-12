@@ -112,6 +112,9 @@ export const HeroDataGrid = () => {
             bottom: [2],
           }, */
           rowSelection: [3],
+          rowGrouping: {
+            model: ['lastName', 'firstName'],
+          },
         }}
         onSortModelChange={(model, detail) => {
           detail.api.scrollToIndexes({ rowIndex: 0 });
@@ -141,7 +144,6 @@ export const HeroDataGrid = () => {
           });
         }} */
         apiRef={apiRef}
-        rowGroupingModel={['lastName', 'firstName']}
       />
     </div>
   );

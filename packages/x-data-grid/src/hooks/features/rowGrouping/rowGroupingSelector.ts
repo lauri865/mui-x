@@ -11,3 +11,6 @@ export const gridFilteredRowGroupingModel = createSelector(
     return rowGroupingModel.filter((field) => columns[field] != null);
   },
 );
+
+export const gridRowGroupingDefaultExpansionDepthSelector = (state: GridStateCommunity) =>
+  state.rowGrouping.defaultExpansionDepth;

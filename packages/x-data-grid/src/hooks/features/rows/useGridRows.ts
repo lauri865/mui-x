@@ -502,8 +502,6 @@ export const useGridRows = (
   const groupRows = React.useCallback(() => {
     logger.info(`Row grouping pre-processing have changed, regenerating the row tree`);
 
-    console.log('groupRows');
-
     let cache: GridRowsInternalCache;
     if (apiRef.current.caches.rows.rowsBeforePartialUpdates === props.rows) {
       // The `props.rows` did not change since the last row grouping

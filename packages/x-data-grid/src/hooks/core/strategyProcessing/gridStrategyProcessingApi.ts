@@ -110,4 +110,10 @@ export interface GridStrategyProcessingApi {
     params: GridStrategyProcessingLookup[P]['params'],
     strategy?: string,
   ) => GridStrategyProcessingLookup[P]['value'];
+
+  /**
+   * Request the processor for the active strategy.
+   * @param {GridStrategyProcessorName} processorName The name of the processor to request.
+   */
+  requestStrategyProcessor: (group: GridStrategyProcessorName) => void;
 }

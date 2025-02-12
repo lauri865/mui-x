@@ -1,7 +1,10 @@
 import {
   ArrowLeftRightIcon,
+  BanIcon,
+  BetweenHorizonalStartIcon,
   ChevronDownIcon,
   ChevronRightIcon,
+  ChevronsUpDownIcon,
   ChevronUpIcon,
   Columns3Icon,
   EllipsisVerticalIcon,
@@ -31,4 +34,7 @@ export const icons = {
   arrowRight: ChevronRightIcon,
   arrowDown: ChevronDownIcon,
   plus: PlusIcon,
+  groupIcon: BetweenHorizonalStartIcon,
+  ungroup: BanIcon,
+  groupExpand: ChevronsUpDownIcon,
 };
