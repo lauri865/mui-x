@@ -1,4 +1,3 @@
-import * as React from 'react';
 import {
   createRenderer,
   ErrorBoundary,
@@ -6,11 +5,11 @@ import {
   reactMajor,
   screen,
 } from '@mui/internal-test-utils';
+import { DataGrid, DataGridProps, GridOverlay } from '@mui/x-data-grid';
 import { expect } from 'chai';
 import { spy } from 'sinon';
-import { DataGrid, DataGridProps, GridOverlay } from '@mui/x-data-grid';
 import { getCell, getRow } from 'test/utils/helperFn';
-import { testSkipIf, isJSDOM } from 'test/utils/skipIf';
+import { isJSDOM, testSkipIf } from 'test/utils/skipIf';
 
 describe('<DataGrid /> - Slots', () => {
   const { render } = createRenderer();
@@ -40,7 +39,7 @@ describe('<DataGrid /> - Slots', () => {
           <DataGrid {...baselineProps} hideFooter />
         </div>,
       );
-      expect(document.querySelectorAll('.MuiDataGrid-footerContainer').length).to.equal(0);
+      expect(document.querySelectorAll('.twg-footerContainer').length).to.equal(0);
     });
 
     it('should hide custom footer if prop hideFooter is set', () => {

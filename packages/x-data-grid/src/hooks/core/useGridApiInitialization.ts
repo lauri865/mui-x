@@ -1,12 +1,12 @@
-import * as React from 'react';
-import { RefObject } from '@mui/x-internals/types';
 import { EventManager } from '@mui/x-internals/EventManager';
-import { Store } from '../../utils/Store';
-import { useGridApiMethod } from '../utils/useGridApiMethod';
-import { GridSignature } from '../utils/useGridApiEventHandler';
-import { DataGridProcessedProps } from '../../models/props/DataGridProps';
+import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
 import type { GridCoreApi } from '../../models';
 import type { GridApiCommon, GridPrivateApiCommon } from '../../models/api/gridApiCommon';
+import { DataGridProcessedProps } from '../../models/props/DataGridProps';
+import { Store } from '../../utils/Store';
+import { GridSignature } from '../utils/useGridApiEventHandler';
+import { useGridApiMethod } from '../utils/useGridApiMethod';
 
 const SYMBOL_API_PRIVATE = Symbol('mui.api_private');
 
@@ -114,7 +114,7 @@ export function useGridApiInitialization<
   const publishEvent = React.useCallback<GridCoreApi['publishEvent']>(
     (...args: any[]) => {
       const [name, params, event = {}] = args;
-      event.defaultMuiPrevented = false;
+      event.defaultTwgPrevented = false;
 
       if (isSyntheticEvent(event) && event.isPropagationStopped()) {
         return;

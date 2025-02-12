@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
+  <g clip-path="url(#a)">
+    <path fill="#fff" d="M0 0h18v18H0V0Z"/>
+    <g clip-path="url(#b)">
+      <mask id="c" width="12" height="12" x="3" y="3" maskUnits="userSpaceOnUse" style="mask-type:luminance">
+        <path fill="#fff" d="M3.6 3.506h10.897V14.5H3.6V3.506Z"/>
+      </mask>
+      <g mask="url(#c)">
+        <path fill="#4CD5F7" fill-rule="evenodd" d="M12.567 4.8c2.271 1.83 2.58 5.187.7 7.584-1.87 2.448-5.288 2.848-7.645.798-2.366-2.105-2.708-5.69-.749-7.912 1.965-2.175 5.416-2.347 7.694-.47Z" clip-rule="evenodd"/>
+      </g>
+      <path fill="#2998E3" fill-rule="evenodd" d="M12.486 5.334c1.672 1.348 1.9 3.82.516 5.586-1.378 1.803-3.895 2.147-5.631.637-1.743-1.55-1.994-4.24-.551-5.877 1.447-1.602 3.988-1.729 5.666-.346Z" clip-rule="evenodd"/>
+      <path fill="#3A5CE9" fill-rule="evenodd" d="M12.341 5.842c1.268 1.025 1.44 2.903.39 4.245-1.044 1.37-2.952 1.595-4.269.447-1.32-1.179-1.511-3.185-.417-4.428 1.097-1.217 3.024-1.314 4.296-.264Z" clip-rule="evenodd"/>
+    </g>
+  </g>
+  <defs>
+    <clipPath id="a">
+      <path fill="#fff" d="M0 0h18v18H0z"/>
+    </clipPath>
+    <clipPath id="b">
+      <path fill="#fff" d="M3.6 3.5h10.899v11H3.6z"/>
+    </clipPath>
+  </defs>
+</svg>

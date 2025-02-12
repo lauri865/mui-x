@@ -31,7 +31,7 @@ export const useDataGridProps = <R extends GridValidRowModel>(inProps: DataGridP
     // eslint-disable-next-line material-ui/mui-name-matches-component-name
     useThemeProps({
       props: inProps,
-      name: 'MuiDataGrid',
+      name: 'twg',
     }); */
 
   const localeText = React.useMemo(

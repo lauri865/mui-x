@@ -7,6 +7,7 @@ import {
 } from '@mui/x-data-grid';
 import * as React from 'react';
 import { cn } from '../../lib/cn';
+import { GlowingEffect } from './glowing-effect';
 
 const columns: GridColDef<(typeof rows)[number]>[] = [
   { field: 'id', headerName: 'ID', width: 90 },
@@ -37,11 +38,15 @@ const columns: GridColDef<(typeof rows)[number]>[] = [
     width: 160,
     valueGetter: (value, row) => `${row.firstName || ''} ${row.lastName || ''}`,
   },
+  {
+    field: 'nested.description',
+    headerName: 'Description',
+  },
 ];
 
 const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 14 },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 31 },
+  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 14, nested: { description: 'test' } },
+  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 31, nested: { description: 'test' } },
   { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 31 },
   { id: 4, lastName: 'Stark', firstName: 'Arya', age: 11 },
   { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
@@ -54,7 +59,9 @@ const rows = [
 let index = rows.length;
 
 const detailPanel = (row) => {
-  return <div style={{ height: 100, width: 600 }}>{row.id}</div>;
+  return (
+    <div className="flex justify-center items-center p-4 w-full flex-1 text-center">{row.id}</div>
+  );
 };
 export const HeroDataGrid = () => {
   const apiRef = useGridApiRef();
@@ -64,12 +71,21 @@ export const HeroDataGrid = () => {
   return (
     <div
       className={cn(
-        'h-[400px] w-full',
+        'h-[400px] w-full relative',
         'mb-8 mt-8 min-w-[800px] select-none duration-1000 animate-in fade-in slide-in-from-bottom-12',
-        'shadow-lg shadow-black/10 dark:shadow-black/30 rounded-[6px]',
+        'shadow-lg shadow-black/8 dark:shadow-black/30 rounded-[6px]',
       )}
     >
+      <GlowingEffect
+        spread={60}
+        glow={true}
+        disabled={false}
+        proximity={64}
+        inactiveZone={0.01}
+        className="hidden dark:flex"
+      />
       <DataGrid
+        className="text-[13px]"
         rows={data}
         columns={columns}
         initialState={{
@@ -116,6 +132,7 @@ export const HeroDataGrid = () => {
           });
         }}
         apiRef={apiRef}
+        rowGroupingModel={['lastName', 'firstName']}
       />
     </div>
   );

@@ -428,7 +428,7 @@ describe('<DataGrid /> - Pagination', () => {
         />,
       );
 
-      const footerHeight = document.querySelector('.MuiDataGrid-footer')!.clientHeight;
+      const footerHeight = document.querySelector('.twg-footer')!.clientHeight;
       const expectedFullPageRowsLength = Math.floor(
         (height - columnHeaderHeight - footerHeight) / rowHeight,
       );
@@ -484,7 +484,7 @@ describe('<DataGrid /> - Pagination', () => {
         />,
       );
 
-      const footerHeight = document.querySelector('.MuiDataGrid-footerContainer')!.clientHeight;
+      const footerHeight = document.querySelector('.twg-footerContainer')!.clientHeight;
       const expectedViewportRowsLengthBefore = Math.floor(
         (heightBefore - columnHeaderHeight - footerHeight) / rowHeight,
       );
@@ -492,7 +492,7 @@ describe('<DataGrid /> - Pagination', () => {
         (heightAfter - columnHeaderHeight - footerHeight) / rowHeight,
       );
 
-      let rows = document.querySelectorAll('.MuiDataGrid-virtualScrollerRenderZone [role="row"]');
+      let rows = document.querySelectorAll('.twg-virtualScrollerRenderZone [role="row"]');
       expect(rows.length).to.equal(expectedViewportRowsLengthBefore);
 
       setProps({ height: heightAfter });
@@ -503,7 +503,7 @@ describe('<DataGrid /> - Pagination', () => {
         );
       });
 
-      rows = document.querySelectorAll('.MuiDataGrid-virtualScrollerRenderZone [role="row"]');
+      rows = document.querySelectorAll('.twg-virtualScrollerRenderZone [role="row"]');
       expect(rows.length).to.equal(expectedViewportRowsLengthAfter);
 
       expect(onPaginationModelChange.lastCall.args[0].pageSize).to.equal(

@@ -1,31 +1,31 @@
-import * as React from 'react';
+import AddIcon from '@mui/icons-material/Add';
+import CancelIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
 import {
-  GridRowsProp,
-  GridRowModesModel,
-  GridRowModes,
   DataGrid,
-  GridColDef,
-  GridToolbarContainer,
   GridActionsCellItem,
+  GridColDef,
   GridEventListener,
+  GridRowEditStopReasons,
   GridRowId,
   GridRowModel,
-  GridRowEditStopReasons,
+  GridRowModes,
+  GridRowModesModel,
+  GridRowsProp,
   GridSlotProps,
+  GridToolbarContainer,
 } from '@mui/x-data-grid';
 import {
-  randomCreatedDate,
-  randomTraderName,
-  randomId,
   randomArrayItem,
+  randomCreatedDate,
+  randomId,
+  randomTraderName,
 } from '@mui/x-data-grid-generator';
+import * as React from 'react';
 
 const roles = ['Market', 'Finance', 'Development'];
 const randomRole = () => {
@@ -109,7 +109,7 @@ export default function FullFeaturedCrudGrid() {
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-      event.defaultMuiPrevented = true;
+      event.defaultTwgPrevented = true;
     }
   };
 

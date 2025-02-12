@@ -1,8 +1,8 @@
+import { createRenderer, ErrorBoundary, fireEvent, screen } from '@mui/internal-test-utils';
+import { DataGrid, DataGridProps, GridColDef, GridRowModel } from '@mui/x-data-grid';
+import { expect } from 'chai';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { expect } from 'chai';
-import { createRenderer, ErrorBoundary, fireEvent, screen } from '@mui/internal-test-utils';
-import { DataGrid, DataGridProps, GridRowModel, GridColDef } from '@mui/x-data-grid';
 
 const isJSDOM = /jsdom/.test(window.navigator.userAgent);
 
@@ -363,10 +363,10 @@ describe('<DataGrid /> - Column grouping', () => {
       fireEvent.click(screen.getByRole('button', { name: /Update columns/ }));
 
       const row1Headers = document.querySelectorAll<HTMLElement>(
-        '[aria-rowindex="1"] [role="columnheader"] .MuiDataGrid-columnHeaderTitle',
+        '[aria-rowindex="1"] [role="columnheader"] .twg-columnHeaderTitle',
       );
       const row2Headers = document.querySelectorAll<HTMLElement>(
-        '[aria-rowindex="2"] [role="columnheader"] .MuiDataGrid-columnHeaderTitle',
+        '[aria-rowindex="2"] [role="columnheader"] .twg-columnHeaderTitle',
       );
 
       expect(Array.from(row1Headers).map((header) => header.textContent)).to.deep.equal(['Group']);

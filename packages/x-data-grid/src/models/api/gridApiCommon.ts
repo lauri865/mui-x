@@ -11,6 +11,7 @@ import type {
   GridDimensionsPrivateApi,
 } from '../../hooks/features/dimensions/gridDimensionsApi';
 import type { GridPaginationApi } from '../../hooks/features/pagination';
+import { GridRowGroupingApi } from '../../hooks/features/rowGrouping';
 import { GridRowPinningApi } from '../../hooks/features/rowPinning/rowPinningInterfaces';
 import type { GridStatePersistenceApi } from '../../hooks/features/statePersistence';
 import type { GridInitialStateCommunity, GridStateCommunity } from '../gridStateCommunity';
@@ -71,7 +72,8 @@ export interface GridApiCommon<
     GridHeaderFilteringApi,
     GridColumnResizeApi,
     GridRowPinningApi,
-    GridDetailPanelApi {}
+    GridDetailPanelApi,
+    GridRowGroupingApi {}
 
 export interface GridPrivateOnlyApiCommon<
   Api extends GridApiCommon,

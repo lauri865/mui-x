@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { useDemoData } from '@mui/x-data-grid-generator';
 
@@ -15,7 +14,7 @@ export default function DoubleClickWithCtrlToEdit() {
       <DataGrid
         onCellDoubleClick={(params, event) => {
           if (!event.ctrlKey) {
-            event.defaultMuiPrevented = true;
+            event.defaultTwgPrevented = true;
           }
         }}
         {...data}

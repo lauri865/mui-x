@@ -62,7 +62,8 @@ const GridDetailPanelImpl = (props: GridDetailPanelsProps) => {
 
         const dimensions = gridDimensionsSelector(apiRef.current.state);
         const containerWidth = dimensions.viewportInnerSize.width;
-        const mode = containerWidth > contentWidth ? 'sticky' : 'static';
+        const mode = containerWidth >= contentWidth ? 'sticky' : 'static';
+        console.log('contentWidth', contentWidth, 'containerWidth', containerWidth, 'mode', mode);
         setMode(mode);
       });
       observer.observe(node);
@@ -107,7 +108,9 @@ const GridDetailPanelImpl = (props: GridDetailPanelsProps) => {
       }}
     >
       <div className={clsx(classes.variants.content)} ref={handleRef}>
-        <div className="w-max">{rootProps.getDetailPanelContent(rowParams)}</div>
+        <div className="w-max min-w-[var(--DataGrid-innerWidth)]">
+          {rootProps.getDetailPanelContent(rowParams)}
+        </div>
       </div>
     </div>
   );

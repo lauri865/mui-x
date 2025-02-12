@@ -31,7 +31,7 @@ import {
 } from 'test/utils/helperFn';
 import { describeSkipIf, isJSDOM, isOSX, testSkipIf } from 'test/utils/skipIf';
 
-const getVariable = (name: string) => $('.MuiDataGrid-root')!.style.getPropertyValue(name);
+const getVariable = (name: string) => $('.twg-root')!.style.getPropertyValue(name);
 
 describe('<DataGrid /> - Layout & warnings', () => {
   const { clock, render } = createRenderer();
@@ -667,10 +667,8 @@ describe('<DataGrid /> - Layout & warnings', () => {
           </div>,
         );
         const rowsHeight = rowHeight * baselineProps.rows.length;
-        expect($('.MuiDataGrid-main')!.clientHeight).to.equal(columnHeaderHeight + rowsHeight);
-        expect($('.MuiDataGrid-virtualScroller')!.clientHeight).to.equal(
-          columnHeaderHeight + rowsHeight,
-        );
+        expect($('.twg-main')!.clientHeight).to.equal(columnHeaderHeight + rowsHeight);
+        expect($('.twg-virtualScroller')!.clientHeight).to.equal(columnHeaderHeight + rowsHeight);
       });
 
       it('should have the correct intrinsic height inside of a flex container', () => {
@@ -687,10 +685,8 @@ describe('<DataGrid /> - Layout & warnings', () => {
           </div>,
         );
         const rowsHeight = rowHeight * baselineProps.rows.length;
-        expect($('.MuiDataGrid-main')!.clientHeight).to.equal(columnHeaderHeight + rowsHeight);
-        expect($('.MuiDataGrid-virtualScroller')!.clientHeight).to.equal(
-          columnHeaderHeight + rowsHeight,
-        );
+        expect($('.twg-main')!.clientHeight).to.equal(columnHeaderHeight + rowsHeight);
+        expect($('.twg-virtualScroller')!.clientHeight).to.equal(columnHeaderHeight + rowsHeight);
       });
 
       // On MacOS the scrollbar has zero width
@@ -733,7 +729,7 @@ describe('<DataGrid /> - Layout & warnings', () => {
             <DataGrid {...baselineProps} rows={[]} rowHeight={rowHeight} autoHeight />
           </div>,
         );
-        expect($('.MuiDataGrid-overlay')!.clientHeight).to.equal(rowHeight * 2);
+        expect($('.twg-overlay')!.clientHeight).to.equal(rowHeight * 2);
       });
 
       it('should allow to override the noRows overlay height', () => {
@@ -747,9 +743,7 @@ describe('<DataGrid /> - Layout & warnings', () => {
             />
           </div>,
         );
-        expect(document.querySelector<HTMLElement>('.MuiDataGrid-overlay')!.clientHeight).to.equal(
-          300,
-        );
+        expect(document.querySelector<HTMLElement>('.twg-overlay')!.clientHeight).to.equal(300);
       });
 
       it('should render loading overlay the same height as the content', () => {
@@ -759,9 +753,7 @@ describe('<DataGrid /> - Layout & warnings', () => {
             <DataGrid {...baselineProps} rowHeight={rowHeight} autoHeight loading />
           </div>,
         );
-        expect($('.MuiDataGrid-overlay')!.clientHeight).to.equal(
-          rowHeight * baselineProps.rows.length,
-        );
+        expect($('.twg-overlay')!.clientHeight).to.equal(rowHeight * baselineProps.rows.length);
       });
 
       it('should apply the autoHeight class to the root element', () => {
@@ -1123,30 +1115,27 @@ describe('<DataGrid /> - Layout & warnings', () => {
 
   // See https://github.com/mui/mui-x/issues/8737
   // Need layout
-  testSkipIf(isJSDOM)(
-    'should not add horizontal scrollbar when .MuiDataGrid-main has border',
-    async () => {
-      render(
-        <div style={{ height: 300, width: 400, display: 'flex' }}>
-          <DataGrid
-            rows={[{ id: 1 }]}
-            columns={[{ field: 'id', flex: 1 }]}
-            sx={{ '.MuiDataGrid-main': { border: '2px solid red' } }}
-          />
-        </div>,
-      );
+  testSkipIf(isJSDOM)('should not add horizontal scrollbar when .twg-main has border', async () => {
+    render(
+      <div style={{ height: 300, width: 400, display: 'flex' }}>
+        <DataGrid
+          rows={[{ id: 1 }]}
+          columns={[{ field: 'id', flex: 1 }]}
+          sx={{ '.twg-main': { border: '2px solid red' } }}
+        />
+      </div>,
+    );
 
-      const virtualScroller = $('.MuiDataGrid-virtualScroller')!;
-      const initialVirtualScrollerWidth = virtualScroller.clientWidth;
+    const virtualScroller = $('.twg-virtualScroller')!;
+    const initialVirtualScrollerWidth = virtualScroller.clientWidth;
 
-      // It should not have a horizontal scrollbar
-      expect(getVariable('--DataGrid-hasScrollX')).to.equal('0');
+    // It should not have a horizontal scrollbar
+    expect(getVariable('--DataGrid-hasScrollX')).to.equal('0');
 
-      await sleep(200);
-      // The width should not increase infinitely
-      expect(virtualScroller.clientWidth).to.equal(initialVirtualScrollerWidth);
-    },
-  );
+    await sleep(200);
+    // The width should not increase infinitely
+    expect(virtualScroller.clientWidth).to.equal(initialVirtualScrollerWidth);
+  });
 
   // See https://github.com/mui/mui-x/issues/8689#issuecomment-1582616570
   // Need layout

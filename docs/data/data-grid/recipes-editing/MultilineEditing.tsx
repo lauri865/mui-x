@@ -1,21 +1,21 @@
-import * as React from 'react';
+import InputBase, { InputBaseProps } from '@mui/material/InputBase';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
 import {
   DataGrid,
-  GridColDef,
-  GridRowModel,
-  GridRenderEditCellParams,
-  useGridApiContext,
-  GridColTypeDef,
   GridCellEditStopReasons,
+  GridColDef,
+  GridColTypeDef,
+  GridRenderEditCellParams,
+  GridRowModel,
+  useGridApiContext,
 } from '@mui/x-data-grid';
-import InputBase, { InputBaseProps } from '@mui/material/InputBase';
-import Popper from '@mui/material/Popper';
-import Paper from '@mui/material/Paper';
 import {
+  randomArrayItem,
   randomInt,
   randomUserName,
-  randomArrayItem,
 } from '@mui/x-data-grid-generator';
+import * as React from 'react';
 
 const lines = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -142,7 +142,7 @@ export default function MultilineEditing() {
             return;
           }
           if (isKeyboardEvent(event) && !event.ctrlKey && !event.metaKey) {
-            event.defaultMuiPrevented = true;
+            event.defaultTwgPrevented = true;
           }
         }}
       />

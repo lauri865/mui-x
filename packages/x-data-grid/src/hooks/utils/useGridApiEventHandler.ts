@@ -1,11 +1,11 @@
-import * as React from 'react';
-import { RefObject } from '@mui/x-internals/types';
 import { EventListenerOptions } from '@mui/x-internals/EventManager';
-import { GridEventListener, GridEvents } from '../../models/events';
-import { UnregisterToken, CleanupTracking } from '../../utils/cleanupTracking/CleanupTracking';
-import { TimerBasedCleanupTracking } from '../../utils/cleanupTracking/TimerBasedCleanupTracking';
-import { FinalizationRegistryBasedCleanupTracking } from '../../utils/cleanupTracking/FinalizationRegistryBasedCleanupTracking';
+import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
 import type { GridApiCommon } from '../../models';
+import { GridEventListener, GridEvents } from '../../models/events';
+import { CleanupTracking, UnregisterToken } from '../../utils/cleanupTracking/CleanupTracking';
+import { FinalizationRegistryBasedCleanupTracking } from '../../utils/cleanupTracking/FinalizationRegistryBasedCleanupTracking';
+import { TimerBasedCleanupTracking } from '../../utils/cleanupTracking/TimerBasedCleanupTracking';
 
 /**
  * Signal to the underlying logic what version of the public component API
@@ -50,7 +50,7 @@ export function createUseGridApiEventHandler(registryContainer: RegistryContaine
 
     if (!subscription.current && handlerRef.current) {
       const enhancedHandler: GridEventListener<E> = (params, event, details) => {
-        if (!event.defaultMuiPrevented) {
+        if (!event.defaultTwgPrevented) {
           handlerRef.current?.(params, event, details);
         }
       };
@@ -82,7 +82,7 @@ export function createUseGridApiEventHandler(registryContainer: RegistryContaine
     React.useEffect(() => {
       if (!subscription.current && handlerRef.current) {
         const enhancedHandler: GridEventListener<E> = (params, event, details) => {
-          if (!event.defaultMuiPrevented) {
+          if (!event.defaultTwgPrevented) {
             handlerRef.current?.(params, event, details);
           }
         };

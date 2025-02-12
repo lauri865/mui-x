@@ -1,30 +1,30 @@
-import * as React from 'react';
-import { expect } from 'chai';
-import { spy } from 'sinon';
-import { RefObject } from '@mui/x-internals/types';
-import { createRenderer, fireEvent, screen, act, waitFor } from '@mui/internal-test-utils';
+import { act, createRenderer, fireEvent, screen, waitFor } from '@mui/internal-test-utils';
 import {
   DataGrid,
   DataGridProps,
-  GridInputRowSelectionModel,
-  GridRowId,
-  GridEditModes,
-  useGridApiRef,
   GridApi,
+  GridEditModes,
+  GridInputRowSelectionModel,
   GridPreferencePanelsValue,
+  GridRowId,
   GridRowSelectionModel,
+  useGridApiRef,
 } from '@mui/x-data-grid';
+import { getBasicGridData } from '@mui/x-data-grid-generator';
+import { RefObject } from '@mui/x-internals/types';
+import { expect } from 'chai';
+import * as React from 'react';
+import { spy } from 'sinon';
 import {
+  getActiveCell,
   getCell,
-  getRow,
-  getRows,
   getColumnHeaderCell,
   getColumnHeadersTextContent,
-  getActiveCell,
+  getRow,
+  getRows,
   grid,
 } from 'test/utils/helperFn';
-import { getBasicGridData } from '@mui/x-data-grid-generator';
-import { testSkipIf, isJSDOM } from 'test/utils/skipIf';
+import { isJSDOM, testSkipIf } from 'test/utils/skipIf';
 
 function getSelectedRowIds() {
   const hasCheckbox = !!document.querySelector('input[type="checkbox"]');
@@ -568,7 +568,7 @@ describe('<DataGrid /> - Row selection', () => {
         await user.keyboard('{ArrowDown}');
         await user.keyboard('{ArrowDown}');
         await user.keyboard('{ArrowDown}');
-        const virtualScroller = document.querySelector('.MuiDataGrid-virtualScroller')!;
+        const virtualScroller = document.querySelector('.twg-virtualScroller')!;
         virtualScroller.scrollTop = 250; // Scroll 5 rows
         virtualScroller.dispatchEvent(new Event('scroll'));
         expect(virtualScroller.scrollTop).to.equal(250);

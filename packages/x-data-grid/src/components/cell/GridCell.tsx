@@ -9,6 +9,7 @@ import { fastMemo } from '@mui/x-internals/fastMemo';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import clsx from 'clsx';
 import * as React from 'react';
+import { GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD } from '../../colDef';
 import { getDataGridUtilityClass, gridClasses } from '../../constants/gridClasses';
 import { useThemedComponent } from '../../context/GridThemeContext';
 import { GridPinnedColumnPosition } from '../../hooks/features/columns/gridColumnsInterfaces';
@@ -276,6 +277,7 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
     center: align === 'center',
     right: align === 'right',
     flex: column.display === 'flex',
+    group: rowNode.type === 'group' && field === GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD,
   });
 
   const publishMouseUp = React.useCallback(
@@ -344,6 +346,10 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
       pinnedPosition,
       pinnedOffset,
     );
+
+    if (rowNode.type === 'group') {
+      (cellStyle as React.CSSProperties & Record<string, any>)['--depth'] = rowNode.depth;
+    }
 
     const isLeftPinned = pinnedPosition === PinnedColumnPosition.LEFT;
     const isRightPinned = pinnedPosition === PinnedColumnPosition.RIGHT;
@@ -463,7 +469,8 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
   const showOverflowWithBorder = React.useCallback(showOverflow(showRightBorder), [
     showRightBorder,
   ]);
-  const showEmpty = children === null || children === undefined || children === '';
+  const showEmpty =
+    rowNode.type !== 'group' && (children === null || children === undefined || children === '');
   return (
     <div
       className={clsx(classes.root, classNames, className)}

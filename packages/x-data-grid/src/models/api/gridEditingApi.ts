@@ -1,9 +1,9 @@
+import { TwgBaseEvent } from '../baseEvent';
 import { GridCellMode, GridRowMode } from '../gridCell';
 import { GridCellModes, GridRowModes } from '../gridEditRowModel';
 import { GridRowId, GridRowModel } from '../gridRows';
 import { GridCellParams } from '../params/gridCellParams';
 import { GridEditCellValueParams } from '../params/gridEditCellParams';
-import { MuiBaseEvent } from '../muiEvent';
 
 export type GridCellModesModelProps =
   | ({ mode: GridCellModes.View } & Omit<GridStopCellEditModeParams, 'id' | 'field'>)
@@ -37,7 +37,7 @@ export interface GridEditingSharedApi {
    */
   setEditCellValue: (
     params: GridEditCellValueParams,
-    event?: MuiBaseEvent,
+    event?: TwgBaseEvent,
   ) => Promise<boolean> | void;
   /**
    * Returns the row with the values that were set by editing the cells.

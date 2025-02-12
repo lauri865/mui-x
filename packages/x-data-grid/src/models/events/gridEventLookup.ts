@@ -2,6 +2,7 @@ import * as React from 'react';
 import type { GridStrategyProcessorName } from '../../hooks/core/strategyProcessing';
 import type { GridColumnVisibilityModel } from '../../hooks/features/columns';
 import { GridCellModesModel, GridRowModesModel } from '../api/gridEditingApi';
+import type { TwgBaseEvent } from '../baseEvent';
 import type { ElementSize } from '../elementSize';
 import { GridDensity } from '../gridDensity';
 import type { GridFilterModel } from '../gridFilterModel';
@@ -9,7 +10,6 @@ import { GridPaginationMeta, GridPaginationModel } from '../gridPaginationProps'
 import type { GridGroupNode } from '../gridRows';
 import type { GridRowSelectionModel } from '../gridRowSelectionModel';
 import type { GridSortModel } from '../gridSortModel';
-import type { MuiBaseEvent } from '../muiEvent';
 import type {
   GridColumnGroupHeaderParams,
   GridColumnHeaderParams,
@@ -508,7 +508,7 @@ export interface GridEventLookup
    */
   cellEditStop: {
     params: GridCellEditStopParams;
-    event: MuiBaseEvent;
+    event: TwgBaseEvent;
   };
   /**
    * Fired when the row turns to edit mode.
@@ -522,7 +522,7 @@ export interface GridEventLookup
    */
   rowEditStop: {
     params: GridRowEditStopParams;
-    event: MuiBaseEvent;
+    event: TwgBaseEvent;
   };
 
   // Focus
@@ -535,13 +535,13 @@ export interface GridEventLookup
    * Fired when a cell loses focus.
    * @ignore - do not document.
    */
-  cellFocusOut: { params: GridCellParams<any>; event: MuiBaseEvent };
+  cellFocusOut: { params: GridCellParams<any>; event: TwgBaseEvent };
 
   // Scroll
   /**
    * Fired during the scroll of the grid viewport.
    */
-  scrollPositionChange: { params: GridScrollParams; event: React.UIEvent | MuiBaseEvent };
+  scrollPositionChange: { params: GridScrollParams; event: React.UIEvent | TwgBaseEvent };
   /**
    * Fired when the content size used by the `GridVirtualScroller` changes.
    * @ignore - do not document.

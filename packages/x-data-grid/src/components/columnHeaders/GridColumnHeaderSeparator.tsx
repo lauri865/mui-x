@@ -39,10 +39,10 @@ function GridColumnHeaderSeparatorRaw(props: GridColumnHeaderSeparatorProps) {
 
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
-    (<div
+    <div
       className={clsx(
         classes.root,
-        'group/resizer text-grid-border hover:text-white active:text-white active:max-h-full h-full absolute cursor-col-resize px-1 z-1 active:z-20 hover:z-20 group-focus-within/cell:text-highlight-border active:[anchor-name:--resizer]',
+        'group/resizer text-grid-border hover:text-grid-resizer-color active:text-grid-resizer-color active:max-h-full h-full absolute cursor-col-resize px-1 z-1 active:z-20 hover:z-20 group-focus-within/cell:text-highlight-border active:[anchor-name:--resizer]',
         side === GridColumnHeaderSeparatorSides.Left && '-left-[5px] twg-columnSeparator--sideLeft',
         side === GridColumnHeaderSeparatorSides.Right &&
           '-right-1 group-data-last-pinned-left/cell:-right-[5px] twg-columnSeparator--sideRight',
@@ -69,14 +69,14 @@ function GridColumnHeaderSeparatorRaw(props: GridColumnHeaderSeparatorProps) {
       {resizerHeight &&
         createPortal(
           <div
-            className="w-px bg-white top-[anchor(top)] left-[anchor(left)] ml-1 [position-anchor:--resizer] flex pointer-events-none z-20 absolute"
+            className="w-px bg-current top-[anchor(top)] left-[anchor(left)] ml-1 [position-anchor:--resizer] flex pointer-events-none z-20 absolute"
             style={{
               height: resizerHeight,
             }}
           />,
           document.body,
         )}
-    </div>)
+    </div>
   );
 }
 

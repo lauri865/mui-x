@@ -31,8 +31,8 @@ function applySelector<Api extends GridApiCommon, Args, T>(
 
 const defaultCompare = Object.is;
 export const objectShallowCompare = fastObjectShallowCompare as (a: unknown, b: unknown) => boolean;
-const arrayShallowCompare = (a: any[], b: any[]) => {
-  if (a === b) {
+export const arrayShallowCompare = (a: any[], b: any[]) => {
+  if (a === b || (a.length === 0 && b.length === 0)) {
     return true;
   }
 

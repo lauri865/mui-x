@@ -44,6 +44,7 @@ export default function Page() {
     <>
       <main className="container relative max-w-[1100px] px-2 py-4 z-[2] lg:py-16">
         <div
+          className="shadow-lg rounded-xl"
           style={{
             background:
               'repeating-linear-gradient(to bottom, transparent, color-mix(in oklab, var(--color-fd-primary) 1%, transparent) 500px, transparent 1000px)',
@@ -460,7 +461,7 @@ function Hero() {
           }}
         />
         <div
-          className="absolute inset-x-0 top-0 z-[-1] h-200 opacity-30 duration-1000 animate-in fade-in dark:opacity-20"
+          className="absolute inset-x-0 top-0 z-[-1] h-200 opacity-30 duration-1000 animate-in fade-in dark:hidden"
           style={{
             maskImage: 'linear-gradient(to top,transparent,white)',
             backgroundImage: 'linear-gradient(to right, #4ebfff, transparent, #e92a67)',

@@ -1,14 +1,13 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import {
-  GridColDef,
-  GridRowsProp,
   DataGrid,
-  GridRowId,
   GridCellModes,
-  GridEventListener,
   GridCellModesModel,
+  GridColDef,
+  GridEventListener,
+  GridRowId,
+  GridRowsProp,
   GridSlotProps,
 } from '@mui/x-data-grid';
 import {
@@ -16,6 +15,7 @@ import {
   randomTraderName,
   randomUpdatedDate,
 } from '@mui/x-data-grid-generator';
+import * as React from 'react';
 
 interface SelectedCellParams {
   id: GridRowId;
@@ -127,7 +127,7 @@ export default function StartEditButtonGrid() {
     (params, event) => {
       if (cellMode === 'edit') {
         // Prevents calling event.preventDefault() if Tab is pressed on a cell in edit mode
-        event.defaultMuiPrevented = true;
+        event.defaultTwgPrevented = true;
       }
     },
     [cellMode],
@@ -135,7 +135,7 @@ export default function StartEditButtonGrid() {
 
   const handleCellEditStop = React.useCallback<GridEventListener<'cellEditStop'>>(
     (params, event) => {
-      event.defaultMuiPrevented = true;
+      event.defaultTwgPrevented = true;
     },
     [],
   );

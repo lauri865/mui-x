@@ -8,6 +8,7 @@ import {
   GridPinnedColumnFields,
 } from '../../hooks/features/columns/gridColumnsInterfaces';
 import { GridExpandedRowIds } from '../../hooks/features/detailPanel';
+import { GridRowGroupingModel } from '../../hooks/features/rowGrouping';
 import { GridPinnedRowsModel } from '../../hooks/features/rowPinning/rowPinningInterfaces';
 import { GridCallbackDetails, GridLocaleText } from '../api';
 import { GridApiCommunity } from '../api/gridApiCommunity';
@@ -847,6 +848,7 @@ export interface DataGridPropsWithoutDefaultValue<R extends GridValidRowModel = 
       setSkeletonRowCount: (count: number) => void;
     },
   ) => Promise<void | GridRowModel<R>[]>;
+  rowGroupingModel?: GridRowGroupingModel;
 }
 
 export interface DataGridProSharedPropsWithDefaultValue {

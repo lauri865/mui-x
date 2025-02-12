@@ -3,7 +3,7 @@ import * as React from 'react';
 import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
 import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { isCopyShortcut } from '../../../utils/keyboardUtils';
-import { useGridApiOptionHandler, useGridNativeEventListener } from '../../utils';
+import { useGridApiOptionHandler } from '../../utils';
 import { serializeCellValue } from '../export/serializers/csvSerializer';
 import { gridFocusCellSelector } from '../focus/gridFocusStateSelector';
 
@@ -86,8 +86,9 @@ export const useGridClipboard = (
       }
 
       let textToCopy = '';
+      const focusedCell = gridFocusCellSelector(apiRef);
       const selectedRows = apiRef.current.getSelectedRows();
-      if (selectedRows.size > 0) {
+      if (selectedRows.size > 0 && (!focusedCell || selectedRows.has(focusedCell.id))) {
         textToCopy = apiRef.current.getDataAsCsv({
           includeHeaders: false,
           delimiter: clipboardCopyCellDelimiter,
@@ -119,7 +120,17 @@ export const useGridClipboard = (
     [apiRef, ignoreValueFormatter, clipboardCopyCellDelimiter],
   );
 
-  useGridNativeEventListener(apiRef, apiRef.current.rootElementRef!, 'keydown', handleCopy);
+  useGridApiOptionHandler(apiRef, 'rootMount', () => {
+    const element = apiRef.current.rootElementRef.current;
+    if (!element) {
+      return undefined;
+    }
+    element.addEventListener('keydown', handleCopy);
+
+    return () => {
+      element.removeEventListener('keydown', handleCopy);
+    };
+  });
 
   useGridApiOptionHandler(apiRef, 'clipboardCopy', props.onClipboardCopy);
 };

@@ -1,4 +1,4 @@
-import { GridDetailPanelCell } from '../components/detailPanel/GridDetailPanelCellRenderer';
+import { GridDetailPanelCell } from '../components/cell/GridDetailPanelCell';
 import { GridColDef } from '../models/colDef/gridColDef';
 
 export const GRID_DETAIL_PANEL_TOGGLE_FIELD = '«detail_panel_toggle»';

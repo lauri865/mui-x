@@ -1,12 +1,11 @@
-import * as React from 'react';
-import { spy } from 'sinon';
 import { createRenderer, fireEvent } from '@mui/internal-test-utils';
-import { expect } from 'chai';
 import { DataGrid, GridValueFormatter } from '@mui/x-data-grid';
-import { getCell } from 'test/utils/helperFn';
-import { fireUserEvent } from 'test/utils/fireUserEvent';
 import { getBasicGridData } from '@mui/x-data-grid-generator';
-import { describeSkipIf, testSkipIf, isJSDOM } from 'test/utils/skipIf';
+import { expect } from 'chai';
+import { spy } from 'sinon';
+import { fireUserEvent } from 'test/utils/fireUserEvent';
+import { getCell } from 'test/utils/helperFn';
+import { describeSkipIf, isJSDOM, testSkipIf } from 'test/utils/skipIf';
 
 describe('<DataGrid /> - Cells', () => {
   const { render } = createRenderer({ clock: 'fake' });
@@ -190,7 +189,7 @@ describe('<DataGrid /> - Cells', () => {
         </div>,
       );
 
-      const virtualScroller = document.querySelector('.MuiDataGrid-virtualScroller')!;
+      const virtualScroller = document.querySelector('.twg-virtualScroller')!;
 
       const cell = getCell(1, 3);
       fireUserEvent.mousePress(cell);
@@ -227,7 +226,7 @@ describe('<DataGrid /> - Cells', () => {
         </div>,
       );
 
-      const virtualScroller = document.querySelector('.MuiDataGrid-virtualScroller')!;
+      const virtualScroller = document.querySelector('.twg-virtualScroller')!;
 
       const thirdRowCell = getCell(2, 0);
       fireUserEvent.mousePress(thirdRowCell);

@@ -1,11 +1,10 @@
-import * as React from 'react';
 import {
-  GridColDef,
-  GridRowsProp,
   DataGrid,
   GridCellEditStopParams,
   GridCellEditStopReasons,
-  MuiEvent,
+  GridColDef,
+  GridRowsProp,
+  TwgEvent,
 } from '@mui/x-data-grid';
 import {
   randomCreatedDate,
@@ -19,9 +18,9 @@ export default function DisableStopEditModeOnFocusOut() {
       <DataGrid
         rows={rows}
         columns={columns}
-        onCellEditStop={(params: GridCellEditStopParams, event: MuiEvent) => {
+        onCellEditStop={(params: GridCellEditStopParams, event: TwgEvent) => {
           if (params.reason === GridCellEditStopReasons.cellFocusOut) {
-            event.defaultMuiPrevented = true;
+            event.defaultTwgPrevented = true;
           }
         }}
       />

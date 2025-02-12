@@ -11,10 +11,10 @@ import { GridRowMultiSelectionApi } from './gridRowSelectionApi';
 export interface GridApiCommunity
   extends GridApiCommon<GridStateCommunity, GridInitialStateCommunity>,
     GridColumnReorderApi,
-    GridRowMultiSelectionApi {}
+    GridRowMultiSelectionApi,
+    GridRowProApi {}
 
 export interface GridPrivateApiCommunity
   extends Omit<GridApiCommunity, 'setColumnIndex'>,
     GridPrivateOnlyApiCommon<GridApiCommunity, GridPrivateApiCommunity, DataGridProcessedProps>,
-    GridColumnReorderApiInternal,
-    GridRowProApi {}
+    GridColumnReorderApiInternal {}

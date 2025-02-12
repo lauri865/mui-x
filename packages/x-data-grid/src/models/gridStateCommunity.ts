@@ -25,6 +25,7 @@ import { GridPinnedColumnFields } from '../hooks/features/columns/gridColumnsInt
 import { GridDetailPanelInitialState, GridDetailPanelState } from '../hooks/features/detailPanel';
 import type { GridVisibleRowsLookupState } from '../hooks/features/filter/gridFilterState';
 import type { GridListViewState } from '../hooks/features/listView/useGridListView';
+import { GridRowGroupingInitialState, GridRowGroupingState } from '../hooks/features/rowGrouping';
 import {
   GridPinnedRowsModel,
   GridPinnedRowsState,
@@ -64,6 +65,7 @@ export interface GridStateCommunity {
   rowSpanning: GridRowSpanningState;
   listViewColumn: GridListViewState;
   pinnedRows: GridPinnedRowsState;
+  rowGrouping: GridRowGroupingState;
   detailPanel: GridDetailPanelState;
 }
 
@@ -85,5 +87,6 @@ export interface GridInitialStateCommunity {
     columnHeader?: GridColumnIdentifier;
   };
   detailPanel?: GridDetailPanelInitialState;
+  rowGrouping?: GridRowGroupingInitialState;
   rowSelection?: GridRowSelectionModel;
 }

@@ -2,7 +2,7 @@ import type { GridLocaleText } from '../models/api/gridLocaleTextApi';
 
 export interface Localization {
   components: {
-    MuiDataGrid: {
+    twgrid: {
       defaultProps: {
         localeText: Partial<GridLocaleText>;
       };
@@ -12,7 +12,7 @@ export interface Localization {
 
 export const getGridLocalization = (gridTranslations: Partial<GridLocaleText>): Localization => ({
   components: {
-    MuiDataGrid: {
+    twgrid: {
       defaultProps: {
         localeText: {
           ...gridTranslations,

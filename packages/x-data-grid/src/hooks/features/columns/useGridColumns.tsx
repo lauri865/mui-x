@@ -150,7 +150,6 @@ export function useGridColumns(
           }),
         }));
         apiRef.current.updateRenderContext?.();
-        apiRef.current.forceUpdate();
       }
     },
     [apiRef],

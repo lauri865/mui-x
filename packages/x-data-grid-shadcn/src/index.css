@@ -2,12 +2,8 @@
 @source './components';
 
 .twg-root {
-  @apply text-[14px] text-grid-text;
-}
-
-.twg-root {
   @theme {
-    --color-grid-text: inherit;
+    --color-grid-text: #0a0a0a;
     --color-grid-bg: #fff;
     --color-grid-pinned-bg: #fff;
     --color-grid-header-bg: #fff;
@@ -21,25 +17,28 @@
     --radius-grid: 6px;
     --spacing-cell: 10px;
     --cell-padding: 10px;
+    --color-grid-resizer-color: var(--color-neutral-950);
   }
 }
 
 :root.light .twg-root,
 :root .twg-root,
 :root .twg-root.light.light {
+  --color-grid-text: #0a0a0a;
   --color-grid-bg: #fff;
   --color-grid-pinned-bg: #fff;
   --color-grid-header-bg: #fff;
   --color-grid-border: var(--color-neutral-200);
-  --color-grid-selected-bg: var(--color-blue-400);
-  --color-grid-selected-border: var(--color-blue-500);
+  --color-grid-selected-bg: var(--color-blue-200);
+  --color-grid-selected-border: var(--color-blue-300);
   --color-highlight: #c7e2ff;
-  --color-highlight-border: var(--color-blue-600);
+  --color-highlight-border: var(--color-blue-500);
   --color-grid-hover-bg: var(--color-neutral-100);
   --color-highlight-text: var(--color-blue-600);
   --radius-grid: 6px;
   --spacing-cell: 10px;
   --cell-padding: 10px;
+  --color-grid-resizer-color: var(--color-neutral-900);
 
   .twg-cell:focus-within,
   .twg-cell[data-open],
@@ -55,7 +54,7 @@
 :root.dark .twg-root,
 :root .twg-root.dark.dark {
   & {
-    --color-grid-text: inherit;
+    --color-grid-text: #ebebeb;
     --color-grid-bg: #09090b;
     --color-grid-pinned-bg: #09090b;
     --color-grid-header-bg: #09090b;
@@ -69,6 +68,7 @@
     --radius-grid: 6px;
     --spacing-cell: 10px;
     --cell-padding: 10px;
+    --color-grid-resizer-color: #ebebeb;
   }
 
   .twg-cell:focus-within,

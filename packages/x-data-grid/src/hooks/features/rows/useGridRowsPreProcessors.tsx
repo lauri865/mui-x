@@ -1,15 +1,15 @@
 import { RefObject } from '@mui/x-internals/types';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
 import { GridGroupNode, GridRowId, GridRowTreeConfig } from '../../../models';
+import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
 import {
   GRID_DEFAULT_STRATEGY,
   GridStrategyProcessor,
   useGridRegisterStrategyProcessor,
 } from '../../core/strategyProcessing';
-import { buildRootGroup, GRID_ROOT_GROUP_ID } from './gridRowsUtils';
 import { GridRowsPartialUpdateAction, GridRowTreeCreationValue } from './gridRowsInterfaces';
+import { buildRootGroup, GRID_ROOT_GROUP_ID } from './gridRowsUtils';
 
-const createFlatRowTree = (rows: GridRowId[]): GridRowTreeCreationValue => {
+export const createFlatRowTree = (rows: GridRowId[]): GridRowTreeCreationValue => {
   const tree: GridRowTreeConfig = {
     [GRID_ROOT_GROUP_ID]: {
       ...buildRootGroup(),

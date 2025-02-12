@@ -36,7 +36,7 @@ const className = {
   },
   columnHeader: {
     base: [
-      'group/cell relative touch-none pl-cell pr-0.5 box-border tap-highlight-none flex items-center cursor-pointer border-b border-b-grid-border font-medium text-[13px] active:[&+&]:pointer-events-none data-sibling-focused:hover:z-0 justify-end',
+      'group/cell relative touch-none pl-cell pr-0.5 box-border tap-highlight-none flex items-center cursor-pointer border-b border-b-grid-border font-medium text-[1em] active:[&+&]:pointer-events-none data-sibling-focused:hover:z-0 justify-end',
       'data-[align=center]:justify-center data-[align=right]:flex-row-reverse data-[align=center]:pr-1.5 data-[align=right]:pr-cell data-[align=right]:pl-0.5',
       'hover:bg-grid-hover-bg transition-[background-color] active:bg-grid-hover-bg',
       'data-first:rounded-tl-[calc(var(--radius-grid)-1px)] group-data-fullwidth:data-last:rounded-tr-[calc(var(--radius-grid)-1px)]',
@@ -77,7 +77,7 @@ const className = {
       'data-empty:flex-1 data-empty:p-0 ',
       `data-[field=«check»]:p-0 data-[field=«check»]:flex data-[field=«check»]:justify-center data-[field=«check»]:items-center`,
       'data-selected:bg-[rgba(144,202,249,0.16)] data-selected:hover:bg-[rgba(144,202,249,0.24)]',
-      'data-reordering:bg-grid-hover-bg data-reordering:shadow-[inset_1px_0_0_0_var(--color-grid-border),inset_-1px_0_0_0_var(--color-grid-border),1px_0_1px_0px_#00000050,-1px_0_1px_0px_#00000050]',
+      'data-reordering:bg-grid-hover-bg data-reordering:shadow-[inset_1px_0_0_0_var(--color-grid-border),inset_-1px_0_0_0_var(--color-grid-border),0px_0_1px_0px_#00000020]',
       // makes drag-drop easier, we can catch onPointerMove discretely at cell level, not cell content level
     ].join(' '),
     editable: '',
@@ -97,6 +97,7 @@ const className = {
     isSelectionMode: 'cursor-default',
     flex: 'flex items-center',
     empty: 'twg-cell--empty opacity-30',
+    group: 'pl-[calc(var(--spacing-cell)+var(--depth)*16px)]',
   },
 
   editCell: {
@@ -146,12 +147,12 @@ const className = {
   },
 
   footer: {
-    base: 'select-none flex h-10 justify-between items-center border-t border-t-grid-border flex-shrink-0 px-cell text-[13px]',
+    base: 'select-none flex h-10 justify-between items-center border-t border-t-grid-border flex-shrink-0 px-cell text-[0.93em]',
   },
   rowCount: {
-    base: 'flex items-center gap-1.5 text-black/50 dark:text-white/50',
+    base: 'flex items-center gap-1.5 text-grid-text/50',
     badge:
-      'bg-grid-hover-bg px-1.5 py-0.5 rounded-md text-xs min-w-[20px] text-center border border-grid-border text:black/40 dark:text-white/40 tabular-nums font-normal',
+      'bg-grid-hover-bg px-1.5 py-0.5 rounded-md text-xs min-w-[20px] text-center border border-grid-border text-grid-text/40 tabular-nums font-normal',
   },
   selectedRowCount: {
     base: 'flex items-center gap-1.5 text-highlight-text cursor-pointer hover:bg-grid-hover-bg hover:opacity-50 pl-1.5 pr-1 -mr-1 py-1 rounded-grid transition-all',

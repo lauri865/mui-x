@@ -1,35 +1,37 @@
-import * as React from 'react';
-import { RefObject } from '@mui/x-internals/types';
 import {
+  gridColumnLookupSelector,
   GridEventListener,
   useGridApiEventHandler,
   useGridApiMethod,
-  gridColumnLookupSelector,
 } from '@mui/x-data-grid-pro';
 import {
-  useGridRegisterPipeProcessor,
   GridPipeProcessor,
   GridRestoreStatePreProcessingContext,
   GridStateInitializer,
   GridStrategyGroup,
+  useGridRegisterPipeProcessor,
 } from '@mui/x-data-grid-pro/internals';
+import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
+import { DataGridPremiumProcessedProps } from '../../../models/dataGridPremiumProps';
 import { GridPrivateApiPremium } from '../../../models/gridApiPremium';
+import { GridInitialStatePremium } from '../../../models/gridStatePremium';
+import { GridRowGroupingApi } from './gridRowGroupingInterfaces';
 import {
   gridRowGroupingModelSelector,
   gridRowGroupingSanitizedModelSelector,
 } from './gridRowGroupingSelector';
-import { DataGridPremiumProcessedProps } from '../../../models/dataGridPremiumProps';
 import {
+  areGroupingRulesEqual,
+  getGroupingRules,
   getRowGroupingFieldFromGroupingCriteria,
-  RowGroupingStrategy,
   isGroupingColumn,
   mergeStateWithRowGroupingModel,
+  RowGroupingStrategy,
   setStrategyAvailability,
-  getGroupingRules,
-  areGroupingRulesEqual,
 } from './gridRowGroupingUtils';
-import { GridRowGroupingApi } from './gridRowGroupingInterfaces';
-import { GridInitialStatePremium } from '../../../models/gridStatePremium';
+
+const ROW_GROUPING_STRATEGY = 'rowGrouping';
 
 export const rowGroupingStateInitializer: GridStateInitializer<
   Pick<DataGridPremiumProcessedProps, 'rowGroupingModel' | 'initialState'>
@@ -37,6 +39,8 @@ export const rowGroupingStateInitializer: GridStateInitializer<
   apiRef.current.caches.rowGrouping = {
     rulesOnLastRowTreeCreation: [],
   };
+
+  apiRef.current.setStrategyAvailability('rowTree', ROW_GROUPING_STRATEGY, () => true);
 
   return {
     ...state,

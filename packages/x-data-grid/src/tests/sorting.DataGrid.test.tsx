@@ -1,19 +1,19 @@
-import * as React from 'react';
-import { RefObject } from '@mui/x-internals/types';
-import { createRenderer, fireEvent, screen, act } from '@mui/internal-test-utils';
-import { expect } from 'chai';
+import { act, createRenderer, fireEvent, screen } from '@mui/internal-test-utils';
 import {
   DataGrid,
   DataGridProps,
-  GridSortModel,
-  useGridApiRef,
   GridApi,
   GridColDef,
+  GridSortModel,
   gridStringOrNumberComparator,
+  useGridApiRef,
 } from '@mui/x-data-grid';
-import { getColumnValues, getColumnHeaderCell } from 'test/utils/helperFn';
-import { spy } from 'sinon';
 import { GridInitialState } from '@mui/x-data-grid-pro';
+import { RefObject } from '@mui/x-internals/types';
+import { expect } from 'chai';
+import * as React from 'react';
+import { spy } from 'sinon';
+import { getColumnHeaderCell, getColumnValues } from 'test/utils/helperFn';
 
 const isJSDOM = /jsdom/.test(window.navigator.userAgent);
 
@@ -250,7 +250,7 @@ describe('<DataGrid /> - Sorting', () => {
     );
     const header = screen
       .getByRole('columnheader', { name: 'isPublished' })
-      .querySelector('.MuiDataGrid-columnHeaderTitleContainer')!;
+      .querySelector('.twg-columnHeaderTitleContainer')!;
     expect(getColumnValues(0)).to.deep.equal(['Nike', 'Adidas', 'Puma']);
     fireEvent.click(header);
     expect(getColumnValues(0)).to.deep.equal(['Nike', 'Adidas', 'Puma']);
@@ -426,7 +426,7 @@ describe('<DataGrid /> - Sorting', () => {
 
     const header = screen
       .getByRole('columnheader', { name: 'brand' })
-      .querySelector('.MuiDataGrid-columnHeaderTitleContainer')!;
+      .querySelector('.twg-columnHeaderTitleContainer')!;
     expect(getColumnValues(0)).to.deep.equal(['Nike', 'Adidas', 'Puma']);
     fireEvent.click(header);
     expect(getColumnValues(0)).to.deep.equal(['Adidas', 'Nike', 'Puma']);
@@ -473,7 +473,7 @@ describe('<DataGrid /> - Sorting', () => {
 
     const header = screen
       .getByRole('columnheader', { name: 'brand' })
-      .querySelector('.MuiDataGrid-columnHeaderTitleContainer')!;
+      .querySelector('.twg-columnHeaderTitleContainer')!;
     expect(getColumnValues(0)).to.deep.equal(['Nike', 'Adidas', 'Puma']);
     fireEvent.click(header);
     expect(getColumnValues(0)).to.deep.equal(['Adidas', 'Nike', 'Puma']);

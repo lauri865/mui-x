@@ -1,6 +1,6 @@
-import { GridRowId } from '../gridRows';
-import { MuiBaseEvent } from '../muiEvent';
 import { GridColumnGroupIdentifier } from '../../hooks/features/focus';
+import { TwgBaseEvent } from '../baseEvent';
+import { GridRowId } from '../gridRows';
 
 export interface GridFocusApi {
   /**
@@ -14,13 +14,13 @@ export interface GridFocusApi {
    * @param {string} field The column field.
    * @param {string} event The event that triggers the action.
    */
-  setColumnHeaderFocus: (field: string, event?: MuiBaseEvent) => void;
+  setColumnHeaderFocus: (field: string, event?: TwgBaseEvent) => void;
   /**
    * Sets the focus to the column header filter at the given `field`.
    * @param {string} field The column field.
    * @param {string} event The event that triggers the action.
    */
-  setColumnHeaderFilterFocus: (field: string, event?: MuiBaseEvent) => void;
+  setColumnHeaderFilterFocus: (field: string, event?: TwgBaseEvent) => void;
 }
 
 export interface GridFocusPrivateApi {
@@ -30,7 +30,7 @@ export interface GridFocusPrivateApi {
    * @param {number} depth The group depth.
    * @param {object} event The event that triggers the action.
    */
-  setColumnGroupHeaderFocus: (field: string, depth: number, event?: MuiBaseEvent) => void;
+  setColumnGroupHeaderFocus: (field: string, depth: number, event?: TwgBaseEvent) => void;
   /**
    * Gets the focus to the column group header at the given `field` and given depth.
    * @returns {GridColumnGroupIdentifier | null} focused

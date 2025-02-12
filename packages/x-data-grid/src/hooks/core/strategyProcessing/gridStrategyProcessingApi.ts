@@ -1,8 +1,4 @@
-import {
-  GridRowTreeCreationParams,
-  GridRowTreeCreationValue,
-  GridRowsState,
-} from '../../features/rows/gridRowsInterfaces';
+import { GridGetRowsParams, GridGetRowsResponse } from '../../../models/gridDataSource';
 import {
   GridFilteringMethodParams,
   GridFilteringMethodValue,
@@ -10,10 +6,14 @@ import {
   GridVisibleRowsLookupState,
 } from '../../features/filter/gridFilterState';
 import {
+  GridRowsState,
+  GridRowTreeCreationParams,
+  GridRowTreeCreationValue,
+} from '../../features/rows/gridRowsInterfaces';
+import {
   GridSortingMethodParams,
   GridSortingMethodValue,
 } from '../../features/sorting/gridSortingState';
-import { GridGetRowsParams, GridGetRowsResponse } from '../../../models/gridDataSource';
 
 export type GridStrategyProcessorName = keyof GridStrategyProcessingLookup;
 
@@ -108,5 +108,6 @@ export interface GridStrategyProcessingApi {
   applyStrategyProcessor: <P extends GridStrategyProcessorName>(
     processorName: P,
     params: GridStrategyProcessingLookup[P]['params'],
+    strategy?: string,
   ) => GridStrategyProcessingLookup[P]['value'];
 }

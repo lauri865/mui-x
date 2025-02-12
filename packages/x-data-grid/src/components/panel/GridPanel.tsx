@@ -23,13 +23,13 @@ export interface GridPanelProps extends Partial<React.ComponentProps<any>> {
   open: boolean;
 }
 
-export const gridPanelClasses = generateUtilityClasses<keyof GridPanelClasses>('MuiDataGrid', [
+export const gridPanelClasses = generateUtilityClasses<keyof GridPanelClasses>('twg', [
   'panel',
   'paper',
 ]);
 
 /* const GridPanelRoot = styled(Popper, {
-  name: 'MuiDataGrid',
+  name: 'twg',
   slot: 'Panel',
   overridesResolver: (props, styles) => styles.panel,
 })<{ ownerState: OwnerState }>(({ theme }) => ({
@@ -37,7 +37,7 @@ export const gridPanelClasses = generateUtilityClasses<keyof GridPanelClasses>('
 }));
 
 const GridPaperRoot = styled(Paper, {
-  name: 'MuiDataGrid',
+  name: 'twg',
   slot: 'Paper',
   overridesResolver: (props, styles) => styles.paper,
 })<{ ownerState: OwnerState }>(({ theme }) => ({

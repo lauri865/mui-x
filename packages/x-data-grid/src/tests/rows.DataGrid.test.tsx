@@ -1,43 +1,43 @@
-import * as React from 'react';
-import { RefObject } from '@mui/x-internals/types';
 import {
-  createRenderer,
-  fireEvent,
-  screen,
   act,
+  createRenderer,
   ErrorBoundary,
+  fireEvent,
   reactMajor,
+  screen,
   waitFor,
 } from '@mui/internal-test-utils';
-import clsx from 'clsx';
-import { expect } from 'chai';
-import { spy, stub } from 'sinon';
+import Dialog from '@mui/material/Dialog';
 import Portal from '@mui/material/Portal';
 import {
   DataGrid,
   DataGridProps,
   GridActionsCellItem,
-  GridRowIdGetter,
-  GridRowClassNameParams,
-  GridRowModel,
-  GridRenderCellParams,
-  useGridApiRef,
   GridApi,
   gridClasses,
+  GridRenderCellParams,
+  GridRowClassNameParams,
+  GridRowIdGetter,
+  GridRowModel,
+  useGridApiRef,
 } from '@mui/x-data-grid';
 import { getBasicGridData } from '@mui/x-data-grid-generator';
+import { RefObject } from '@mui/x-internals/types';
+import { expect } from 'chai';
+import clsx from 'clsx';
+import * as React from 'react';
+import { spy, stub } from 'sinon';
+import { fireUserEvent } from 'test/utils/fireUserEvent';
 import {
-  grid,
-  gridOffsetTop,
-  getColumnValues,
-  getRow,
+  $$,
   getActiveCell,
   getCell,
-  $$,
+  getColumnValues,
+  getRow,
+  grid,
+  gridOffsetTop,
 } from 'test/utils/helperFn';
-import { fireUserEvent } from 'test/utils/fireUserEvent';
-import Dialog from '@mui/material/Dialog';
-import { testSkipIf, isJSDOM, describeSkipIf } from 'test/utils/skipIf';
+import { describeSkipIf, isJSDOM, testSkipIf } from 'test/utils/skipIf';
 
 import { COMPACT_DENSITY_FACTOR } from '../hooks/features/density/densitySelector';
 
@@ -626,9 +626,7 @@ describe('<DataGrid /> - Rows', () => {
         const border = 1;
         const contentHeight = 100;
         render(<TestCase getBioContentHeight={() => contentHeight} getRowHeight={() => 'auto'} />);
-        const virtualScrollerContent = document.querySelector(
-          '.MuiDataGrid-virtualScrollerContent',
-        );
+        const virtualScrollerContent = document.querySelector('.twg-virtualScrollerContent');
         const expectedHeight = baselineProps.rows.length * (contentHeight + border);
 
         await waitFor(() => {
@@ -652,9 +650,7 @@ describe('<DataGrid /> - Rows', () => {
             rowBufferPx={0}
           />,
         );
-        const virtualScrollerContent = document.querySelector(
-          '.MuiDataGrid-virtualScrollerContent',
-        );
+        const virtualScrollerContent = document.querySelector('.twg-virtualScrollerContent');
         const expectedHeight =
           measuredRowHeight +
           border + // Measured rows also include the border
@@ -682,9 +678,7 @@ describe('<DataGrid /> - Rows', () => {
             rowBufferPx={0}
           />,
         );
-        const virtualScrollerContent = document.querySelector(
-          '.MuiDataGrid-virtualScrollerContent',
-        );
+        const virtualScrollerContent = document.querySelector('.twg-virtualScrollerContent');
         const firstRowHeight = measuredRowHeight + border; // Measured rows also include the border
         const expectedHeight =
           firstRowHeight + (baselineProps.rows.length - 1) * estimatedRowHeight;
@@ -705,9 +699,7 @@ describe('<DataGrid /> - Rows', () => {
             rowBufferPx={0}
           />,
         );
-        const virtualScrollerContent = document.querySelector(
-          '.MuiDataGrid-virtualScrollerContent',
-        );
+        const virtualScrollerContent = document.querySelector('.twg-virtualScrollerContent');
 
         await waitFor(() => {
           expect(virtualScrollerContent).toHaveComputedStyle({ height: '101px' });
@@ -796,9 +788,7 @@ describe('<DataGrid /> - Rows', () => {
             columnHeaderHeight={columnHeaderHeight}
           />,
         );
-        const virtualScrollerContent = document.querySelector(
-          '.MuiDataGrid-virtualScrollerContent',
-        )!;
+        const virtualScrollerContent = document.querySelector('.twg-virtualScrollerContent')!;
 
         await waitFor(() => {
           expect(virtualScrollerContent).toHaveComputedStyle({
@@ -827,7 +817,7 @@ describe('<DataGrid /> - Rows', () => {
               {...data}
             />,
           );
-          const virtualScroller = document.querySelector('.MuiDataGrid-virtualScroller')!;
+          const virtualScroller = document.querySelector('.twg-virtualScroller')!;
           virtualScroller.scrollTop = 10e6; // Scroll to measure all cells
           virtualScroller.dispatchEvent(new Event('scroll'));
 
@@ -969,7 +959,7 @@ describe('<DataGrid /> - Rows', () => {
           disableVirtualization
         />,
       );
-      const virtualScrollerContent = document.querySelector('.MuiDataGrid-virtualScrollerContent');
+      const virtualScrollerContent = document.querySelector('.twg-virtualScrollerContent');
       const expectedHeight = rows.length * (rowHeight + spacingTop + spacingBottom);
       expect(virtualScrollerContent).toHaveComputedStyle({ height: `${expectedHeight}px` });
       expect(virtualScrollerContent).toHaveInlineStyle({ width: 'auto' });
@@ -987,7 +977,7 @@ describe('<DataGrid /> - Rows', () => {
           disableVirtualization
         />,
       );
-      const virtualScrollerContent = document.querySelector('.MuiDataGrid-virtualScrollerContent');
+      const virtualScrollerContent = document.querySelector('.twg-virtualScrollerContent');
       const expectedHeight = rows.length * (rowHeight + spacingTop + spacingBottom);
       expect(virtualScrollerContent).toHaveComputedStyle({ height: `${expectedHeight}px` });
       expect(virtualScrollerContent).toHaveInlineStyle({ width: 'auto' });
@@ -1135,7 +1125,7 @@ describe('<DataGrid /> - Rows', () => {
       const cell = getCell(0, 0);
       fireUserEvent.mousePress(cell);
 
-      const virtualScroller = document.querySelector('.MuiDataGrid-virtualScroller')!;
+      const virtualScroller = document.querySelector('.twg-virtualScroller')!;
       virtualScroller.scrollTop = 1000;
       virtualScroller.dispatchEvent(new Event('scroll'));
 

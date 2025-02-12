@@ -48,6 +48,11 @@ import {
   useGridPreferencesPanel,
 } from '../hooks/features/preferencesPanel/useGridPreferencesPanel';
 import {
+  rowGroupingStateInitializer,
+  useGridRowGrouping,
+  useGridRowGroupingPreProcessors,
+} from '../hooks/features/rowGrouping/useGridRowGrouping';
+import {
   rowPinningStateInitializer,
   useGridRowPinning,
 } from '../hooks/features/rowPinning/useGridRowPinning';
@@ -89,16 +94,18 @@ export const useDataGridComponent = (
    */
   useGridRowSelectionPreProcessors(apiRef, props);
   useGridRowsPreProcessors(apiRef);
+  useGridRowGroupingPreProcessors(apiRef);
 
   /**
    * Register all state initializers here.
    */
+  useGridInitializeState(rowGroupingStateInitializer, apiRef, props);
   useGridInitializeState(rowSelectionStateInitializer, apiRef, props);
   useGridInitializeState(columnsStateInitializer, apiRef, props);
   useGridInitializeState(detailPanelStateInitializer, apiRef, props);
   useGridInitializeState(columnPinningStateInitializer, apiRef, props);
-  useGridInitializeState(paginationStateInitializer, apiRef, props);
   useGridInitializeState(rowsStateInitializer, apiRef, props);
+  useGridInitializeState(paginationStateInitializer, apiRef, props);
   useGridInitializeState(editingStateInitializer, apiRef, props);
   useGridInitializeState(focusStateInitializer, apiRef, props);
   useGridInitializeState(sortingStateInitializer, apiRef, props);
@@ -115,6 +122,7 @@ export const useDataGridComponent = (
   useGridInitializeState(rowsMetaStateInitializer, apiRef, props);
   useGridInitializeState(listViewStateInitializer, apiRef, props);
 
+  useGridRowGrouping(apiRef, props);
   useGridKeyboardNavigation(apiRef, props);
   useGridRowSelection(apiRef, props);
   useGridColumns(apiRef, props);

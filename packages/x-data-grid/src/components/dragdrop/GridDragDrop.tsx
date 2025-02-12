@@ -234,7 +234,7 @@ export function GridDragDrop() {
 
   return (
     <div
-      className="fixed flex gap-2 items-center top-0 left-0 z-9999 pointer-events-none px-cell bg-highlight border border-highlight-border backdrop-blur-sm min-w-[100px] font-medium rounded-grid *:size-3.5 will-change-transform"
+      className="fixed flex gap-2 items-center top-0 left-0 z-9999 pointer-events-none px-cell bg-highlight border border-highlight-border backdrop-blur-sm min-w-[100px] font-medium rounded-grid *:size-3.5 will-change-transform shadow-xl"
       style={{
         transform: `translate3d(${pointer.x + 5}px, ${pointer.y + 5}px, 0)`,
         height: 36,

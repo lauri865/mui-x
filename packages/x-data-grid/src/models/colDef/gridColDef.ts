@@ -1,22 +1,22 @@
-import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
+import { GridActionsCellItemProps } from '../../components/cell/GridActionsCellItem';
+import { GridApiCommunity } from '../api/gridApiCommunity';
 import { GridCellClassNamePropType } from '../gridCellClass';
 import { GridColumnHeaderClassNamePropType } from '../gridColumnHeaderClass';
+import { GridEditCellProps } from '../gridEditRowModel';
 import type { GridFilterOperator } from '../gridFilterOperator';
+import type { GridValidRowModel } from '../gridRows';
+import { GridComparatorFn, GridSortDirection } from '../gridSortModel';
 import {
+  GridPreProcessEditCellProps,
   GridRenderCellParams,
   GridRenderEditCellParams,
-  GridPreProcessEditCellProps,
 } from '../params/gridCellParams';
 import { GridColumnHeaderParams } from '../params/gridColumnHeaderParams';
-import { GridComparatorFn, GridSortDirection } from '../gridSortModel';
-import { GridColType } from './gridColType';
 import { GridRowParams } from '../params/gridRowParams';
 import { GridValueOptionsParams } from '../params/gridValueOptionsParams';
-import { GridActionsCellItemProps } from '../../components/cell/GridActionsCellItem';
-import { GridEditCellProps } from '../gridEditRowModel';
-import type { GridValidRowModel } from '../gridRows';
-import { GridApiCommunity } from '../api/gridApiCommunity';
+import { GridColType } from './gridColType';
 /**
  * Alignment used in position elements in Cells.
  */
@@ -175,6 +175,10 @@ export interface GridBaseColDef<R extends GridValidRowModel = GridValidRowModel,
    * Function that returns specific data to render in the cell instead of using the field value.
    */
   valueGetter?: GridValueGetter<R, V, F>;
+  /**
+   * Function that returns a value to be used in grouping rows.
+   */
+  groupingValueGetter?: GridValueGetter<R, V, F, any>;
   /**
    * Function that returns a specific value to be used in row spanning.
    */

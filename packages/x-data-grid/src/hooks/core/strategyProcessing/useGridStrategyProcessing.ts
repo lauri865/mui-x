@@ -1,14 +1,14 @@
-import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
 import { GridPrivateApiCommon } from '../../../models/api/gridApiCommon';
+import { useGridApiMethod } from '../../utils/useGridApiMethod';
 import {
+  GridStrategyGroup,
+  GridStrategyGroupValue,
+  GridStrategyProcessingApi,
   GridStrategyProcessor,
   GridStrategyProcessorName,
-  GridStrategyProcessingApi,
-  GridStrategyGroupValue,
-  GridStrategyGroup,
 } from './gridStrategyProcessingApi';
-import { useGridApiMethod } from '../../utils/useGridApiMethod';
 
 export const GRID_DEFAULT_STRATEGY = 'none';
 
@@ -109,10 +109,9 @@ export const useGridStrategyProcessing = (apiRef: RefObject<GridPrivateApiCommon
   const applyStrategyProcessor = React.useCallback<
     GridStrategyProcessingApi['applyStrategyProcessor']
   >(
-    (processorName, params) => {
-      const activeStrategy = apiRef.current.getActiveStrategy(
-        GRID_STRATEGIES_PROCESSORS[processorName],
-      );
+    (processorName, params, strategy) => {
+      const activeStrategy =
+        strategy ?? apiRef.current.getActiveStrategy(GRID_STRATEGIES_PROCESSORS[processorName]);
       if (activeStrategy == null) {
         throw new Error("Can't apply a strategy processor before defining an active strategy");
       }

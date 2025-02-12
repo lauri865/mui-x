@@ -6,6 +6,7 @@ export * from './gridDateColDef';
 export * from './gridDateOperators';
 export * from './gridDefaultColumnTypes';
 export * from './gridDetailPanelColDef';
+export * from './gridGroupingColumnColDef';
 export * from './gridNumericColDef';
 export * from './gridNumericOperators';
 export * from './gridSingleSelectColDef';

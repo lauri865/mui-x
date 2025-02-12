@@ -1,29 +1,29 @@
-import { RefObject } from '@mui/x-internals/types';
 import resolveProps from '@mui/utils/resolveProps';
-import {
-  GridColumnLookup,
-  GridColumnsState,
-  GridColumnsRawState,
-  GridColumnVisibilityModel,
-  GridColumnRawLookup,
-  GridColumnsInitialState,
-} from './gridColumnsInterfaces';
+import { RefObject } from '@mui/x-internals/types';
 import {
   DEFAULT_GRID_COL_TYPE_KEY,
-  GRID_STRING_COL_DEF,
   getGridDefaultColumnTypes,
+  GRID_STRING_COL_DEF,
 } from '../../../colDef';
-import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
-import { GridApiCommunity } from '../../../models/api/gridApiCommunity';
-import { GridColDef, GridStateColDef } from '../../../models/colDef/gridColDef';
-import { gridColumnsStateSelector, gridColumnVisibilityModelSelector } from './gridColumnsSelector';
-import { clamp } from '../../../utils/utils';
 import { GridApiCommon } from '../../../models/api/gridApiCommon';
-import { GridRowEntry } from '../../../models/gridRows';
-import { gridDensityFactorSelector } from '../density/densitySelector';
-import { gridHeaderFilteringEnabledSelector } from '../headerFiltering/gridHeaderFilteringSelectors';
+import { GridApiCommunity, GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridColDef, GridStateColDef } from '../../../models/colDef/gridColDef';
+import { GridRowEntry, GridValidRowModel } from '../../../models/gridRows';
+import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
+import { clamp } from '../../../utils/utils';
 import { gridColumnGroupsHeaderMaxDepthSelector } from '../columnGrouping/gridColumnGroupsSelector';
+import { gridDensityFactorSelector } from '../density/densitySelector';
 import type { GridDimensions } from '../dimensions/gridDimensionsApi';
+import { gridHeaderFilteringEnabledSelector } from '../headerFiltering/gridHeaderFilteringSelectors';
+import {
+  GridColumnLookup,
+  GridColumnRawLookup,
+  GridColumnsInitialState,
+  GridColumnsRawState,
+  GridColumnsState,
+  GridColumnVisibilityModel,
+} from './gridColumnsInterfaces';
+import { gridColumnsStateSelector, gridColumnVisibilityModelSelector } from './gridColumnsSelector';
 
 export const COLUMNS_DIMENSION_PROPERTIES = ['maxWidth', 'minWidth', 'width', 'flex'] as const;
 
@@ -313,7 +313,7 @@ export const createColumnsState = ({
   initialState: GridColumnsInitialState | undefined;
   columnVisibilityModel?: GridColumnVisibilityModel;
   keepOnlyColumnsToUpsert: boolean;
-  apiRef: RefObject<GridApiCommunity>;
+  apiRef: RefObject<GridPrivateApiCommunity>;
 }) => {
   const isInsideStateInitializer = !apiRef.current.state.columns;
 
@@ -349,6 +349,7 @@ export const createColumnsState = ({
     columnsToUpsertLookup[field] = true;
     columnsToKeep[field] = true;
     let existingState = columnsState.lookup[field];
+    let valueGetter = newColumn.valueGetter;
 
     if (existingState == null) {
       existingState = {
@@ -357,6 +358,10 @@ export const createColumnsState = ({
         hasBeenResized: false,
       };
       columnsState.orderedFields.push(field);
+
+      if (!valueGetter && field.includes('.')) {
+        valueGetter = (_, r) => r[field] ?? get(r, field);
+      }
     } else if (keepOnlyColumnsToUpsert) {
       columnsState.orderedFields.push(field);
     }
@@ -380,7 +385,11 @@ export const createColumnsState = ({
       }
     });
 
-    columnsState.lookup[field] = resolveProps(existingState, { ...newColumn, hasBeenResized });
+    columnsState.lookup[field] = resolveProps(existingState, {
+      ...newColumn,
+      hasBeenResized,
+      valueGetter,
+    });
   });
 
   if (keepOnlyColumnsToUpsert && !isInsideStateInitializer) {
@@ -406,6 +415,25 @@ export const createColumnsState = ({
     apiRef.current.getRootDimensions?.() ?? undefined,
   );
 };
+
+function get(obj: GridValidRowModel, path: string) {
+  if (!obj || !path) {
+    return;
+  }
+  const props = path.split('.');
+  let prop: string;
+  while (props.length) {
+    prop = props.shift() as string;
+    if (!obj) {
+      return;
+    }
+    obj = obj[prop];
+    if (obj === undefined) {
+      return;
+    }
+  }
+  return obj;
+}
 
 export function getFirstNonSpannedColumnToRender({
   firstColumnToRender,

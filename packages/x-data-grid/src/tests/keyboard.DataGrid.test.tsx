@@ -1,16 +1,5 @@
-import * as React from 'react';
-import { createRenderer, fireEvent, screen, act } from '@mui/internal-test-utils';
-import { spy } from 'sinon';
-import { expect } from 'chai';
-import {
-  getActiveCell,
-  getActiveColumnHeader,
-  getCell,
-  getColumnHeaderCell,
-  getColumnValues,
-  getRow,
-} from 'test/utils/helperFn';
-import { fireUserEvent } from 'test/utils/fireUserEvent';
+import RestoreIcon from '@mui/icons-material/Restore';
+import { act, createRenderer, fireEvent, screen } from '@mui/internal-test-utils';
 import {
   DataGrid,
   DataGridProps,
@@ -19,9 +8,19 @@ import {
   GridColType,
   GridValueSetter,
 } from '@mui/x-data-grid';
-import { useBasicDemoData, getBasicGridData } from '@mui/x-data-grid-generator';
-import RestoreIcon from '@mui/icons-material/Restore';
-import { testSkipIf, isJSDOM } from 'test/utils/skipIf';
+import { getBasicGridData, useBasicDemoData } from '@mui/x-data-grid-generator';
+import { expect } from 'chai';
+import { spy } from 'sinon';
+import { fireUserEvent } from 'test/utils/fireUserEvent';
+import {
+  getActiveCell,
+  getActiveColumnHeader,
+  getCell,
+  getColumnHeaderCell,
+  getColumnValues,
+  getRow,
+} from 'test/utils/helperFn';
+import { isJSDOM, testSkipIf } from 'test/utils/skipIf';
 
 const PAGE_SIZE = 10;
 const ROW_HEIGHT = 52;
@@ -313,9 +312,7 @@ describe('<DataGrid /> - Keyboard', () => {
           </div>,
         );
         getColumnHeaderCell(0).focus();
-        const virtualScroller = document.querySelector<HTMLElement>(
-          '.MuiDataGrid-virtualScroller',
-        )!;
+        const virtualScroller = document.querySelector<HTMLElement>('.twg-virtualScroller')!;
         expect(virtualScroller.scrollLeft).to.equal(0);
         fireEvent.keyDown(document.activeElement!, { key: 'ArrowRight' });
         expect(virtualScroller.scrollLeft).not.to.equal(0);
@@ -332,9 +329,7 @@ describe('<DataGrid /> - Keyboard', () => {
           </div>,
         );
         getColumnHeaderCell(0).focus();
-        const virtualScroller = document.querySelector<HTMLElement>(
-          '.MuiDataGrid-virtualScroller',
-        )!;
+        const virtualScroller = document.querySelector<HTMLElement>('.twg-virtualScroller')!;
         expect(virtualScroller.scrollLeft).to.equal(0);
         fireEvent.keyDown(document.activeElement!, { key: 'ArrowRight' });
         expect(virtualScroller.scrollLeft).not.to.equal(0);
@@ -503,9 +498,7 @@ describe('<DataGrid /> - Keyboard', () => {
         );
         // Tab to the first column header
         await user.keyboard('{Tab}');
-        const virtualScroller = document.querySelector<HTMLElement>(
-          '.MuiDataGrid-virtualScroller',
-        )!;
+        const virtualScroller = document.querySelector<HTMLElement>('.twg-virtualScroller')!;
         expect(virtualScroller.scrollLeft).to.equal(0);
         // We then need to move up to the group header, then right to the first named column
         await user.keyboard('{ArrowUp}{ArrowUp}{ArrowRight}');
@@ -528,9 +521,7 @@ describe('<DataGrid /> - Keyboard', () => {
         );
         // Tab to the first column header
         await user.keyboard('{Tab}');
-        const virtualScroller = document.querySelector<HTMLElement>(
-          '.MuiDataGrid-virtualScroller',
-        )!;
+        const virtualScroller = document.querySelector<HTMLElement>('.twg-virtualScroller')!;
         expect(virtualScroller.scrollLeft).to.equal(0);
         // We then need to move up to the group header, then right to the first named column
         await user.keyboard('{ArrowUp}{ArrowUp}{ArrowRight}');
@@ -715,7 +706,7 @@ describe('<DataGrid /> - Keyboard', () => {
         <DataGrid rows={rows} columns={columns} />
       </div>,
     );
-    const virtualScroller = document.querySelector<HTMLElement>('.MuiDataGrid-virtualScroller')!;
+    const virtualScroller = document.querySelector<HTMLElement>('.twg-virtualScroller')!;
 
     await user.click(getCell(0, 0));
     expect(virtualScroller.scrollLeft).to.equal(0);

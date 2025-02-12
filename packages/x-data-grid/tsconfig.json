@@ -2,13 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "esModuleInterop": true,
-    "types": [
-      "@mui/internal-test-utils/initMatchers",
-      "@mui/material/themeCssVarsAugmentation",
-      "chai-dom",
-      "mocha",
-      "node"
-    ],
+    "types": ["@mui/internal-test-utils/initMatchers", "chai-dom", "mocha", "node"],
     "skipLibCheck": true
   },
   "include": ["src/**/*"]

@@ -1,4 +1,4 @@
-import { GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD } from '../constants';
+import { GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD } from '../../colDef';
 
 export const getRowGroupingCriteriaFromGroupingField = (groupingColDefField: string) => {
   const match = groupingColDefField.match(/^__row_group_by_columns_group_(.*)__$/);

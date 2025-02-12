@@ -1,9 +1,9 @@
-import * as React from 'react';
-import { expect } from 'chai';
 import { createRenderer, fireEvent, screen } from '@mui/internal-test-utils';
-import { DataGrid, DataGridProps, GridRowsProp, GridColDef, gridClasses } from '@mui/x-data-grid';
+import { DataGrid, DataGridProps, GridColDef, GridRowsProp, gridClasses } from '@mui/x-data-grid';
+import { expect } from 'chai';
+import * as React from 'react';
 import { getCell, getColumnHeaderCell, getColumnHeadersTextContent } from 'test/utils/helperFn';
-import { testSkipIf, isJSDOM } from 'test/utils/skipIf';
+import { isJSDOM, testSkipIf } from 'test/utils/skipIf';
 
 const rows: GridRowsProp = [{ id: 1, idBis: 1 }];
 
@@ -65,10 +65,10 @@ describe('<DataGrid /> - Columns', () => {
     const { setProps } = render(
       <TestDataGrid columns={[{ field: 'id', type: 'string' }, { field: 'idBis' }]} />,
     );
-    expect(getColumnHeaderCell(0)).not.to.have.class('MuiDataGrid-columnHeader--numeric');
+    expect(getColumnHeaderCell(0)).not.to.have.class('twg-columnHeader--numeric');
 
     setProps({ columns: [{ field: 'id', type: 'number' }, { field: 'idBis' }] });
-    expect(getColumnHeaderCell(0)).to.have.class('MuiDataGrid-columnHeader--numeric');
+    expect(getColumnHeaderCell(0)).to.have.class('twg-columnHeader--numeric');
   });
 
   it('should not persist valueFormatter on column type change', () => {
@@ -100,7 +100,7 @@ describe('<DataGrid /> - Columns', () => {
         ]}
       />,
     );
-    expect(getColumnHeaderCell(0)).not.to.have.class('MuiDataGrid-columnHeader--numeric');
+    expect(getColumnHeaderCell(0)).not.to.have.class('twg-columnHeader--numeric');
     expect(getCell(0, 0).textContent).to.equal('formatted: 1');
 
     setProps({
@@ -116,7 +116,7 @@ describe('<DataGrid /> - Columns', () => {
         { field: 'idBis' },
       ],
     } as Partial<DataGridProps>);
-    expect(getColumnHeaderCell(0)).to.have.class('MuiDataGrid-columnHeader--numeric');
+    expect(getColumnHeaderCell(0)).to.have.class('twg-columnHeader--numeric');
     // should not override valueFormatter with the default numeric one
     expect(getCell(0, 0).textContent).to.equal('formatted: 1');
   });

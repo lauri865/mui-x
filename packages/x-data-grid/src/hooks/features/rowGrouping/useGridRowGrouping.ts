@@ -1,0 +1,583 @@
+import { GridGroupNode, useGridApiEventHandler } from '@mui/x-data-grid-pro';
+import { isObjectEmpty } from '@mui/x-internals/isObjectEmpty';
+import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
+import {
+  GRID_GROUPING_COLUMN_COL_DEF,
+  GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD,
+} from '../../../colDef';
+import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridRowId, GridRowTreeConfig } from '../../../models/gridRows';
+import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
+import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
+import {
+  GridStrategyProcessor,
+  useGridRegisterStrategyProcessor,
+} from '../../core/strategyProcessing';
+import { useFirstRender } from '../../utils/useFirstRender';
+import { useGridApiMethod } from '../../utils/useGridApiMethod';
+import { GridStateInitializer } from '../../utils/useGridInitializeState';
+import { arrayShallowCompare } from '../../utils/useGridSelector';
+import { gridColumnLookupSelector } from '../columns';
+import {
+  defaultGridFilterLookup,
+  GridAggregatedFilterItemApplierResult,
+} from '../filter/gridFilterState';
+import {
+  GRID_ROOT_GROUP_ID,
+  gridDataRowIdsSelector,
+  gridRowsLookupSelector,
+  gridRowTreeSelector,
+} from '../rows';
+import { buildRootGroup } from '../rows/gridRowsUtils';
+import { createFlatRowTree } from '../rows/useGridRowsPreProcessors';
+import { GridRowGroupingApi, GridRowGroupingModel } from './gridRowGroupingInterfaces';
+import { gridFilteredRowGroupingModel, gridRowGroupingModelSelector } from './rowGroupingSelector';
+
+const EMPTY_ROW_GROUPING_MODEL: GridRowGroupingModel = [];
+
+const ROW_GROUPING_STRATEGY = 'rowGrouping';
+
+export const rowGroupingStateInitializer: GridStateInitializer<
+  Pick<DataGridProcessedProps, 'rowGroupingModel' | 'initialState'>
+> = (state, props, apiRef) => {
+  const model =
+    props.rowGroupingModel ?? props.initialState?.rowGrouping?.model ?? EMPTY_ROW_GROUPING_MODEL;
+
+  return {
+    ...state,
+    rowGrouping: {
+      model,
+    },
+  };
+};
+
+export const useGridRowGrouping = (
+  apiRef: RefObject<GridPrivateApiCommunity>,
+  props: Pick<DataGridProcessedProps, 'rowGroupingModel'>,
+) => {
+  const setRowGroupingModel = React.useCallback(
+    (model: GridRowGroupingModel) => {
+      const currentModel = gridRowGroupingModelSelector(apiRef.current.state);
+      if (arrayShallowCompare(model, currentModel)) {
+        return;
+      }
+      apiRef.current.setState((state) => ({
+        ...state,
+        rowGrouping: {
+          ...state.rowGrouping,
+          model,
+        },
+      }));
+      apiRef.current.forceUpdate();
+    },
+    [apiRef],
+  );
+
+  const addRowGroupingCriteria = React.useCallback(
+    (groupingCriteriaField: string, groupingIndex?: number) => {
+      const currentModel = gridRowGroupingModelSelector(apiRef.current.state);
+      const updatedModel = [...currentModel];
+      if (groupingIndex != null) {
+        updatedModel.splice(groupingIndex, 0, groupingCriteriaField);
+      } else {
+        updatedModel.push(groupingCriteriaField);
+      }
+      apiRef.current.setRowGroupingModel(updatedModel);
+    },
+    [apiRef],
+  );
+
+  const removeRowGroupingCriteria = React.useCallback(
+    (groupingCriteriaField: string) => {
+      const currentModel = gridRowGroupingModelSelector(apiRef.current.state);
+      let updatedModel = currentModel.filter((field) => field !== groupingCriteriaField);
+      if (updatedModel.length === 0) {
+        updatedModel = EMPTY_ROW_GROUPING_MODEL;
+      }
+      apiRef.current.setRowGroupingModel(updatedModel);
+    },
+    [apiRef],
+  );
+
+  const setRowGroupingCriteriaIndex = React.useCallback(
+    (groupingCriteriaField: string, groupingIndex: number) => {
+      const currentModel = gridRowGroupingModelSelector(apiRef.current.state);
+      const updatedModel = currentModel.filter((field) => field !== groupingCriteriaField);
+      updatedModel.splice(groupingIndex, 0, groupingCriteriaField);
+      apiRef.current.setRowGroupingModel(updatedModel);
+    },
+    [apiRef],
+  );
+
+  const methods: GridRowGroupingApi = {
+    setRowGroupingModel,
+    addRowGroupingCriteria,
+    removeRowGroupingCriteria,
+    setRowGroupingCriteriaIndex,
+  };
+
+  useGridApiMethod(apiRef, methods, 'public');
+
+  React.useEffect(() => {
+    if (props.rowGroupingModel) {
+      apiRef.current.setRowGroupingModel(props.rowGroupingModel);
+    }
+  }, [apiRef, props.rowGroupingModel]);
+};
+
+export const useGridRowGroupingPreProcessors = (apiRef: RefObject<GridPrivateApiCommunity>) => {
+  const createRowTree = React.useCallback<GridStrategyProcessor<'rowTreeCreation'>>(
+    (params) => {
+      const groupBy = gridFilteredRowGroupingModel(apiRef);
+      let rowIds =
+        params.updates.type === 'full'
+          ? params.updates.rows
+          : Object.keys(params.dataRowIdToModelLookup);
+
+      if (!groupBy.length) {
+        return createFlatRowTree(rowIds);
+      }
+
+      const columnsLookup = gridColumnLookupSelector(apiRef);
+
+      /* treeDepths: Object
+      // 0: top level
+        // 1: second level
+        // 2: third level – total rows comes here
+0: 6 - number of top-level groups
+1: 27 - 6 + number of second level rows
+2: 35  - total rows*/
+
+      /*  */
+
+      const tree: GridRowTreeConfig = {
+        [GRID_ROOT_GROUP_ID]: buildRootGroup(),
+      };
+      const treeDepths: Record<number, number> = {};
+      const previousTree = params.previousTree ?? {};
+
+      for (const id of rowIds) {
+        const row = params.dataRowIdToModelLookup[id];
+        if (!row) continue;
+
+        let depth = 0;
+        let parent = GRID_ROOT_GROUP_ID;
+        let groupId = 'auto-generated-row';
+
+        for (const key of groupBy) {
+          const groupValue = row[key] ?? 'N/A';
+
+          if (depth === 0) {
+            groupId += `-${key}`;
+          }
+          groupId += `/${groupValue}`;
+
+          // If this group does not exist in the stack, create a new group
+          if (!tree[groupId]) {
+            const groupNode: GridGroupNode = {
+              id: groupId,
+              type: 'group',
+              depth,
+              parent,
+              isAutoGenerated: true,
+              groupingKey: groupValue,
+              groupingField: key,
+              children: [],
+              childrenFromPath: {},
+              childrenExpanded: (previousTree[groupId] as GridGroupNode)?.childrenExpanded ?? false,
+            };
+            tree[groupId] = groupNode;
+            const group = tree[parent] as GridGroupNode;
+            group.childrenFromPath[key] = {};
+            group.children.push(groupId);
+            group.childrenFromPath[key][groupValue] = groupId;
+            treeDepths[depth] = (treeDepths[depth] ?? 0) + 1;
+          }
+
+          parent = groupId;
+          depth++;
+        }
+
+        // Add the actual row as a leaf
+        tree[id] = {
+          id,
+          depth,
+          parent,
+          type: 'leaf',
+          groupingKey: row.id,
+        };
+        const group = tree[parent] as GridGroupNode;
+        group.children.push(id);
+        group.childrenFromPath.__no_field__ ??= {};
+        group.childrenFromPath.__no_field__[row.id] = id;
+
+        treeDepths[depth] = (treeDepths[depth] ?? 0) + 1;
+      }
+
+      return {
+        groupingName: 'rowGrouping',
+        tree,
+        treeDepths,
+        dataRowIds: rowIds,
+      };
+    },
+    [apiRef],
+  );
+
+  const lastGroupingModelRef = React.useRef<GridRowGroupingModel>([]);
+  const addGroupingColumn = React.useCallback<GridPipeProcessor<'hydrateColumns'>>(
+    (columns) => {
+      const rowGroupingModel = gridRowGroupingModelSelector(apiRef.current.state).filter(
+        (field) => columns.lookup[field] != null,
+      );
+      const lastGroupingModel = lastGroupingModelRef.current;
+      lastGroupingModelRef.current = rowGroupingModel;
+
+      if (!rowGroupingModel.length) {
+        if (columns.lookup[GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD]) {
+          delete columns.lookup[GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD];
+          columns.orderedFields = columns.orderedFields.filter(
+            (field) => field !== GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD,
+          );
+          delete columns.columnVisibilityModel[GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD];
+
+          if (lastGroupingModel.length) {
+            lastGroupingModel.forEach((field) => {
+              delete columns.columnVisibilityModel[field];
+            });
+          }
+        }
+        return columns;
+      }
+
+      if (arrayShallowCompare(rowGroupingModel, lastGroupingModel)) {
+        return columns;
+      }
+
+      const firstGroup = columns.lookup[rowGroupingModel[0]];
+      columns.lookup[GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD] = {
+        ...GRID_GROUPING_COLUMN_COL_DEF,
+        headerName: firstGroup.headerName,
+        cellClassName: 'gap-2',
+        width:
+          20 +
+          8 +
+          (rowGroupingModel.length - 1) * 16 +
+          rowGroupingModel.reduce(
+            (acc, field) => Math.max(acc, columns.lookup[field]?.width ?? 0),
+            0,
+          ),
+        sortingOrder: firstGroup.sortingOrder,
+      };
+
+      columns.orderedFields = [
+        GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD,
+        ...columns.orderedFields.filter(
+          (field) => field !== GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD,
+        ),
+      ];
+
+      rowGroupingModel.forEach((field) => {
+        columns.columnVisibilityModel[field] = false;
+      });
+
+      return columns;
+    },
+    [apiRef],
+  );
+
+  const sortTree = React.useCallback<GridStrategyProcessor<'sorting'>>(
+    (params) => {
+      const tree = gridRowTreeSelector(apiRef.current.state);
+      const rootGroupNode = tree[GRID_ROOT_GROUP_ID] as GridGroupNode;
+
+      const rowIds = gridDataRowIdsSelector(apiRef.current.state);
+      const sortedChildren = params.sortRowList
+        ? params.sortRowList(rowIds.map((childId) => tree[childId]))
+        : [...rowIds];
+
+      if (rootGroupNode.footerId != null) {
+        sortedChildren.push(rootGroupNode.footerId);
+      }
+
+      const result: GridRowId[] = [];
+      const seenGroups = new Set<GridRowId>();
+
+      function addAncestors(nodeId: GridRowId) {
+        const ancestors: GridRowId[] = [];
+        let node = tree[nodeId];
+        if (!node) return;
+
+        // Traverse up the tree and collect groups
+        let parentId = node.parent;
+        while (parentId && !seenGroups.has(parentId)) {
+          let parent = tree[parentId];
+          if (parent && parent.depth >= 0) {
+            ancestors.push(parentId);
+            seenGroups.add(parentId);
+            parentId = parent.parent;
+          } else {
+            break;
+          }
+        }
+
+        // Add collected ancestors in reverse order to ensure top-level parents come first
+        for (let i = ancestors.length - 1; i >= 0; i--) {
+          result.push(ancestors[i]);
+        }
+      }
+
+      for (const leafId of sortedChildren) {
+        if (!tree[leafId]) continue;
+        addAncestors(leafId);
+        result.push(leafId);
+      }
+
+      console.log('result', result);
+
+      return result;
+    },
+    [apiRef],
+  );
+
+  const filterTree = React.useCallback<GridStrategyProcessor<'filtering'>>(
+    (params) => {
+      const isRowMatching = params.isRowMatchingFilters;
+      if (isObjectEmpty(params.filterModel) || !isRowMatching) {
+        return defaultGridFilterLookup;
+      }
+
+      const result: ReturnType<GridStrategyProcessor<'filtering'>> = {
+        filteredChildrenCountLookup: {},
+        filteredRowsLookup: {},
+        filteredDescendantCountLookup: {},
+      };
+
+      const tree = gridRowTreeSelector(apiRef.current.state);
+      const rowLookup = gridRowsLookupSelector(apiRef.current.state);
+
+      // TODO: finish implementation, this is a rough idea, but untested
+      const traverse = (rowId: GridRowId): number => {
+        const node = tree[rowId];
+        let descendantCount = 0;
+
+        const filterResults: GridAggregatedFilterItemApplierResult = {
+          passingFilterItems: null,
+          passingQuickFilterValues: null,
+        };
+
+        // Check if the current row matches
+        const shouldApplyFilterToRow =
+          node.type === 'group' && node.isAutoGenerated ? (columnField: string) => true : undefined;
+        isRowMatching(rowLookup[rowId], shouldApplyFilterToRow, filterResults);
+
+        // If it's a group, traverse its children
+        if (node.type === 'group' && node.children) {
+          let matchingChildrenCount = 0;
+
+          for (const childId of node.children) {
+            const childDescendantCount = traverse(childId);
+            descendantCount += childDescendantCount;
+
+            if (result.filteredRowsLookup[childId] !== false) {
+              matchingChildrenCount++;
+            }
+          }
+
+          // Update filteredChildrenCountLookup
+          result.filteredChildrenCountLookup[rowId] = matchingChildrenCount;
+        }
+
+        let isMatching = true;
+        if (node.type === 'group') {
+          isMatching = descendantCount > 0;
+        }
+
+        // Update filteredRowsLookup
+        if (!isMatching) {
+          result.filteredRowsLookup[rowId] = false;
+        }
+
+        // Update filteredDescendantCountLookup
+        if (isMatching) {
+          descendantCount += 1; // Include the current row
+        }
+        result.filteredDescendantCountLookup[rowId] = descendantCount;
+
+        return descendantCount;
+      };
+
+      return result;
+    },
+    [apiRef],
+  );
+
+  const createVisibleRows = React.useCallback<GridStrategyProcessor<'visibleRowsLookupCreation'>>(
+    (params) => {
+      const visibleRowsLookup: Record<GridRowId, boolean> = {};
+
+      const tree = params.tree;
+
+      function traverseTree(rowId: GridRowId, parentExpanded: boolean) {
+        const node = tree[rowId];
+
+        if (!node) {
+          return; // Node doesn't exist, skip it
+        }
+
+        const isVisible = parentExpanded;
+
+        if (!isVisible) {
+          visibleRowsLookup[rowId] = false;
+        }
+
+        if (node.type === 'group' && node.children) {
+          const childrenExpanded = node.childrenExpanded;
+
+          for (const childRowId of node.children) {
+            traverseTree(childRowId, isVisible && childrenExpanded === true);
+          }
+        }
+      }
+
+      traverseTree(GRID_ROOT_GROUP_ID, true);
+
+      return visibleRowsLookup;
+    },
+    [apiRef],
+  );
+
+  useGridApiEventHandler(apiRef, 'cellKeyDown', (params, event) => {
+    if (event.key !== 'Enter') {
+      return;
+    }
+    if (
+      params.field === GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD &&
+      params.rowNode.type === 'group'
+    ) {
+      const isExpanded = params.rowNode.childrenExpanded;
+      apiRef.current.setRowChildrenExpansion(params.rowNode.id, !isExpanded);
+    }
+  });
+
+  useFirstRender(() => {
+    apiRef.current.setStrategyAvailability('rowTree', ROW_GROUPING_STRATEGY, () => true);
+  });
+
+  useGridRegisterStrategyProcessor(apiRef, ROW_GROUPING_STRATEGY, 'rowTreeCreation', createRowTree);
+  useGridRegisterStrategyProcessor(apiRef, ROW_GROUPING_STRATEGY, 'sorting', sortTree);
+  useGridRegisterStrategyProcessor(apiRef, ROW_GROUPING_STRATEGY, 'filtering', filterTree);
+  useGridRegisterStrategyProcessor(
+    apiRef,
+    ROW_GROUPING_STRATEGY,
+    'visibleRowsLookupCreation',
+    createVisibleRows,
+  );
+  useGridRegisterPipeProcessor(apiRef, 'hydrateColumns', addGroupingColumn);
+};
+
+/* {
+    "1": {
+        "type": "leaf",
+        "id": 1,
+        "depth": 2,
+        "parent": "auto-generated-row-company/Disney Studios-director/Anthony & Joe Russo",
+        "groupingKey": "1"
+    },
+    "auto-generated-group-node-root": {
+        "type": "group",
+        "id": "auto-generated-group-node-root",
+        "depth": -1,
+        "groupingField": null,
+        "groupingKey": null,
+        "isAutoGenerated": true,
+        "children": [
+            "auto-generated-row-company/20th Century Fox",
+            "auto-generated-row-company/Disney Studios",
+            "auto-generated-row-company/Universal Pictures",
+            "auto-generated-row-company/Warner Bros. Pictures",
+            "auto-generated-row-company/New Line Cinema",
+            "auto-generated-row-company/Paramount Pictures"
+        ],
+        "childrenFromPath": {
+            "company": {
+                "20th Century Fox": "auto-generated-row-company/20th Century Fox",
+                "Disney Studios": "auto-generated-row-company/Disney Studios",
+                "Universal Pictures": "auto-generated-row-company/Universal Pictures",
+                "Warner Bros. Pictures": "auto-generated-row-company/Warner Bros. Pictures",
+                "New Line Cinema": "auto-generated-row-company/New Line Cinema",
+                "Paramount Pictures": "auto-generated-row-company/Paramount Pictures"
+            }
+        },
+        "childrenExpanded": true,
+        "parent": null
+    },
+    "auto-generated-row-company/Disney Studios": {
+        "type": "group",
+        "id": "auto-generated-row-company/Disney Studios",
+        "parent": "auto-generated-group-node-root",
+        "depth": 0,
+        "isAutoGenerated": true,
+        "groupingKey": "Disney Studios",
+        "groupingField": "company",
+        "children": [
+            "auto-generated-row-company/Disney Studios-director/Anthony & Joe Russo",
+            "auto-generated-row-company/Disney Studios-director/J. J. Abrams",
+            "auto-generated-row-company/Disney Studios-director/Jon Watts",
+            "auto-generated-row-company/Disney Studios-director/Jon Favreau",
+            "auto-generated-row-company/Disney Studios-director/Joss Whedon",
+            "auto-generated-row-company/Disney Studios-director/Chris Buck & Jennifer Lee",
+            "auto-generated-row-company/Disney Studios-director/Ryan Coogler",
+            "auto-generated-row-company/Disney Studios-director/Rian Johnson",
+            "auto-generated-row-company/Disney Studios-director/Bill Condon",
+            "auto-generated-row-company/Disney Studios-director/Brad Bird",
+            "auto-generated-row-company/Disney Studios-director/Shane Black",
+            "auto-generated-row-company/Disney Studios-director/Anna Boden & Ryan Fleck",
+            "auto-generated-row-company/Disney Studios-director/Josh Cooley",
+            "auto-generated-row-company/Disney Studios-director/Lee Unkrich"
+        ],
+        "childrenFromPath": {
+            "director": {
+                "Anthony & Joe Russo": "auto-generated-row-company/Disney Studios-director/Anthony & Joe Russo",
+                "J. J. Abrams": "auto-generated-row-company/Disney Studios-director/J. J. Abrams",
+                "Jon Watts": "auto-generated-row-company/Disney Studios-director/Jon Watts",
+                "Jon Favreau": "auto-generated-row-company/Disney Studios-director/Jon Favreau",
+                "Joss Whedon": "auto-generated-row-company/Disney Studios-director/Joss Whedon",
+                "Chris Buck & Jennifer Lee": "auto-generated-row-company/Disney Studios-director/Chris Buck & Jennifer Lee",
+                "Ryan Coogler": "auto-generated-row-company/Disney Studios-director/Ryan Coogler",
+                "Rian Johnson": "auto-generated-row-company/Disney Studios-director/Rian Johnson",
+                "Bill Condon": "auto-generated-row-company/Disney Studios-director/Bill Condon",
+                "Brad Bird": "auto-generated-row-company/Disney Studios-director/Brad Bird",
+                "Shane Black": "auto-generated-row-company/Disney Studios-director/Shane Black",
+                "Anna Boden & Ryan Fleck": "auto-generated-row-company/Disney Studios-director/Anna Boden & Ryan Fleck",
+                "Josh Cooley": "auto-generated-row-company/Disney Studios-director/Josh Cooley",
+                "Lee Unkrich": "auto-generated-row-company/Disney Studios-director/Lee Unkrich"
+            }
+        },
+        "childrenExpanded": true
+    },
+    "auto-generated-row-company/Disney Studios-director/Anthony & Joe Russo": {
+        "type": "group",
+        "id": "auto-generated-row-company/Disney Studios-director/Anthony & Joe Russo",
+        "parent": "auto-generated-row-company/Disney Studios",
+        "depth": 1,
+        "isAutoGenerated": true,
+        "groupingKey": "Anthony & Joe Russo",
+        "groupingField": "director",
+        "children": [
+            1,
+            4,
+            22
+        ],
+        "childrenFromPath": {
+            "__no_field__": {
+                "1": 1,
+                "4": 4,
+                "22": 22
+            }
+        },
+        "childrenExpanded": false
+    },
+    
+} */
