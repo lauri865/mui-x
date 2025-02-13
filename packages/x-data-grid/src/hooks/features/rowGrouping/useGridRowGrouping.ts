@@ -88,6 +88,38 @@ export const useGridRowGrouping = (
       if (arrayShallowCompare(model, currentModel)) {
         return;
       }
+      if (model.length) {
+        setTimeout(() => {
+          apiRef.current.setColumnHeaderFocus(GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD);
+        }, 0);
+      }
+      if (!currentModel.length && model.length) {
+        const sortModel = apiRef.current.getSortModel();
+        const firstColumn = model[0];
+
+        if (sortModel[0]?.field === firstColumn) {
+          apiRef.current.state.sorting.sortModel = [
+            { ...sortModel[0], field: GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD },
+            ...sortModel.slice(1),
+          ];
+        }
+      } else if (currentModel.length && !model.length) {
+        const sortModel = apiRef.current.getSortModel();
+        const firstColumn = sortModel[0]?.field;
+
+        setTimeout(() => {
+          apiRef.current.setColumnHeaderFocus(currentModel[0]);
+        }, 0);
+
+        if (firstColumn === GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD) {
+          apiRef.current.state.sorting.sortModel = [
+            { ...sortModel[0], field: currentModel[0] },
+            ...sortModel
+              .slice(1)
+              .filter((sort) => sort.field !== GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD),
+          ];
+        }
+      }
       apiRef.current.setState((state) => ({
         ...state,
         rowGrouping: {

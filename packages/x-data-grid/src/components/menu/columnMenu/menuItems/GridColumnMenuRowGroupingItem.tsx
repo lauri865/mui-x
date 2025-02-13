@@ -54,6 +54,10 @@ function GridColumnRowGroupingItem(props: GridColumnMenuItemProps) {
             {apiRef.current.getLocaleText('unGroupColumn')(headerName)}
           </DropdownMenu.Item>
         ))}
+        <DropdownMenu.Item onClick={() => apiRef.current.setRowGroupingModel([])}>
+          <rootProps.slots.ungroupIcon />
+          {apiRef.current.getLocaleText('unGroupAll')}
+        </DropdownMenu.Item>
       </>
     );
   }

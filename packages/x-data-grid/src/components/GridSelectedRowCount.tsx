@@ -16,7 +16,11 @@ const GridSelectedRowCount = forwardRef<HTMLDivElement, GridSelectedRowCountProp
     const { className, selectedRowCount, ...other } = props;
     const apiRef = useGridApiContext();
     const rootProps = useGridRootProps();
-    const rowSelectedText = apiRef.current.getLocaleText('footerRowSelected');
+    let rowSelectedText = apiRef.current.getLocaleText('footerRowSelected');
+    if (typeof rowSelectedText === 'function') {
+      // @ts-ignore – backwards compatibility for old locale
+      rowSelectedText = rowSelectedText(selectedRowCount);
+    }
     const classes = useThemedComponent('selectedRowCount');
 
     return (

@@ -180,6 +180,7 @@ export interface GridLocaleText {
   groupExpansion: string;
   groupColumn: (name: string) => string;
   unGroupColumn: (name: string) => string;
+  unGroupAll: string;
 
   // Master/detail
   detailPanelToggle: string;

@@ -180,6 +180,7 @@ export const GRID_DEFAULT_LOCALE_TEXT: GridLocaleText = {
   groupExpansion: 'Group expansion',
   groupColumn: (name) => `Group by ${name}`,
   unGroupColumn: (name) => `Stop grouping by ${name}`,
+  unGroupAll: 'Stop grouping',
 
   // Master/detail
   detailPanelToggle: 'Detail panel toggle',
