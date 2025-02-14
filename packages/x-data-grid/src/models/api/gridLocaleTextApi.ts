@@ -130,8 +130,10 @@ export interface GridLocaleText {
   columnMenuUnsort: React.ReactNode;
   columnMenuSortAsc: React.ReactNode | ((colDef: GridColDef) => React.ReactNode);
   columnMenuSortDesc: React.ReactNode | ((colDef: GridColDef) => React.ReactNode);
+  columnMenuAutoSize: React.ReactNode;
   columnMenuAutoSizeColumn: React.ReactNode;
   columnMenuAutoSizeAllColumns: React.ReactNode;
+  columnMenuAutoSizeExpand: React.ReactNode;
 
   // Column header text
   columnHeaderFiltersTooltipActive: (count: number) => React.ReactNode;

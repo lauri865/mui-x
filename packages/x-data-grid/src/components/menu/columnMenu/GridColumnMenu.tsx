@@ -2,6 +2,7 @@ import { useGridColumnMenuSlots } from '../../../hooks/features/columnMenu/useGr
 import { useGridApiContext } from '../../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../../hooks/utils/useGridRootProps';
 import { GridColumnMenuProps } from './GridColumnMenuProps';
+import { GridColumnAggregationItem } from './menuItems/GridColumnMenuAggregationItem';
 import { GridColumnMenuColumnPinningItem } from './menuItems/GridColumnMenuColumnPinningItem';
 import { GridColumnMenuColumnsItem } from './menuItems/GridColumnMenuColumnsItem';
 import { GridColumnMenuFilterItem } from './menuItems/GridColumnMenuFilterItem';
@@ -14,14 +15,16 @@ export const GRID_COLUMN_MENU_SLOTS = {
   columnMenuRowGrouping: GridColumnRowGroupingItem,
   columnMenuFilterItem: GridColumnMenuFilterItem,
   columnMenuColumnsItem: GridColumnMenuColumnsItem,
+  columnMenuAggregationItem: GridColumnAggregationItem,
 };
 
 export const GRID_COLUMN_MENU_SLOT_PROPS = {
   columnMenuSortItem: { displayOrder: 10 },
-  columnMenuColumnPinning: { displayOrder: 20 },
+  columnMenuFilterItem: { displayOrder: 20 },
+  columnMenuColumnPinning: { displayOrder: 25 },
   columnMenuRowGrouping: { displayOrder: 30 },
-  columnMenuFilterItem: { displayOrder: 40 },
-  columnMenuColumnsItem: { displayOrder: 50 },
+  columnMenuAggregationItem: { displayOrder: 50 },
+  columnMenuColumnsItem: { displayOrder: 60 },
 };
 
 function GridColumnMenu(props: GridColumnMenuProps) {

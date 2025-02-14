@@ -128,8 +128,10 @@ export const GRID_DEFAULT_LOCALE_TEXT: GridLocaleText = {
   columnMenuUnsort: 'Unsort',
   columnMenuSortAsc: 'Sort Ascending',
   columnMenuSortDesc: 'Sort Descending',
+  columnMenuAutoSize: 'Autosize',
   columnMenuAutoSizeColumn: 'Autosize column',
   columnMenuAutoSizeAllColumns: 'Autosize all columns',
+  columnMenuAutoSizeExpand: 'Auto-fit columns',
 
   // Column header text
   columnHeaderFiltersTooltipActive: (count) =>

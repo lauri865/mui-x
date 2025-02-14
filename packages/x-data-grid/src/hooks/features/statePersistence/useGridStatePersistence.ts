@@ -1,9 +1,9 @@
-import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
-import { GridInitialStateCommunity } from '../../../models/gridStateCommunity';
+import * as React from 'react';
 import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
-import { GridStatePersistenceApi } from './gridStatePersistenceInterface';
+import { GridInitialStateCommunity } from '../../../models/gridStateCommunity';
 import { useGridApiMethod } from '../../utils';
+import { GridStatePersistenceApi } from './gridStatePersistenceInterface';
 
 export const useGridStatePersistence = (apiRef: RefObject<GridPrivateApiCommunity>) => {
   const exportState = React.useCallback<
@@ -34,8 +34,6 @@ export const useGridStatePersistence = (apiRef: RefObject<GridPrivateApiCommunit
       response.callbacks.forEach((callback) => {
         callback();
       });
-
-      apiRef.current.forceUpdate();
     },
     [apiRef],
   );

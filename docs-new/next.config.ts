@@ -7,7 +7,7 @@ const withAnalyzer = createBundleAnalyzer({
 });
 
 const config: NextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   logging: {
     fetches: {
       fullUrl: true,

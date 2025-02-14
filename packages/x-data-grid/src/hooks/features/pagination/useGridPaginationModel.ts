@@ -251,6 +251,12 @@ export const useGridPaginationModel = (
     [apiRef],
   );
 
+  const handleSortModelChange = React.useCallback(() => {
+    apiRef.current.setPage(0);
+  }, [apiRef]);
+
+  useGridApiEventHandler(apiRef, 'sortModelChange', handleSortModelChange);
+
   useGridApiEventHandler(apiRef, 'viewportInnerSizeChange', handleUpdateAutoPageSize);
   useGridApiEventHandler(apiRef, 'paginationModelChange', handlePaginationModelChange);
   useGridApiEventHandler(apiRef, 'rowCountChange', handleRowCountChange);

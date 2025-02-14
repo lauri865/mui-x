@@ -621,7 +621,6 @@ export const useGridColumnResize = (
       ...state,
       columnResize: { ...state.columnResize, resizingColumnField: '' },
     }));
-    apiRef.current.forceUpdate();
   }, [apiRef]);
 
   const handleColumnResizeMouseDown: GridEventListener<'columnSeparatorMouseDown'> =

@@ -30,7 +30,6 @@ const useUtilityClasses = (ownerState: OwnerState) => {
 const GridHeaderCheckbox = forwardRef<HTMLButtonElement, GridColumnHeaderParams>(
   function GridHeaderCheckbox(props, ref) {
     const { field, colDef, ...other } = props;
-    const [, forceUpdate] = React.useState(false);
     const apiRef = useGridApiContext();
     const rootProps = useGridRootProps();
     const ownerState = { classes: rootProps.classes };
@@ -110,14 +109,6 @@ const GridHeaderCheckbox = forwardRef<HTMLButtonElement, GridColumnHeaderParams>
       },
       [apiRef, isChecked],
     );
-
-    const handleSelectionChange = React.useCallback(() => {
-      forceUpdate((p) => !p);
-    }, []);
-
-    React.useEffect(() => {
-      return apiRef.current.subscribeEvent('rowSelectionChange', handleSelectionChange);
-    }, [apiRef, handleSelectionChange]);
 
     const label = apiRef.current.getLocaleText(
       isChecked && !isIndeterminate

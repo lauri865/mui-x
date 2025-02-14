@@ -188,7 +188,6 @@ export const useGridRowSelection = (
           ...state,
           rowSelection: props.rowSelection ? model : [],
         }));
-        apiRef.current.forceUpdate();
       }
     },
     [apiRef, logger, props.rowSelection, props.signature, canHaveMultipleSelection],

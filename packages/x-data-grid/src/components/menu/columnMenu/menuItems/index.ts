@@ -1,3 +1,4 @@
+export * from './GridColumnMenuAggregationItem';
 export * from './GridColumnMenuColumnPinningItem';
 export * from './GridColumnMenuColumnsItem';
 export * from './GridColumnMenuFilterItem';

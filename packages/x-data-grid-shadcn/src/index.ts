@@ -13,6 +13,7 @@ import {
   MoveHorizontalIcon,
   PinIcon,
   PlusIcon,
+  SigmaIcon,
 } from 'lucide-react';
 
 export { Button } from './components/ui/button';
@@ -37,4 +38,5 @@ export const icons = {
   groupIcon: BetweenHorizonalStartIcon,
   ungroup: BanIcon,
   groupExpand: ChevronsUpDownIcon,
+  aggregation: SigmaIcon,
 };

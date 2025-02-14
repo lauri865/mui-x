@@ -22,7 +22,8 @@ export const rowPinningStateInitializer: GridStateInitializer<
   let model = props.pinnedRows ?? props.initialState?.pinnedRows ?? EMPTY_PINNED_ROWS;
 
   const tree = gridRowTreeSelector(apiRef.current.state);
-  const hasFooter = true;
+  const hasFooter = tree[GRID_ROOT_FOOTER_ID] != null;
+
   if (hasFooter) {
     model = {
       ...model,

@@ -24,8 +24,14 @@ function GridColumnMenuAutoSizeItem(props: GridColumnMenuItemProps) {
       if (disabled) {
         return;
       }
+
+      const method = (event.currentTarget as HTMLElement).getAttribute('data-value');
+      const columns = method === 'column' ? [colDef.field] : visibleColumns.map((c) => c.field);
+      const expand = method === 'expand';
+
       apiRef.current.autosizeColumns({
-        columns: [colDef.field],
+        columns,
+        expand,
       });
     },
     [apiRef, colDef.field, onClick, disabled],
@@ -42,10 +48,26 @@ function GridColumnMenuAutoSizeItem(props: GridColumnMenuItemProps) {
   const DropdownMenu = rootProps.slots.baseDropdownMenu;
 
   return (
-    <DropdownMenu.Item onSelect={autosize} disabled={disabled}>
-      <rootProps.slots.autosizeIcon />
-      {apiRef.current.getLocaleText('columnMenuAutoSizeColumn')}
-    </DropdownMenu.Item>
+    <DropdownMenu.Sub>
+      <DropdownMenu.SubTrigger>
+        <rootProps.slots.autosizeIcon />
+        {apiRef.current.getLocaleText('columnMenuAutoSize')}
+      </DropdownMenu.SubTrigger>
+      <DropdownMenu.SubContent>
+        <DropdownMenu.Item onSelect={autosize} disabled={disabled} data-value="column">
+          <rootProps.slots.autosizeIcon />
+          {apiRef.current.getLocaleText('columnMenuAutoSizeColumn')}
+        </DropdownMenu.Item>
+        <DropdownMenu.Item onSelect={autosize} disabled={disabled} data-value="all">
+          <rootProps.slots.autosizeIcon />
+          {apiRef.current.getLocaleText('columnMenuAutoSizeAllColumns')}
+        </DropdownMenu.Item>
+        <DropdownMenu.Item onSelect={autosize} disabled={disabled} data-value="expand">
+          <rootProps.slots.autosizeIcon />
+          {apiRef.current.getLocaleText('columnMenuAutoSizeExpand')}
+        </DropdownMenu.Item>
+      </DropdownMenu.SubContent>
+    </DropdownMenu.Sub>
   );
 }
 

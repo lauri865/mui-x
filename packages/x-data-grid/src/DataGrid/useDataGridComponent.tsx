@@ -1,6 +1,10 @@
 import { RefObject } from '@mui/x-internals/types';
 import { useGridInitialization } from '../hooks/core/useGridInitialization';
-import { useGridAggregationPreProcessors } from '../hooks/features/aggregation/useGridAggregation';
+import {
+  gridAggregationStateInitializer,
+  useGridAggregation,
+  useGridAggregationPreProcessors,
+} from '../hooks/features/aggregation/useGridAggregation';
 import { useGridClipboard } from '../hooks/features/clipboard/useGridClipboard';
 import {
   columnGroupsStateInitializer,
@@ -104,6 +108,7 @@ export const useDataGridComponent = (
    * Register all state initializers here.
    */
   useGridInitializeState(rowGroupingStateInitializer, apiRef, props);
+  useGridInitializeState(gridAggregationStateInitializer, apiRef, props);
   useGridInitializeState(rowSelectionStateInitializer, apiRef, props);
   useGridInitializeState(columnsStateInitializer, apiRef, props);
   useGridInitializeState(detailPanelStateInitializer, apiRef, props);
@@ -127,6 +132,7 @@ export const useDataGridComponent = (
   useGridInitializeState(listViewStateInitializer, apiRef, props);
 
   useGridRowGrouping(apiRef, props);
+  useGridAggregation(apiRef, props);
   useGridKeyboardNavigation(apiRef, props);
   useGridRowSelection(apiRef, props);
   useGridColumns(apiRef, props);

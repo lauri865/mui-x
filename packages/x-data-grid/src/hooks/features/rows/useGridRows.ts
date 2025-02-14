@@ -142,7 +142,6 @@ export const useGridRows = (
           }),
         }));
         apiRef.current.publishEvent('rowsSet');
-        apiRef.current.forceUpdate();
       };
 
       timeout.clear();
@@ -288,7 +287,6 @@ export const useGridRows = (
           },
         };
       });
-      apiRef.current.forceUpdate();
       apiRef.current.publishEvent('rowExpansionChange', newNode);
     },
     [apiRef],
@@ -592,7 +590,6 @@ export const useGridRows = (
       };
     });
     apiRef.current.publishEvent('rowsSet');
-    apiRef.current.forceUpdate();
   }, [apiRef, props.rowCount]);
 
   useGridRegisterPipeApplier(apiRef, 'hydrateRows', applyHydrateRowsProcessor);
@@ -635,7 +632,6 @@ export const useGridRows = (
           rows: { ...state.rows, loading: props.loading },
         }));
         apiRef.current.caches.rows!.loadingPropBeforePartialUpdates = props.loading;
-        apiRef.current.forceUpdate();
       }
 
       if (!isNewRowCountAlreadyInState) {
@@ -648,7 +644,6 @@ export const useGridRows = (
           },
         }));
         apiRef.current.caches.rows.rowCountPropBeforePartialUpdates = props.rowCount;
-        apiRef.current.forceUpdate();
       }
       if (!isRowCountPropUpdated) {
         return;

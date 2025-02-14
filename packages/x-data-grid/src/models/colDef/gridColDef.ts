@@ -292,6 +292,9 @@ export interface GridBaseColDef<R extends GridValidRowModel = GridValidRowModel,
    * Example values that can be used by the grid to get more context about the column.
    */
   unstable_examples?: V[];
+
+  aggregable?: boolean;
+  availableAggregationFunctions?: string[];
 }
 
 /**

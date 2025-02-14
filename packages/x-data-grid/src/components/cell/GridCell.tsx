@@ -131,7 +131,7 @@ let warnedOnce = false;
 
 const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(props, ref) {
   const {
-    column,
+    column: columnProp,
     row,
     rowId,
     rowNode,
@@ -164,7 +164,7 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
   const rootProps = useGridRootProps();
   const isRtl = useRtl();
 
-  const field = column.field;
+  const field = columnProp.field;
 
   const editCellState: GridEditCellProps<any> | null = useGridSelector(
     apiRef,
@@ -185,7 +185,7 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
     any,
     GridTreeNodeWithRender
   >(rowId, field, row, {
-    colDef: column,
+    colDef: columnProp,
     cellMode,
     rowNode: rowNode as GridTreeNodeWithRender,
     tabIndex: useGridSelector(apiRef, () => {
@@ -197,6 +197,8 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
       return focus?.id === rowId && focus.field === field;
     }),
   });
+
+  const column = cellParams.colDef;
 
   cellParams.api = apiRef.current;
 
@@ -470,7 +472,10 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
     showRightBorder,
   ]);
   const showEmpty =
-    rowNode.type !== 'group' && (children === null || children === undefined || children === '');
+    rowNode.type !== 'group' &&
+    columnProp.type !== 'custom' &&
+    (children === null || children === undefined || children === '');
+
   return (
     <div
       className={clsx(classes.root, classNames, className)}

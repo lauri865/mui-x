@@ -137,8 +137,6 @@ export const useGridFocus = (
           },
         };
       });
-
-      apiRef.current.forceUpdate();
     },
     [apiRef, logger, publishCellFocusOut],
   );
@@ -167,8 +165,6 @@ export const useGridFocus = (
           },
         };
       });
-
-      apiRef.current.forceUpdate();
     },
     [apiRef, logger, publishCellFocusOut],
   );
@@ -203,8 +199,6 @@ export const useGridFocus = (
           },
         };
       });
-
-      apiRef.current.forceUpdate();
     },
     [apiRef],
   );
@@ -406,8 +400,6 @@ export const useGridFocus = (
             columnGroupHeader: null,
           },
         }));
-        apiRef.current.forceUpdate();
-
         // There's a focused cell but another element (not a cell) was clicked
         // Publishes an event to notify that the focus was lost
         publishCellFocusOut(focusedCell, event);

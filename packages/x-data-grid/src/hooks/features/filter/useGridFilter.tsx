@@ -22,6 +22,7 @@ import { useGridApiMethod } from '../../utils/useGridApiMethod';
 import { GridStateInitializer } from '../../utils/useGridInitializeState';
 import { useGridLogger } from '../../utils/useGridLogger';
 import { useLazyRef } from '../../utils/useLazyRef';
+import { GRID_ROOT_FOOTER_ID } from '../aggregation/useGridAggregation';
 import { gridColumnLookupSelector } from '../columns/gridColumnsSelector';
 import { GridPreferencePanelsValue } from '../preferencesPanel/gridPreferencePanelsValue';
 import { gridRowsLookupSelector } from '../rows';
@@ -443,6 +444,10 @@ export const useGridFilter = (
         const row = rows[i];
         const id = getRowId ? getRowId(row) : row.id;
 
+        if (id === GRID_ROOT_FOOTER_ID) {
+          continue;
+        }
+
         isRowMatchingFilters(row, undefined, result);
 
         const isRowPassing = passFilterLogic(
@@ -456,12 +461,6 @@ export const useGridFilter = (
         if (!isRowPassing) {
           filteredRowsLookup[id] = isRowPassing;
         }
-      }
-
-      const footerId = 'auto-generated-group-footer-root';
-      const footer = dataRowIdToModelLookup[footerId];
-      if (footer) {
-        filteredRowsLookup[footerId] = true;
       }
 
       return {
@@ -518,10 +517,8 @@ export const useGridFilter = (
         visibleRowsLookup: getVisibleRowsLookupState(apiRef, state),
       };
     });
-    apiRef.current.forceUpdate();
   }, [apiRef]);
 
-  // Do not call `apiRef.current.forceUpdate` to avoid re-render before updating the sorted rows.
   // Otherwise, the state is not consistent during the render
   useGridApiEventHandler(apiRef, 'rowsSet', updateFilteredRows);
   useGridApiEventHandler(apiRef, 'columnsChange', handleColumnsChange);

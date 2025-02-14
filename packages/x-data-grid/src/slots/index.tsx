@@ -75,6 +75,7 @@ const iconSlots: GridIconSlotsComponent = {
   groupIcon: icons.groupIcon,
   ungroupIcon: icons.ungroup,
   groupExpandIcon: icons.groupExpand,
+  aggregationIcon: icons.aggregation,
 };
 
 const Missing = () => null;
@@ -83,8 +84,8 @@ const baseSlots: GridBaseSlots = {
     <span
       {...props}
       className={clsx(
-        'badge bg-grid-hover-bg px-[4px] h-[20px] inline-flex items-center justify-center rounded-md leading-none text-[0.7rem] min-w-[20px] text-center border border-grid-border text-grid-text/40 tabular-nums font-normal',
-
+        'badge bg-grid-hover-bg px-[4px] h-[20px] inline-flex items-center justify-center rounded-md leading-none text-[0.7rem] min-w-[20px] text-center border border-grid-border text-grid-text/50 dark:text-grid-text/60 tabular-nums font-normal',
+        'flex-shrink-0',
         props.className,
       )}
     />

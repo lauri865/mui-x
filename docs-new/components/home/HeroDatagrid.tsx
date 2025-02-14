@@ -39,6 +39,20 @@ const columns: GridColDef<(typeof rows)[number]>[] = [
     editable: true,
   },
   {
+    field: 'fakeAge',
+    headerName: 'Age',
+    type: 'number',
+    width: 110,
+    editable: true,
+    valueGetter: (value, row) => row.age,
+    valueFormatter: (value) => {
+      if (value == null) {
+        return value;
+      }
+      return `${Math.round(value)} years`;
+    },
+  },
+  {
     field: 'fullName',
     headerName: 'Full name',
     description: 'This column has a value getter and is not sortable.',
@@ -54,8 +68,8 @@ const columns: GridColDef<(typeof rows)[number]>[] = [
 
 const rows = [
   { id: 1, lastName: 'Snow', firstName: 'Jon', age: 14, nested: { description: 'test' } },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 31, nested: { description: 'test' } },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 31 },
+  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 30, nested: { description: 'test' } },
+  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 15 },
   { id: 4, lastName: 'Stark', firstName: 'Arya', age: 11 },
   { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
   { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
@@ -111,13 +125,14 @@ export const HeroDataGrid = () => {
             top: [1],
             bottom: [2],
           }, */
-          rowSelection: [3],
+          rowSelection: [2, 3, 'auto-generated-row-lastName/Lannister'],
           rowGrouping: {
-            model: ['lastName', 'firstName'],
+            model: ['lastName'],
           },
           aggregation: {
             model: {
-              lastName: 'count',
+              age: 'sum',
+              fakeAge: 'avg',
             },
           },
         }}
@@ -131,7 +146,6 @@ export const HeroDataGrid = () => {
         checkboxSelection
         loading={isLoading}
         getDetailPanelContent={detailPanel}
-        defaultGroupingExpansionDepth={-1}
         /* onRowsScrollEnd={async (params, detail) => {
           if (params.visibleRowsCount >= 40) {
             return;

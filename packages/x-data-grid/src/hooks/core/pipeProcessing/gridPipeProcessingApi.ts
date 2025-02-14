@@ -32,7 +32,7 @@ export interface GridPipeProcessingLookup {
   };
   exportState: { value: GridInitialStateCommunity; context: GridExportStateParams };
   getRowsParams: { value: Partial<GridGetRowsParams> };
-  getCellParams: { value: GridCellParams };
+  getCellParams: { value: GridCellParams<any, any, any, any> };
   hydrateColumns: {
     value: GridHydrateColumnsValue;
   };

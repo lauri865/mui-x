@@ -1,12 +1,18 @@
-import { GridCallbackDetails, GridColDef, GridRowId, GridValueFormatter } from '../../../models';
+import { GridApiCommunity } from '../../../internals';
+import {
+  GridCallbackDetails,
+  GridColDef,
+  GridRowId,
+  GridTreeNode,
+  GridValidRowModel,
+  GridValueFormatter,
+} from '../../../models';
 
 export interface GridAggregationColdef {
   aggregable?: boolean;
 }
 
-export type GridAggregationLookup = {
-  [rowId: GridRowId]: number | string | Date | boolean | null | undefined;
-};
+export type GridAggregationLookup = Map<GridRowId, any>;
 
 export interface GridAggregationState {
   model: GridAggregationModel;
@@ -19,10 +25,16 @@ export interface GridAggregationInitialState {
 
 export interface GridAggregationApi {
   setAggregationModel: (model: GridAggregationModel) => void;
+  setColumnAggregation: (field: string, aggregation: string) => void;
+  getColumnAggregation: (field: string) => {
+    aggregation: string;
+    function: GridAggregationFunction;
+  } | null;
 }
 
 export interface GridAggregationPrivateApi {
   applyAggregation: () => void;
+  aggregationFunctions: Record<string, GridAggregationFunction>;
 }
 
 interface GridAggregationFunctionCommon {
@@ -33,34 +45,52 @@ interface GridAggregationFunctionCommon {
   hasCellUnit?: boolean;
 }
 
-export type GridAggregationFunction<ReturnValue = any, V = ReturnValue> =
-  | (GridAggregationFunctionCommon & {
-      reduce: (params: GridAggregationApplierParams<V>) => ReturnValue;
-    })
-  | (GridAggregationFunctionCommon & {
-      apply: (params: GridAggregationApplierParams<V>) => ReturnValue;
-    });
+export interface GridAggregationReducerFunction<Value = any, ReturnValue = Value>
+  extends GridAggregationFunctionCommon {
+  reduce: (
+    acc: Value,
+    value: Value | null | undefined,
+    params: GridAggregationApplierParams<Value> & {
+      row: GridValidRowModel;
+      rowNode: GridTreeNode;
+    },
+  ) => Value;
+  postReduce?: (
+    acc: Value,
+    meta: {
+      count: number;
+    },
+    params: GridAggregationApplierParams<Value>,
+  ) => ReturnValue;
+  apply?: never;
+}
 
-export interface GridAggregationApplierParams<V = any> {
-  values: (V | undefined)[];
-  groupId: GridRowId;
+export interface GridAggregationApplierFunction<ReturnValue = any, Value = ReturnValue>
+  extends GridAggregationFunctionCommon {
+  apply: (
+    values: (Value | undefined)[],
+    params: GridAggregationApplierParams<Value>,
+  ) => ReturnValue;
+  reduce?: never;
+  postReduce?: never;
+}
+
+export type GridAggregationFunction =
+  | GridAggregationReducerFunction<any>
+  | GridAggregationApplierFunction<any>;
+
+export interface GridAggregationApplierParams<Value = any> {
   field: GridColDef['field'];
+  api: GridApiCommunity;
 }
 
 export type GridAggregationModel = {
   [field: string]: string;
 };
 
-export interface GridAggregationRule {
-  aggregationFunctionName: string;
-  aggregationFunction: GridAggregationFunction;
-}
-
-export type GridAggregationRules = { [field: string]: GridAggregationRule };
-
 export interface GridAggregationProps {
   aggregationModel?: GridAggregationModel;
-  aggregationFunctions?: Array<GridAggregationFunction>;
+  aggregationFunctions?: Record<string, GridAggregationFunction>;
   onAggregationModelChange?: (model: GridAggregationModel, detail: GridCallbackDetails) => void;
   showGrandTotals?: boolean;
 }

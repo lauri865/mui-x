@@ -1,4 +1,5 @@
 import { GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD } from '../../../../colDef';
+import { gridRowTreeSelector } from '../../../../hooks';
 import { gridFilteredRowGroupingModel } from '../../../../hooks/features/rowGrouping/rowGroupingSelector';
 import { useGridApiContext } from '../../../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../../../hooks/utils/useGridRootProps';
@@ -18,6 +19,10 @@ function GridColumnRowGroupingItem(props: GridColumnMenuItemProps) {
       field,
       headerName: apiRef.current.getColumn(field).headerName ?? field,
     }));
+    const tree = gridRowTreeSelector(apiRef.current.state);
+    const hasAtLeastOneExpandedGroup = Object.values(tree).some(
+      (node) => node.type === 'group' && node.depth >= 0 && node.childrenExpanded,
+    );
     return (
       <>
         <DropdownMenu.Sub>
@@ -26,9 +31,13 @@ function GridColumnRowGroupingItem(props: GridColumnMenuItemProps) {
             {apiRef.current.getLocaleText('groupExpansion')}
           </DropdownMenu.SubTrigger>
           <DropdownMenu.SubContent>
-            <DropdownMenu.Item onSelect={() => apiRef.current.setDefaultGroupingExpansionDepth(0)}>
-              {apiRef.current.getLocaleText('groupCollapseAll')}
-            </DropdownMenu.Item>
+            {hasAtLeastOneExpandedGroup && (
+              <DropdownMenu.Item
+                onSelect={() => apiRef.current.setDefaultGroupingExpansionDepth(0)}
+              >
+                {apiRef.current.getLocaleText('groupCollapseAll')}
+              </DropdownMenu.Item>
+            )}
             {groupingFields.map(
               ({ field, headerName }, i) =>
                 i < groupingFields.length - 1 && (
@@ -54,10 +63,12 @@ function GridColumnRowGroupingItem(props: GridColumnMenuItemProps) {
             {apiRef.current.getLocaleText('unGroupColumn')(headerName)}
           </DropdownMenu.Item>
         ))}
-        <DropdownMenu.Item onClick={() => apiRef.current.setRowGroupingModel([])}>
-          <rootProps.slots.ungroupIcon />
-          {apiRef.current.getLocaleText('unGroupAll')}
-        </DropdownMenu.Item>
+        {groupingFields.length > 1 && (
+          <DropdownMenu.Item onClick={() => apiRef.current.setRowGroupingModel([])}>
+            <rootProps.slots.ungroupIcon />
+            {apiRef.current.getLocaleText('unGroupAll')}
+          </DropdownMenu.Item>
+        )}
       </>
     );
   }
