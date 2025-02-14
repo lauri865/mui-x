@@ -3,7 +3,8 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "types": ["@mui/internal-test-utils/initMatchers", "chai-dom", "mocha", "node"],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": "."
   },
   "include": ["src/**/*"]
 }

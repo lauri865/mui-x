@@ -11,7 +11,14 @@ const Trigger = Primitive.Trigger;
 const Group = Primitive.Group;
 
 const Portal = (props: React.ComponentPropsWithoutRef<typeof Primitive.Portal>) => (
-  <Primitive.Portal container={document.getElementById('twg-portal') || document.body} {...props} />
+  <Primitive.Portal
+    container={
+      typeof document !== undefined
+        ? document.getElementById('twg-portal') || document.body
+        : undefined
+    }
+    {...props}
+  />
 );
 
 const Sub = Primitive.Sub;

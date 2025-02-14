@@ -1,12 +1,13 @@
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
 import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
-import { GridEventListener } from '../../../models/events';
 import { GridRowId } from '../../../models/gridRows';
 import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { useGridApiOptionHandler } from '../../utils/useGridApiEventHandler';
 import { useGridApiMethod } from '../../utils/useGridApiMethod';
 import { GridStateInitializer } from '../../utils/useGridInitializeState';
+import { GRID_ROOT_FOOTER_ID } from '../aggregation/useGridAggregation';
+import { gridRowTreeSelector } from '../rows';
 import { gridPinnedRowsModelSelector } from './gridRowPinningSelector';
 import {
   EMPTY_PINNED_ROWS,
@@ -18,7 +19,16 @@ import {
 export const rowPinningStateInitializer: GridStateInitializer<
   Pick<DataGridProcessedProps, 'pinnedRows' | 'initialState'>
 > = (state, props, apiRef) => {
-  const model = props.pinnedRows ?? props.initialState?.pinnedRows ?? EMPTY_PINNED_ROWS;
+  let model = props.pinnedRows ?? props.initialState?.pinnedRows ?? EMPTY_PINNED_ROWS;
+
+  const tree = gridRowTreeSelector(apiRef.current.state);
+  const hasFooter = true;
+  if (hasFooter) {
+    model = {
+      ...model,
+      bottom: [...model.bottom, GRID_ROOT_FOOTER_ID],
+    };
+  }
   return {
     ...state,
     pinnedRows: model,
@@ -66,9 +76,9 @@ export const useGridRowPinning = (
         ...model,
         [position]: model[position].filter((rowId) => rowId !== id),
       };
+
       apiRef.current.setPinnedRows(newModel);
       delete apiRef.current.state.visibleRowsLookup[id];
-      apiRef.current.unstable_applyFilters();
     },
     [apiRef],
   );
@@ -133,30 +143,25 @@ export const useGridRowPinning = (
 
   useGridApiMethod(apiRef, methods, 'public');
 
-  const overrideVisibleRowsLookup = React.useCallback<GridEventListener<'filteredRowsSet'>>(
-    (params) => {
-      const model = gridPinnedRowsModelSelector(apiRef.current.state);
-      if (model === EMPTY_PINNED_ROWS) {
-        return;
-      }
+  const overrideVisibleRowsLookup = React.useCallback(() => {
+    const model = gridPinnedRowsModelSelector(apiRef.current.state);
+    if (model === EMPTY_PINNED_ROWS) {
+      return;
+    }
 
-      const pinnnedRowIds = [...model.top, ...model.bottom];
-      const visibleRowsLookup = { ...apiRef.current.state.visibleRowsLookup };
+    const pinnnedRowIds = [...model.top, ...model.bottom];
+    const visibleRowsLookup = { ...apiRef.current.state.visibleRowsLookup };
 
-      for (let i = 0; i < pinnnedRowIds.length; i += 1) {
-        const rowId = pinnnedRowIds[i];
-        visibleRowsLookup[rowId] = false;
-      }
+    for (let i = 0; i < pinnnedRowIds.length; i += 1) {
+      const rowId = pinnnedRowIds[i];
+      visibleRowsLookup[rowId] = false;
+    }
 
-      // HACK: update filtered rows selector instead
-      apiRef.current.setState((state) => ({
-        ...state,
-        visibleRowsLookup,
-      }));
-    },
-    [apiRef],
-  );
+    // HACK: update filtered rows selector instead
+    apiRef.current.state.visibleRowsLookup = visibleRowsLookup;
+  }, [apiRef]);
 
+  useGridApiOptionHandler(apiRef, 'filteredRowsSet', overrideVisibleRowsLookup);
   useGridApiOptionHandler(apiRef, 'sortedRowsSet', overrideVisibleRowsLookup);
 
   React.useEffect(() => {

@@ -2,6 +2,7 @@ import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
 import { InfiniteLoaderPayload } from '../../components/virtualization/GridInfiniteLoader';
 import { GridClasses } from '../../constants/gridClasses';
+import { GridAggregationProps } from '../../hooks/features/aggregation';
 import type { GridAutosizeOptions } from '../../hooks/features/columnResize';
 import {
   GridColumnVisibilityModel,
@@ -913,4 +914,5 @@ export interface DataGridProcessedProps<R extends GridValidRowModel = any>
     DataGridPropsWithoutDefaultValue<R>,
     DataGridProSharedPropsWithoutDefaultValue,
     Partial<DataGridProSharedPropsWithDefaultValue>,
-    Partial<DataGridPremiumSharedPropsWithDefaultValue> {}
+    Partial<DataGridPremiumSharedPropsWithDefaultValue>,
+    GridAggregationProps {}

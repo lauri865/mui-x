@@ -179,12 +179,15 @@ export const useGridKeyboardNavigation = (
         }
 
         case 'ArrowRight': {
-          const rightColIndex = getRightColumnIndex({
-            currentColIndex: colIndexBefore,
-            firstColIndex,
-            lastColIndex,
-            isRtl,
-          });
+          const rightColIndex =
+            event.metaKey || event.ctrlKey
+              ? lastColIndex
+              : getRightColumnIndex({
+                  currentColIndex: colIndexBefore,
+                  firstColIndex,
+                  lastColIndex,
+                  isRtl,
+                });
 
           if (rightColIndex !== null) {
             goToHeader(rightColIndex, event);
@@ -194,12 +197,15 @@ export const useGridKeyboardNavigation = (
         }
 
         case 'ArrowLeft': {
-          const leftColIndex = getLeftColumnIndex({
-            currentColIndex: colIndexBefore,
-            firstColIndex,
-            lastColIndex,
-            isRtl,
-          });
+          const leftColIndex =
+            event.metaKey || event.ctrlKey
+              ? firstColIndex
+              : getLeftColumnIndex({
+                  currentColIndex: colIndexBefore,
+                  firstColIndex,
+                  lastColIndex,
+                  isRtl,
+                });
           if (leftColIndex !== null) {
             goToHeader(leftColIndex, event);
           }
@@ -512,10 +518,13 @@ export const useGridKeyboardNavigation = (
       switch (event.key) {
         case 'ArrowDown': {
           // "Enter" is only triggered by the row / cell editing feature
+
           if (rowIndexBefore < lastRowIndexInPage) {
+            const nextIndex =
+              event.metaKey || event.ctrlKey ? lastRowIndexInPage : rowIndexBefore + 1;
             goToCell(
               colIndexBefore,
-              getRowIdFromIndex(rowIndexBefore + 1),
+              getRowIdFromIndex(nextIndex),
               isRtl ? 'right' : 'left',
               'down',
             );
@@ -525,7 +534,9 @@ export const useGridKeyboardNavigation = (
 
         case 'ArrowUp': {
           if (rowIndexBefore > firstRowIndexInPage) {
-            goToCell(colIndexBefore, getRowIdFromIndex(rowIndexBefore - 1));
+            const nextIndex =
+              event.metaKey || event.ctrlKey ? firstRowIndexInPage : rowIndexBefore - 1;
+            goToCell(colIndexBefore, getRowIdFromIndex(nextIndex));
           } else if (headerFilteringEnabled) {
             goToHeaderFilter(colIndexBefore, event);
           } else {
@@ -535,12 +546,15 @@ export const useGridKeyboardNavigation = (
         }
 
         case 'ArrowRight': {
-          const rightColIndex = getRightColumnIndex({
-            currentColIndex: colIndexBefore,
-            firstColIndex,
-            lastColIndex,
-            isRtl,
-          });
+          const rightColIndex =
+            event.metaKey || event.ctrlKey
+              ? lastColIndex
+              : getRightColumnIndex({
+                  currentColIndex: colIndexBefore,
+                  firstColIndex,
+                  lastColIndex,
+                  isRtl,
+                });
           if (rightColIndex !== null) {
             goToCell(rightColIndex, getRowIdFromIndex(rowIndexBefore), isRtl ? 'left' : 'right');
           }
@@ -548,12 +562,15 @@ export const useGridKeyboardNavigation = (
         }
 
         case 'ArrowLeft': {
-          const leftColIndex = getLeftColumnIndex({
-            currentColIndex: colIndexBefore,
-            firstColIndex,
-            lastColIndex,
-            isRtl,
-          });
+          const leftColIndex =
+            event.metaKey || event.ctrlKey
+              ? firstColIndex
+              : getLeftColumnIndex({
+                  currentColIndex: colIndexBefore,
+                  firstColIndex,
+                  lastColIndex,
+                  isRtl,
+                });
           if (leftColIndex !== null) {
             goToCell(leftColIndex, getRowIdFromIndex(rowIndexBefore), isRtl ? 'right' : 'left');
           }

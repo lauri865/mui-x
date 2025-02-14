@@ -1,4 +1,5 @@
 import { unstable_useForkRef as useForkRef } from '@mui/utils';
+import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import clsx from 'clsx';
 import * as React from 'react';
@@ -94,7 +95,7 @@ const GridGenericColumnHeaderItem = forwardRef<HTMLDivElement, GridGenericColumn
       ariaSort = sortDirection === 'asc' ? 'ascending' : 'descending';
     }
 
-    React.useLayoutEffect(() => {
+    useEnhancedEffect(() => {
       const columnMenuState = apiRef.current.state.columnMenu;
       if (hasFocus && !columnMenuState.open) {
         const focusableElement =

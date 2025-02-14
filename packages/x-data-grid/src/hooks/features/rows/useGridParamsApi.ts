@@ -1,9 +1,10 @@
-import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
 import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
 import { GridParamsApi, GridParamsPrivateApi } from '../../../models/api/gridParamsApi';
 import { GridCellParams } from '../../../models/params/gridCellParams';
 import { GridRowParams } from '../../../models/params/gridRowParams';
+import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import {
   getGridCellElement,
   getGridColumnHeaderElement,
@@ -11,7 +12,6 @@ import {
 } from '../../../utils/domUtils';
 import { useGridApiMethod } from '../../utils/useGridApiMethod';
 import { gridFocusCellSelector, gridTabIndexCellSelector } from '../focus/gridFocusStateSelector';
-import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { gridListColumnSelector } from '../listView/gridListViewSelectors';
 
 export class MissingRowIdError extends Error {}
@@ -80,7 +80,12 @@ export function useGridParamsApi(
       }
       params.isEditable = colDef && apiRef.current.isCellEditable(params);
 
-      return params;
+      const hydratedParams = apiRef.current.unstable_applyPipeProcessors(
+        'getCellParams',
+        params,
+      ) as GridCellParams<any, any, any, any>;
+
+      return hydratedParams;
     },
     [apiRef],
   );

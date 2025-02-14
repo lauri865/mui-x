@@ -1,5 +1,6 @@
 'use client';
 import { unstable_useForkRef as useForkRef } from '@mui/utils';
+import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
 import { fastMemo } from '@mui/x-internals/fastMemo';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import { isObjectEmpty } from '@mui/x-internals/isObjectEmpty';
@@ -142,7 +143,7 @@ const GridRow = forwardRef<HTMLDivElement, GridRowProps>(function GridRow(props,
   const cellClasses = useThemedComponent('cell');
   const getRowAriaAttributes = configuration.hooks.useGridRowAriaAttributes();
 
-  React.useLayoutEffect(() => {
+  useEnhancedEffect(() => {
     if (currentPage.range) {
       const rowIndex = apiRef.current.getRowIndexRelativeToVisibleRows(rowId);
       // Pinned rows are not part of the visible rows

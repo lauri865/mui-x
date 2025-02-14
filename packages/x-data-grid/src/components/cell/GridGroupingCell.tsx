@@ -28,8 +28,13 @@ export const GridGroupingCell = forwardRef<HTMLInputElement, GridRenderCellParam
     const buttonRef = React.useRef<HTMLElement>(null);
     const handleRef = useForkRef(buttonRef, ref);
 
-    if (rowNode.type === 'footer' || rowNode.type === 'pinnedRow') {
+    if (rowNode.type === 'pinnedRow') {
       return null;
+    }
+
+    if (rowNode.type === 'footer') {
+      /* return <div className="total font-medium tracking-wide">Total</div>; */
+      return <>&nbsp;</>;
     }
 
     if (rowNode.type === 'leaf') {

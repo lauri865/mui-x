@@ -164,35 +164,40 @@ export const GridContextMenu = () => {
               Copy with headers
             </ContextMenu.Item>
             <ContextMenu.Separator />
-            <ContextMenu.Sub>
-              <ContextMenu.SubTrigger>
-                <rootProps.slots.pinIcon />
-                Pin Row
-              </ContextMenu.SubTrigger>
-              <ContextMenu.SubContent>
-                <ContextMenu.RadioGroup
-                  value={apiRef.current.getRowPinnedPosition(cell.id) || ''}
-                  onValueChange={(value) => {
-                    if (value === '') {
-                      apiRef.current.unpinRow(cell.id);
-                    } else {
-                      apiRef.current.pinRow(cell.id, value as GridPinnedRowPosition);
-                    }
-                  }}
-                >
-                  <ContextMenu.RadioItem value={GridPinnedRowPosition.top}>
-                    Top
-                  </ContextMenu.RadioItem>
-                  <ContextMenu.RadioItem value={GridPinnedRowPosition.bottom}>
-                    Bottom
-                  </ContextMenu.RadioItem>
-                  {apiRef.current.isRowPinned(cell.id) && (
-                    <ContextMenu.RadioItem value="">Unpin</ContextMenu.RadioItem>
-                  )}
-                </ContextMenu.RadioGroup>
-              </ContextMenu.SubContent>
-            </ContextMenu.Sub>
-            <ContextMenu.Separator />
+            {cell.rowNode.type !== 'group' && (
+              <>
+                <ContextMenu.Sub>
+                  <ContextMenu.SubTrigger>
+                    <rootProps.slots.pinIcon />
+                    Pin Row
+                  </ContextMenu.SubTrigger>
+                  <ContextMenu.SubContent>
+                    <ContextMenu.RadioGroup
+                      value={apiRef.current.getRowPinnedPosition(cell.id) || ''}
+                      onValueChange={(value) => {
+                        if (value === '') {
+                          apiRef.current.unpinRow(cell.id);
+                        } else {
+                          apiRef.current.pinRow(cell.id, value as GridPinnedRowPosition);
+                        }
+                      }}
+                    >
+                      {apiRef.current.isRowPinned(cell.id) && (
+                        <ContextMenu.RadioItem value="">Unpin</ContextMenu.RadioItem>
+                      )}
+                      <ContextMenu.RadioItem value={GridPinnedRowPosition.top}>
+                        Top
+                      </ContextMenu.RadioItem>
+                      <ContextMenu.RadioItem value={GridPinnedRowPosition.bottom}>
+                        Bottom
+                      </ContextMenu.RadioItem>
+                    </ContextMenu.RadioGroup>
+                  </ContextMenu.SubContent>
+                </ContextMenu.Sub>
+                <ContextMenu.Separator />
+              </>
+            )}
+
             <ContextMenu.Sub>
               <ContextMenu.SubTrigger>
                 <span>

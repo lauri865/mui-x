@@ -20,6 +20,7 @@ import type {
   GridTabIndexState,
   GridVirtualizationState,
 } from '../hooks';
+import { GridAggregationInitialState, GridAggregationState } from '../hooks/features/aggregation';
 import type { GridColumnResizeState } from '../hooks/features/columnResize';
 import { GridPinnedColumnFields } from '../hooks/features/columns/gridColumnsInterfaces';
 import { GridDetailPanelInitialState, GridDetailPanelState } from '../hooks/features/detailPanel';
@@ -67,6 +68,7 @@ export interface GridStateCommunity {
   pinnedRows: GridPinnedRowsState;
   rowGrouping: GridRowGroupingState;
   detailPanel: GridDetailPanelState;
+  aggregation: GridAggregationState;
 }
 
 /**
@@ -89,4 +91,5 @@ export interface GridInitialStateCommunity {
   detailPanel?: GridDetailPanelInitialState;
   rowGrouping?: GridRowGroupingInitialState;
   rowSelection?: GridRowSelectionModel;
+  aggregation?: GridAggregationInitialState;
 }

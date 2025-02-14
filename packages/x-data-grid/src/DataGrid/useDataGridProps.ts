@@ -12,7 +12,7 @@ import {
 } from '../models/props/DataGridProps';
 
 const DATA_GRID_FORCED_PROPS: { [key in DataGridForcedPropsKey]?: DataGridProcessedProps[key] } = {
-  disableMultipleColumnsFiltering: true,
+  /* disableMultipleColumnsFiltering: true,
   disableMultipleColumnsSorting: true,
   throttleRowsMs: undefined,
   hideFooterRowCount: false,
@@ -20,8 +20,8 @@ const DATA_GRID_FORCED_PROPS: { [key in DataGridForcedPropsKey]?: DataGridProces
   checkboxSelectionVisibleOnly: false,
   disableColumnReorder: true,
   keepColumnPositionIfDraggedOutside: false,
+  unstable_listView: false, */
   signature: 'DataGridPremium',
-  unstable_listView: false,
 };
 
 const defaultSlots = DATA_GRID_DEFAULT_SLOTS_COMPONENTS;

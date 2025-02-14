@@ -1,4 +1,5 @@
 import { unstable_composeClasses as composeClasses, unstable_useId as useId } from '@mui/utils';
+import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
 import { fastMemo } from '@mui/x-internals/fastMemo';
 import clsx from 'clsx';
 import * as React from 'react';
@@ -261,7 +262,7 @@ function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
     </React.Fragment>
   );
 
-  React.useLayoutEffect(() => {
+  useEnhancedEffect(() => {
     const columnMenuState = apiRef.current.state.columnMenu;
     if (hasFocus && !columnMenuState.open) {
       const focusableElement = headerCellRef.current!.querySelector<HTMLElement>('[tabindex="0"]');

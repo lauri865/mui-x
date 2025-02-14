@@ -1,5 +1,6 @@
 import { RefObject } from '@mui/x-internals/types';
 import { useGridInitialization } from '../hooks/core/useGridInitialization';
+import { useGridAggregationPreProcessors } from '../hooks/features/aggregation/useGridAggregation';
 import { useGridClipboard } from '../hooks/features/clipboard/useGridClipboard';
 import {
   columnGroupsStateInitializer,
@@ -95,6 +96,7 @@ export const useDataGridComponent = (
   useGridRowsPreProcessors(apiRef);
   useGridRowGroupingPreProcessors(apiRef, props);
   useGridRowSelectionPreProcessors(apiRef, props);
+  useGridAggregationPreProcessors(apiRef, props);
 
   // TO-DO SEPARATE COLUMN PINNING AND ROW PINNING PREPROCESSORS HERe
 

@@ -1,11 +1,12 @@
+import { GridColDef } from '../../../models/colDef';
 import {
+  GridColumnGroup,
   GridColumnGroupingModel,
   GridColumnNode,
-  GridColumnGroup,
   isLeaf,
 } from '../../../models/gridColumnGrouping';
-import { GridColDef } from '../../../models/colDef';
 import { isDeepEqual } from '../../../utils/utils';
+import { GridPinnedColumnFields } from '../columns';
 import { GridGroupingStructure } from './gridColumnGroupsInterfaces';
 
 type UnwrappedGroupingModel = { [key: GridColDef['field']]: GridColumnGroup['groupId'][] };
@@ -65,7 +66,7 @@ export const unwrapGroupingColumnModel = (
 export const getColumnGroupsHeaderStructure = (
   orderedColumns: string[],
   unwrappedGroupingModel: UnwrappedGroupingModel,
-  pinnedFields: { right?: string[]; left?: string[] },
+  pinnedFields: GridPinnedColumnFields,
 ) => {
   const getParents = (field: string) => unwrappedGroupingModel[field] ?? [];
 

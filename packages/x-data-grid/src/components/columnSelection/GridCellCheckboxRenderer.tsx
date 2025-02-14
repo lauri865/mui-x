@@ -79,6 +79,12 @@ const GridCellCheckboxForwardRef = forwardRef<HTMLInputElement, GridRenderCellPa
         tabIndex={tabIndex}
         checked={isIndeterminate ? 'indeterminate' : isChecked}
         onCheckedChange={handleChange}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            handleChange(!isChecked);
+          }
+        }}
         aria-label={label}
         name={'select_row'}
         disabled={!isSelectable}

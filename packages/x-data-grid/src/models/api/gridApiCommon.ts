@@ -3,6 +3,7 @@ import type {
   GridPipeProcessingPrivateApi,
 } from '../../hooks/core/pipeProcessing';
 import type { GridStrategyProcessingApi } from '../../hooks/core/strategyProcessing';
+import { GridAggregationApi, GridAggregationPrivateApi } from '../../hooks/features/aggregation';
 import type { GridColumnPinningApi } from '../../hooks/features/columnPinning';
 import type { GridColumnResizeApi } from '../../hooks/features/columnResize';
 import { GridDetailPanelApi, GridDetailPanelPrivateApi } from '../../hooks/features/detailPanel';
@@ -73,7 +74,8 @@ export interface GridApiCommon<
     GridColumnResizeApi,
     GridRowPinningApi,
     GridDetailPanelApi,
-    GridRowGroupingApi {}
+    GridRowGroupingApi,
+    GridAggregationApi {}
 
 export interface GridPrivateOnlyApiCommon<
   Api extends GridApiCommon,
@@ -93,7 +95,8 @@ export interface GridPrivateOnlyApiCommon<
     GridVirtualizationPrivateApi,
     GridRowProPrivateApi,
     GridParamsPrivateApi,
-    GridDetailPanelPrivateApi {}
+    GridDetailPanelPrivateApi,
+    GridAggregationPrivateApi {}
 
 export interface GridPrivateApiCommon
   extends GridApiCommon,

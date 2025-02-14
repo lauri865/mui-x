@@ -1,6 +1,8 @@
 import * as React from 'react';
 import type { GridStrategyProcessorName } from '../../hooks/core/strategyProcessing';
+import { GridAggregationModel } from '../../hooks/features/aggregation';
 import type { GridColumnVisibilityModel } from '../../hooks/features/columns';
+import { GridRowGroupingModel } from '../../hooks/features/rowGrouping';
 import { GridCellModesModel, GridRowModesModel } from '../api/gridEditingApi';
 import type { TwgBaseEvent } from '../baseEvent';
 import type { ElementSize } from '../elementSize';
@@ -365,6 +367,9 @@ export interface GridControlledStateEventLookup {
    * Fired when the pagination meta change.
    */
   paginationMetaChange: { params: GridPaginationMeta };
+
+  rowGroupingModelChange: { params: GridRowGroupingModel };
+  aggregationModelChange: { params: GridAggregationModel };
 }
 
 export interface GridControlledStateReasonLookup {

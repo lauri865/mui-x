@@ -143,7 +143,6 @@ export const useGridFilter = (
    */
   const applyFilters = React.useCallback<GridFilterApi['unstable_applyFilters']>(() => {
     updateFilteredRows();
-    apiRef.current.forceUpdate();
   }, [apiRef, updateFilteredRows]);
 
   const upsertFilterItem = React.useCallback<GridFilterApi['upsertFilterItem']>(

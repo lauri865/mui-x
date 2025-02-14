@@ -17,4 +17,7 @@ export interface GridGenericColumnMenuProps
     GridColumnMenuContainerProps {}
 
 export interface GridColumnMenuProps
-  extends Omit<GridColumnMenuContainerProps, 'defaultSlots' | 'defaultSlotProps'> {}
+  extends Omit<GridColumnMenuContainerProps, 'defaultSlots' | 'defaultSlotProps'> {
+  slots?: any;
+  slotProps?: any;
+}

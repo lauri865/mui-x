@@ -133,7 +133,7 @@ const className = {
   },
 
   pinnedRows: {
-    base: 'sticky z-4 bg-grid-pinned-bg/50 shadow-sm shadow-black/30 backdrop-blur-sm w-[var(--DataGrid-rowWidth)]',
+    base: 'sticky z-4 bg-grid-pinned-bg/50 shadow-sm shadow-black/5 dark:shadow-black/30 backdrop-blur-sm w-[var(--DataGrid-rowWidth)]',
     top: 'top-0 [&_.twg-cell]:border-t-0 [&_.twg-cell]:border-b [&_.twg-cell]:!border-b-grid-border',
     bottom: 'bottom-0',
   },

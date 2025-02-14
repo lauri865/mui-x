@@ -90,7 +90,7 @@ export const useGridStateInitialization = <PrivateApi extends GridPrivateApiComm
         if (controlState.propOnChange && hasPropChanged) {
           controlState.propOnChange(model, {
             reason,
-            api: apiRef.current,
+            api: apiRef.current as any,
           });
         }
 

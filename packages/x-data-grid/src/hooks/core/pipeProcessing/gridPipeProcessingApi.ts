@@ -1,27 +1,27 @@
 import * as React from 'react';
 import {
-  GridCellIndexCoordinates,
-  GridScrollParams,
-  GridColDef,
   GridCellCoordinates,
+  GridCellIndexCoordinates,
   GridCellParams,
+  GridColDef,
   GridEditMode,
+  GridScrollParams,
 } from '../../../models';
+import { GridGetRowsParams, GridGetRowsResponse } from '../../../models/gridDataSource';
+import { GridRowEntry, GridRowId } from '../../../models/gridRows';
 import { GridInitialStateCommunity } from '../../../models/gridStateCommunity';
+import {
+  GridHydrateColumnsValue,
+  GridPinnedColumnPosition,
+} from '../../features/columns/gridColumnsInterfaces';
+import { GridPreferencePanelsValue } from '../../features/preferencesPanel';
+import { GridHydrateRowsValue } from '../../features/rows/gridRowsInterfaces';
+import { HeightEntry } from '../../features/rows/gridRowsMetaInterfaces';
 import {
   GridExportStateParams,
   GridRestoreStatePreProcessingContext,
   GridRestoreStatePreProcessingValue,
 } from '../../features/statePersistence/gridStatePersistenceInterface';
-import {
-  GridHydrateColumnsValue,
-  GridPinnedColumnPosition,
-} from '../../features/columns/gridColumnsInterfaces';
-import { GridRowEntry, GridRowId } from '../../../models/gridRows';
-import { GridHydrateRowsValue } from '../../features/rows/gridRowsInterfaces';
-import { GridPreferencePanelsValue } from '../../features/preferencesPanel';
-import { GridGetRowsParams, GridGetRowsResponse } from '../../../models/gridDataSource';
-import { HeightEntry } from '../../features/rows/gridRowsMetaInterfaces';
 
 export type GridPipeProcessorGroup = keyof GridPipeProcessingLookup;
 
@@ -32,6 +32,7 @@ export interface GridPipeProcessingLookup {
   };
   exportState: { value: GridInitialStateCommunity; context: GridExportStateParams };
   getRowsParams: { value: Partial<GridGetRowsParams> };
+  getCellParams: { value: GridCellParams };
   hydrateColumns: {
     value: GridHydrateColumnsValue;
   };

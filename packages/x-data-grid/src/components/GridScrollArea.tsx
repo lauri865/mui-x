@@ -1,5 +1,6 @@
 'use client';
 import { unstable_useEventCallback as useEventCallback } from '@mui/utils';
+import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
 import { fastMemo } from '@mui/x-internals/fastMemo';
 import { RefObject } from '@mui/x-internals/types';
 import clsx from 'clsx';
@@ -106,7 +107,7 @@ function GridScrollAreaContent(props: ScrollAreaProps) {
     setCanScrollMore(getCanScrollMore);
   };
 
-  React.useLayoutEffect(() => {
+  useEnhancedEffect(() => {
     setCanScrollMore(getCanScrollMore);
   }, [columnsTotalWidth]);
 

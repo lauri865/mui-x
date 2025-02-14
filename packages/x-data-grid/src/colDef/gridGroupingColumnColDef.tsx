@@ -20,6 +20,15 @@ export const GRID_GROUPING_COLUMN_COL_DEF: GridColDef = {
   display: 'flex',
   align: 'left',
   renderCell: GridGroupingCell,
+  disableExport: false,
+  valueGetter: (value, row, col, apiRef) => {
+    const id = apiRef.current.getRowId(row);
+    const node = apiRef.current.getRowNode(id);
+    if (node?.type === 'group') {
+      return node.groupingKey;
+    }
+    return value;
+  },
   sortComparator: (_, __, cellA, cellB) => {
     // We only want to sort the groups of the current grouping criteria
     if (cellA.rowNode.type === 'group' || cellB.rowNode.type === 'group') {
