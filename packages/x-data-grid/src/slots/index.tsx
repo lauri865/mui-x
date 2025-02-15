@@ -4,6 +4,9 @@ import {
   ContextMenu,
   DropdownMenu,
   icons,
+  Input,
+  Label,
+  Popover,
   Tooltip,
 } from '@twgrid/x-data-grid-shadcn';
 import clsx from 'clsx';
@@ -76,6 +79,7 @@ const iconSlots: GridIconSlotsComponent = {
   ungroupIcon: icons.ungroup,
   groupExpandIcon: icons.groupExpand,
   aggregationIcon: icons.aggregation,
+  dragHandleIcon: icons.dragHandle,
 };
 
 const Missing = () => null;
@@ -96,15 +100,15 @@ const baseSlots: GridBaseSlots = {
   baseLinearProgress: Missing,
   baseDropdownMenu: DropdownMenu,
   baseMenuItem: Missing,
-  baseTextField: Missing,
+  baseTextField: Input,
   baseFormControl: Missing,
   baseSelect: Missing,
   baseButton: Button,
   baseIconButton: (props) => <Button size="icon" {...props} />,
   baseInputAdornment: Missing,
   baseTooltip: Tooltip,
-  basePopper: Missing,
-  baseInputLabel: Missing,
+  basePopper: Popover,
+  baseInputLabel: Label,
   baseSelectOption: Missing,
   baseSkeleton: (props) => (
     <div

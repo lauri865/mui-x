@@ -131,7 +131,7 @@ export const HeroDataGrid = () => {
           },
           aggregation: {
             model: {
-              age: 'sum',
+              age: 'avg',
               fakeAge: 'avg',
             },
           },

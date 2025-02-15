@@ -2,7 +2,7 @@ import { useGridRootProps } from '../../../../hooks/utils/useGridRootProps';
 import { useGridPrivateApiContext } from '../../../../internals';
 import { GridColumnMenuItemProps } from '../GridColumnMenuItemProps';
 
-function GridColumnAggregationItem(props: GridColumnMenuItemProps) {
+function GridColumnAggregationItem(props: GridColumnMenuItemProps & { returnOptions?: boolean }) {
   const { colDef } = props;
   const apiRef = useGridPrivateApiContext();
   const rootProps = useGridRootProps();
@@ -25,29 +25,49 @@ function GridColumnAggregationItem(props: GridColumnMenuItemProps) {
         return acc;
       }, [] as string[]);
 
+  if (!availableAggregations.length) {
+    return null;
+  }
+
+  const currentAggregation = apiRef.current.getColumnAggregation(colDef.field);
+  const options = (
+    <DropdownMenu.RadioGroup value={currentAggregation?.aggregation}>
+      {currentAggregation && (
+        <DropdownMenu.RadioItem
+          key="none"
+          onSelect={() => {
+            apiRef.current.setColumnAggregation(colDef.field, '');
+          }}
+          value="none"
+        >
+          None
+        </DropdownMenu.RadioItem>
+      )}
+      {availableAggregations.map((aggregation) => (
+        <DropdownMenu.RadioItem
+          key={aggregation}
+          onSelect={() => {
+            apiRef.current.setColumnAggregation(colDef.field, aggregation);
+          }}
+          value={aggregation}
+        >
+          {aggregationFunctions[aggregation].label}
+        </DropdownMenu.RadioItem>
+      ))}
+    </DropdownMenu.RadioGroup>
+  );
+
+  if (props.returnOptions) {
+    return options;
+  }
+
   return (
     <DropdownMenu.Sub>
       <DropdownMenu.SubTrigger>
         <rootProps.slots.aggregationIcon />
         {apiRef.current.getLocaleText('aggregationMenuItemHeader')}
       </DropdownMenu.SubTrigger>
-      <DropdownMenu.SubContent>
-        <DropdownMenu.RadioGroup
-          value={apiRef.current.getColumnAggregation(colDef.field)?.aggregation}
-        >
-          {availableAggregations.map((aggregation) => (
-            <DropdownMenu.RadioItem
-              key={aggregation}
-              onSelect={() => {
-                apiRef.current.setColumnAggregation(colDef.field, aggregation);
-              }}
-              value={aggregation}
-            >
-              {aggregationFunctions[aggregation].label}
-            </DropdownMenu.RadioItem>
-          ))}
-        </DropdownMenu.RadioGroup>
-      </DropdownMenu.SubContent>
+      <DropdownMenu.SubContent>{options}</DropdownMenu.SubContent>
     </DropdownMenu.Sub>
   );
 }

@@ -11,6 +11,7 @@ import { GRID_CHECKBOX_SELECTION_COL_DEF } from '../colDef/gridCheckboxSelection
 import { GRID_DETAIL_PANEL_TOGGLE_FIELD } from '../colDef/gridDetailPanelColDef';
 import { gridClasses } from '../constants/gridClasses';
 import { useThemedComponent } from '../context/GridThemeContext';
+import { gridAggregationModelSelector } from '../hooks/features/aggregation/gridAggregationSelector';
 import { GridPinnedColumnFields } from '../hooks/features/columns';
 import { gridColumnPositionsSelector } from '../hooks/features/columns/gridColumnsSelector';
 import {
@@ -22,7 +23,11 @@ import { gridSortModelSelector } from '../hooks/features/sorting/gridSortingSele
 import { useGridConfiguration } from '../hooks/utils/useGridConfiguration';
 import { useGridPrivateApiContext } from '../hooks/utils/useGridPrivateApiContext';
 import { useGridRootProps } from '../hooks/utils/useGridRootProps';
-import { objectShallowCompare, useGridSelector } from '../hooks/utils/useGridSelector';
+import {
+  objectShallowCompare,
+  useGridConditionalSelector,
+  useGridSelector,
+} from '../hooks/utils/useGridSelector';
 import { getVisibleRows } from '../hooks/utils/useGridVisibleRows';
 import { PinnedColumnPosition } from '../internals/constants';
 import { getPinnedCellOffset } from '../internals/utils/getPinnedCellOffset';
@@ -124,10 +129,20 @@ const GridRow = forwardRef<HTMLDivElement, GridRowProps>(function GridRow(props,
     rowReordering && isObjectEmpty(gridEditRowsStateSelector(apiRef.current.state));
   const handleRef = useForkRef(ref, refProp);
   const rowNode = apiRef.current.getRowNode(rowId);
-  const editing = useGridSelector(apiRef, gridRowIsEditingSelector, {
-    rowId,
-    editMode: rootProps.editMode,
-  });
+  const editing = useGridConditionalSelector(
+    apiRef,
+    rootProps.editMode === GridEditModes.Row,
+    gridRowIsEditingSelector,
+    {
+      rowId,
+      editMode: rootProps.editMode,
+    },
+  );
+  const aggregationModel = useGridConditionalSelector(
+    apiRef,
+    rowNode?.type === 'footer' || rowNode?.type === 'group',
+    gridAggregationModelSelector,
+  );
   const editable = rootProps.editMode === GridEditModes.Row;
   const hasFocusCell = focusedColumnIndex !== undefined;
   const hasVirtualFocusCellLeft =
@@ -355,9 +370,10 @@ const GridRow = forwardRef<HTMLDivElement, GridRowProps>(function GridRow(props,
       );
     }
 
+    const aggregationKey = aggregationModel?.[column.field];
     return (
       <slots.cell
-        key={column.field}
+        key={column.field + aggregationKey}
         column={column}
         width={width}
         rowId={rowId}

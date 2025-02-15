@@ -11,7 +11,9 @@ function GridColumnMenuManageItem(props: GridColumnMenuItemProps) {
 
   const showColumns = React.useCallback(
     (event: Event) => {
-      apiRef.current.showPreferences(GridPreferencePanelsValue.columns);
+      requestAnimationFrame(() => {
+        apiRef.current.showPreferences(GridPreferencePanelsValue.columns);
+      });
     },
     [apiRef, onClick],
   );

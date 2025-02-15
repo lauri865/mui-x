@@ -1,8 +1,8 @@
 import { unstable_generateUtilityClasses as generateUtilityClasses } from '@mui/utils';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import * as React from 'react';
-import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import { useGridPrivateApiContext } from '../../internals';
 import type { DataGridProcessedProps } from '../../models/props/DataGridProps';
 
 type OwnerState = DataGridProcessedProps;
@@ -51,10 +51,10 @@ const GridPaperRoot = styled(Paper, {
 
 const GridPanel = forwardRef<HTMLDivElement, GridPanelProps>((props, ref) => {
   const { children, className, classes: classesProp, ...other } = props;
-  const apiRef = useGridApiContext();
+  const apiRef = useGridPrivateApiContext();
   const rootProps = useGridRootProps();
   const classes = gridPanelClasses;
-  const [isPlaced, setIsPlaced] = React.useState(false);
+  const [isPlaced, setIsPlaced] = React.useState(true);
 
   const handleClickAway = React.useCallback(() => {
     apiRef.current.hidePreferences();
@@ -84,6 +84,8 @@ const GridPanel = forwardRef<HTMLDivElement, GridPanelProps>((props, ref) => {
   if (!anchorEl) {
     return null;
   }
+
+  console.log('test');
 
   throw new Error('Not implemented');
   return null;

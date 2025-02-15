@@ -6,7 +6,7 @@ export const GRID_DETAIL_PANEL_TOGGLE_FIELD = '«detail_panel_toggle»';
 export const GRID_DETAIL_PANEL_COL_DEF: GridColDef = {
   type: 'custom',
   field: GRID_DETAIL_PANEL_TOGGLE_FIELD,
-  headerName: '',
+  headerName: 'Toggle detail panel',
   width: 40,
   editable: false,
   resizable: false,
@@ -20,4 +20,5 @@ export const GRID_DETAIL_PANEL_COL_DEF: GridColDef = {
   display: 'flex',
   align: 'center',
   renderCell: (params) => <GridDetailPanelCell {...params} />,
+  renderHeader: () => '',
 };

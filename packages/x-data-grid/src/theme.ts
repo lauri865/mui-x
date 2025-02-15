@@ -16,7 +16,7 @@ const className = {
   },
 
   panelAnchor: {
-    base: 'absolute top-[var(--DataGrid-headersTotalHeight)] left-0 w-[calc(100%-(var(--DataGrid-hasScrollY)*var(--DataGrid-scrollbarSize)))]',
+    base: 'pointer-events-none transform-gpu translate-y-[var(--DataGrid-headersTotalHeight)]',
   },
 
   autosizing: {
@@ -170,6 +170,21 @@ const className = {
     content: 'h-max box-content overflow-auto',
     sticky: 'sticky left-0 w-[var(--DataGrid-innerWidth)]',
     static: 'relative',
+  },
+  columnsPanel: {
+    base: 'flex flex-col gap-2.5 px-3 py-3 overflow-auto max-h-[400px] flex-1 text-sm',
+    header: 'p-1 bg-grid-hover-bg/50 border-b border-b-grid-border',
+    searchInput: 'bg-grid-bg h-8.5',
+    checkboxLabel: 'group/label flex gap-2 items-center select-none relative',
+    footer:
+      'flex bg-grid-hover-bg/50 rounded-b-[inherit] border-t border-t-grid-border px-3 py-1 justify-between pr-1',
+    resetButton: 'px-2 py-1',
+    dragging: 'opacity-50',
+    draggingOverIndicator:
+      'absolute -bottom-1.5 left-0 w-full h-0.5 bg-highlight-border pointer-events-none',
+    draggingOverIndicatorTop: '!-top-1.5',
+    dragHandle: 'inline-flex size-4 text-grid-text/50 ml-auto',
+    pinIcon: 'size-4 text-grid-text hover:text-grid-text/50 inline-flex',
   },
 };
 

@@ -58,12 +58,13 @@ export const avg: GridAggregationReducerFunction<number> = {
   postReduce: (acc, { count }) => {
     return acc / count;
   },
-  valueFormatter: (value) => round(value, 2),
+  valueFormatter: (value) => round(value, 2) + 'haha',
 };
 
 export const count: GridAggregationReducerFunction<any> = {
   label: 'Count',
-  footerLabel: 'count',
+  footerLabel: 'Count',
+  columnTypes: ['number', 'date', 'dateTime', 'string', 'boolean'],
   reduce: (acc) => {
     return acc + 1;
   },
@@ -82,7 +83,8 @@ export const countExists: GridAggregationReducerFunction<any> = {
 
 export const distinct: GridAggregationApplierFunction<number> = {
   label: 'Distinct',
-  footerLabel: 'unique',
+  footerLabel: 'Distinct',
+  columnTypes: ['string'],
   apply: (values) => {
     return new Set(values).size;
   },

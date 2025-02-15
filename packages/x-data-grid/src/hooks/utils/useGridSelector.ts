@@ -64,6 +64,16 @@ type Refs<T> = {
 
 const emptyGetSnapshot = () => null;
 
+export const useGridConditionalSelector = <Api extends GridApiCommon, Args, T>(
+  apiRef: RefObject<Api>,
+  enabled: boolean = true,
+  selector: Selector<Api, Args, T>,
+  args: Args = undefined as Args,
+  equals: <U = T>(a: U, b: U) => boolean = defaultCompare,
+) => {
+  return useGridSelector(apiRef, selector, args, equals, enabled);
+};
+
 export const useGridSelector = <Api extends GridApiCommon, Args, T>(
   apiRef: RefObject<Api>,
   selector: Selector<Api, Args, T>,

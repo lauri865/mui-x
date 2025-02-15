@@ -24,7 +24,7 @@ import {
 } from '../../hooks/features/rows/gridRowSpanningSelectors';
 import { useGridPrivateApiContext } from '../../hooks/utils/useGridPrivateApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-import { useGridSelector } from '../../hooks/utils/useGridSelector';
+import { useGridConditionalSelector, useGridSelector } from '../../hooks/utils/useGridSelector';
 import { useRtl } from '../../hooks/utils/useRtl';
 import { PinnedColumnPosition } from '../../internals/constants';
 import { attachPinnedStyle } from '../../internals/utils';
@@ -166,15 +166,14 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
 
   const field = columnProp.field;
 
-  const editCellState: GridEditCellProps<any> | null = useGridSelector(
+  const editCellState: GridEditCellProps<any> | null = useGridConditionalSelector(
     apiRef,
+    props.column.editable,
     gridEditCellStateSelector,
     {
       rowId,
       field,
     },
-    undefined,
-    props.column.editable,
   );
 
   const cellMode: GridCellModes = editCellState ? GridCellModes.Edit : GridCellModes.View;
@@ -202,31 +201,22 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
 
   cellParams.api = apiRef.current;
 
-  const isSelected = useGridSelector(
-    apiRef,
-    () =>
-      apiRef.current.unstable_applyPipeProcessors('isCellSelected', false, {
-        id: rowId,
-        field,
-      }),
-    undefined,
-    undefined,
-    rootProps.cellSelection,
+  const isSelected = useGridConditionalSelector(apiRef, rootProps.cellSelection, () =>
+    apiRef.current.unstable_applyPipeProcessors('isCellSelected', false, {
+      id: rowId,
+      field,
+    }),
   );
 
-  const hiddenCells = useGridSelector(
+  const hiddenCells = useGridConditionalSelector(
     apiRef,
+    rootProps.rowSpanning,
     gridRowSpanningHiddenCellsSelector,
-    undefined,
-    undefined,
-    rootProps.rowSpanning,
   );
-  const spannedCells = useGridSelector(
+  const spannedCells = useGridConditionalSelector(
     apiRef,
-    gridRowSpanningSpannedCellsSelector,
-    undefined,
-    undefined,
     rootProps.rowSpanning,
+    gridRowSpanningSpannedCellsSelector,
   );
 
   const { hasFocus, isEditable = false, value } = cellParams;

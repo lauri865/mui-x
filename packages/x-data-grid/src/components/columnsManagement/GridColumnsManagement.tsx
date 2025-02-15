@@ -1,19 +1,20 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import composeClasses from '@mui/utils/composeClasses';
+import useEventCallback from '@mui/utils/useEventCallback';
 import clsx from 'clsx';
 import * as React from 'react';
-import { getDataGridUtilityClass } from '../../constants/gridClasses';
+import { useThemedComponent } from '../../context/GridThemeContext';
 import {
   gridColumnDefinitionsSelector,
+  gridColumnFieldsSelector,
   gridColumnVisibilityModelSelector,
+  gridPinnedColumnsSelector,
 } from '../../hooks/features/columns/gridColumnsSelector';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-import { useGridSelector } from '../../hooks/utils/useGridSelector';
+import { arrayShallowCompare, useGridSelector } from '../../hooks/utils/useGridSelector';
 import { useLazyRef } from '../../hooks/utils/useLazyRef';
 import type { GridColDef } from '../../models/colDef/gridColDef';
 import { TextFieldProps } from '../../models/gridBaseSlots';
-import type { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { checkColumnVisibilityModelsSame, defaultSearchPredicate } from './utils';
 
 export interface GridColumnsManagementProps {
@@ -58,35 +59,22 @@ export interface GridColumnsManagementProps {
   getTogglableColumns?: (columns: GridColDef[]) => GridColDef['field'][];
 }
 
-type OwnerState = DataGridProcessedProps;
-
-const useUtilityClasses = (ownerState: OwnerState) => {
-  const { classes } = ownerState;
-
-  const slots = {
-    root: ['columnsManagement'],
-    header: ['columnsManagementHeader'],
-    searchInput: ['columnsManagementSearchInput'],
-    footer: ['columnsManagementFooter'],
-    row: ['columnsManagementRow'],
-  };
-
-  return composeClasses(slots, getDataGridUtilityClass, classes);
-};
-
 const collator = new Intl.Collator();
 
 function GridColumnsManagement(props: GridColumnsManagementProps) {
   const apiRef = useGridApiContext();
-  const searchInputRef = React.useRef<HTMLInputElement>(null);
   const columns = useGridSelector(apiRef, gridColumnDefinitionsSelector);
   const initialColumnVisibilityModel = useLazyRef(() =>
     gridColumnVisibilityModelSelector(apiRef),
   ).current;
+  const initialPinnedColumns = useLazyRef(() =>
+    gridPinnedColumnsSelector(apiRef.current.state),
+  ).current;
+  const initalColumnOrder = useLazyRef(() => gridColumnFieldsSelector(apiRef)).current;
   const columnVisibilityModel = useGridSelector(apiRef, gridColumnVisibilityModelSelector);
   const rootProps = useGridRootProps();
   const [searchValue, setSearchValue] = React.useState('');
-  const classes = useUtilityClasses(rootProps);
+  const classes = useThemedComponent('columnsPanel');
 
   const {
     sort,
@@ -99,9 +87,20 @@ function GridColumnsManagement(props: GridColumnsManagementProps) {
     searchInputProps,
   } = props;
 
+  const columnOrder = useGridSelector(apiRef, gridColumnFieldsSelector);
   const isResetDisabled = React.useMemo(
-    () => checkColumnVisibilityModelsSame(columnVisibilityModel, initialColumnVisibilityModel),
-    [columnVisibilityModel, initialColumnVisibilityModel],
+    () =>
+      checkColumnVisibilityModelsSame(columnVisibilityModel, initialColumnVisibilityModel) &&
+      arrayShallowCompare(initalColumnOrder, columnOrder) &&
+      arrayShallowCompare(
+        initialPinnedColumns.left,
+        gridPinnedColumnsSelector(apiRef.current.state).left,
+      ) &&
+      arrayShallowCompare(
+        initialPinnedColumns.right,
+        gridPinnedColumnsSelector(apiRef.current.state).right,
+      ),
+    [columnVisibilityModel, initialColumnVisibilityModel, columnOrder],
   );
 
   const sortedColumns = React.useMemo(() => {
@@ -121,9 +120,8 @@ function GridColumnsManagement(props: GridColumnsManagementProps) {
     }
   }, [columns, sort]);
 
-  const toggleColumn = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const { name: field } = event.target as HTMLInputElement;
-    apiRef.current.setColumnVisibility(field, columnVisibilityModel[field] === false);
+  const toggleColumn = (field: string) => (checked: boolean) => {
+    apiRef.current.setColumnVisibility(field, checked);
   };
 
   const currentColumns = React.useMemo(() => {
@@ -191,16 +189,6 @@ function GridColumnsManagement(props: GridColumnsManagementProps) {
     [columnVisibilityModel, hideableColumns],
   );
 
-  const firstSwitchRef = React.useRef<HTMLInputElement>(null);
-
-  React.useEffect(() => {
-    if (autoFocusSearchField) {
-      searchInputRef.current!.focus();
-    } else if (firstSwitchRef.current && typeof firstSwitchRef.current.focus === 'function') {
-      firstSwitchRef.current.focus();
-    }
-  }, [autoFocusSearchField]);
-
   let firstHideableColumnFound = false;
   const isFirstHideableColumn = (column: GridColDef) => {
     if (firstHideableColumnFound === false && column.hideable !== false) {
@@ -209,60 +197,104 @@ function GridColumnsManagement(props: GridColumnsManagementProps) {
     }
     return false;
   };
-  const handleSearchReset = React.useCallback(() => {
-    setSearchValue('');
-    searchInputRef.current!.focus();
-  }, []);
+
+  const reorder = useDragReorder((dragIndex, overIndex) => {
+    const pinnedPositionOver = apiRef.current.getColumnPinnedPosition(
+      currentColumns[overIndex].field,
+    );
+    const pinnedPositionDrag = apiRef.current.getColumnPinnedPosition(
+      currentColumns[dragIndex].field,
+    );
+    if (pinnedPositionOver !== pinnedPositionDrag) {
+      if (pinnedPositionOver) {
+        apiRef.current.pinColumn(currentColumns[dragIndex].field, pinnedPositionOver);
+      } else {
+        apiRef.current.unpinColumn(currentColumns[dragIndex].field);
+      }
+    }
+    apiRef.current.setColumnIndex(currentColumns[dragIndex].field, overIndex);
+  });
 
   return (
     <React.Fragment>
-      <div className={classes.header}>
+      <div className={classes.variants.header}>
         <rootProps.slots.baseTextField
           placeholder={apiRef.current.getLocaleText('columnsManagementSearchTitle')}
-          inputRef={searchInputRef}
-          className={classes.searchInput}
+          className={classes.variants.searchInput}
           value={searchValue}
           onChange={handleSearchValueChange}
           size="small"
           type="search"
           autoComplete="off"
-          fullWidth
           {...rootProps.slotProps?.baseTextField}
           {...searchInputProps}
         />
       </div>
-      <div className={clsx(classes.root, 'flex flex-col overflow-auto max-h-400 flex-1')}>
-        {currentColumns.map((column) => (
-          <React.Fragment key={column.field}>
-            <rootProps.slots.baseCheckbox
-              disabled={column.hideable === false}
-              checked={columnVisibilityModel[column.field] !== false}
-              onClick={toggleColumn}
-              name={column.field}
-              ref={isFirstHideableColumn(column) ? firstSwitchRef : undefined}
-              {...rootProps.slotProps?.baseCheckbox}
-            />
-            <rootProps.slots.baseInputLabel>
+      <div className={clsx(classes.root)} ref={reorder.refs.containerRef}>
+        {currentColumns.map((column, index) => (
+          <div key={column.field} className="relative group/column">
+            {reorder.state.hoverIndex === index &&
+              reorder.state.dragIndex !== reorder.state.hoverIndex && (
+                <div
+                  className={clsx(
+                    classes.variants.draggingOverIndicator,
+                    reorder.state.dragIndex !== null &&
+                      reorder.state.dragIndex > reorder.state.hoverIndex &&
+                      classes.variants.draggingOverIndicatorTop,
+                  )}
+                />
+              )}
+            <rootProps.slots.baseInputLabel
+              className={clsx(
+                classes.variants.checkboxLabel,
+                reorder.state.dragIndex === index && classes.variants.dragging,
+              )}
+              {...reorder.handlers}
+              data-index={index}
+            >
+              <rootProps.slots.baseCheckbox
+                disabled={column.hideable === false}
+                checked={columnVisibilityModel[column.field] !== false}
+                onCheckedChange={toggleColumn(column.field)}
+                name={column.field}
+              />
+
               {column.headerName || column.field}
+              <div className="ml-auto flex items-center">
+                {apiRef.current.isColumnPinned(column.field) && (
+                  <rootProps.slots.pinIcon
+                    className={classes.variants.pinIcon}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      apiRef.current.unpinColumn(column.field);
+                    }}
+                  />
+                )}
+                <rootProps.slots.dragHandleIcon className={classes.variants.dragHandle} />
+              </div>
             </rootProps.slots.baseInputLabel>
-          </React.Fragment>
+          </div>
         ))}
         {currentColumns.length === 0 && (
-          <div>{apiRef.current.getLocaleText('columnsManagementNoColumns')}</div>
+          <div className="text-center text-grid-text/50 py-1">
+            {apiRef.current.getLocaleText('columnsManagementNoColumns')}
+          </div>
         )}
       </div>
       {(!disableShowHideToggle || !disableResetButton) && currentColumns.length > 0 ? (
-        <div className={classes.footer}>
+        <div className={classes.variants.footer}>
           {!disableShowHideToggle ? (
             <>
-              <rootProps.slots.baseCheckbox
-                disabled={hideableColumns.length === 0}
-                checked={allHideableColumnsVisible}
-                onClick={() => toggleAllColumns(!allHideableColumnsVisible)}
-                name={apiRef.current.getLocaleText('columnsManagementShowHideAllText')}
-                {...rootProps.slotProps?.baseCheckbox}
-              />
-              <rootProps.slots.baseInputLabel>
+              <rootProps.slots.baseInputLabel className={classes.variants.checkboxLabel}>
+                <rootProps.slots.baseCheckbox
+                  disabled={hideableColumns.length === 0}
+                  checked={allHideableColumnsVisible}
+                  onClick={() => toggleAllColumns(!allHideableColumnsVisible)}
+                  name={apiRef.current.getLocaleText('columnsManagementShowHideAllText')}
+                  {...rootProps.slotProps?.baseCheckbox}
+                />
+
                 {apiRef.current.getLocaleText('columnsManagementShowHideAllText')}
               </rootProps.slots.baseInputLabel>
             </>
@@ -272,8 +304,20 @@ function GridColumnsManagement(props: GridColumnsManagementProps) {
 
           {!disableResetButton ? (
             <rootProps.slots.baseButton
-              onClick={() => apiRef.current.setColumnVisibilityModel(initialColumnVisibilityModel)}
+              onClick={() => {
+                apiRef.current.setState((state) => ({
+                  ...state,
+                  columns: {
+                    ...state.columns,
+                    orderedFields: initalColumnOrder,
+                    columnVisibilityModel: initialColumnVisibilityModel,
+                  },
+                }));
+                apiRef.current.setPinnedColumns(initialPinnedColumns);
+              }}
               disabled={isResetDisabled}
+              size="md"
+              className={classes.variants.resetButton}
               {...rootProps.slotProps?.baseButton}
             >
               {apiRef.current.getLocaleText('columnsManagementReset')}
@@ -283,6 +327,91 @@ function GridColumnsManagement(props: GridColumnsManagementProps) {
       ) : null}
     </React.Fragment>
   );
+}
+
+interface DragReorderHandlers {
+  onPointerDown: (e: React.PointerEvent) => void;
+  onPointerMove: (e: React.PointerEvent) => void;
+}
+
+export function useDragReorder(onReorder: (dragIndex: number, overIndex: number) => void) {
+  const [dragIndex, setDragIndex] = React.useState<number | null>(null);
+  const [hoverIndex, setHoverIndex] = React.useState<number | null>(null);
+  const ref = React.useRef<HTMLDivElement>(null);
+  const startY = React.useRef<number | null>(null);
+
+  const getIndex = (e: React.PointerEvent) => {
+    const target = e.currentTarget as HTMLElement;
+    return Number(target.dataset.index);
+  };
+
+  const onPointerUp = useEventCallback((e: PointerEvent) => {
+    if (dragIndex != null && hoverIndex != null) {
+      e.stopPropagation();
+      e.preventDefault();
+
+      if (dragIndex !== hoverIndex) {
+        onReorder(dragIndex!, hoverIndex);
+      }
+    }
+    setDragIndex(null);
+    setHoverIndex(null);
+    startY.current = null;
+  });
+
+  const handlers: DragReorderHandlers = {
+    onPointerDown: (e) => {
+      if (e.button !== 0) {
+        return;
+      }
+      const index = getIndex(e);
+      setDragIndex(index);
+      startY.current = e.clientY;
+      window.addEventListener('pointerup', onPointerUp, {
+        once: true,
+        capture: true,
+      });
+    },
+    onPointerMove: (e) => {
+      if (
+        dragIndex !== null &&
+        startY.current !== null &&
+        Math.abs(e.clientY - startY.current) > 5
+      ) {
+        let index = getIndex(e);
+
+        if (index !== dragIndex) {
+          const bbox = e.currentTarget.getBoundingClientRect();
+          const y = e.clientY - bbox.top;
+          const isBefore = y < bbox.height / 2;
+          const draggingBelow = index > dragIndex;
+          if (isBefore && draggingBelow) {
+            index = Math.max(0, index - 1);
+          }
+          if (!isBefore && !draggingBelow) {
+            index = Math.min(index + 1, ref.current!.children.length - 1);
+          }
+        }
+
+        setHoverIndex(index);
+
+        if (ref.current) {
+          const { top, bottom } = ref.current.getBoundingClientRect();
+          if (e.clientY < top + 20) {
+            ref.current.scrollBy({ top: -10, behavior: 'smooth' });
+          } else if (e.clientY > bottom - 20) {
+            ref.current.scrollBy({ top: 10, behavior: 'smooth' });
+          }
+        }
+      }
+    },
+  };
+
+  return {
+    state: { dragIndex, hoverIndex },
+    refs: { containerRef: ref },
+    handlers,
+  };
 }
 
 export { GridColumnsManagement };

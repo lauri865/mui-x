@@ -84,6 +84,8 @@
 
 .twg-root {
   @theme {
+    --text-sm: 0.8125rem;
+    --text-sm--line-height: 1.25rem;
     --color-background: hsl(var(--background));
     --color-foreground: hsl(var(--foreground));
 

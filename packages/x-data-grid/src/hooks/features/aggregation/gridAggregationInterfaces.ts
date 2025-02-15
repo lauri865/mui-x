@@ -25,7 +25,7 @@ export interface GridAggregationInitialState {
 
 export interface GridAggregationApi {
   setAggregationModel: (model: GridAggregationModel) => void;
-  setColumnAggregation: (field: string, aggregation: string) => void;
+  setColumnAggregation: (field: string, aggregation: string | null) => void;
   getColumnAggregation: (field: string) => {
     aggregation: string;
     function: GridAggregationFunction;

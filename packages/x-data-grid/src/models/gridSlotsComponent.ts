@@ -1,4 +1,4 @@
-import { Checkbox, ContextMenu, DropdownMenu } from '@twgrid/x-data-grid-shadcn';
+import { Checkbox, ContextMenu, DropdownMenu, Popover } from '@twgrid/x-data-grid-shadcn';
 import * as React from 'react';
 import type { GridIconSlotsComponent } from './gridIconSlotsComponent';
 import type { GridSlotProps } from './gridSlotsComponentsProps';
@@ -91,12 +91,12 @@ export interface GridBaseSlots {
    * The custom Popper component used in the grid.
    * @default Popper
    */
-  basePopper: React.JSXElementConstructor<GridSlotProps['basePopper']>;
+  basePopper: typeof Popover;
   /**
    * The custom InputLabel component used in the grid.
    * @default InputLabel
    */
-  baseInputLabel: React.JSXElementConstructor<GridSlotProps['baseInputLabel']>;
+  baseInputLabel: typeof Label;
   /**
    * The custom SelectOption component used in the grid.
    * @default SelectOption

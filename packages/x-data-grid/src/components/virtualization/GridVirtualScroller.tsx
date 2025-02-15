@@ -58,6 +58,7 @@ function GridVirtualScroller(props: GridVirtualScrollerProps) {
   const rows = getRows();
 
   const classes = useThemedComponent('main');
+  const panelAnchorClasses = useThemedComponent('panelAnchor');
 
   return (
     <div
@@ -72,6 +73,7 @@ function GridVirtualScroller(props: GridVirtualScrollerProps) {
         hasHorizontalFiller === false || (hasPinnedRight && !scrollbarYSize) || undefined
       }
     >
+      <div role="presentation" data-id="gridPanelAnchor" className={panelAnchorClasses.root} />
       <GridDragDrop />
       <GridScrollArea scrollDirection="left" {...getScrollAreaProps()} />
       <GridScrollArea scrollDirection="right" {...getScrollAreaProps()} />

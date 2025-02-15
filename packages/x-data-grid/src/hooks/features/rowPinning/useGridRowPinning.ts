@@ -78,8 +78,8 @@ export const useGridRowPinning = (
         [position]: model[position].filter((rowId) => rowId !== id),
       };
 
-      apiRef.current.setPinnedRows(newModel);
       delete apiRef.current.state.visibleRowsLookup[id];
+      apiRef.current.setPinnedRows(newModel);
     },
     [apiRef],
   );
@@ -128,6 +128,7 @@ export const useGridRowPinning = (
         ...state,
         pinnedRows,
       }));
+      overrideVisibleRowsLookup();
     },
     [apiRef],
   );
