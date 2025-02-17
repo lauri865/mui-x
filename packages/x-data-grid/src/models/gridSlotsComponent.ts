@@ -1,4 +1,4 @@
-import { Checkbox, ContextMenu, DropdownMenu, Popover } from '@twgrid/x-data-grid-shadcn';
+import { Checkbox, ContextMenu, DropdownMenu, Popover, Select } from '@twgrid/x-data-grid-shadcn';
 import * as React from 'react';
 import type { GridIconSlotsComponent } from './gridIconSlotsComponent';
 import type { GridSlotProps } from './gridSlotsComponentsProps';
@@ -71,7 +71,7 @@ export interface GridBaseSlots {
    * The custom Select component used in the grid.
    * @default Select
    */
-  baseSelect: React.JSXElementConstructor<GridSlotProps['baseSelect']>;
+  baseSelect: typeof Select;
   /**
    * The custom Button component used in the grid.
    * @default Button
@@ -190,6 +190,11 @@ export interface GridSlotsComponent extends GridBaseSlots, GridIconSlotsComponen
    * @default GridNoRowsOverlay
    */
   noRowsOverlay: React.JSXElementConstructor<GridSlotProps['noRowsOverlay']>;
+  /**
+   * No columns overlay component rendered when the grid has no columns.
+   * @default GridNoColumnsOverlay
+   */
+  noColumnsOverlay: React.JSXElementConstructor<GridSlotProps['noRowsOverlay']>;
   /**
    * Pagination component rendered in the grid footer by default.
    * @default Pagination

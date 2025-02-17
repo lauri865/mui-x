@@ -29,7 +29,7 @@ const className = {
   topContainer: 'sticky z-4 top-0',
 
   columnHeaders: {
-    base: 'flex flex-col rounded-l-grid rounded-r-grid w-[var(--DataGrid-rowWidth)] bg-grid-header-bg select-none',
+    base: 'flex flex-col rounded-l-grid rounded-r-grid w-[var(--DataGrid-rowWidth)] bg-grid-header-bg select-none min-h-[var(--DataGrid-headersTotalHeight)] *:flex-1',
   },
   columnSeparator: {
     base: '',
@@ -180,9 +180,7 @@ const className = {
       'flex bg-grid-hover-bg/50 rounded-b-[inherit] border-t border-t-grid-border px-3 py-1 justify-between pr-1',
     resetButton: 'px-2 py-1',
     dragging: 'opacity-50',
-    draggingOverIndicator:
-      'absolute -bottom-1.5 left-0 w-full h-0.5 bg-highlight-border pointer-events-none',
-    draggingOverIndicatorTop: '!-top-1.5',
+    draggingOverIndicator: 'absolute left-0 w-full h-0.5 bg-highlight-border pointer-events-none',
     dragHandle: 'inline-flex size-4 text-grid-text/50 ml-auto',
     pinIcon: 'size-4 text-grid-text hover:text-grid-text/50 inline-flex',
   },

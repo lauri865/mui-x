@@ -6,6 +6,7 @@ import { gridVisiblePinnedRowsCountSelector } from '../../features/rowPinning';
 import { useGridSelector } from '../../utils';
 import { useGridApiContext } from '../../utils/useGridApiContext';
 import { useGridRootProps } from '../../utils/useGridRootProps';
+import { gridVisibleColumnFieldsSelector } from '../columns';
 import { gridExpandedRowCountSelector } from '../filter';
 import { gridRowCountSelector, gridRowsLoadingSelector } from '../rows';
 
@@ -20,6 +21,7 @@ export const useGridOverlays = () => {
   const totalRowCount = useGridSelector(apiRef, gridRowCountSelector);
   const visibleRowCount = useGridSelector(apiRef, gridExpandedRowCountSelector);
   const pinnedRowsCount = useGridSelector(apiRef, gridVisiblePinnedRowsCountSelector);
+  const visibleColumns = useGridSelector(apiRef, gridVisibleColumnFieldsSelector);
   const noRows = totalRowCount === 0 && pinnedRowsCount === 0;
   const loading = useGridSelector(apiRef, gridRowsLoadingSelector);
 
@@ -42,6 +44,10 @@ export const useGridOverlays = () => {
     loadingOverlayVariant =
       rootProps.slotProps?.loadingOverlay?.[noRows ? 'noRowsVariant' : 'variant'] ??
       (noRows ? 'skeleton' : 'linear-progress');
+  }
+
+  if (!visibleColumns.length) {
+    overlayType = 'noColumnsOverlay';
   }
 
   const overlaysProps = { overlayType, loadingOverlayVariant };

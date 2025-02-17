@@ -12,7 +12,10 @@ import { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { GridLoadingOverlayVariant } from '../GridLoadingOverlay';
 
 export type GridOverlayType =
-  | keyof Pick<GridSlotsComponent, 'noRowsOverlay' | 'noResultsOverlay' | 'loadingOverlay'>
+  | keyof Pick<
+      GridSlotsComponent,
+      'noRowsOverlay' | 'noResultsOverlay' | 'loadingOverlay' | 'noColumnsOverlay'
+    >
   | null;
 
 interface GridOverlaysProps {
@@ -40,8 +43,7 @@ export function GridOverlayWrapper(props: React.PropsWithChildren<GridOverlaysPr
 
   let height: React.CSSProperties['height'] = Math.max(
     dimensions.viewportOuterSize.height -
-      dimensions.topContainerHeight -
-      dimensions.bottomContainerHeight -
+      dimensions.headersTotalHeight -
       (dimensions.hasScrollX ? dimensions.scrollbarSize : 0),
     0,
   );
@@ -60,7 +62,7 @@ export function GridOverlayWrapper(props: React.PropsWithChildren<GridOverlaysPr
         props.loadingOverlayVariant !== 'skeleton' && 'sticky left-0 w-0 h-0',
         overlayType === 'loadingOverlay'
           ? 'z-5' // Should be above pinned columns, pinned rows, and detail panel
-          : 'z-4',
+          : 'z-5',
       )}
       style={
         props.loadingOverlayVariant !== 'skeleton'

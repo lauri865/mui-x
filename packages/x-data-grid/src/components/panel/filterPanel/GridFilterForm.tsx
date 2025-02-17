@@ -1,28 +1,12 @@
-import {
-  unstable_capitalize as capitalize,
-  unstable_composeClasses as composeClasses,
-  unstable_useId as useId,
-} from '@mui/utils';
+import { unstable_capitalize as capitalize } from '@mui/utils';
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import clsx from 'clsx';
 import * as React from 'react';
-import { getDataGridUtilityClass } from '../../../constants/gridClasses';
-import {
-  gridColumnLookupSelector,
-  gridFilterableColumnDefinitionsSelector,
-} from '../../../hooks/features/columns/gridColumnsSelector';
 import { gridFilterModelSelector } from '../../../hooks/features/filter/gridFilterSelector';
 import { useGridApiContext } from '../../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../../hooks/utils/useGridRootProps';
 import { useGridSelector } from '../../../hooks/utils/useGridSelector';
-import {
-  GridColDef,
-  GridSingleSelectColDef,
-  GridStateColDef,
-} from '../../../models/colDef/gridColDef';
+import { GridColDef, GridStateColDef } from '../../../models/colDef/gridColDef';
 import { GridFilterItem, GridLogicOperator } from '../../../models/gridFilterItem';
-import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
-import { getValueFromValueOptions, getValueOptions } from './filterPanelUtils';
 
 export interface FilterColumnsArgs {
   field: GridColDef['field'];
@@ -115,28 +99,12 @@ export interface GridFilterFormProps {
    * @default {}
    */
   valueInputProps?: any;
+  index: number;
   /**
    * @ignore - do not document.
    */
   children?: React.ReactNode;
 }
-
-type OwnerState = DataGridProcessedProps;
-
-const useUtilityClasses = (ownerState: OwnerState) => {
-  const { classes } = ownerState;
-
-  const slots = {
-    root: ['filterForm'],
-    deleteIcon: ['filterFormDeleteIcon'],
-    logicOperatorInput: ['filterFormLogicOperatorInput'],
-    columnInput: ['filterFormColumnInput'],
-    operatorInput: ['filterFormOperatorInput'],
-    valueInput: ['filterFormValueInput'],
-  };
-
-  return composeClasses(slots, getDataGridUtilityClass, classes);
-};
 
 const getLogicOperatorLocaleKey = (logicOperator: GridLogicOperator) => {
   switch (logicOperator) {
@@ -177,83 +145,15 @@ const GridFilterForm = forwardRef<HTMLDivElement, GridFilterFormProps>(
       ...other
     } = props;
     const apiRef = useGridApiContext();
-    const columnLookup = useGridSelector(apiRef, gridColumnLookupSelector);
-    const filterableColumns = useGridSelector(apiRef, gridFilterableColumnDefinitionsSelector);
     const filterModel = useGridSelector(apiRef, gridFilterModelSelector);
-    const columnSelectId = useId();
-    const columnSelectLabelId = useId();
-    const operatorSelectId = useId();
-    const operatorSelectLabelId = useId();
     const rootProps = useGridRootProps();
-    const classes = useUtilityClasses(rootProps);
     const valueRef = React.useRef<any>(null);
     const filterSelectorRef = React.useRef<HTMLInputElement>(null);
     const multiFilterOperator = filterModel.logicOperator ?? GridLogicOperator.And;
 
     const hasLogicOperatorColumn: boolean = hasMultipleFilters && logicOperators.length > 0;
 
-    const baseFormControlProps = rootProps.slotProps?.baseFormControl || {};
-
-    const baseSelectProps = rootProps.slotProps?.baseSelect || {};
-    const isBaseSelectNative = baseSelectProps.native ?? false;
-
-    const baseInputLabelProps = rootProps.slotProps?.baseInputLabel || {};
-    const baseSelectOptionProps = rootProps.slotProps?.baseSelectOption || {};
-
-    const { InputComponentProps, ...valueInputPropsOther } = valueInputProps;
-
-    const { filteredColumns, selectedField } = React.useMemo(() => {
-      let itemField: string | undefined = item.field;
-
-      // Yields a valid value if the current filter belongs to a column that is not filterable
-      const selectedNonFilterableColumn =
-        columnLookup[item.field].filterable === false ? columnLookup[item.field] : null;
-
-      if (selectedNonFilterableColumn) {
-        return {
-          filteredColumns: [selectedNonFilterableColumn],
-          selectedField: itemField,
-        };
-      }
-
-      if (filterColumns === undefined || typeof filterColumns !== 'function') {
-        return { filteredColumns: filterableColumns, selectedField: itemField };
-      }
-
-      const filteredFields = filterColumns({
-        field: item.field,
-        columns: filterableColumns,
-        currentFilters: filterModel?.items || [],
-      });
-
-      return {
-        filteredColumns: filterableColumns.filter((column) => {
-          const isFieldIncluded = filteredFields.includes(column.field);
-          if (column.field === item.field && !isFieldIncluded) {
-            itemField = undefined;
-          }
-          return isFieldIncluded;
-        }),
-        selectedField: itemField,
-      };
-    }, [filterColumns, filterModel?.items, filterableColumns, item.field, columnLookup]);
-
-    const sortedFilteredColumns = React.useMemo(() => {
-      switch (columnsSort) {
-        case 'asc':
-          return filteredColumns.sort((a, b) =>
-            collator.compare(getColumnLabel(a), getColumnLabel(b)),
-          );
-
-        case 'desc':
-          return filteredColumns.sort(
-            (a, b) => -collator.compare(getColumnLabel(a), getColumnLabel(b)),
-          );
-
-        default:
-          return filteredColumns;
-      }
-    }, [filteredColumns, columnsSort]);
+    const { InputComponentProps } = valueInputProps;
 
     const currentColumn = item.field ? apiRef.current.getColumn(item.field) : null;
 
@@ -265,63 +165,8 @@ const GridFilterForm = forwardRef<HTMLDivElement, GridFilterFormProps>(
       return currentColumn.filterOperators?.find((operator) => operator.value === item.operator);
     }, [item, currentColumn]);
 
-    const changeColumn = React.useCallback(
-      (event: Event) => {
-        const field = event.target.value as string;
-        const column = apiRef.current.getColumn(field)!;
-
-        if (column.field === currentColumn!.field) {
-          // column did not change
-          return;
-        }
-
-        // try to keep the same operator when column change
-        const newOperator =
-          column.filterOperators!.find((operator) => operator.value === item.operator) ||
-          column.filterOperators![0];
-
-        // Erase filter value if the input component or filtered column type is modified
-        const eraseFilterValue =
-          !newOperator.InputComponent ||
-          newOperator.InputComponent !== currentOperator?.InputComponent ||
-          column.type !== currentColumn!.type;
-
-        let filterValue = eraseFilterValue ? undefined : item.value;
-
-        // Check filter value against the new valueOptions
-        if (column.type === 'singleSelect' && filterValue !== undefined) {
-          const colDef = column as GridSingleSelectColDef;
-          const valueOptions = getValueOptions(colDef);
-          if (Array.isArray(filterValue)) {
-            filterValue = filterValue.filter((val) => {
-              return (
-                // Only keep values that are in the new value options
-                (getValueFromValueOptions(val, valueOptions, colDef?.getOptionValue!) !== undefined)
-              );
-            });
-          } else if (
-            getValueFromValueOptions(item.value, valueOptions, colDef?.getOptionValue!) ===
-            undefined
-          ) {
-            // Reset the filter value if it is not in the new value options
-            filterValue = undefined;
-          }
-        }
-
-        applyFilterChanges({
-          ...item,
-          field,
-          operator: newOperator.value,
-          value: filterValue,
-        });
-      },
-      [apiRef, applyFilterChanges, item, currentColumn, currentOperator],
-    );
-
     const changeOperator = React.useCallback(
-      (event: Event) => {
-        const operator = event.target.value as string;
-
+      (operator: string) => {
         const newOperator = currentColumn?.filterOperators!.find((op) => op.value === operator);
 
         const eraseItemValue =
@@ -335,17 +180,6 @@ const GridFilterForm = forwardRef<HTMLDivElement, GridFilterFormProps>(
         });
       },
       [applyFilterChanges, item, currentColumn, currentOperator],
-    );
-
-    const changeLogicOperator = React.useCallback(
-      (event: Event) => {
-        const logicOperator =
-          (event.target.value as string) === GridLogicOperator.And.toString()
-            ? GridLogicOperator.And
-            : GridLogicOperator.Or;
-        applyMultiFilterOperatorChanges(logicOperator);
-      },
-      [applyMultiFilterOperatorChanges],
     );
 
     const handleDeleteFilter = () => {
@@ -366,200 +200,82 @@ const GridFilterForm = forwardRef<HTMLDivElement, GridFilterFormProps>(
       [currentOperator],
     );
 
+    const Select = rootProps.slots.baseSelect;
+
     return (
-      <div className={classes.root} data-id={item.id} ownerState={rootProps} {...other} ref={ref}>
-        <div
-          as={rootProps.slots.baseFormControl}
-          {...baseFormControlProps}
-          {...deleteIconProps}
-          className={clsx(
-            classes.deleteIcon,
-            baseFormControlProps.className,
-            deleteIconProps.className,
-          )}
-          ownerState={rootProps}
-        >
-          <rootProps.slots.baseIconButton
-            aria-label={apiRef.current.getLocaleText('filterPanelDeleteIconLabel')}
-            title={apiRef.current.getLocaleText('filterPanelDeleteIconLabel')}
-            onClick={handleDeleteFilter}
-            size="small"
-            disabled={readOnly}
-            {...rootProps.slotProps?.baseIconButton}
-          >
-            <rootProps.slots.filterPanelDeleteIcon fontSize="small" />
-          </rootProps.slots.baseIconButton>
-        </div>
-        <div
-          variant="outlined"
-          size="small"
-          as={rootProps.slots.baseFormControl}
-          {...baseFormControlProps}
-          {...logicOperatorInputProps}
-          sx={[
-            hasLogicOperatorColumn
-              ? {
-                  display: 'flex',
-                }
-              : {
-                  display: 'none',
-                },
-            showMultiFilterOperators
-              ? {
-                  visibility: 'visible',
-                }
-              : {
-                  visibility: 'hidden',
-                },
-            baseFormControlProps.sx,
-            logicOperatorInputProps.sx,
-          ]}
-          className={clsx(
-            classes.logicOperatorInput,
-            baseFormControlProps.className,
-            logicOperatorInputProps.className,
-          )}
-          ownerState={rootProps}
-        >
-          <rootProps.slots.baseSelect
-            inputProps={{
-              'aria-label': apiRef.current.getLocaleText('filterPanelLogicOperator'),
-            }}
+      <div
+        className="flex flex-col gap-2 w-[240px] p-cell border-b last:border-b-0"
+        data-id={item.id}
+        {...other}
+        ref={ref}
+      >
+        {showMultiFilterOperators && hasLogicOperatorColumn && (
+          <Select.Root
             value={multiFilterOperator ?? ''}
-            onChange={changeLogicOperator}
-            disabled={!!disableMultiFilterOperator || logicOperators.length === 1}
-            native={isBaseSelectNative}
-            {...rootProps.slotProps?.baseSelect}
+            onValueChange={(value) => {
+              applyMultiFilterOperatorChanges(value as GridLogicOperator);
+            }}
+            disabled={readOnly || !!disableMultiFilterOperator || logicOperators.length === 1}
           >
-            {logicOperators.map((logicOperator) => (
-              <rootProps.slots.baseSelectOption
-                {...baseSelectOptionProps}
-                native={isBaseSelectNative}
-                key={logicOperator.toString()}
-                value={logicOperator.toString()}
-              >
-                {apiRef.current.getLocaleText(getLogicOperatorLocaleKey(logicOperator))}
-              </rootProps.slots.baseSelectOption>
-            ))}
-          </rootProps.slots.baseSelect>
-        </div>
-        <div
-          variant="outlined"
-          size="small"
-          as={rootProps.slots.baseFormControl}
-          {...baseFormControlProps}
-          {...columnInputProps}
-          className={clsx(
-            classes.columnInput,
-            baseFormControlProps.className,
-            columnInputProps.className,
-          )}
-          ownerState={rootProps}
-        >
-          <rootProps.slots.baseInputLabel
-            {...baseInputLabelProps}
-            htmlFor={columnSelectId}
-            id={columnSelectLabelId}
-          >
-            {apiRef.current.getLocaleText('filterPanelColumns')}
-          </rootProps.slots.baseInputLabel>
-          <rootProps.slots.baseSelect
-            labelId={columnSelectLabelId}
-            id={columnSelectId}
-            label={apiRef.current.getLocaleText('filterPanelColumns')}
-            value={selectedField ?? ''}
-            onChange={changeColumn}
-            native={isBaseSelectNative}
-            disabled={readOnly}
-            {...rootProps.slotProps?.baseSelect}
-          >
-            {sortedFilteredColumns.map((col) => (
-              <rootProps.slots.baseSelectOption
-                {...baseSelectOptionProps}
-                native={isBaseSelectNative}
-                key={col.field}
-                value={col.field}
-              >
-                {getColumnLabel(col)}
-              </rootProps.slots.baseSelectOption>
-            ))}
-          </rootProps.slots.baseSelect>
-        </div>
-        <div
-          variant="outlined"
-          size="small"
-          as={rootProps.slots.baseFormControl}
-          {...baseFormControlProps}
-          {...operatorInputProps}
-          className={clsx(
-            classes.operatorInput,
-            baseFormControlProps.className,
-            operatorInputProps.className,
-          )}
-          ownerState={rootProps}
-        >
-          <rootProps.slots.baseInputLabel
-            {...baseInputLabelProps}
-            htmlFor={operatorSelectId}
-            id={operatorSelectLabelId}
-          >
-            {apiRef.current.getLocaleText('filterPanelOperator')}
-          </rootProps.slots.baseInputLabel>
-          <rootProps.slots.baseSelect
-            labelId={operatorSelectLabelId}
-            label={apiRef.current.getLocaleText('filterPanelOperator')}
-            id={operatorSelectId}
-            value={item.operator}
-            onChange={changeOperator}
-            native={isBaseSelectNative}
-            inputRef={filterSelectorRef}
-            disabled={readOnly}
-            {...rootProps.slotProps?.baseSelect}
-          >
+            <Select.Trigger>
+              <Select.Value
+                placeholder={apiRef.current.getLocaleText('filterPanelLogicOperator')}
+              />
+            </Select.Trigger>
+            <Select.Content>
+              {logicOperators.map((logicOperator) => (
+                <Select.Item key={logicOperator.toString()} value={logicOperator.toString()}>
+                  {apiRef.current.getLocaleText(getLogicOperatorLocaleKey(logicOperator))}
+                </Select.Item>
+              ))}
+            </Select.Content>
+          </Select.Root>
+        )}
+
+        <Select.Root value={item.operator} disabled={readOnly} onValueChange={changeOperator}>
+          <Select.Trigger className="capitalize">
+            <Select.Value placeholder={apiRef.current.getLocaleText('filterPanelOperator')} />
+          </Select.Trigger>
+          <Select.Content>
             {currentColumn?.filterOperators?.map((operator) => (
-              <rootProps.slots.baseSelectOption
-                {...baseSelectOptionProps}
-                native={isBaseSelectNative}
-                key={operator.value}
-                value={operator.value}
-              >
+              <Select.Item key={operator.value} value={operator.value} className="capitalize">
                 {operator.label ||
                   apiRef.current.getLocaleText(
                     `filterOperator${capitalize(operator.value)}` as 'filterOperatorContains',
                   )}
-              </rootProps.slots.baseSelectOption>
+              </Select.Item>
             ))}
-          </rootProps.slots.baseSelect>
-        </div>
-        <div
-          variant="outlined"
-          size="small"
-          as={rootProps.slots.baseFormControl}
-          {...baseFormControlProps}
-          {...valueInputPropsOther}
-          className={clsx(
-            classes.valueInput,
-            baseFormControlProps.className,
-            valueInputPropsOther.className,
-          )}
-          ownerState={rootProps}
-        >
-          {currentOperator?.InputComponent ? (
-            <currentOperator.InputComponent
-              apiRef={apiRef}
-              item={item}
-              applyValue={applyFilterChanges}
-              focusElementRef={valueRef}
-              disabled={readOnly}
-              key={item.field}
-              slotProps={{
-                root: { size: 'small' },
-              }}
-              {...currentOperator.InputComponentProps}
-              {...InputComponentProps}
-            />
-          ) : null}
-        </div>
+          </Select.Content>
+        </Select.Root>
+
+        {currentOperator?.InputComponent ? (
+          <currentOperator.InputComponent
+            apiRef={apiRef}
+            item={item}
+            applyValue={applyFilterChanges}
+            focusElementRef={valueRef}
+            disabled={readOnly}
+            left={<rootProps.slots.quickFilterIcon />}
+            right={
+              (props.item.value != null || props.index > 0) && (
+                <rootProps.slots.baseIconButton
+                  aria-label={apiRef.current.getLocaleText('filterPanelDeleteIconLabel')}
+                  title={apiRef.current.getLocaleText('filterPanelDeleteIconLabel')}
+                  onClick={handleDeleteFilter}
+                  size="icon"
+                  disabled={readOnly}
+                  className="text-grid-text/50"
+                  {...rootProps.slotProps?.baseIconButton}
+                >
+                  <rootProps.slots.filterPanelDeleteIcon />
+                </rootProps.slots.baseIconButton>
+              )
+            }
+            key={item.field}
+            {...currentOperator.InputComponentProps}
+            {...InputComponentProps}
+          />
+        ) : null}
       </div>
     );
   },

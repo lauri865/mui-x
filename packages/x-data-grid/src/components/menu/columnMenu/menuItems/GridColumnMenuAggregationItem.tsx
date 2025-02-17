@@ -1,6 +1,67 @@
 import { useGridRootProps } from '../../../../hooks/utils/useGridRootProps';
 import { useGridPrivateApiContext } from '../../../../internals';
+import { GridPrivateApiCommon } from '../../../../models/api/gridApiCommon';
+import { GridColDef } from '../../../../models/colDef/gridColDef';
 import { GridColumnMenuItemProps } from '../GridColumnMenuItemProps';
+
+export function getAvailableAggregations(
+  colDef: GridColDef,
+  apiRef: React.RefObject<GridPrivateApiCommon>,
+): string[] {
+  const aggregationFunctions = apiRef.current.aggregationFunctions;
+  const aggregationFunctionMethods = Object.keys(aggregationFunctions);
+
+  return colDef.availableAggregationFunctions
+    ? aggregationFunctionMethods.filter((fn) => colDef.availableAggregationFunctions!.includes(fn))
+    : Object.entries(aggregationFunctions).reduce((acc, [name, fn]) => {
+        if (fn.columnTypes?.includes(colDef.type!)) {
+          acc.push(name);
+        }
+        return acc;
+      }, [] as string[]);
+}
+
+export function AggregationMenuOptions({
+  field,
+  availableAggregations,
+}: {
+  field: string;
+  availableAggregations: string[];
+}) {
+  const apiRef = useGridPrivateApiContext();
+  const rootProps = useGridRootProps();
+  const DropdownMenu = rootProps.slots.baseDropdownMenu;
+
+  const aggregationFunctions = apiRef.current.aggregationFunctions;
+  const currentAggregation = apiRef.current.getColumnAggregation(field);
+
+  return (
+    <DropdownMenu.RadioGroup value={currentAggregation?.aggregation}>
+      {currentAggregation && (
+        <DropdownMenu.RadioItem
+          key="none"
+          onSelect={() => {
+            apiRef.current.setColumnAggregation(field, '');
+          }}
+          value="none"
+        >
+          None
+        </DropdownMenu.RadioItem>
+      )}
+      {availableAggregations.map((aggregation) => (
+        <DropdownMenu.RadioItem
+          key={aggregation}
+          onSelect={() => {
+            apiRef.current.setColumnAggregation(field, aggregation);
+          }}
+          value={aggregation}
+        >
+          {aggregationFunctions[aggregation].label}
+        </DropdownMenu.RadioItem>
+      ))}
+    </DropdownMenu.RadioGroup>
+  );
+}
 
 function GridColumnAggregationItem(props: GridColumnMenuItemProps & { returnOptions?: boolean }) {
   const { colDef } = props;
@@ -14,51 +75,10 @@ function GridColumnAggregationItem(props: GridColumnMenuItemProps & { returnOpti
   const DropdownMenu = rootProps.slots.baseDropdownMenu;
 
   const aggregationFunctions = apiRef.current.aggregationFunctions;
-  const aggregationFunctionMethods = Object.keys(aggregationFunctions);
-
-  const availableAggregations = colDef.availableAggregationFunctions
-    ? aggregationFunctionMethods.filter((fn) => colDef.availableAggregationFunctions!.includes(fn))
-    : Object.entries(aggregationFunctions).reduce((acc, [name, fn]) => {
-        if (fn.columnTypes?.includes(colDef.type!)) {
-          acc.push(name);
-        }
-        return acc;
-      }, [] as string[]);
+  const availableAggregations = getAvailableAggregations(colDef, apiRef);
 
   if (!availableAggregations.length) {
     return null;
-  }
-
-  const currentAggregation = apiRef.current.getColumnAggregation(colDef.field);
-  const options = (
-    <DropdownMenu.RadioGroup value={currentAggregation?.aggregation}>
-      {currentAggregation && (
-        <DropdownMenu.RadioItem
-          key="none"
-          onSelect={() => {
-            apiRef.current.setColumnAggregation(colDef.field, '');
-          }}
-          value="none"
-        >
-          None
-        </DropdownMenu.RadioItem>
-      )}
-      {availableAggregations.map((aggregation) => (
-        <DropdownMenu.RadioItem
-          key={aggregation}
-          onSelect={() => {
-            apiRef.current.setColumnAggregation(colDef.field, aggregation);
-          }}
-          value={aggregation}
-        >
-          {aggregationFunctions[aggregation].label}
-        </DropdownMenu.RadioItem>
-      ))}
-    </DropdownMenu.RadioGroup>
-  );
-
-  if (props.returnOptions) {
-    return options;
   }
 
   return (
@@ -67,7 +87,12 @@ function GridColumnAggregationItem(props: GridColumnMenuItemProps & { returnOpti
         <rootProps.slots.aggregationIcon />
         {apiRef.current.getLocaleText('aggregationMenuItemHeader')}
       </DropdownMenu.SubTrigger>
-      <DropdownMenu.SubContent>{options}</DropdownMenu.SubContent>
+      <DropdownMenu.SubContent>
+        <AggregationMenuOptions
+          field={colDef.field}
+          availableAggregations={availableAggregations}
+        />
+      </DropdownMenu.SubContent>
     </DropdownMenu.Sub>
   );
 }

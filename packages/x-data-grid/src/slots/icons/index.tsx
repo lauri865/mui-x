@@ -1,7 +1,14 @@
 import * as React from 'react';
 const createSvgIcon = (path: React.ReactNode, displayName: string) => {
   return (props: any) => (
-    <svg focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation" {...props}>
+    <svg
+      focusable="false"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      role="presentation"
+      fill="currentColor"
+      {...props}
+    >
       {path}
     </svg>
   );

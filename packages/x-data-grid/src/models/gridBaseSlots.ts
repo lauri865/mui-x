@@ -8,6 +8,7 @@ export type BadgeProps = {
   overlap?: 'circular';
   variant?: 'dot';
   style?: React.CSSProperties;
+  className?: string;
 };
 
 export type ButtonProps = {

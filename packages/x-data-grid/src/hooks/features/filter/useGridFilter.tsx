@@ -472,6 +472,20 @@ export const useGridFilter = (
     [apiRef, props.filterMode, getRowId, getRowsRef],
   );
 
+  const filterShortcut = React.useCallback<GridEventListener<'cellKeyDown'>>(
+    (params, event) => {
+      if (!params.colDef.filterable) {
+        return;
+      }
+      if (event.key === 'f' && event.shiftKey && (event.metaKey || event.ctrlKey)) {
+        apiRef.current.showFilterPanel(params.field, 'filterPanel', params.colDef.field);
+      }
+    },
+    [apiRef],
+  );
+
+  useGridApiEventHandler(apiRef, 'cellKeyDown', filterShortcut);
+  useGridApiEventHandler(apiRef, 'columnHeaderKeyDown', filterShortcut);
   useGridRegisterPipeProcessor(apiRef, 'columnMenu', addColumnMenuItem);
   useGridRegisterPipeProcessor(apiRef, 'exportState', stateExportPreProcessing);
   useGridRegisterPipeProcessor(apiRef, 'restoreState', stateRestorePreProcessing);

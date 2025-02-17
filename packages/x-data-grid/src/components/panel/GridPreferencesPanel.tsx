@@ -1,5 +1,6 @@
 import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
 import { forwardRef } from '@mui/x-internals/forwardRef';
+import clsx from 'clsx';
 import React from 'react';
 import { gridColumnDefinitionsSelector } from '../../hooks/features/columns/gridColumnsSelector';
 import { gridPreferencePanelStateSelector } from '../../hooks/features/preferencesPanel/gridPreferencePanelSelector';
@@ -31,10 +32,18 @@ export function GridPreferencesPanel() {
   });
 
   const open = columns.length > 0 && preferencePanelState.open;
+  const headerEl = React.useMemo(() => {
+    if (!preferencePanelState.labelId || !open) {
+      return null;
+    }
+    return apiRef.current.getColumnHeaderElement(preferencePanelState.labelId);
+  }, [preferencePanelState.labelId, open]);
+
   if (!open) {
     return null;
   }
   const Popover = rootProps.slots.basePopper;
+
   return (
     <Popover.Root
       open={open}
@@ -54,16 +63,21 @@ export function GridPreferencesPanel() {
       }}
     >
       <Popover.Anchor asChild>
-        <FakeAnchor anchorEl={anchorEl} />
+        <FakeAnchor anchorEl={headerEl ?? anchorEl} />
       </Popover.Anchor>
       <Popover.Content
         id={preferencePanelState.panelId}
         aria-labelledby={preferencePanelState.labelId}
         side="bottom"
-        align="end"
-        sideOffset={0}
-        alignOffset={12}
-        className="rounded-t-none -mt-px -mx-px bg-grid-bg/80 backdrop-blur-sm  w-auto min-w-[220px] p-0"
+        align={headerEl ? 'center' : 'end'}
+        sideOffset={headerEl ? -4 : 0}
+        alignOffset={headerEl ? undefined : 12}
+        className={clsx(
+          'bg-grid-bg/80 backdrop-blur-sm  w-auto min-w-[220px] p-0',
+          !headerEl && 'rounded-t-none -mt-px -mx-px ',
+        )}
+        updatePositionStrategy="always"
+        avoidCollisions={false}
       >
         {panelContent}
       </Popover.Content>

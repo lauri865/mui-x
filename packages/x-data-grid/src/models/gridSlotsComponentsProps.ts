@@ -145,6 +145,7 @@ interface ElementSlotProps {
   loadingOverlay: GridLoadingOverlayProps & LoadingOverlayPropsOverrides;
   noResultsOverlay: GridOverlayProps & NoResultsOverlayPropsOverrides;
   noRowsOverlay: GridOverlayProps & NoRowsOverlayPropsOverrides;
+  noColumnsOverlay: GridOverlayProps;
   pagination: Partial<{}> & PaginationPropsOverrides;
   panel: GridPanelProps & PanelPropsOverrides;
   pinnedRows: GridPinnedRowsProps & PinnedRowsPropsOverrides;

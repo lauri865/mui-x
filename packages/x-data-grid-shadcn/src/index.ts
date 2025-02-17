@@ -11,10 +11,13 @@ import {
   EyeOffIcon,
   FilterIcon,
   GripVerticalIcon,
+  ListFilterIcon,
   MoveHorizontalIcon,
   PinIcon,
   PlusIcon,
   SigmaIcon,
+  Trash2Icon,
+  XIcon,
 } from 'lucide-react';
 
 export { Button } from './components/ui/button';
@@ -24,9 +27,11 @@ export * as DropdownMenu from './components/ui/dropdown-menu';
 export { Input } from './components/ui/input';
 export { Label } from './components/ui/label';
 export * as Popover from './components/ui/popover';
+export * as Select from './components/ui/select';
 export { Tooltip } from './components/ui/tooltip';
 
 export const icons = {
+  close: XIcon,
   pin: PinIcon,
   hide: EyeOffIcon,
   reorder: ArrowLeftRightIcon,
@@ -35,6 +40,7 @@ export const icons = {
   sortDesc: ChevronDownIcon,
   columnMenu: EllipsisVerticalIcon,
   filter: FilterIcon,
+  filterAlt: ListFilterIcon,
   autoSize: MoveHorizontalIcon,
   arrowRight: ChevronRightIcon,
   arrowDown: ChevronDownIcon,
@@ -44,4 +50,5 @@ export const icons = {
   groupExpand: ChevronsUpDownIcon,
   aggregation: SigmaIcon,
   dragHandle: GripVerticalIcon,
+  trash: Trash2Icon,
 };

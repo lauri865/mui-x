@@ -162,7 +162,8 @@ const GridSkeletonLoadingOverlay = forwardRef<HTMLDivElement, React.HTMLAttribut
     const handleRef = useForkRef(ref, forwardedRef);
     const apiRef = useGridApiContext();
     const dimensions = useGridSelector(apiRef, gridDimensionsSelector);
-    const viewportHeight = dimensions?.viewportInnerSize.height ?? 0;
+    const viewportHeight =
+      (dimensions?.viewportInnerSize.height ?? 0) + (dimensions?.bottomContainerHeight ?? 0);
     const skeletonRowsCount = Math.ceil(viewportHeight / dimensions.rowHeight);
     const totalWidth = useGridSelector(apiRef, gridDimensionsColumnsTotalWidthSelector);
     const positions = useGridSelector(apiRef, gridColumnPositionsSelector);

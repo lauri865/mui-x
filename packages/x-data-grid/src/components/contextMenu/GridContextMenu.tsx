@@ -83,7 +83,7 @@ export const GridContextMenu = () => {
             }}
             onCloseAutoFocus={(e) => e.preventDefault()}
           >
-            {cell.colDef.editable && (
+            {cell.colDef.editable && cell.rowNode.type === 'leaf' && (
               <>
                 <ContextMenu.Item
                   onSelect={() => {
@@ -126,7 +126,7 @@ export const GridContextMenu = () => {
                 );
               }}
             >
-              Copy
+              Copy{selection.size ? ` (${selection.size})` : ''}
               <ContextMenu.Shortcut>⌘+C</ContextMenu.Shortcut>
             </ContextMenu.Item>
             <ContextMenu.Item
@@ -161,7 +161,7 @@ export const GridContextMenu = () => {
                 }
               }}
             >
-              Copy with headers
+              Copy with headers{selection.size ? ` (${selection.size})` : ''}
             </ContextMenu.Item>
             <ContextMenu.Separator />
             {cell.rowNode.type !== 'group' && (

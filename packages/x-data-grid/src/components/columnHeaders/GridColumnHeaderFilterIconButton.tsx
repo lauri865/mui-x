@@ -1,6 +1,5 @@
-import { unstable_composeClasses as composeClasses, unstable_useId as useId } from '@mui/utils';
+import { unstable_useId as useId } from '@mui/utils';
 import * as React from 'react';
-import { getDataGridUtilityClass } from '../../constants/gridClasses';
 import { useGridSelector } from '../../hooks';
 import {
   gridPreferencePanelSelectorWithLabel,
@@ -10,7 +9,6 @@ import { GridPreferencePanelsValue } from '../../hooks/features/preferencesPanel
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { GridColumnHeaderParams } from '../../models/params/gridColumnHeaderParams';
-import type { DataGridProcessedProps } from '../../models/props/DataGridProps';
 
 export interface ColumnHeaderFilterIconButtonProps {
   field: string;
@@ -18,34 +16,12 @@ export interface ColumnHeaderFilterIconButtonProps {
   onClick?: (params: GridColumnHeaderParams, event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-type OwnerState = ColumnHeaderFilterIconButtonProps & {
-  classes?: DataGridProcessedProps['classes'];
-};
-
-const useUtilityClasses = (ownerState: OwnerState) => {
-  const { classes } = ownerState;
-
-  const slots = {
-    icon: ['filterIcon'],
-  };
-
-  return composeClasses(slots, getDataGridUtilityClass, classes);
-};
-
-function GridColumnHeaderFilterIconButtonWrapped(props: ColumnHeaderFilterIconButtonProps) {
-  if (!props.counter) {
-    return null;
-  }
-  return <GridColumnHeaderFilterIconButton {...props} />;
-}
-
 function GridColumnHeaderFilterIconButton(props: ColumnHeaderFilterIconButtonProps) {
-  const { counter, field, onClick } = props;
+  const { counter = 0, field, onClick } = props;
   const apiRef = useGridApiContext();
   const rootProps = useGridRootProps();
   const ownerState = { ...props, classes: rootProps.classes };
-  const classes = useUtilityClasses(ownerState);
-  const labelId = useId();
+  const labelId = field;
   const isOpen = useGridSelector(apiRef, gridPreferencePanelSelectorWithLabel, labelId);
   const panelId = useId();
 
@@ -69,7 +45,7 @@ function GridColumnHeaderFilterIconButton(props: ColumnHeaderFilterIconButtonPro
     [apiRef, field, onClick, panelId, labelId],
   );
 
-  if (!counter) {
+  if (!counter && !isOpen) {
     return null;
   }
 
@@ -78,38 +54,40 @@ function GridColumnHeaderFilterIconButton(props: ColumnHeaderFilterIconButtonPro
       id={labelId}
       onClick={toggleFilter}
       aria-label={apiRef.current.getLocaleText('columnHeaderFiltersLabel')}
-      size="small"
+      size="icon"
       tabIndex={-1}
+      variant={counter ? 'primary' : undefined}
       aria-haspopup="menu"
       aria-expanded={isOpen}
       aria-controls={isOpen ? panelId : undefined}
       {...rootProps.slotProps?.baseIconButton}
     >
-      <rootProps.slots.columnFilteredIcon className={classes.icon} fontSize="small" />
+      <rootProps.slots.columnFilteredIcon />
     </rootProps.slots.baseIconButton>
   );
 
   return (
     <rootProps.slots.baseTooltip
       title={
-        apiRef.current.getLocaleText('columnHeaderFiltersTooltipActive')(
+        counter &&
+        (apiRef.current.getLocaleText('columnHeaderFiltersTooltipActive')(
           counter,
-        ) as React.ReactElement<any>
+        ) as React.ReactElement<any>)
       }
       delay={500}
       {...rootProps.slotProps?.baseTooltip}
     >
-      <React.Fragment>
+      <span>
         {counter > 1 && (
           <rootProps.slots.baseBadge badgeContent={counter} color="default">
             {iconButton}
           </rootProps.slots.baseBadge>
         )}
 
-        {counter === 1 && iconButton}
-      </React.Fragment>
+        {(counter === 1 || isOpen) && iconButton}
+      </span>
     </rootProps.slots.baseTooltip>
   );
 }
 
-export { GridColumnHeaderFilterIconButtonWrapped as GridColumnHeaderFilterIconButton };
+export { GridColumnHeaderFilterIconButton };

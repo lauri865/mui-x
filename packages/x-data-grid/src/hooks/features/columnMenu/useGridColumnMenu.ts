@@ -128,6 +128,11 @@ export const useGridColumnMenu = (apiRef: RefObject<GridPrivateApiCommunity>): v
 
   useGridApiMethod(apiRef, columnMenuApi, 'public');
 
+  useGridApiEventHandler(apiRef, 'cellKeyDown', (params, event) => {
+    if (params.cellMode === 'view' && event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
+      apiRef.current.showColumnMenu(params.field);
+    }
+  });
   useGridApiEventHandler(apiRef, 'columnResizeStart', hideColumnMenu);
   useGridApiEventHandler(apiRef, 'virtualScrollerWheel', apiRef.current.hideColumnMenu);
   useGridApiEventHandler(apiRef, 'virtualScrollerTouchMove', apiRef.current.hideColumnMenu);

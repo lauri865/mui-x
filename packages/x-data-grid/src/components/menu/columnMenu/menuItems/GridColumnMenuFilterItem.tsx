@@ -11,7 +11,7 @@ function GridColumnMenuFilterItem(props: GridColumnMenuItemProps) {
   const showFilter = React.useCallback(
     (event: Event) => {
       requestAnimationFrame(() => {
-        apiRef.current.showFilterPanel(colDef.field);
+        apiRef.current.showFilterPanel(colDef.field, 'filterMenu', colDef.field);
       });
     },
     [apiRef, colDef.field, onClick],

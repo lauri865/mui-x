@@ -59,7 +59,7 @@ export const useGridColumnPinning = (
       if (currentPosition !== null) {
         newState[currentPosition] = state[currentPosition].filter((f) => f !== field);
       } else {
-        positionBeforePinning.current.set(field, apiRef.current.getColumnIndex(field));
+        positionBeforePinning.current.set(field, apiRef.current.getColumnIndex(field, false));
       }
       apiRef.current.setPinnedColumns(newState);
     },

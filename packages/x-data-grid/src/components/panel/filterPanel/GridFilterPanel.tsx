@@ -1,16 +1,19 @@
 import { forwardRef } from '@mui/x-internals/forwardRef';
+import clsx from 'clsx';
 import * as React from 'react';
 import {
   gridFilterableColumnDefinitionsSelector,
   gridFilterableColumnLookupSelector,
 } from '../../../hooks/features/columns/gridColumnsSelector';
-import { gridFilterModelSelector } from '../../../hooks/features/filter/gridFilterSelector';
+import {
+  gridFilterActiveItemsLookupSelector,
+  gridFilterModelSelector,
+} from '../../../hooks/features/filter/gridFilterSelector';
 import { useGridApiContext } from '../../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../../hooks/utils/useGridRootProps';
 import { useGridSelector } from '../../../hooks/utils/useGridSelector';
 import { GridColDef, GridStateColDef } from '../../../models/colDef/gridColDef';
 import { GridFilterItem, GridLogicOperator } from '../../../models/gridFilterItem';
-import { GridPanelContent } from '../GridPanelContent';
 import { GridPanelFooter } from '../GridPanelFooter';
 import { GridFilterForm, GridFilterFormProps } from './GridFilterForm';
 
@@ -72,9 +75,11 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
     const rootProps = useGridRootProps();
     const filterModel = useGridSelector(apiRef, gridFilterModelSelector);
     const filterableColumns = useGridSelector(apiRef, gridFilterableColumnDefinitionsSelector);
+    const filterColumnLookup = useGridSelector(apiRef, gridFilterActiveItemsLookupSelector);
     const filterableColumnsLookup = useGridSelector(apiRef, gridFilterableColumnLookupSelector);
     const lastFilterRef = React.useRef<any>(null);
     const placeholderFilter = React.useRef<GridFilterItem | null>(null);
+    console.log('props', props);
 
     const {
       logicOperators = [GridLogicOperator.And, GridLogicOperator.Or],
@@ -204,14 +209,11 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
     );
 
     const handleRemoveAll = React.useCallback(() => {
-      if (validFilters.length === 1 && validFilters[0].value === undefined) {
-        apiRef.current.deleteFilterItem(validFilters[0]);
-        return apiRef.current.hideFilterPanel();
-      }
-      return apiRef.current.setFilterModel(
+      apiRef.current.setFilterModel(
         { ...filterModel, items: readOnlyFilters },
         'removeAllFilterItems',
       );
+      return apiRef.current.hideFilterPanel();
     }, [apiRef, readOnlyFilters, filterModel, validFilters]);
 
     React.useEffect(() => {
@@ -230,9 +232,11 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
       }
     }, [validFilters.length]);
 
+    console.log('validFilters', validFilters);
+
     return (
       <>
-        <GridPanelContent>
+        <div className={clsx('overflow-auto max-h-[400px]')}>
           {readOnlyFilters.map((item, index) => (
             <GridFilterForm
               key={item.id == null ? index : item.id}
@@ -247,6 +251,7 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
               readOnly
               logicOperators={logicOperators}
               columnsSort={columnsSort}
+              index={index}
               {...filterFormProps}
             />
           ))}
@@ -263,31 +268,36 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
               focusElementRef={index === validFilters.length - 1 ? lastFilterRef : null}
               logicOperators={logicOperators}
               columnsSort={columnsSort}
+              index={index}
               {...filterFormProps}
             />
           ))}
-        </GridPanelContent>
+        </div>
         {!rootProps.disableMultipleColumnsFiltering &&
         !(disableAddFilterButton && disableRemoveAllButton) ? (
           <GridPanelFooter>
             {!disableAddFilterButton ? (
               <rootProps.slots.baseButton
                 onClick={addNewFilter}
-                startIcon={<rootProps.slots.filterPanelAddIcon />}
+                size="sm"
+                variant="outline"
                 {...rootProps.slotProps?.baseButton}
               >
+                <rootProps.slots.filterPanelAddIcon />
                 {apiRef.current.getLocaleText('filterPanelAddFilter')}
               </rootProps.slots.baseButton>
             ) : (
               <span />
             )}
 
-            {!disableRemoveAllButton && validFilters.length > 0 ? (
+            {!disableRemoveAllButton && filterColumnLookup[validFilters[0]?.field] ? (
               <rootProps.slots.baseButton
+                size="sm"
+                variant="secondary"
                 onClick={handleRemoveAll}
-                startIcon={<rootProps.slots.filterPanelRemoveAllIcon />}
                 {...rootProps.slotProps?.baseButton}
               >
+                <rootProps.slots.filterPanelRemoveAllIcon />
                 {apiRef.current.getLocaleText('filterPanelRemoveAll')}
               </rootProps.slots.baseButton>
             ) : null}

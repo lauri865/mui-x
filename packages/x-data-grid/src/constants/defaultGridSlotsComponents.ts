@@ -15,6 +15,7 @@ import {
 } from '../components';
 import { GridCell } from '../components/cell/GridCell';
 import { GridColumnHeaders } from '../components/GridColumnHeaders';
+import { GridNoColumnsOverlay } from '../components/GridNoColumnsOverlay';
 import { GridNoResultsOverlay } from '../components/GridNoResultsOverlay';
 import { GridPinnedRows } from '../components/GridPinnedRows';
 import { GridColumnMenu } from '../components/menu/columnMenu/GridColumnMenu';
@@ -38,6 +39,7 @@ export const DATA_GRID_DEFAULT_SLOTS_COMPONENTS: GridSlotsComponent = {
   loadingOverlay: GridLoadingOverlay,
   noResultsOverlay: GridNoResultsOverlay,
   noRowsOverlay: GridNoRowsOverlay,
+  noColumnsOverlay: GridNoColumnsOverlay,
   pagination: GridPagination,
   filterPanel: GridFilterPanel,
   columnsPanel: GridColumnsPanel,

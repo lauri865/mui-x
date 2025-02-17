@@ -241,14 +241,6 @@ function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
 
   const columnTitleIconButtons = (
     <React.Fragment>
-      {!rootProps.disableColumnFilter && (
-        <rootProps.slots.columnHeaderFilterIconButton
-          field={colDef.field}
-          counter={filterItemsCounter}
-          {...rootProps.slotProps?.columnHeaderFilterIconButton}
-        />
-      )}
-
       {showSortIcon && (
         <rootProps.slots.columnHeaderSortIcon
           field={colDef.field}
@@ -257,6 +249,13 @@ function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
           sortingOrder={sortingOrder}
           disabled={!colDef.sortable}
           {...rootProps.slotProps?.columnHeaderSortIcon}
+        />
+      )}
+      {!rootProps.disableColumnFilter && (
+        <rootProps.slots.columnHeaderFilterIconButton
+          field={colDef.field}
+          counter={filterItemsCounter}
+          {...rootProps.slotProps?.columnHeaderFilterIconButton}
         />
       )}
     </React.Fragment>

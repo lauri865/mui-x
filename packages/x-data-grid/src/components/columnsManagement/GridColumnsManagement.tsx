@@ -223,6 +223,7 @@ function GridColumnsManagement(props: GridColumnsManagementProps) {
           className={classes.variants.searchInput}
           value={searchValue}
           onChange={handleSearchValueChange}
+          left={<rootProps.slots.quickFilterIcon />}
           size="small"
           type="search"
           autoComplete="off"
@@ -236,12 +237,12 @@ function GridColumnsManagement(props: GridColumnsManagementProps) {
             {reorder.state.hoverIndex === index &&
               reorder.state.dragIndex !== reorder.state.hoverIndex && (
                 <div
-                  className={clsx(
-                    classes.variants.draggingOverIndicator,
-                    reorder.state.dragIndex !== null &&
-                      reorder.state.dragIndex > reorder.state.hoverIndex &&
-                      classes.variants.draggingOverIndicatorTop,
-                  )}
+                  className={clsx(classes.variants.draggingOverIndicator)}
+                  style={{
+                    top: reorder.state.hoverIndex < reorder.state.dragIndex! ? '-6px' : undefined,
+                    bottom:
+                      reorder.state.hoverIndex > reorder.state.dragIndex! ? '-6px' : undefined,
+                  }}
                 />
               )}
             <rootProps.slots.baseInputLabel
@@ -264,7 +265,7 @@ function GridColumnsManagement(props: GridColumnsManagementProps) {
                 {apiRef.current.isColumnPinned(column.field) && (
                   <rootProps.slots.pinIcon
                     className={classes.variants.pinIcon}
-                    onClick={(e) => {
+                    onClick={(e: any) => {
                       e.stopPropagation();
                       e.preventDefault();
                       apiRef.current.unpinColumn(column.field);
@@ -310,9 +311,9 @@ function GridColumnsManagement(props: GridColumnsManagementProps) {
                   columns: {
                     ...state.columns,
                     orderedFields: initalColumnOrder,
-                    columnVisibilityModel: initialColumnVisibilityModel,
                   },
                 }));
+                apiRef.current.setColumnVisibilityModel(initialColumnVisibilityModel);
                 apiRef.current.setPinnedColumns(initialPinnedColumns);
               }}
               disabled={isResetDisabled}
@@ -345,6 +346,17 @@ export function useDragReorder(onReorder: (dragIndex: number, overIndex: number)
     return Number(target.dataset.index);
   };
 
+  const onKeyDown = React.useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      setDragIndex(null);
+      setHoverIndex(null);
+      startY.current = null;
+      window.removeEventListener('keydown', onKeyDown);
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }, []);
+
   const onPointerUp = useEventCallback((e: PointerEvent) => {
     if (dragIndex != null && hoverIndex != null) {
       e.stopPropagation();
@@ -357,6 +369,9 @@ export function useDragReorder(onReorder: (dragIndex: number, overIndex: number)
     setDragIndex(null);
     setHoverIndex(null);
     startY.current = null;
+    window.removeEventListener('keydown', onKeyDown, {
+      capture: true,
+    });
   });
 
   const handlers: DragReorderHandlers = {
@@ -370,6 +385,10 @@ export function useDragReorder(onReorder: (dragIndex: number, overIndex: number)
       window.addEventListener('pointerup', onPointerUp, {
         once: true,
         capture: true,
+      });
+      window.addEventListener('keydown', onKeyDown, {
+        capture: true,
+        once: true,
       });
     },
     onPointerMove: (e) => {

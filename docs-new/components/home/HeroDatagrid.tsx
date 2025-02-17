@@ -3,6 +3,7 @@ import {
   DataGrid,
   GRID_DETAIL_PANEL_TOGGLE_FIELD,
   GridColDef,
+  GridPreferencePanelsValue,
   useGridApiRef,
 } from '@mui/x-data-grid';
 import * as React from 'react';
@@ -89,6 +90,13 @@ export const HeroDataGrid = () => {
   const apiRef = useGridApiRef();
   const [data, setData] = React.useState(rows);
   const [isLoading, setIsLoading] = React.useState(false);
+
+  React.useEffect(() => {
+    apiRef.current?.showPreferences(GridPreferencePanelsValue.columns);
+    requestAnimationFrame(() => {
+      document.activeElement?.blur();
+    });
+  }, []);
 
   return (
     <div

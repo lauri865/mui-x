@@ -588,6 +588,7 @@ export const useGridKeyboardNavigation = (
         }
 
         case ' ': {
+          event.preventDefault();
           const field = (params as GridCellParams).field;
           if (field === GRID_DETAIL_PANEL_TOGGLE_FIELD) {
             break;
@@ -601,11 +602,22 @@ export const useGridKeyboardNavigation = (
           }
           if (!event.shiftKey && rowIndexBefore < lastRowIndexInPage) {
             return;
-            goToCell(
-              colIndexBefore,
-              getRowIdFromIndex(Math.min(rowIndexBefore + viewportPageSize, lastRowIndexInPage)),
+          }
+          break;
+        }
+
+        case 'x': {
+          if (event.ctrlKey || event.metaKey) {
+            const bbox = (event.target as HTMLElement).getBoundingClientRect();
+            event.currentTarget.dispatchEvent(
+              new MouseEvent('contextmenu', {
+                ...(event as any),
+                clientX: bbox.left - 2,
+                clientY: bbox.bottom + 4,
+              }),
             );
           }
+          return;
           break;
         }
 
