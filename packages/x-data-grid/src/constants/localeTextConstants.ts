@@ -4,6 +4,7 @@ export const GRID_DEFAULT_LOCALE_TEXT: GridLocaleText = {
   // Root
   noRowsLabel: 'No rows',
   noResultsOverlayLabel: 'No results found.',
+  noResultsOverlayClearAllFilters: 'Clear all filters',
   noColumnsOverlayLabel: 'No columns',
   noColumnsOverlayManageColumns: 'Manage columns',
 

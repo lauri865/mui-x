@@ -204,49 +204,51 @@ const GridFilterForm = forwardRef<HTMLDivElement, GridFilterFormProps>(
 
     return (
       <div
-        className="flex flex-col gap-2 w-[240px] p-cell border-b last:border-b-0"
+        className="flex flex-col gap-2 w-[240px] p-2 border-b last:border-b-0"
         data-id={item.id}
         {...other}
         ref={ref}
       >
-        {showMultiFilterOperators && hasLogicOperatorColumn && (
-          <Select.Root
-            value={multiFilterOperator ?? ''}
-            onValueChange={(value) => {
-              applyMultiFilterOperatorChanges(value as GridLogicOperator);
-            }}
-            disabled={readOnly || !!disableMultiFilterOperator || logicOperators.length === 1}
-          >
-            <Select.Trigger>
-              <Select.Value
-                placeholder={apiRef.current.getLocaleText('filterPanelLogicOperator')}
-              />
+        <div className="flex items-center gap-2">
+          {showMultiFilterOperators && hasLogicOperatorColumn && (
+            <Select.Root
+              value={multiFilterOperator ?? ''}
+              onValueChange={(value) => {
+                applyMultiFilterOperatorChanges(value as GridLogicOperator);
+              }}
+              disabled={readOnly || !!disableMultiFilterOperator || logicOperators.length === 1}
+            >
+              <Select.Trigger className="w-[100px]">
+                <Select.Value
+                  placeholder={apiRef.current.getLocaleText('filterPanelLogicOperator')}
+                />
+              </Select.Trigger>
+              <Select.Content>
+                {logicOperators.map((logicOperator) => (
+                  <Select.Item key={logicOperator.toString()} value={logicOperator.toString()}>
+                    {apiRef.current.getLocaleText(getLogicOperatorLocaleKey(logicOperator))}
+                  </Select.Item>
+                ))}
+              </Select.Content>
+            </Select.Root>
+          )}
+
+          <Select.Root value={item.operator} disabled={readOnly} onValueChange={changeOperator}>
+            <Select.Trigger className="capitalize">
+              <Select.Value placeholder={apiRef.current.getLocaleText('filterPanelOperator')} />
             </Select.Trigger>
             <Select.Content>
-              {logicOperators.map((logicOperator) => (
-                <Select.Item key={logicOperator.toString()} value={logicOperator.toString()}>
-                  {apiRef.current.getLocaleText(getLogicOperatorLocaleKey(logicOperator))}
+              {currentColumn?.filterOperators?.map((operator) => (
+                <Select.Item key={operator.value} value={operator.value} className="capitalize">
+                  {operator.label ||
+                    apiRef.current.getLocaleText(
+                      `filterOperator${capitalize(operator.value)}` as 'filterOperatorContains',
+                    )}
                 </Select.Item>
               ))}
             </Select.Content>
           </Select.Root>
-        )}
-
-        <Select.Root value={item.operator} disabled={readOnly} onValueChange={changeOperator}>
-          <Select.Trigger className="capitalize">
-            <Select.Value placeholder={apiRef.current.getLocaleText('filterPanelOperator')} />
-          </Select.Trigger>
-          <Select.Content>
-            {currentColumn?.filterOperators?.map((operator) => (
-              <Select.Item key={operator.value} value={operator.value} className="capitalize">
-                {operator.label ||
-                  apiRef.current.getLocaleText(
-                    `filterOperator${capitalize(operator.value)}` as 'filterOperatorContains',
-                  )}
-              </Select.Item>
-            ))}
-          </Select.Content>
-        </Select.Root>
+        </div>
 
         {currentOperator?.InputComponent ? (
           <currentOperator.InputComponent
@@ -272,6 +274,13 @@ const GridFilterForm = forwardRef<HTMLDivElement, GridFilterFormProps>(
               )
             }
             key={item.field}
+            onKeyDown={(event: React.KeyboardEvent) => {
+              if (event.key === 'Enter' && event.currentTarget === event.target) {
+                event.stopPropagation();
+                event.preventDefault();
+                apiRef.current.hideFilterPanel();
+              }
+            }}
             {...currentOperator.InputComponentProps}
             {...InputComponentProps}
           />

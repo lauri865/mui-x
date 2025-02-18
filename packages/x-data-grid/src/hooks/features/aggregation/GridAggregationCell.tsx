@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import React, { useRef } from 'react';
 import { AggregationMenuOptions, getAvailableAggregations } from '../../../components';
 import { GridApiCommon, GridCellParams } from '../../../models';
+import { useGridSelector } from '../../utils';
 import { useGridPrivateApiContext } from '../../utils/useGridPrivateApiContext';
 import { useGridRootProps } from '../../utils/useGridRootProps';
 
@@ -11,14 +12,14 @@ interface AggregationCellProps {
   formattedValue: React.ReactNode;
 }
 
-export const GridAggregationCell: React.FC<AggregationCellProps> = ({
-  params,
-  aggregation,
-  formattedValue,
-}) => {
+export const GridAggregationCell: React.FC<AggregationCellProps> = ({ params, aggregation }) => {
   const { slots } = useGridRootProps();
   const apiRef = useGridPrivateApiContext();
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const formattedValue = useGridSelector(
+    apiRef,
+    () => apiRef.current.getCellParams(params.id, params.field).formattedValue,
+  );
   const availableAggregations = getAvailableAggregations(params.colDef, apiRef);
 
   if (!availableAggregations.length) {

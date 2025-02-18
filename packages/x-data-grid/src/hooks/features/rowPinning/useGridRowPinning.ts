@@ -3,7 +3,6 @@ import * as React from 'react';
 import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
 import { GridRowId } from '../../../models/gridRows';
 import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
-import { useGridApiOptionHandler } from '../../utils/useGridApiEventHandler';
 import { useGridApiMethod } from '../../utils/useGridApiMethod';
 import { GridStateInitializer } from '../../utils/useGridInitializeState';
 import { GRID_ROOT_FOOTER_ID } from '../aggregation/useGridAggregation';
@@ -128,7 +127,6 @@ export const useGridRowPinning = (
         ...state,
         pinnedRows,
       }));
-      overrideVisibleRowsLookup();
     },
     [apiRef],
   );
@@ -145,7 +143,7 @@ export const useGridRowPinning = (
 
   useGridApiMethod(apiRef, methods, 'public');
 
-  const overrideVisibleRowsLookup = React.useCallback(() => {
+  /*  const overrideVisibleRowsLookup = React.useCallback(() => {
     const model = gridPinnedRowsModelSelector(apiRef.current.state);
     if (model === EMPTY_PINNED_ROWS) {
       return;
@@ -164,7 +162,7 @@ export const useGridRowPinning = (
   }, [apiRef]);
 
   useGridApiOptionHandler(apiRef, 'filteredRowsSet', overrideVisibleRowsLookup);
-  useGridApiOptionHandler(apiRef, 'sortedRowsSet', overrideVisibleRowsLookup);
+  useGridApiOptionHandler(apiRef, 'sortedRowsSet', overrideVisibleRowsLookup); */
 
   React.useEffect(() => {
     if (props.pinnedRows) {

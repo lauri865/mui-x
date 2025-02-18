@@ -93,9 +93,10 @@ function GridColumnMenu(props: GridColumnMenuProps) {
           }}
           onCloseAutoFocus={(event) => event.preventDefault()}
         >
-          <DropdownMenu.Label className="text-[13px] text-neutral-400 py-1">
+          <DropdownMenu.Label className="text-[13px] text-grid-text/50 py-1">
             <rootProps.slots.columnsIcon />
             {props.colDef.headerName || props.colDef.field}
+            <DropdownMenu.Shortcut>&#8984;&#9166;</DropdownMenu.Shortcut>
           </DropdownMenu.Label>
           <DropdownMenu.Separator />
           {orderedSlots.map(([Component, otherProps], index) => (

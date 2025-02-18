@@ -11,7 +11,7 @@ const GridOverlay = forwardRef<HTMLDivElement, GridOverlayProps>(function GridOv
     <div
       className={clsx(
         className,
-        'w-full h-full flex items-center justify-center bg-[var(--unstable_DataGrid-overlayBackground)] self-center',
+        'w-full h-full flex items-center justify-center bg-[var(--unstable_DataGrid-overlayBackground,var(--color-grid-bg))] self-center',
       )}
       {...other}
       ref={ref}

@@ -1,5 +1,5 @@
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import { gridFilteredTopLevelRowCountSelector } from '../hooks/features/filter/gridFilterSelector';
+import { gridFilteredDescendantRowCountSelector } from '../hooks/features/filter/gridFilterSelector';
 import { gridTopLevelRowCountSelector } from '../hooks/features/rows/gridRowsSelector';
 import { selectedGridRowsCountSelector } from '../hooks/features/rowSelection/gridRowSelectionSelector';
 import { useGridApiContext } from '../hooks/utils/useGridApiContext';
@@ -14,7 +14,7 @@ const GridFooter = forwardRef<HTMLDivElement, GridFooterContainerProps>(
     const rootProps = useGridRootProps();
     const totalTopLevelRowCount = useGridSelector(apiRef, gridTopLevelRowCountSelector);
     const selectedRowCount = useGridSelector(apiRef, selectedGridRowsCountSelector);
-    const visibleTopLevelRowCount = useGridSelector(apiRef, gridFilteredTopLevelRowCountSelector);
+    const visibleTopLevelRowCount = useGridSelector(apiRef, gridFilteredDescendantRowCountSelector);
 
     const selectedRowCountElement =
       !rootProps.hideFooterSelectedRowCount && selectedRowCount > 0 ? (

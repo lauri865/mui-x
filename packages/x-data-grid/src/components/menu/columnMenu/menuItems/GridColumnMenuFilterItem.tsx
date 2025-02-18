@@ -27,6 +27,7 @@ function GridColumnMenuFilterItem(props: GridColumnMenuItemProps) {
     <DropdownMenu.Item onSelect={showFilter}>
       <rootProps.slots.columnMenuFilterIcon />
       {apiRef.current.getLocaleText('columnMenuFilter')}
+      <DropdownMenu.Shortcut>&#8984;&#8679;F</DropdownMenu.Shortcut>
     </DropdownMenu.Item>
   );
 }

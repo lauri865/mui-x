@@ -29,7 +29,7 @@ function GridFilterInputValue(props: GridTypeFilterInputValueProps) {
   } = props;
   const textFieldProps = slotProps?.root;
 
-  const filterTimeout = useTimeout();
+  const filterTimeout = useTimeout({ runOnDispose: true });
   const [filterValueState, setFilterValueState] = React.useState<string | undefined>(
     sanitizeFilterItemValue(item.value),
   );

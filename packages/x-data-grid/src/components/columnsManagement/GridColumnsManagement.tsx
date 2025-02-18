@@ -3,16 +3,18 @@ import useEventCallback from '@mui/utils/useEventCallback';
 import clsx from 'clsx';
 import * as React from 'react';
 import { useThemedComponent } from '../../context/GridThemeContext';
+import { EMPTY_PINNED_COLUMN_FIELDS } from '../../hooks';
+import { getPinnedColumnState } from '../../hooks/features/columnPinning/useGridColumnPinning';
 import {
   gridColumnDefinitionsSelector,
   gridColumnFieldsSelector,
   gridColumnVisibilityModelSelector,
   gridPinnedColumnsSelector,
 } from '../../hooks/features/columns/gridColumnsSelector';
-import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { arrayShallowCompare, useGridSelector } from '../../hooks/utils/useGridSelector';
 import { useLazyRef } from '../../hooks/utils/useLazyRef';
+import { createColumnsState, useGridPrivateApiContext } from '../../internals';
 import type { GridColDef } from '../../models/colDef/gridColDef';
 import { TextFieldProps } from '../../models/gridBaseSlots';
 import { checkColumnVisibilityModelsSame, defaultSearchPredicate } from './utils';
@@ -62,17 +64,29 @@ export interface GridColumnsManagementProps {
 const collator = new Intl.Collator();
 
 function GridColumnsManagement(props: GridColumnsManagementProps) {
-  const apiRef = useGridApiContext();
+  const apiRef = useGridPrivateApiContext();
   const columns = useGridSelector(apiRef, gridColumnDefinitionsSelector);
-  const initialColumnVisibilityModel = useLazyRef(() =>
-    gridColumnVisibilityModelSelector(apiRef),
-  ).current;
-  const initialPinnedColumns = useLazyRef(() =>
-    gridPinnedColumnsSelector(apiRef.current.state),
-  ).current;
-  const initalColumnOrder = useLazyRef(() => gridColumnFieldsSelector(apiRef)).current;
-  const columnVisibilityModel = useGridSelector(apiRef, gridColumnVisibilityModelSelector);
   const rootProps = useGridRootProps();
+  const initialState = useLazyRef(() =>
+    createColumnsState({
+      apiRef,
+      columnsToUpsert: rootProps.columns,
+      initialState: rootProps.initialState?.columns,
+      columnVisibilityModel:
+        rootProps.columnVisibilityModel ?? rootProps.initialState?.columns?.columnVisibilityModel,
+      keepOnlyColumnsToUpsert: true,
+      force: true,
+    }),
+  ).current;
+  const initialColumnVisibilityModel = useLazyRef(() => initialState.columnVisibilityModel).current;
+  const initialPinnedColumns = useLazyRef(
+    () =>
+      rootProps.pinnedColumns ??
+      rootProps.initialState?.pinnedColumns ??
+      EMPTY_PINNED_COLUMN_FIELDS,
+  ).current;
+  const initalColumnOrder = useLazyRef(() => initialState.orderedFields).current;
+  const columnVisibilityModel = useGridSelector(apiRef, gridColumnVisibilityModelSelector);
   const [searchValue, setSearchValue] = React.useState('');
   const classes = useThemedComponent('columnsPanel');
 
@@ -306,15 +320,25 @@ function GridColumnsManagement(props: GridColumnsManagementProps) {
           {!disableResetButton ? (
             <rootProps.slots.baseButton
               onClick={() => {
+                // first restore pinned columns to make sure resulting order is correct
                 apiRef.current.setState((state) => ({
                   ...state,
-                  columns: {
-                    ...state.columns,
-                    orderedFields: initalColumnOrder,
-                  },
+                  pinnedColumns: getPinnedColumnState(initialPinnedColumns, initialState),
                 }));
-                apiRef.current.setColumnVisibilityModel(initialColumnVisibilityModel);
-                apiRef.current.setPinnedColumns(initialPinnedColumns);
+                const newInitialState = createColumnsState({
+                  apiRef,
+                  columnsToUpsert: rootProps.columns,
+                  initialState: rootProps.initialState?.columns,
+                  columnVisibilityModel:
+                    rootProps.columnVisibilityModel ??
+                    rootProps.initialState?.columns?.columnVisibilityModel,
+                  keepOnlyColumnsToUpsert: true,
+                  force: true,
+                });
+                apiRef.current.setState((state) => ({
+                  ...state,
+                  columns: newInitialState,
+                }));
               }}
               disabled={isResetDisabled}
               size="md"

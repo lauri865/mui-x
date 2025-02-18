@@ -177,7 +177,7 @@ export const useGridColumnPinning = (
   }, [apiRef, props.pinnedColumns]);
 };
 
-function getPinnedColumnState(
+export function getPinnedColumnState(
   pinnedColumns: GridPinnedColumnFields,
   columns: GridColumnsState,
 ): GridColumnPinningState {

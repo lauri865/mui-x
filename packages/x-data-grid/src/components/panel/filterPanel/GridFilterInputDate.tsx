@@ -1,10 +1,10 @@
-import * as React from 'react';
 import { unstable_useId as useId } from '@mui/utils';
-import { useTimeout } from '../../../hooks/utils/useTimeout';
-import { GridFilterInputValueProps } from '../../../models/gridFilterInputComponent';
+import * as React from 'react';
 import { useGridRootProps } from '../../../hooks/utils/useGridRootProps';
-import { GridFilterItem } from '../../../models/gridFilterItem';
+import { useTimeout } from '../../../hooks/utils/useTimeout';
 import { TextFieldProps } from '../../../models/gridBaseSlots';
+import { GridFilterInputValueProps } from '../../../models/gridFilterInputComponent';
+import { GridFilterItem } from '../../../models/gridFilterItem';
 
 export type GridFilterInputDateProps = GridFilterInputValueProps<TextFieldProps> & {
   type?: 'date' | 'datetime-local';
@@ -50,7 +50,7 @@ function GridFilterInputDate(props: GridFilterInputDateProps) {
     ...other
   } = props;
   const rootSlotProps = slotProps?.root.slotProps;
-  const filterTimeout = useTimeout();
+  const filterTimeout = useTimeout({ runOnDispose: true });
   const [filterValueState, setFilterValueState] = React.useState(() =>
     convertFilterItemValueToInputValue(item.value, type),
   );

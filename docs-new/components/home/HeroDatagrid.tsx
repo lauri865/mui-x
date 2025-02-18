@@ -3,9 +3,9 @@ import {
   DataGrid,
   GRID_DETAIL_PANEL_TOGGLE_FIELD,
   GridColDef,
-  GridPreferencePanelsValue,
   useGridApiRef,
 } from '@mui/x-data-grid';
+import { GRID_ROOT_FOOTER_ID } from '@mui/x-data-grid/hooks/features/aggregation/useGridAggregation';
 import * as React from 'react';
 import { cn } from '../../lib/cn';
 import { GlowingEffect } from './glowing-effect';
@@ -86,13 +86,20 @@ const detailPanel = (row) => {
     <div className="flex justify-center items-center p-4 w-full flex-1 text-center">{row.id}</div>
   );
 };
+
+const getRowHeight = (params) => {
+  if (params.id === GRID_ROOT_FOOTER_ID) {
+    return 44;
+  }
+};
+
 export const HeroDataGrid = () => {
   const apiRef = useGridApiRef();
   const [data, setData] = React.useState(rows);
   const [isLoading, setIsLoading] = React.useState(false);
 
   React.useEffect(() => {
-    apiRef.current?.showPreferences(GridPreferencePanelsValue.columns);
+    //apiRef.current?.showPreferences(GridPreferencePanelsValue.columns);
     requestAnimationFrame(() => {
       document.activeElement?.blur();
     });
@@ -170,6 +177,7 @@ export const HeroDataGrid = () => {
             }, 300);
           });
         }} */
+        getRowHeight={getRowHeight}
         apiRef={apiRef}
       />
     </div>

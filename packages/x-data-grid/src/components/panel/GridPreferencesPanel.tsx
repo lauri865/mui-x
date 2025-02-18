@@ -39,6 +39,20 @@ export function GridPreferencesPanel() {
     return apiRef.current.getColumnHeaderElement(preferencePanelState.labelId);
   }, [preferencePanelState.labelId, open]);
 
+  React.useEffect(() => {
+    if (open) {
+      return () => {
+        if (document.activeElement !== document.body) {
+          return;
+        }
+        const focusedEl = apiRef.current.rootElementRef?.current?.querySelector(
+          '[tabindex="0"]',
+        ) as HTMLElement;
+        focusedEl?.focus();
+      };
+    }
+  }, [open]);
+
   if (!open) {
     return null;
   }
@@ -50,15 +64,6 @@ export function GridPreferencesPanel() {
       onOpenChange={(open) => {
         if (!open) {
           apiRef.current.hidePreferences();
-          requestAnimationFrame(() => {
-            if (document.activeElement !== document.body) {
-              return;
-            }
-            const focusedEl = apiRef.current.rootElementRef?.current?.querySelector(
-              '[tabindex="0"]',
-            ) as HTMLElement;
-            focusedEl?.focus();
-          });
         }
       }}
     >
@@ -74,7 +79,7 @@ export function GridPreferencesPanel() {
         alignOffset={headerEl ? undefined : 12}
         className={clsx(
           'bg-grid-bg/80 backdrop-blur-sm  w-auto min-w-[220px] p-0',
-          !headerEl && 'rounded-t-none -mt-px -mx-px ',
+          !headerEl && 'rounded-t-none -mt-px -mx-px',
         )}
         updatePositionStrategy="always"
         avoidCollisions={false}

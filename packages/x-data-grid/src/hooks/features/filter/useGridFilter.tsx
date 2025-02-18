@@ -5,7 +5,6 @@ import { lruMemoize } from 'reselect';
 import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
 import { GridFilterApi } from '../../../models/api/gridFilterApi';
 import { GridEventListener } from '../../../models/events';
-import { GridFilterItem } from '../../../models/gridFilterItem';
 import { GridRowId } from '../../../models/gridRows';
 import { GridStateCommunity } from '../../../models/gridStateCommunity';
 import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
@@ -30,7 +29,6 @@ import { gridFilterModelSelector } from './gridFilterSelector';
 import { defaultGridFilterLookup, getDefaultGridFilterModel } from './gridFilterState';
 import {
   buildAggregatedFilterApplier,
-  cleanFilterItem,
   mergeStateWithFilterModel,
   passFilterLogic,
   sanitizeFilterModel,
@@ -195,67 +193,6 @@ export const useGridFilter = (
   const showFilterPanel = React.useCallback<GridFilterApi['showFilterPanel']>(
     (targetColumnField, panelId, labelId) => {
       logger.debug('Displaying filter panel');
-      if (targetColumnField) {
-        const filterModel = gridFilterModelSelector(apiRef);
-        const filterItemsWithValue = filterModel.items.filter((item) => {
-          if (item.value !== undefined) {
-            // Some filters like `isAnyOf` support array as `item.value`.
-            // If array is empty, we want to remove it from the filter model.
-            if (Array.isArray(item.value) && item.value.length === 0) {
-              return false;
-            }
-            return true;
-          }
-
-          const column = apiRef.current.getColumn(item.field);
-          const filterOperator = column.filterOperators?.find(
-            (operator) => operator.value === item.operator,
-          );
-          const requiresFilterValue =
-            typeof filterOperator?.requiresFilterValue === 'undefined'
-              ? true
-              : filterOperator?.requiresFilterValue;
-
-          // Operators like `isEmpty` don't have and don't require `item.value`.
-          // So we don't want to remove them from the filter model if `item.value === undefined`.
-          // See https://github.com/mui/mui-x/issues/5402
-          if (requiresFilterValue) {
-            return false;
-          }
-          return true;
-        });
-
-        let newFilterItems: GridFilterItem[];
-        const filterItemOnTarget = filterItemsWithValue.find(
-          (item) => item.field === targetColumnField,
-        );
-
-        const targetColumn = apiRef.current.getColumn(targetColumnField);
-
-        if (filterItemOnTarget) {
-          newFilterItems = filterItemsWithValue;
-        } else if (props.disableMultipleColumnsFiltering) {
-          newFilterItems = [
-            cleanFilterItem(
-              { field: targetColumnField, operator: targetColumn!.filterOperators![0].value! },
-              apiRef,
-            ),
-          ];
-        } else {
-          newFilterItems = [
-            ...filterItemsWithValue,
-            cleanFilterItem(
-              { field: targetColumnField, operator: targetColumn!.filterOperators![0].value! },
-              apiRef,
-            ),
-          ];
-        }
-
-        apiRef.current.setFilterModel({
-          ...filterModel,
-          items: newFilterItems,
-        });
-      }
       apiRef.current.showPreferences(GridPreferencePanelsValue.filters, panelId, labelId);
     },
     [apiRef, logger, props.disableMultipleColumnsFiltering],

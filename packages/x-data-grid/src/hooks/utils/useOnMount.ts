@@ -1,1 +1,9 @@
-export { default as useOnMount } from '@mui/utils/useOnMount';
+'use client';
+import * as React from 'react';
+
+const EMPTY = [] as unknown[];
+
+export function useOnMount(fn: React.EffectCallback) {
+  /* eslint-disable react-hooks/exhaustive-deps */
+  React.useEffect(fn, EMPTY);
+}

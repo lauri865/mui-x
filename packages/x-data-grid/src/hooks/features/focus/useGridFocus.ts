@@ -21,6 +21,7 @@ import { GridStateInitializer } from '../../utils/useGridInitializeState';
 import { useGridLogger } from '../../utils/useGridLogger';
 import { getVisibleRows } from '../../utils/useGridVisibleRows';
 import { gridVisibleColumnDefinitionsSelector } from '../columns/gridColumnsSelector';
+import { gridPreferencePanelStateSelector } from '../preferencesPanel';
 import { gridVisiblePinnedRowsSelector } from '../rowPinning';
 import { gridVisibleRowIdsWithPinnedRowsSelector } from '../rowPinning/gridRowPinningInternalSelector';
 import {
@@ -421,26 +422,46 @@ export const useGridFocus = (
     [apiRef],
   );
 
+  const unsubscribeRef = React.useRef<ReturnType<typeof apiRef.current.subscribeEvent> | null>(
+    null,
+  );
   const handleRowSet = React.useCallback<GridEventListener<'rowsSet'>>(() => {
+    const preferencePanelOpen = gridPreferencePanelStateSelector(apiRef.current.state).open;
+    if (preferencePanelOpen) {
+      if (!unsubscribeRef.current) {
+        unsubscribeRef.current = apiRef.current.subscribeEvent('preferencePanelClose', () => {
+          unsubscribeRef.current?.();
+          unsubscribeRef.current = null;
+          requestAnimationFrame(() => {
+            // @ts-ignore
+            handleRowSet();
+          });
+        });
+      }
+      return;
+    }
     const cell = gridFocusCellSelector(apiRef);
+
+    const currentPage = getVisibleRows(apiRef);
 
     // If the focused cell is in a row which does not exist anymore,
     // focus previous row or remove the focus
-    if (cell && !apiRef.current.getRow(cell.id)) {
+    if (cell && currentPage.rowIdToIndexMap.get(cell.id) === undefined) {
       const lastFocusedRowId = cell.id;
 
       let nextRowId: GridRowId | null = null;
       if (typeof lastFocusedRowId !== 'undefined') {
         const rowEl = apiRef.current.getRowElement(lastFocusedRowId);
         const lastFocusedRowIndex = rowEl?.dataset.rowindex ? Number(rowEl?.dataset.rowindex) : 0;
-        const currentPage = getVisibleRows(apiRef, {
-          pagination: props.pagination,
-          paginationMode: props.paginationMode,
-        });
+        const currentPage = getVisibleRows(apiRef);
 
         const nextRow =
           currentPage.rows[clamp(lastFocusedRowIndex, 0, currentPage.rows.length - 1)];
         nextRowId = nextRow?.id ?? null;
+
+        if (nextRowId === null) {
+          return;
+        }
       }
 
       apiRef.current.setState((state) => ({
@@ -562,6 +583,6 @@ export const useGridFocus = (
   useGridApiEventHandler(apiRef, 'cellModeChange', handleCellModeChange);
   useGridApiEventHandler(apiRef, 'columnHeaderFocus', handleColumnHeaderFocus);
   useGridApiEventHandler(apiRef, 'columnGroupHeaderFocus', handleColumnGroupHeaderFocus);
-  useGridApiEventHandler(apiRef, 'rowsSet', handleRowSet);
+  useGridApiEventHandler(apiRef, 'filteredRowsSet', handleRowSet);
   useGridApiEventHandler(apiRef, 'paginationModelChange', handlePaginationModelChange);
 };

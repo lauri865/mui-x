@@ -56,7 +56,7 @@ function GridColumnHeaderFilterIconButton(props: ColumnHeaderFilterIconButtonPro
       aria-label={apiRef.current.getLocaleText('columnHeaderFiltersLabel')}
       size="icon"
       tabIndex={-1}
-      variant={counter ? 'primary' : undefined}
+      variant={'primary'}
       aria-haspopup="menu"
       aria-expanded={isOpen}
       aria-controls={isOpen ? panelId : undefined}
@@ -77,13 +77,12 @@ function GridColumnHeaderFilterIconButton(props: ColumnHeaderFilterIconButtonPro
       delay={500}
       {...rootProps.slotProps?.baseTooltip}
     >
-      <span>
+      <span className="inline-flex">
         {counter > 1 && (
           <rootProps.slots.baseBadge badgeContent={counter} color="default">
             {iconButton}
           </rootProps.slots.baseBadge>
         )}
-
         {(counter === 1 || isOpen) && iconButton}
       </span>
     </rootProps.slots.baseTooltip>

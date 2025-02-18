@@ -12,6 +12,7 @@ import * as React from 'react';
 import { GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD } from '../../colDef';
 import { getDataGridUtilityClass, gridClasses } from '../../constants/gridClasses';
 import { useThemedComponent } from '../../context/GridThemeContext';
+import { gridPreferencePanelStateSelector } from '../../hooks';
 import { GridPinnedColumnPosition } from '../../hooks/features/columns/gridColumnsInterfaces';
 import { gridEditCellStateSelector } from '../../hooks/features/editing/gridEditingSelectors';
 import {
@@ -359,7 +360,8 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
   }, [width, isNotVisible, styleProp, pinnedOffset, pinnedPosition, isRtl, rowSpan]);
 
   useEnhancedEffect(() => {
-    if (!hasFocus || cellMode === GridCellModes.Edit) {
+    const preferencePanelState = gridPreferencePanelStateSelector(apiRef.current.state);
+    if (!hasFocus || cellMode === GridCellModes.Edit || preferencePanelState.open) {
       return;
     }
 

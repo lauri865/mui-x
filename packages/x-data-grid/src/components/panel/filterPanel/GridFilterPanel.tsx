@@ -1,38 +1,25 @@
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import clsx from 'clsx';
 import * as React from 'react';
+import { gridPreferencePanelStateSelector } from '../../../hooks';
 import {
   gridFilterableColumnDefinitionsSelector,
   gridFilterableColumnLookupSelector,
 } from '../../../hooks/features/columns/gridColumnsSelector';
-import {
-  gridFilterActiveItemsLookupSelector,
-  gridFilterModelSelector,
-} from '../../../hooks/features/filter/gridFilterSelector';
+import { gridFilterModelSelector } from '../../../hooks/features/filter/gridFilterSelector';
 import { useGridApiContext } from '../../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../../hooks/utils/useGridRootProps';
 import { useGridSelector } from '../../../hooks/utils/useGridSelector';
-import { GridColDef, GridStateColDef } from '../../../models/colDef/gridColDef';
+import { GridStateColDef } from '../../../models/colDef/gridColDef';
 import { GridFilterItem, GridLogicOperator } from '../../../models/gridFilterItem';
 import { GridPanelFooter } from '../GridPanelFooter';
 import { GridFilterForm, GridFilterFormProps } from './GridFilterForm';
-
-export interface GetColumnForNewFilterArgs {
-  currentFilters: GridFilterItem[];
-  columns: GridStateColDef[];
-}
 
 export interface GridFilterPanelProps
   extends Pick<GridFilterFormProps, 'logicOperators' | 'columnsSort'> {
   /**
    * The system prop that allows defining system overrides as well as additional CSS styles.
    */
-  /**
-   * Function that returns the next filter item to be picked as default filter.
-   * @param {GetColumnForNewFilterArgs} args Currently configured filters and columns.
-   * @returns {GridColDef['field']} The field to be used for the next filter or `null` to prevent adding a filter.
-   */
-  getColumnForNewFilter?: (args: GetColumnForNewFilterArgs) => GridColDef['field'] | null;
   /**
    * Props passed to each filter form.
    */
@@ -75,17 +62,15 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
     const rootProps = useGridRootProps();
     const filterModel = useGridSelector(apiRef, gridFilterModelSelector);
     const filterableColumns = useGridSelector(apiRef, gridFilterableColumnDefinitionsSelector);
-    const filterColumnLookup = useGridSelector(apiRef, gridFilterActiveItemsLookupSelector);
     const filterableColumnsLookup = useGridSelector(apiRef, gridFilterableColumnLookupSelector);
+    const { labelId: field } = gridPreferencePanelStateSelector(apiRef.current.state);
     const lastFilterRef = React.useRef<any>(null);
     const placeholderFilter = React.useRef<GridFilterItem | null>(null);
-    console.log('props', props);
 
     const {
       logicOperators = [GridLogicOperator.And, GridLogicOperator.Or],
       columnsSort,
       filterFormProps,
-      getColumnForNewFilter,
       children,
       disableAddFilterButton = false,
       disableRemoveAllButton = false,
@@ -102,51 +87,12 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
     );
 
     const getDefaultFilter = React.useCallback((): GridFilterItem | null => {
-      let nextColumnWithOperator;
-      if (getColumnForNewFilter && typeof getColumnForNewFilter === 'function') {
-        // To allow override the column for default (first) filter
-        const nextFieldName = getColumnForNewFilter({
-          currentFilters: filterModel?.items || [],
-          columns: filterableColumns,
-        });
+      const filterModelItemsForField = filterModel.items.filter((item) => item.field === field);
+      const currentFilter = filterModelItemsForField.at(-1);
 
-        if (nextFieldName === null) {
-          return null;
-        }
-
-        nextColumnWithOperator = filterableColumns.find(({ field }) => field === nextFieldName);
-      } else {
-        nextColumnWithOperator = filterableColumns.find((colDef) => colDef.filterOperators?.length);
-      }
-
-      if (!nextColumnWithOperator) {
-        return null;
-      }
-
-      return getGridFilter(nextColumnWithOperator);
-    }, [filterModel?.items, filterableColumns, getColumnForNewFilter]);
-
-    const getNewFilter = React.useCallback((): GridFilterItem | null => {
-      if (getColumnForNewFilter === undefined || typeof getColumnForNewFilter !== 'function') {
-        return getDefaultFilter();
-      }
-
-      const currentFilters = filterModel.items.length
-        ? filterModel.items
-        : [getDefaultFilter()].filter(Boolean);
-
-      // If no items are there in filterModel, we have to pass defaultFilter
-      const nextColumnFieldName = getColumnForNewFilter({
-        currentFilters: currentFilters as GridFilterItem[],
-        columns: filterableColumns,
-      });
-
-      if (nextColumnFieldName === null) {
-        return null;
-      }
-
-      const nextColumnWithOperator = filterableColumns.find(
-        ({ field }) => field === nextColumnFieldName,
+      let nextColumnWithOperator = filterableColumns.find(
+        (colDef) =>
+          (currentFilter && currentFilter.field === colDef.field) || colDef.field === field,
       );
 
       if (!nextColumnWithOperator) {
@@ -154,7 +100,11 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
       }
 
       return getGridFilter(nextColumnWithOperator);
-    }, [filterModel.items, filterableColumns, getColumnForNewFilter, getDefaultFilter]);
+    }, [filterModel.items, filterableColumns, field]);
+
+    const getNewFilter = React.useCallback((): GridFilterItem | null => {
+      return getDefaultFilter();
+    }, [filterModel.items, filterableColumns, getDefaultFilter]);
 
     const items = React.useMemo<GridFilterItem[]>(() => {
       if (filterModel.items.length) {
@@ -177,6 +127,9 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
       () =>
         items.reduce(
           (acc, item) => {
+            if (item.field !== field) {
+              return acc;
+            }
             if (filterableColumnsLookup[item.field]) {
               acc.validFilters.push(item);
             } else {
@@ -231,8 +184,6 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
         lastFilterRef.current!.focus();
       }
     }, [validFilters.length]);
-
-    console.log('validFilters', validFilters);
 
     return (
       <>
@@ -290,7 +241,7 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
               <span />
             )}
 
-            {!disableRemoveAllButton && filterColumnLookup[validFilters[0]?.field] ? (
+            {!disableRemoveAllButton && filterModel.items.length > 1 ? (
               <rootProps.slots.baseButton
                 size="sm"
                 variant="secondary"

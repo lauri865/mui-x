@@ -48,7 +48,7 @@ function GridVirtualScrollerFiller({ rowsLength }: Props) {
         <div
           className={clsx(
             'sticky h-full box-border border-t border-t-grid-border bg-grid-pinned-bg',
-            'left-0 border-r- border-r-grid-border',
+            'left-0 border-r border-r-grid-border',
             gridClasses['filler--pinnedLeft'],
           )}
           style={{ width: leftPinnedWidth }}

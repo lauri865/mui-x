@@ -8,6 +8,7 @@ export interface GridLocaleText {
   // Root
   noRowsLabel: string;
   noResultsOverlayLabel: string;
+  noResultsOverlayClearAllFilters: string;
   noColumnsOverlayLabel: string;
   noColumnsOverlayManageColumns: string;
 

@@ -1,13 +1,16 @@
-import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
+import { GridEventListener } from '../../../models';
 import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
-import { useGridApiMethod } from '../../utils/useGridApiMethod';
-import { useGridLogger } from '../../utils/useGridLogger';
+import { GridPreferencesPanelApi } from '../../../models/api/gridPreferencesPanelApi';
 import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
-import { gridPreferencePanelStateSelector } from './gridPreferencePanelSelector';
-import { GridPreferencesPanelApi } from '../../../models/api/gridPreferencesPanelApi';
+import { useGridApiEventHandler } from '../../utils';
+import { useGridApiMethod } from '../../utils/useGridApiMethod';
 import { GridStateInitializer } from '../../utils/useGridInitializeState';
+import { useGridLogger } from '../../utils/useGridLogger';
+import { gridPreferencePanelStateSelector } from './gridPreferencePanelSelector';
+import { GridPreferencePanelsValue } from './gridPreferencePanelsValue';
 
 export const preferencePanelStateInitializer: GridStateInitializer<
   Pick<DataGridProcessedProps, 'initialState'>
@@ -114,6 +117,15 @@ export const useGridPreferencesPanel = (
     [apiRef],
   );
 
+  const columnManagementShortcut: GridEventListener<'cellKeyDown'> = (_, event) => {
+    if (event.key === 'c' && (event.ctrlKey || event.metaKey) && event.shiftKey) {
+      event.preventDefault();
+      apiRef.current.showPreferences(GridPreferencePanelsValue.columns);
+    }
+  };
+
+  useGridApiEventHandler(apiRef, 'cellKeyDown', columnManagementShortcut);
+  useGridApiEventHandler(apiRef, 'columnHeaderKeyDown', columnManagementShortcut);
   useGridRegisterPipeProcessor(apiRef, 'exportState', stateExportPreProcessing);
   useGridRegisterPipeProcessor(apiRef, 'restoreState', stateRestorePreProcessing);
 };

@@ -22,6 +22,7 @@ import {
   GridValidRowModel,
 } from '../../../models';
 import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { gridFilteredRowsLookupSelector } from '../filter';
 import { GRID_ROOT_GROUP_ID, gridRowsLookupSelector, gridRowTreeSelector } from '../rows';
 import { GridAggregationCell } from './GridAggregationCell';
 import { defaultAggregationFunctions } from './defaultAggregationFunctions';
@@ -178,6 +179,7 @@ export const useGridAggregation = (
     const lookup = new Map<GridRowId, any>();
     const tree = gridRowTreeSelector(apiRef.current.state);
     const rowLookup = gridRowsLookupSelector(apiRef.current.state);
+    const filteredRowsLookup = gridFilteredRowsLookupSelector(apiRef.current.state);
     function traverseAndAggregate(nodeId: GridRowId) {
       const node = tree[nodeId];
       if (node.type !== 'group') {
@@ -210,6 +212,9 @@ export const useGridAggregation = (
             fieldValues[field].push(...childFieldValues[field]);
           }
         } else {
+          if (filteredRowsLookup[childNodeId] === false) {
+            continue;
+          }
           row = rowLookup[childNodeId];
           aggregatedData['count'] += 1;
         }

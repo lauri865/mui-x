@@ -28,6 +28,7 @@ function GridColumnMenuManageItem(props: GridColumnMenuItemProps) {
     <DropdownMenu.Item onSelect={showColumns}>
       <rootProps.slots.columnMenuManageColumnsIcon />
       {apiRef.current.getLocaleText('columnMenuManageColumns')}
+      <DropdownMenu.Shortcut>&#8984;&#8679;C</DropdownMenu.Shortcut>
     </DropdownMenu.Item>
   );
 }

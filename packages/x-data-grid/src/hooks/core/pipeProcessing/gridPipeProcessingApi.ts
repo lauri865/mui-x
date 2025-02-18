@@ -35,6 +35,7 @@ export interface GridPipeProcessingLookup {
   getCellParams: { value: GridCellParams<any, any, any, any> };
   hydrateColumns: {
     value: GridHydrateColumnsValue;
+    context: { force: boolean };
   };
   hydrateRows: {
     value: GridHydrateRowsValue;

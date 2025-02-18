@@ -4,7 +4,10 @@ import { GridRowId } from '../../../models/gridRows';
 import { GridStateCommunity } from '../../../models/gridStateCommunity';
 import { createSelector, createSelectorMemoized } from '../../../utils/createSelector';
 import { gridColumnLookupSelector } from '../columns/gridColumnsSelector';
-import { gridVisiblePinnedRowsCountSelector } from '../rowPinning/gridRowPinningSelector';
+import {
+  gridPinnedRowsModelSelector,
+  gridVisiblePinnedRowsCountSelector,
+} from '../rowPinning/gridRowPinningSelector';
 import { gridRowMaximumTreeDepthSelector, gridRowTreeSelector } from '../rows/gridRowsSelector';
 import { gridSortedRowEntriesSelector } from '../sorting/gridSortingSelector';
 
@@ -35,7 +38,19 @@ export const gridQuickFilterValuesSelector = createSelector(
  * @category Visible rows
  * @ignore - do not document.
  */
-export const gridVisibleRowsLookupSelector = (state: GridStateCommunity) => state.visibleRowsLookup;
+const visibleRowsLookupSelector = (state: GridStateCommunity) => state.visibleRowsLookup;
+export const gridVisibleRowsLookupSelector = createSelectorMemoized(
+  visibleRowsLookupSelector,
+  gridPinnedRowsModelSelector,
+  (visibleRowsLookup, visiblePinnedRows) => {
+    if (!visiblePinnedRows.top.length && !visiblePinnedRows.bottom.length) {
+      return visibleRowsLookup;
+    }
+
+    const pinnedRowsIds = [...visiblePinnedRows.top, ...visiblePinnedRows.bottom];
+    return { ...visibleRowsLookup, ...Object.fromEntries(pinnedRowsIds.map((id) => [id, false])) };
+  },
+);
 
 /**
  * @category Filtering

@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import * as React from 'react';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import { gridFilteredChildrenCountLookupSelector, useGridSelector } from '../../internals';
 import type { GridRenderCellParams } from '../../models/params/gridCellParams';
 
 export const GridGroupingCell = forwardRef<HTMLInputElement, GridRenderCellParams>(
@@ -27,6 +28,7 @@ export const GridGroupingCell = forwardRef<HTMLInputElement, GridRenderCellParam
     const rootProps = useGridRootProps();
     const buttonRef = React.useRef<HTMLElement>(null);
     const handleRef = useForkRef(buttonRef, ref);
+    const childrenCount = useGridSelector(apiRef, gridFilteredChildrenCountLookupSelector);
 
     if (rowNode.type === 'pinnedRow') {
       return null;
@@ -110,7 +112,8 @@ export const GridGroupingCell = forwardRef<HTMLInputElement, GridRenderCellParam
             />
           )}
         </rootProps.slots.baseIconButton>
-        <span className="grouping-label">{value}</span> <Badge>{rowNode.children.length}</Badge>
+        <span className="grouping-label">{value}</span>{' '}
+        <Badge>{childrenCount[id] ?? rowNode.children.length}</Badge>
       </>
     );
   },

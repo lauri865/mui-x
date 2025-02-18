@@ -308,11 +308,13 @@ export const createColumnsState = ({
   initialState,
   columnVisibilityModel = gridColumnVisibilityModelSelector(apiRef),
   keepOnlyColumnsToUpsert = false,
+  force = false,
 }: {
   columnsToUpsert: readonly GridColDef[];
   initialState: GridColumnsInitialState | undefined;
   columnVisibilityModel?: GridColumnVisibilityModel;
   keepOnlyColumnsToUpsert: boolean;
+  force?: boolean;
   apiRef: RefObject<GridPrivateApiCommunity>;
 }) => {
   const isInsideStateInitializer = !apiRef.current.state.columns;
@@ -403,6 +405,7 @@ export const createColumnsState = ({
   const columnsStateWithPreProcessing = apiRef.current.unstable_applyPipeProcessors(
     'hydrateColumns',
     columnsState,
+    { force },
   );
 
   const columnsStateWithPortableColumns = applyInitialState(
