@@ -22,6 +22,16 @@ export interface GridFilterItem {
    * The name of the operator we want to apply.
    */
   operator: string;
+  /**
+   * - `GridLogicOperator.And`: the row must pass all the filter items.
+   * - `GridLogicOperator.Or`: the row must pass at least on filter item.
+   * @default GridLogicOperator.And
+   */
+  logicOperator?: GridLogicOperator;
+  conditions: Array<{
+    value?: any;
+    operator: string;
+  }>;
 }
 
 enum GridLogicOperator {

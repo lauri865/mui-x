@@ -19,7 +19,7 @@ export const GridAggregationCell: React.FC<AggregationCellProps> = ({ params, ag
   const formattedValue = useGridSelector(
     apiRef,
     () => apiRef.current.getCellParams(params.id, params.field).formattedValue,
-  );
+  ) as React.ReactNode;
   const availableAggregations = getAvailableAggregations(params.colDef, apiRef);
 
   if (!availableAggregations.length) {
@@ -58,7 +58,7 @@ export const GridAggregationCell: React.FC<AggregationCellProps> = ({ params, ag
             <slots.baseBadge
               data-variant="aggregation"
               className={clsx(
-                'opacity-0 group-hover/menu:opacity-100 !px-1.5 !h-7 group-data-[state=open]/menu:opacity-100 shadow-xs',
+                'opacity-0 group-hover/cell:opacity-100 !px-1.5 !h-7 group-data-[state=open]/menu:opacity-100 shadow-xs',
                 //params.hasFocus && 'opacity-100',
               )}
             >

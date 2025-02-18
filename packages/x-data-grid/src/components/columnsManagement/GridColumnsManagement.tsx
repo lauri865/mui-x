@@ -297,7 +297,7 @@ function GridColumnsManagement(props: GridColumnsManagementProps) {
           </div>
         )}
       </div>
-      {(!disableShowHideToggle || !disableResetButton) && currentColumns.length > 0 ? (
+      {!disableShowHideToggle || !disableResetButton ? (
         <div className={classes.variants.footer}>
           {!disableShowHideToggle ? (
             <>

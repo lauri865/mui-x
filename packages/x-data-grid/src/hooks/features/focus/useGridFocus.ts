@@ -422,22 +422,9 @@ export const useGridFocus = (
     [apiRef],
   );
 
-  const unsubscribeRef = React.useRef<ReturnType<typeof apiRef.current.subscribeEvent> | null>(
-    null,
-  );
   const handleRowSet = React.useCallback<GridEventListener<'rowsSet'>>(() => {
     const preferencePanelOpen = gridPreferencePanelStateSelector(apiRef.current.state).open;
     if (preferencePanelOpen) {
-      if (!unsubscribeRef.current) {
-        unsubscribeRef.current = apiRef.current.subscribeEvent('preferencePanelClose', () => {
-          unsubscribeRef.current?.();
-          unsubscribeRef.current = null;
-          requestAnimationFrame(() => {
-            // @ts-ignore
-            handleRowSet();
-          });
-        });
-      }
       return;
     }
     const cell = gridFocusCellSelector(apiRef);
@@ -585,4 +572,5 @@ export const useGridFocus = (
   useGridApiEventHandler(apiRef, 'columnGroupHeaderFocus', handleColumnGroupHeaderFocus);
   useGridApiEventHandler(apiRef, 'filteredRowsSet', handleRowSet);
   useGridApiEventHandler(apiRef, 'paginationModelChange', handlePaginationModelChange);
+  useGridApiEventHandler(apiRef, 'preferencePanelClose', () => queueMicrotask(handleRowSet as any));
 };

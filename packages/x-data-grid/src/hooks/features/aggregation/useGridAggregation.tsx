@@ -133,12 +133,38 @@ export const useGridAggregation = (
     [apiRef, aggregationFunctions],
   );
 
+  const resetAggregation = React.useCallback(() => {
+    if (!apiRef.current.state.aggregation.lookup.size) {
+      return;
+    }
+    apiRef.current.setState((state) => ({
+      ...state,
+      aggregation: {
+        ...state.aggregation,
+        lookup: new Map(),
+      },
+    }));
+
+    const tree = gridRowTreeSelector(apiRef.current.state);
+    if (tree[GRID_ROOT_FOOTER_ID]) {
+      delete tree[GRID_ROOT_FOOTER_ID];
+      apiRef.current.setState((state) => ({
+        ...state,
+        visibleRowsLookup: {
+          ...state.visibleRowsLookup,
+          [GRID_ROOT_FOOTER_ID]: false,
+        },
+      }));
+    }
+  }, [setAggregationModel]);
+
   const applyAggregation = React.useCallback(() => {
     const visibilityModel = gridColumnVisibilityModelSelector(apiRef.current.state);
     const aggregationModel = gridAggregationModelSelector(apiRef.current.state);
     const columnLookup = gridColumnLookupSelector(apiRef.current.state);
 
     if (!aggregationFunctions || !aggregationModel) {
+      resetAggregation();
       return;
     }
 
@@ -147,6 +173,7 @@ export const useGridAggregation = (
     );
 
     if (!visibleAggregatedFields.length) {
+      resetAggregation();
       // hide the footer if there are no visible aggregated fields
       return;
     }
@@ -286,6 +313,11 @@ export const useGridAggregation = (
     }
     traverseAndAggregate(GRID_ROOT_GROUP_ID);
 
+    if (!lookup.size) {
+      resetAggregation();
+      return;
+    }
+
     apiRef.current.setState((state) => ({
       ...state,
       aggregation: {
@@ -351,6 +383,7 @@ export const useGridAggregationPreProcessors = (
       if (params.dataRowIds.length === 0) {
         return params;
       }
+
       params.tree[GRID_ROOT_FOOTER_ID] = {
         id: GRID_ROOT_FOOTER_ID,
         type: 'footer',

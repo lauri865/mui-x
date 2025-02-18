@@ -54,6 +54,7 @@ const getGridFilter = (col: GridStateColDef): GridFilterItem => ({
   field: col.field,
   operator: col.filterOperators![0].value,
   id: Math.round(Math.random() * 1e5),
+  conditions: [],
 });
 
 const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
@@ -87,27 +88,21 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
     );
 
     const getDefaultFilter = React.useCallback((): GridFilterItem | null => {
-      const filterModelItemsForField = filterModel.items.filter((item) => item.field === field);
-      const currentFilter = filterModelItemsForField.at(-1);
-
-      let nextColumnWithOperator = filterableColumns.find(
-        (colDef) =>
-          (currentFilter && currentFilter.field === colDef.field) || colDef.field === field,
-      );
+      let nextColumnWithOperator = filterableColumns.find((colDef) => colDef.field === field);
 
       if (!nextColumnWithOperator) {
         return null;
       }
 
       return getGridFilter(nextColumnWithOperator);
-    }, [filterModel.items, filterableColumns, field]);
+    }, [filterableColumns, field]);
 
     const getNewFilter = React.useCallback((): GridFilterItem | null => {
       return getDefaultFilter();
     }, [filterModel.items, filterableColumns, getDefaultFilter]);
 
     const items = React.useMemo<GridFilterItem[]>(() => {
-      if (filterModel.items.length) {
+      if (filterModel.items.filter((item) => item.field === field).length > 0) {
         return filterModel.items;
       }
 
