@@ -2,7 +2,9 @@ import {
   ArrowLeftRightIcon,
   BanIcon,
   BetweenHorizonalStartIcon,
+  CheckIcon,
   ChevronDownIcon,
+  ChevronLeftIcon,
   ChevronRightIcon,
   ChevronsUpDownIcon,
   ChevronUpIcon,
@@ -51,4 +53,8 @@ export const icons = {
   aggregation: SigmaIcon,
   dragHandle: GripVerticalIcon,
   trash: Trash2Icon,
+  prev: ChevronLeftIcon,
+  next: ChevronRightIcon,
+  true: CheckIcon,
+  false: XIcon,
 };

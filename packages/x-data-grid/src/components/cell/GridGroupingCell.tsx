@@ -22,12 +22,12 @@ export const GridGroupingCell = forwardRef<HTMLInputElement, GridRenderCellParam
       hasFocus,
       tabIndex,
       api,
+      focusElementRef,
       ...other
     } = props;
     const apiRef = useGridApiContext();
     const rootProps = useGridRootProps();
-    const buttonRef = React.useRef<HTMLElement>(null);
-    const handleRef = useForkRef(buttonRef, ref);
+    const handleRef = useForkRef(focusElementRef, ref);
     const childrenCount = useGridSelector(apiRef, gridFilteredChildrenCountLookupSelector);
 
     if (rowNode.type === 'pinnedRow') {
@@ -53,12 +53,6 @@ export const GridGroupingCell = forwardRef<HTMLInputElement, GridRenderCellParam
         }
       }
     }, [apiRef, tabIndex, id, field]);
-
-    useEnhancedEffect(() => {
-      if (hasFocus) {
-        buttonRef.current?.focus({ preventScroll: true });
-      }
-    }, [hasFocus]);
 
     const isExpanded = rowNode.childrenExpanded;
     // disable animations on mount / when reodering columns

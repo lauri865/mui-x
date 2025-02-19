@@ -46,14 +46,14 @@ export type GridValueGetter<
   R extends GridValidRowModel = GridValidRowModel,
   V = any,
   F = V,
-  TValue = never,
+  TValue = V | undefined | null,
 > = (value: TValue, row: R, column: GridColDef<R, V, F>, apiRef: RefObject<GridApiCommunity>) => V;
 
 export type GridValueFormatter<
   R extends GridValidRowModel = GridValidRowModel,
   V = any,
   F = V,
-  TValue = never,
+  TValue = V | undefined | null,
 > = (value: TValue, row: R, column: GridColDef<R, V, F>, apiRef: RefObject<GridApiCommunity>) => F;
 
 export type GridValueSetter<R extends GridValidRowModel = GridValidRowModel, V = any, F = V> = (
@@ -323,28 +323,44 @@ export interface GridActionsColDef<R extends GridValidRowModel = any, V = any, F
  *   - [Special column properties](/x/react-data-grid/column-definition/#special-properties)
  */
 export interface GridSingleSelectColDef<R extends GridValidRowModel = any, V = any, F = V>
-  extends GridBaseColDef<R, V, F> {
+  extends Omit<GridBaseColDef<R, V, F>, 'editCell' | 'editCellParams'> {
   /**
    * The type of the column.
    * @default 'singleSelect'
    */
-  type: 'singleSelect';
-  /**
-   * To be used in combination with `type: 'singleSelect'`. This is an array (or a function returning an array) of the possible cell values and labels.
-   */
-  valueOptions?: Array<ValueOptions> | ((params: GridValueOptionsParams<R>) => Array<ValueOptions>);
-  /**
-   * Used to determine the label displayed for a given value option.
-   * @param {ValueOptions} value The current value option.
-   * @returns {string} The text to be displayed.
-   */
-  getOptionLabel?: (value: ValueOptions) => string;
-  /**
-   * Used to determine the value used for a value option.
-   * @param {ValueOptions} value The current value option.
-   * @returns {string} The value to be used.
-   */
-  getOptionValue?: (value: ValueOptions) => any;
+  editCell: 'singleSelect';
+  editCellParams: {
+    /**
+     * To be used in combination with `type: 'singleSelect'`. This is an array (or a function returning an array) of the possible cell values and labels.
+     */
+    valueOptions:
+      | Array<ValueOptions>
+      | ((params: GridValueOptionsParams<R>) => Array<ValueOptions>);
+    // TODO: implement async valueOptions
+    /* | Promise<Array<ValueOptions>> */
+    /**
+     * Used to determine the label displayed for a given value option.
+     * @param {ValueOptions} value The current value option.
+     * @returns {string} The text to be displayed.
+     */
+    getOptionLabel?: (value: ValueOptions) => string;
+    /**
+     * Used to determine the value used for a value option.
+     * @param {ValueOptions} value The current value option.
+     * @returns {string} The value to be used.
+     */
+    getOptionValue?: (value: ValueOptions) => any;
+    /**
+     * The key of the label in the value option object.
+     * @default 'label'
+     */
+    optionLabelKey?: string;
+    /**
+     * The key of the value in the value option object.
+     * @default 'value'
+     */
+    optionValueKey?: string;
+  };
 }
 
 /**

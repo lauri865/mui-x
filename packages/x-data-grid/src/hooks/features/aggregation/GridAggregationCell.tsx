@@ -5,6 +5,7 @@ import { GridApiCommon, GridCellParams } from '../../../models';
 import { useGridSelector } from '../../utils';
 import { useGridPrivateApiContext } from '../../utils/useGridPrivateApiContext';
 import { useGridRootProps } from '../../utils/useGridRootProps';
+import { gridAggregationLookupSelector } from './gridAggregationSelector';
 
 interface AggregationCellProps {
   params: GridCellParams<any, any, any, any>;
@@ -16,10 +17,9 @@ export const GridAggregationCell: React.FC<AggregationCellProps> = ({ params, ag
   const { slots } = useGridRootProps();
   const apiRef = useGridPrivateApiContext();
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const formattedValue = useGridSelector(
-    apiRef,
-    () => apiRef.current.getCellParams(params.id, params.field).formattedValue,
-  ) as React.ReactNode;
+  useGridSelector(apiRef, gridAggregationLookupSelector);
+  const formattedValue = apiRef.current.getCellParams(params.id, params.field)
+    .formattedValue as React.ReactNode;
   const availableAggregations = getAvailableAggregations(params.colDef, apiRef);
 
   if (!availableAggregations.length) {

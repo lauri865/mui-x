@@ -21,7 +21,8 @@ export type ButtonProps = {
   onKeyDown?: React.KeyboardEventHandler<HTMLElement>;
   onPointerDown?: React.PointerEventHandler<HTMLElement>;
   role?: string;
-  size?: 'sm' | 'md' | 'lg' | 'icon';
+  size?: 'default' | 'sm' | 'md' | 'lg' | 'icon' | null | undefined;
+  variant?: 'default' | 'primary' | 'secondary' | 'ghost' | 'outline';
   startIcon?: React.ReactNode;
   style?: React.CSSProperties;
   tabIndex?: number;
@@ -77,21 +78,14 @@ export type TextFieldProps = {
   fullWidth?: boolean;
   helperText?: string | null;
   id?: string;
-  inputRef?: React.Ref<HTMLInputElement>;
+  ref?: React.Ref<HTMLInputElement>;
   label?: React.ReactNode;
   onChange?: React.ChangeEventHandler;
   onKeyDown?: React.KeyboardEventHandler;
   placeholder?: string;
   size?: 'small' | 'medium';
-  slotProps?: {
-    input?: {
-      disabled?: boolean;
-      endAdornment?: React.ReactNode;
-      startAdornment?: React.ReactNode;
-    };
-    inputLabel?: {};
-    htmlInput?: React.InputHTMLAttributes<HTMLInputElement>;
-  };
+  left?: React.ReactNode;
+  right?: React.ReactNode;
   style?: React.CSSProperties;
   tabIndex?: number;
   type?: React.HTMLInputTypeAttribute;

@@ -241,13 +241,6 @@ export const useGridKeyboardNavigation = (
           break;
         }
 
-        case 'Enter': {
-          if (event.ctrlKey || event.metaKey) {
-            apiRef.current.toggleColumnMenu(params.field);
-          }
-          break;
-        }
-
         case ' ': {
           // prevent Space event from scrolling
           break;
@@ -603,21 +596,6 @@ export const useGridKeyboardNavigation = (
           if (!event.shiftKey && rowIndexBefore < lastRowIndexInPage) {
             return;
           }
-          break;
-        }
-
-        case 'x': {
-          if (event.ctrlKey || event.metaKey) {
-            const bbox = (event.target as HTMLElement).getBoundingClientRect();
-            event.currentTarget.dispatchEvent(
-              new MouseEvent('contextmenu', {
-                ...(event as any),
-                clientX: bbox.left - 2,
-                clientY: bbox.bottom + 4,
-              }),
-            );
-          }
-          return;
           break;
         }
 

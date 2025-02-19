@@ -172,13 +172,20 @@ export const useGridDetailPanel = (
   );
 
   useGridApiEventHandler(apiRef, 'cellKeyDown', (params, event) => {
-    if (event.key !== 'Enter') {
+    if (
+      event.key === 'd' &&
+      (event.ctrlKey || event.metaKey) &&
+      props.getDetailPanelContent?.(apiRef.current.getRowParams(params.id))
+    ) {
+      event.preventDefault();
+      apiRef.current.toggleDetailPanel(params.id);
       return;
     }
-    if (document.activeElement !== event.currentTarget) {
-      return;
-    }
-    if (params.field === GRID_DETAIL_PANEL_TOGGLE_FIELD) {
+    if (
+      event.key === 'Enter' &&
+      document.activeElement === event.currentTarget &&
+      params.field === GRID_DETAIL_PANEL_TOGGLE_FIELD
+    ) {
       apiRef.current.toggleDetailPanel(params.id);
     }
   });

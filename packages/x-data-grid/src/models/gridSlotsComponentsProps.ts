@@ -39,7 +39,6 @@ import type {
   ButtonProps,
   CircularProgressProps,
   DividerProps,
-  IconButtonProps,
   LinearProgressProps,
   MenuItemProps,
   SkeletonProps,
@@ -59,7 +58,6 @@ export interface BaseLinearProgressPropsOverrides {}
 export interface BaseMenuListPropsOverrides {}
 export interface BaseMenuItemPropsOverrides {}
 export interface BaseTextFieldPropsOverrides {}
-export interface BaseFormControlPropsOverrides {}
 export interface BaseSelectPropsOverrides {}
 export interface BaseSwitchPropsOverrides {}
 export interface BaseButtonPropsOverrides {}
@@ -101,11 +99,10 @@ interface BaseSlotProps {
   baseMenuList: {} & BaseMenuListPropsOverrides;
   baseMenuItem: MenuItemProps & BaseMenuItemPropsOverrides;
   baseTextField: TextFieldProps & BaseTextFieldPropsOverrides;
-  baseFormControl: {} & BaseFormControlPropsOverrides;
   baseSelect: {} & BaseSelectPropsOverrides;
   baseSwitch: {} & BaseSwitchPropsOverrides;
   baseButton: ButtonProps & BaseButtonPropsOverrides;
-  baseIconButton: IconButtonProps & BaseIconButtonPropsOverrides;
+  baseIconButton: ButtonProps & BaseIconButtonPropsOverrides;
   basePopper: {} & BasePopperPropsOverrides;
   baseTooltip: TooltipProps & BaseTooltipPropsOverrides;
   baseInputLabel: {} & BaseInputLabelPropsOverrides;

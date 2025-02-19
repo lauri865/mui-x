@@ -20,7 +20,6 @@ function GridColumnHeaderFilterIconButton(props: ColumnHeaderFilterIconButtonPro
   const { counter = 0, field, onClick } = props;
   const apiRef = useGridApiContext();
   const rootProps = useGridRootProps();
-  const ownerState = { ...props, classes: rootProps.classes };
   const labelId = field;
   const isOpen = useGridSelector(apiRef, gridPreferencePanelSelectorWithLabel, labelId);
   const panelId = useId();
@@ -49,14 +48,14 @@ function GridColumnHeaderFilterIconButton(props: ColumnHeaderFilterIconButtonPro
     return null;
   }
 
-  const iconButton = (
+  return (
     <rootProps.slots.baseIconButton
       id={labelId}
       onClick={toggleFilter}
       aria-label={apiRef.current.getLocaleText('columnHeaderFiltersLabel')}
       size="icon"
       tabIndex={-1}
-      variant={'primary'}
+      variant="primary"
       aria-haspopup="menu"
       aria-expanded={isOpen}
       aria-controls={isOpen ? panelId : undefined}
@@ -64,28 +63,6 @@ function GridColumnHeaderFilterIconButton(props: ColumnHeaderFilterIconButtonPro
     >
       <rootProps.slots.columnFilteredIcon />
     </rootProps.slots.baseIconButton>
-  );
-
-  return (
-    <rootProps.slots.baseTooltip
-      title={
-        counter &&
-        (apiRef.current.getLocaleText('columnHeaderFiltersTooltipActive')(
-          counter,
-        ) as React.ReactElement<any>)
-      }
-      delay={500}
-      {...rootProps.slotProps?.baseTooltip}
-    >
-      <span className="inline-flex">
-        {counter > 1 && (
-          <rootProps.slots.baseBadge badgeContent={counter} color="default">
-            {iconButton}
-          </rootProps.slots.baseBadge>
-        )}
-        {(counter === 1 || isOpen) && iconButton}
-      </span>
-    </rootProps.slots.baseTooltip>
   );
 }
 

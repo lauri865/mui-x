@@ -1,10 +1,10 @@
 import type { GridColumnTypesRecord } from '../models/colDef/gridColumnTypesRecord';
-import { GRID_STRING_COL_DEF } from './gridStringColDef';
-import { GRID_NUMERIC_COL_DEF } from './gridNumericColDef';
-import { GRID_DATE_COL_DEF, GRID_DATETIME_COL_DEF } from './gridDateColDef';
-import { GRID_BOOLEAN_COL_DEF } from './gridBooleanColDef';
-import { GRID_SINGLE_SELECT_COL_DEF } from './gridSingleSelectColDef';
 import { GRID_ACTIONS_COL_DEF, GRID_ACTIONS_COLUMN_TYPE } from './gridActionsColDef';
+import { GRID_BOOLEAN_COL_DEF } from './gridBooleanColDef';
+import { GRID_DATE_COL_DEF, GRID_DATE_STR_COL_DEF, GRID_DATETIME_COL_DEF } from './gridDateColDef';
+import { GRID_NUMERIC_COL_DEF } from './gridNumericColDef';
+import { GRID_SINGLE_SELECT_COL_DEF } from './gridSingleSelectColDef';
+import { GRID_STRING_COL_DEF } from './gridStringColDef';
 
 export const DEFAULT_GRID_COL_TYPE_KEY = 'string';
 export const getGridDefaultColumnTypes = () => {
@@ -13,10 +13,12 @@ export const getGridDefaultColumnTypes = () => {
     number: GRID_NUMERIC_COL_DEF,
     date: GRID_DATE_COL_DEF,
     dateTime: GRID_DATETIME_COL_DEF,
+    dateString: GRID_DATE_STR_COL_DEF,
     boolean: GRID_BOOLEAN_COL_DEF,
     singleSelect: GRID_SINGLE_SELECT_COL_DEF,
     [GRID_ACTIONS_COLUMN_TYPE]: GRID_ACTIONS_COL_DEF,
     custom: GRID_STRING_COL_DEF,
+    array: GRID_STRING_COL_DEF,
   };
 
   return nativeColumnTypes;

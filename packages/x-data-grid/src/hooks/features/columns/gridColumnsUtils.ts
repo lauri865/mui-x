@@ -5,6 +5,8 @@ import {
   getGridDefaultColumnTypes,
   GRID_STRING_COL_DEF,
 } from '../../../colDef';
+import { isSingleSelectColDef } from '../../../internals';
+import { GridColType } from '../../../models';
 import { GridApiCommon } from '../../../models/api/gridApiCommon';
 import { GridApiCommunity, GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
 import { GridColDef, GridStateColDef } from '../../../models/colDef/gridColDef';
@@ -294,7 +296,10 @@ export const applyInitialState = (
   return newColumnsState;
 };
 
-function getDefaultColTypeDef(type: GridColDef['type']) {
+function getDefaultColTypeDef(type: GridColDef['type'], colDefParam: GridColDef) {
+  if (isSingleSelectColDef(colDefParam) && COLUMN_TYPES[colDefParam.editCell as GridColType]) {
+    return COLUMN_TYPES[colDefParam.editCell as GridColType];
+  }
   let colDef = COLUMN_TYPES[DEFAULT_GRID_COL_TYPE_KEY];
   if (type && COLUMN_TYPES[type]) {
     colDef = COLUMN_TYPES[type];
@@ -355,7 +360,8 @@ export const createColumnsState = ({
 
     if (existingState == null) {
       existingState = {
-        ...getDefaultColTypeDef(newColumn.type),
+        type: newColumn.type,
+        ...getDefaultColTypeDef(newColumn.type, newColumn),
         field,
         hasBeenResized: false,
       };
@@ -371,7 +377,8 @@ export const createColumnsState = ({
     // If the column type has changed - merge the existing state with the default column type definition
     if (existingState && existingState.type !== newColumn.type) {
       existingState = {
-        ...getDefaultColTypeDef(newColumn.type),
+        type: newColumn.type,
+        ...getDefaultColTypeDef(newColumn.type, newColumn),
         field,
       };
     }
@@ -387,11 +394,20 @@ export const createColumnsState = ({
       }
     });
 
-    columnsState.lookup[field] = resolveProps(existingState, {
+    const column = resolveProps(existingState, {
       ...newColumn,
       hasBeenResized,
       valueGetter,
     });
+
+    if ('editCellParams' in column && 'editCellParams' in existingState) {
+      column.editCellParams = {
+        ...(existingState.editCellParams as any),
+        ...(column.editCellParams as any),
+      };
+    }
+
+    columnsState.lookup[field] = column;
   });
 
   if (keepOnlyColumnsToUpsert && !isInsideStateInitializer) {
@@ -419,9 +435,12 @@ export const createColumnsState = ({
   );
 };
 
-function get(obj: GridValidRowModel, path: string) {
+export function get(obj: GridValidRowModel, path: string) {
   if (!obj || !path) {
     return;
+  }
+  if (obj[path] !== undefined) {
+    return obj[path];
   }
   const props = path.split('.');
   let prop: string;

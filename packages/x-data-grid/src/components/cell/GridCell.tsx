@@ -260,6 +260,8 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
   const handleRef = useForkRef(ref, cellRef);
   const focusElementRef = React.useRef<FocusElement>(null);
 
+  const isEditing = editCellState !== null && !!column.renderEditCell;
+
   const classes = useThemedComponent('cell', {
     editable: isEditable,
     pinned:
@@ -271,6 +273,7 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
     right: align === 'right',
     flex: column.display === 'flex',
     group: rowNode.type === 'group' && field === GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD,
+    editing: isEditing,
   });
 
   const publishMouseUp = React.useCallback(
@@ -507,7 +510,7 @@ const showOverflow = (showRightBorder: boolean) => (event: Event) => {
   const isOverflowingX = el.scrollWidth > el.clientWidth;
   const isOverflowingY = el.scrollHeight > el.clientHeight;
   if (isOverflowingX) {
-    const delta = el.scrollWidth - el.clientWidth;
+    const delta = Math.max(100, el.scrollWidth - el.clientWidth + 10);
     el.style.minWidth = `${el.clientWidth + delta}px`;
     el.style.overflow = 'visible';
     el.style.marginRight = `-${delta + (showRightBorder ? -1 : 0)}px`;

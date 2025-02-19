@@ -178,6 +178,8 @@ export interface GridLocaleText {
   treeDataCollapse: string;
 
   // Grouping columns
+  groupExpand: string;
+  groupCollapse: string;
   groupExpandAll: string;
   groupCollapseAll: string;
   groupExpandColumn: (name: string) => string;
@@ -203,8 +205,14 @@ export interface GridLocaleText {
   aggregationFunctionLabelMax: string;
   aggregationFunctionLabelSize: string;
 
+  // Pagination
+  paginationRowsPerPage: string;
+  paginationOf: string;
+  paginationPage: string;
+  paginationPreviousPage: string;
+  paginationNextPage: string;
   // Used core components translation keys
-  MuiTablePagination: MuiTablePaginationLocalizedProps;
+  //MuiTablePagination: MuiTablePaginationLocalizedProps;
 }
 
 export type GridTranslationKeys = keyof GridLocaleText;

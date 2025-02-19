@@ -236,15 +236,17 @@ export const gridFilterActiveItemsSelector = createSelectorMemoized(
       if (!column?.filterOperators || column?.filterOperators?.length === 0) {
         return false;
       }
-      const filterOperator = column.filterOperators.find(
-        (operator) => operator.value === item.operator,
+      const filterOperator = column.filterOperators.find((operator) =>
+        item.conditions.find((condition) => condition.operator === operator.value),
       );
       if (!filterOperator) {
         return false;
       }
-      return (
-        !filterOperator.InputComponent || (item.value != null && item.value?.toString() !== '')
+
+      const hasAtLeastOneCondition = item.conditions.some(
+        (condition) => condition.value != null && condition.value?.toString() !== '',
       );
+      return !filterOperator.InputComponent || hasAtLeastOneCondition;
     }),
 );
 

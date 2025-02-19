@@ -33,8 +33,6 @@ import {
 import { GridColumnUnsortedIcon } from './icons/GridColumnUnsortedIcon';
 
 const iconSlots: GridIconSlotsComponent = {
-  booleanCellTrueIcon: GridCheckIcon,
-  booleanCellFalseIcon: GridCloseIcon,
   openFilterButtonIcon: icons.filter,
   filterPanelDeleteIcon: icons.close,
   columnFilteredIcon: icons.filterAlt,
@@ -78,6 +76,10 @@ const iconSlots: GridIconSlotsComponent = {
   groupExpandIcon: icons.groupExpand,
   aggregationIcon: icons.aggregation,
   dragHandleIcon: icons.dragHandle,
+  paginationPrevIcon: icons.prev,
+  paginationNextIcon: icons.next,
+  booleanCellTrueIcon: icons.true,
+  booleanCellFalseIcon: icons.false,
 };
 
 const Missing = () => null;
@@ -102,7 +104,7 @@ const baseSlots: GridBaseSlots = {
   baseFormControl: Missing,
   baseSelect: Select,
   baseButton: Button,
-  baseIconButton: (props) => <Button size="icon" {...props} />,
+  baseIconButton: (props: React.ComponentProps<typeof Button>) => <Button size="icon" {...props} />,
   baseInputAdornment: Missing,
   baseTooltip: Tooltip,
   basePopper: Popover,

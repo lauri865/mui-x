@@ -51,9 +51,8 @@ function GridBooleanCellRaw(props: GridBooleanCellProps) {
 
   return (
     <Icon
-      fontSize="small"
       className={classes.variants.boolean}
-      titleAccess={apiRef.current.getLocaleText(
+      aria-label={apiRef.current.getLocaleText(
         value ? 'booleanCellTrueLabel' : 'booleanCellFalseLabel',
       )}
       data-value={Boolean(value)}

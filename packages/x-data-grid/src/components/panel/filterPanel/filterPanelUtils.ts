@@ -2,7 +2,7 @@ import type { GridColDef, GridSingleSelectColDef } from '../../../models/colDef/
 import type { GridValueOptionsParams } from '../../../models/params/gridValueOptionsParams';
 
 export function isSingleSelectColDef(colDef: GridColDef | null): colDef is GridSingleSelectColDef {
-  return colDef?.type === 'singleSelect';
+  return colDef !== null && 'editCell' in colDef && colDef.editCell === 'singleSelect';
 }
 
 export function getValueOptions(
@@ -12,15 +12,15 @@ export function getValueOptions(
   if (!column) {
     return undefined;
   }
-  return typeof column.valueOptions === 'function'
-    ? column.valueOptions({ field: column.field, ...additionalParams })
-    : column.valueOptions;
+  return typeof column.editCellParams.valueOptions === 'function'
+    ? column.editCellParams.valueOptions({ field: column.field, ...additionalParams })
+    : column.editCellParams.valueOptions;
 }
 
 export function getValueFromValueOptions(
   value: string,
   valueOptions: any[] | undefined,
-  getOptionValue: NonNullable<GridSingleSelectColDef['getOptionValue']>,
+  getOptionValue: NonNullable<GridSingleSelectColDef['editCellParams']['getOptionValue']>,
 ) {
   if (valueOptions === undefined) {
     return undefined;

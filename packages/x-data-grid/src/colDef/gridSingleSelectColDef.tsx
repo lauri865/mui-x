@@ -1,30 +1,41 @@
-import { GRID_STRING_COL_DEF } from './gridStringColDef';
-import { GridSingleSelectColDef, ValueOptions } from '../models/colDef/gridColDef';
 import { renderEditSingleSelectCell } from '../components/cell/GridEditSingleSelectCell';
-import { getGridSingleSelectOperators } from './gridSingleSelectOperators';
 import {
   getValueOptions,
   isSingleSelectColDef,
 } from '../components/panel/filterPanel/filterPanelUtils';
+import { get } from '../hooks/features/columns/gridColumnsUtils';
+import { GridSingleSelectColDef, ValueOptions } from '../models/colDef/gridColDef';
 import { isObject } from '../utils/utils';
+import { getGridSingleSelectOperators } from './gridSingleSelectOperators';
+import { GRID_STRING_COL_DEF } from './gridStringColDef';
 
 const isArrayOfObjects = (options: any): options is Array<Record<string, any>> => {
   return typeof options[0] === 'object';
 };
 
-const defaultGetOptionValue = (value: ValueOptions) => {
-  return isObject(value) ? value.value : value;
+const defaultGetOptionValue = (key: string) => (value: ValueOptions) => {
+  return isObject(value) ? get(value, key) : value;
 };
 
-const defaultGetOptionLabel = (value: ValueOptions) => {
-  return isObject(value) ? value.label : String(value);
+const defaultGetOptionLabel = (key: string) => (value: ValueOptions) => {
+  return isObject(value) ? get(value, key) : String(value);
 };
 
-export const GRID_SINGLE_SELECT_COL_DEF: Omit<GridSingleSelectColDef, 'field'> = {
+export const GRID_SINGLE_SELECT_COL_DEF: Omit<
+  GridSingleSelectColDef,
+  'field' | 'editCellParams'
+> & {
+  editCellParams: Pick<
+    GridSingleSelectColDef['editCellParams'],
+    'getOptionLabel' | 'getOptionValue'
+  >;
+} = {
   ...GRID_STRING_COL_DEF,
-  type: 'singleSelect',
-  getOptionLabel: defaultGetOptionLabel,
-  getOptionValue: defaultGetOptionValue,
+  editCell: 'singleSelect',
+  editCellParams: {
+    getOptionLabel: defaultGetOptionLabel('label'),
+    getOptionValue: defaultGetOptionValue('value'),
+  },
   valueFormatter(value, row, colDef, apiRef) {
     // const { id, field, value, api } = params;
     const rowId = apiRef.current.getRowId(row);
@@ -43,19 +54,22 @@ export const GRID_SINGLE_SELECT_COL_DEF: Omit<GridSingleSelectColDef, 'field'> =
     }
 
     if (!isArrayOfObjects(valueOptions)) {
-      return colDef.getOptionLabel!(value);
+      console.log('codef', colDef.editCellParams);
+      return colDef.editCellParams.getOptionLabel!(value);
     }
 
-    const valueOption = valueOptions.find((option) => colDef.getOptionValue!(option) === value);
-    return valueOption ? colDef.getOptionLabel!(valueOption) : '';
+    const valueOption = valueOptions.find(
+      (option) => colDef.editCellParams.getOptionValue!(option) === value,
+    );
+    return valueOption ? colDef.editCellParams.getOptionLabel!(valueOption) : '';
   },
   renderEditCell: renderEditSingleSelectCell,
   filterOperators: getGridSingleSelectOperators(),
   // @ts-ignore
-  pastedValueParser: (value, row, column) => {
+  pastedValueParser: async (value, row, column) => {
     const colDef = column as GridSingleSelectColDef;
-    const valueOptions = getValueOptions(colDef) || [];
-    const getOptionValue = (colDef as GridSingleSelectColDef).getOptionValue!;
+    const valueOptions = await getValueOptions(colDef)!;
+    const getOptionValue = colDef.editCellParams.getOptionValue!;
     const valueOption = valueOptions.find((option) => {
       if (getOptionValue(option) === value) {
         return true;

@@ -1,27 +1,12 @@
-import * as React from 'react';
-import clsx from 'clsx';
 import {
-  unstable_composeClasses as composeClasses,
-  unstable_useId as useId,
   unstable_useEnhancedEffect as useEnhancedEffect,
+  unstable_useId as useId,
 } from '@mui/utils';
-import { getDataGridUtilityClass } from '../../constants/gridClasses';
-import { GridRenderEditCellParams } from '../../models/params/gridCellParams';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-import { DataGridProcessedProps } from '../../models/props/DataGridProps';
+import * as React from 'react';
+import { useThemedComponent } from '../../context/GridThemeContext';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
-
-type OwnerState = { classes: DataGridProcessedProps['classes'] };
-
-const useUtilityClasses = (ownerState: OwnerState) => {
-  const { classes } = ownerState;
-
-  const slots = {
-    root: ['editBooleanCell'],
-  };
-
-  return composeClasses(slots, getDataGridUtilityClass, classes);
-};
+import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import { GridRenderEditCellParams } from '../../models/params/gridCellParams';
 
 export interface GridEditBooleanCellProps
   extends GridRenderEditCellParams,
@@ -35,10 +20,7 @@ export interface GridEditBooleanCellProps
    * @param {boolean} newValue The value that is going to be passed to `apiRef.current.setEditCellValue`.
    * @returns {Promise<void> | void} A promise to be awaited before calling `apiRef.current.setEditCellValue`
    */
-  onValueChange?: (
-    event: React.ChangeEvent<HTMLInputElement>,
-    newValue: boolean,
-  ) => Promise<void> | void;
+  onValueChange?: (newValue: boolean) => Promise<void> | void;
 }
 
 function GridEditBooleanCell(props: GridEditBooleanCellProps) {
@@ -64,23 +46,21 @@ function GridEditBooleanCell(props: GridEditBooleanCellProps) {
   } = props;
 
   const apiRef = useGridApiContext();
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const inputRef = React.useRef<HTMLButtonElement>(null);
   const id = useId();
   const [valueState, setValueState] = React.useState(value);
   const rootProps = useGridRootProps();
   const ownerState = { classes: rootProps.classes };
-  const classes = useUtilityClasses(ownerState);
+  const classes = useThemedComponent('editCell');
 
   const handleChange = React.useCallback(
-    async (event: React.ChangeEvent<HTMLInputElement>) => {
-      const newValue = event.target.checked;
-
+    async (checked: boolean) => {
       if (onValueChange) {
-        await onValueChange(event, newValue);
+        await onValueChange(checked);
       }
 
-      setValueState(newValue);
-      await apiRef.current.setEditCellValue({ id: idProp, field, value: newValue }, event);
+      setValueState(checked);
+      await apiRef.current.setEditCellValue({ id: idProp, field, value: checked });
     },
     [apiRef, field, idProp, onValueChange],
   );
@@ -96,16 +76,13 @@ function GridEditBooleanCell(props: GridEditBooleanCellProps) {
   }, [hasFocus]);
 
   return (
-    <label htmlFor={id} className={clsx(classes.root, className)} {...other}>
-      <rootProps.slots.baseCheckbox
-        id={id}
-        inputRef={inputRef}
-        checked={Boolean(valueState)}
-        onChange={handleChange}
-        size="small"
-        {...rootProps.slotProps?.baseCheckbox}
-      />
-    </label>
+    <rootProps.slots.baseCheckbox
+      id={id}
+      ref={inputRef}
+      checked={Boolean(valueState)}
+      onCheckedChange={handleChange}
+      {...rootProps.slotProps?.baseCheckbox}
+    />
   );
 }
 

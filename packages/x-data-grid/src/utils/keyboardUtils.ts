@@ -35,8 +35,7 @@ export const isNavigationKey = (key: string) =>
   key.indexOf('Page') === 0 ||
   key === ' ' ||
   key === 'Home' ||
-  key === 'End' ||
-  key === 'x';
+  key === 'End';
 
 export const isKeyboardEvent = (event: any): event is React.KeyboardEvent<HTMLElement> =>
   !!event.key;

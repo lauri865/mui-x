@@ -82,7 +82,6 @@ function GridFilterInputDate(props: GridFilterInputDateProps) {
   return (
     <React.Fragment>
       <rootProps.slots.baseTextField
-        fullWidth
         id={id}
         label={apiRef.current.getLocaleText('filterPanelInputLabel')}
         placeholder={apiRef.current.getLocaleText('filterPanelInputPlaceholder')}
@@ -90,21 +89,11 @@ function GridFilterInputDate(props: GridFilterInputDateProps) {
         onChange={onFilterChange}
         type={type || 'text'}
         disabled={disabled}
-        inputRef={focusElementRef}
-        slotProps={{
-          ...rootSlotProps,
-          input: {
-            endAdornment: applying ? (
-              <rootProps.slots.loadIcon fontSize="small" color="action" />
-            ) : null,
-            ...rootSlotProps?.input,
-          },
-          htmlInput: {
-            max: type === 'datetime-local' ? '9999-12-31T23:59' : '9999-12-31',
-            tabIndex,
-            ...rootSlotProps?.htmlInput,
-          },
-        }}
+        ref={focusElementRef}
+        right={applying && <rootProps.slots.loadIcon fontSize="small" color="action" />}
+        max={type === 'datetime-local' ? '9999-12-31T23:59' : '9999-12-31'}
+        onFocus={(event: any) => event.target.showPicker?.()}
+        tabIndex={tabIndex}
         {...rootProps.slotProps?.baseTextField}
         {...other}
         {...slotProps?.root}

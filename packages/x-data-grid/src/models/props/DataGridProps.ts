@@ -22,6 +22,7 @@ import { GridDensity } from '../gridDensity';
 import { GridEditMode } from '../gridEditRowModel';
 import { GridFeatureMode } from '../gridFeatureMode';
 import { GridFilterModel } from '../gridFilterModel';
+import { GridMeta } from '../gridMeta';
 import { GridPaginationMeta, GridPaginationModel } from '../gridPaginationProps';
 import {
   GridGroupNode,
@@ -868,6 +869,7 @@ export interface DataGridPropsWithoutDefaultValue<R extends GridValidRowModel = 
   rowGroupingModel?: GridRowGroupingModel;
   isGroupExpandedByDefault?: (node: GridGroupNode) => boolean;
   onRowGroupingModelChange?: (model: GridRowGroupingModel, details: GridCallbackDetails) => void;
+  meta?: GridMeta<R>;
 }
 
 export interface DataGridProSharedPropsWithDefaultValue {

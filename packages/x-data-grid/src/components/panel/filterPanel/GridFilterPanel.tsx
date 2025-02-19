@@ -52,9 +52,13 @@ export interface GridFilterPanelProps
 
 const getGridFilter = (col: GridStateColDef): GridFilterItem => ({
   field: col.field,
-  operator: col.filterOperators![0].value,
   id: Math.round(Math.random() * 1e5),
-  conditions: [],
+  logicOperator: GridLogicOperator.Or,
+  conditions: [
+    {
+      operator: col.filterOperators![0].value,
+    },
+  ],
 });
 
 const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
@@ -79,13 +83,6 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
     } = props;
 
     const applyFilter = apiRef.current.upsertFilterItem;
-
-    const applyFilterLogicOperator = React.useCallback(
-      (operator: GridLogicOperator) => {
-        apiRef.current.setFilterLogicOperator(operator);
-      },
-      [apiRef],
-    );
 
     const getDefaultFilter = React.useCallback((): GridFilterItem | null => {
       let nextColumnWithOperator = filterableColumns.find((colDef) => colDef.field === field);
@@ -137,12 +134,25 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
       [items, filterableColumnsLookup],
     );
 
+    const applyFilterLogicOperator = React.useCallback(
+      (filter: GridFilterItem) => (operator: GridLogicOperator) => {
+        apiRef.current.upsertFilterItem({ ...filter, logicOperator: operator });
+      },
+      [apiRef],
+    );
+
     const addNewFilter = React.useCallback(() => {
-      const newFilter = getNewFilter();
-      if (!newFilter) {
+      const validFilter = validFilters.at(-1);
+      if (!validFilter) {
         return;
       }
-      apiRef.current.upsertFilterItems([...items, newFilter]);
+      apiRef.current.upsertFilterItem({
+        ...validFilter,
+        conditions: [
+          ...validFilter.conditions,
+          { operator: validFilter.conditions.at(-1)!.operator },
+        ],
+      });
     }, [apiRef, getNewFilter, items]);
 
     const deleteFilter = React.useCallback(
@@ -164,60 +174,83 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
       return apiRef.current.hideFilterPanel();
     }, [apiRef, readOnlyFilters, filterModel, validFilters]);
 
-    React.useEffect(() => {
-      if (
-        logicOperators.length > 0 &&
-        filterModel.logicOperator &&
-        !logicOperators.includes(filterModel.logicOperator)
-      ) {
-        applyFilterLogicOperator(logicOperators[0]);
-      }
-    }, [logicOperators, applyFilterLogicOperator, filterModel.logicOperator]);
+    const validFilterCount = validFilters.reduce(
+      (acc, filter) => acc + filter.conditions.length,
+      0,
+    );
 
     React.useEffect(() => {
       if (validFilters.length > 0) {
-        lastFilterRef.current!.focus();
+        lastFilterRef.current?.focus?.();
       }
-    }, [validFilters.length]);
+    }, [validFilterCount]);
 
     return (
       <>
         <div className={clsx('overflow-auto max-h-[400px]')}>
-          {readOnlyFilters.map((item, index) => (
-            <GridFilterForm
-              key={item.id == null ? index : item.id}
-              item={item}
-              applyFilterChanges={applyFilter}
-              deleteFilter={deleteFilter}
-              hasMultipleFilters={hasMultipleFilters}
-              showMultiFilterOperators={index > 0}
-              disableMultiFilterOperator={index !== 1}
-              applyMultiFilterOperatorChanges={applyFilterLogicOperator}
-              focusElementRef={null}
-              readOnly
-              logicOperators={logicOperators}
-              columnsSort={columnsSort}
-              index={index}
-              {...filterFormProps}
-            />
-          ))}
-          {validFilters.map((item, index) => (
-            <GridFilterForm
-              key={item.id == null ? index + readOnlyFilters.length : item.id}
-              item={item}
-              applyFilterChanges={applyFilter}
-              deleteFilter={deleteFilter}
-              hasMultipleFilters={hasMultipleFilters}
-              showMultiFilterOperators={readOnlyFilters.length + index > 0}
-              disableMultiFilterOperator={readOnlyFilters.length + index !== 1}
-              applyMultiFilterOperatorChanges={applyFilterLogicOperator}
-              focusElementRef={index === validFilters.length - 1 ? lastFilterRef : null}
-              logicOperators={logicOperators}
-              columnsSort={columnsSort}
-              index={index}
-              {...filterFormProps}
-            />
-          ))}
+          {readOnlyFilters.map((filter) =>
+            filter.conditions.map((item, index) => (
+              <GridFilterForm
+                key={filter.id == null ? `readOnly.${index}` : `${filter.id}.${index}`}
+                item={item}
+                filter={filter}
+                applyFilterChanges={() => {
+                  // do nothing
+                }}
+                deleteFilter={() => {
+                  // do nothing
+                }}
+                hasMultipleFilters={hasMultipleFilters}
+                showMultiFilterOperators={index > 0}
+                disableMultiFilterOperator={index !== 1}
+                applyMultiFilterOperatorChanges={applyFilterLogicOperator(filter)}
+                focusElementRef={null}
+                readOnly
+                logicOperators={logicOperators}
+                columnsSort={columnsSort}
+                index={index}
+                {...filterFormProps}
+              />
+            )),
+          )}
+          {validFilters.map((filter) =>
+            filter.conditions.map((item, index) => (
+              <GridFilterForm
+                key={filter.id == null ? `valid.${index}` : `${filter.id}.${index}`}
+                item={item}
+                filter={filter}
+                applyFilterChanges={(values) => {
+                  console.log('filter', filter);
+                  applyFilter({
+                    ...filter,
+                    conditions: filter.conditions.map((condition, i) =>
+                      i === index ? values : condition,
+                    ),
+                  });
+                }}
+                deleteFilter={() => {
+                  if (index === 0) {
+                    deleteFilter(filter);
+                  } else {
+                    const newFilter = {
+                      ...filter,
+                      conditions: filter.conditions.filter((_, i) => i !== index),
+                    };
+                    applyFilter(newFilter);
+                  }
+                }}
+                hasMultipleFilters={filter.conditions.length > 1}
+                showMultiFilterOperators={index > 0}
+                disableMultiFilterOperator={index !== 1}
+                applyMultiFilterOperatorChanges={applyFilterLogicOperator(filter)}
+                focusElementRef={index === filter.conditions.length - 1 ? lastFilterRef : null}
+                logicOperators={logicOperators}
+                columnsSort={columnsSort}
+                index={index}
+                {...filterFormProps}
+              />
+            )),
+          )}
         </div>
         {!rootProps.disableMultipleColumnsFiltering &&
         !(disableAddFilterButton && disableRemoveAllButton) ? (
@@ -236,7 +269,7 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
               <span />
             )}
 
-            {!disableRemoveAllButton && filterModel.items.length > 1 ? (
+            {!disableRemoveAllButton && validFilterCount > 1 ? (
               <rootProps.slots.baseButton
                 size="sm"
                 variant="secondary"

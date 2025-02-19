@@ -39,13 +39,13 @@ export function GridPreferencesPanel() {
     return apiRef.current.getColumnHeaderElement(preferencePanelState.labelId);
   }, [preferencePanelState.labelId, open]);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if (open) {
       return () => {
         if (document.activeElement !== document.body) {
           return;
         }
-        const focusedEl = apiRef.current.rootElementRef?.current?.querySelector(
+        const focusedEl = apiRef.current.mainElementRef?.current?.querySelector(
           '[tabindex="0"]',
         ) as HTMLElement;
         focusedEl?.focus();
@@ -78,7 +78,7 @@ export function GridPreferencesPanel() {
         sideOffset={headerEl ? -4 : 0}
         alignOffset={headerEl ? undefined : 12}
         className={clsx(
-          'bg-grid-bg/80 backdrop-blur-sm  w-auto min-w-[220px] p-0',
+          'bg-grid-bg/80 backdrop-blur-sm  w-auto min-w-[200px] p-0',
           !headerEl && 'rounded-t-none -mt-px -mx-px',
         )}
         updatePositionStrategy="always"

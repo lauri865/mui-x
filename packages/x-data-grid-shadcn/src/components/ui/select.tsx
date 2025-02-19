@@ -5,6 +5,7 @@ import { Check, ChevronDown, ChevronUp } from 'lucide-react';
 import * as React from 'react';
 
 import { cn } from '../../lib/utils';
+import { useTwgPortal } from './useTwgPortal';
 
 const Root = SelectPrimitive.Root;
 
@@ -14,20 +15,29 @@ const Value = SelectPrimitive.Value;
 
 const Trigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & {
+    variant?: 'default' | 'ghost';
+  }
+>(({ className, children, variant, ...props }, ref) => (
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      'flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border outline-ring/50 border-input bg-transparent px-3 py-2 pr-2.5 text-sm shadow-xs ring-offset-background placeholder:text-muted-foreground focus:outline-1 focus:ring-4 focus:ring-ring/10 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
+      'flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md bg-transparent text-sm shadow-xs ring-offset-background placeholder:text-muted-foreground focus:outline-1 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
+      variant !== 'ghost' &&
+        'px-3 py-2 outline-ring/50 border outline-ring/50 border-input bg-background shadow-xs pr-2.5 shadow-xs focus:ring-4 focus:ring-ring/10',
+      variant === 'ghost' &&
+        'focus-visible:outline-1 focus-visible:ring-4 focus-visible:ring-ring/10 outline-ring/50',
+
       className,
     )}
     {...props}
   >
     {children}
-    <SelectPrimitive.Icon asChild>
-      <ChevronDown className="size-4 opacity-50" />
-    </SelectPrimitive.Icon>
+    {variant !== 'ghost' && (
+      <SelectPrimitive.Icon asChild>
+        <ChevronDown className="size-4 opacity-50" />
+      </SelectPrimitive.Icon>
+    )}
   </SelectPrimitive.Trigger>
 ));
 Trigger.displayName = SelectPrimitive.Trigger.displayName;
@@ -64,13 +74,7 @@ const Content = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
 >(({ className, children, position = 'popper', ...props }, ref) => (
-  <SelectPrimitive.Portal
-    container={
-      typeof document !== undefined
-        ? document.getElementById('twg-portal') || document.body
-        : undefined
-    }
-  >
+  <SelectPrimitive.Portal container={useTwgPortal()}>
     <SelectPrimitive.Content
       ref={ref}
       className={cn(

@@ -178,6 +178,8 @@ export const GRID_DEFAULT_LOCALE_TEXT: GridLocaleText = {
   treeDataCollapse: 'hide children',
 
   // Grouping columns
+  groupExpand: 'Expand group',
+  groupCollapse: 'Collapse group',
   groupExpandAll: 'Expand all',
   groupCollapseAll: 'Collapse all',
   groupExpandColumn: (name) => `${name}`,
@@ -189,11 +191,17 @@ export const GRID_DEFAULT_LOCALE_TEXT: GridLocaleText = {
 
   // Master/detail
   detailPanelToggle: 'Detail panel toggle',
-  expandDetailPanel: 'Expand',
-  collapseDetailPanel: 'Collapse',
+  expandDetailPanel: 'Expand detail',
+  collapseDetailPanel: 'Collapse detail',
+
+  paginationRowsPerPage: 'Rows per page',
+  paginationOf: 'of',
+  paginationPage: 'Page',
+  paginationPreviousPage: 'Previous page',
+  paginationNextPage: 'Next page',
 
   // Used core components translation keys
-  MuiTablePagination: {},
+  //MuiTablePagination: {},
 
   // Row reordering text
   rowReorderingHeaderName: 'Row reordering',

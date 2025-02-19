@@ -3,6 +3,7 @@ import { Check, ChevronRight, Circle } from 'lucide-react';
 import * as React from 'react';
 
 import { cn } from '../../lib/utils';
+import { useTwgPortal } from './useTwgPortal';
 
 const Root = Primitive.Root;
 
@@ -11,14 +12,7 @@ const Trigger = Primitive.Trigger;
 const Group = Primitive.Group;
 
 const Portal = (props: React.ComponentPropsWithoutRef<typeof Primitive.Portal>) => (
-  <Primitive.Portal
-    container={
-      typeof document !== undefined
-        ? document.getElementById('twg-portal') || document.body
-        : undefined
-    }
-    {...props}
-  />
+  <Primitive.Portal container={useTwgPortal()} {...props} />
 );
 
 const Sub = Primitive.Sub;

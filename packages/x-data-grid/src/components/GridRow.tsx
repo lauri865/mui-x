@@ -284,24 +284,26 @@ const GridRow = forwardRef<HTMLDivElement, GridRowProps>(function GridRow(props,
     return rowStyle;
   }, [isNotVisible, rowHeight, styleProp, heightEntry, rootProps.rowSpacingType]);
 
+  /* Start of rendering */
+  if (!rowNode) {
+    return null;
+  }
+
   const rowClassNames = apiRef.current.unstable_applyPipeProcessors('rowClassName', [], rowId);
   const ariaAttributes = rowNode ? getRowAriaAttributes(rowNode, index) : undefined;
 
   if (typeof rootProps.getRowClassName === 'function') {
     const indexRelativeToCurrentPage = index - (currentPage.range?.firstRowIndex || 0);
     const rowParams: GridRowClassNameParams = {
-      ...apiRef.current.getRowParams(rowId),
+      id: rowId,
+      row,
+      columns: visibleColumns,
       isFirstVisible: indexRelativeToCurrentPage === 0,
       isLastVisible: indexRelativeToCurrentPage === currentPage.rows.length - 1,
       indexRelativeToCurrentPage,
     };
 
     rowClassNames.push(rootProps.getRowClassName(rowParams));
-  }
-
-  /* Start of rendering */
-  if (!rowNode) {
-    return null;
   }
 
   const getCell = (

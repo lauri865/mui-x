@@ -1,5 +1,6 @@
 import { unstable_useEnhancedEffect as useEnhancedEffect } from '@mui/utils';
 import * as React from 'react';
+import { useThemedComponent } from '../../context/GridThemeContext';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { GridEditModes } from '../../models/gridEditRowModel';
@@ -18,7 +19,7 @@ export interface GridEditSingleSelectCellProps extends GridRenderEditCellParams 
    * @param {any} newValue The value that is going to be passed to `apiRef.current.setEditCellValue`.
    * @returns {Promise<void> | void} A promise to be awaited before calling `apiRef.current.setEditCellValue`
    */
-  onValueChange?: (event: Event, newValue: any) => Promise<void> | void;
+  onValueChange?: (newValue: any) => Promise<void> | void;
   /**
    * If true, the select opens by default.
    */
@@ -54,13 +55,14 @@ function GridEditSingleSelectCell(props: GridEditSingleSelectCellProps) {
   } = props;
 
   const apiRef = useGridApiContext();
-  const ref = React.useRef<any>(null);
   const inputRef = React.useRef<any>(null);
   const [open, setOpen] = React.useState(initialOpen);
+  const classes = useThemedComponent('editCell', {
+    singleSelect: true,
+  });
 
   const baseSelectProps = rootProps.slotProps?.baseSelect || {};
-  const isSelectNative = baseSelectProps.native ?? false;
-  const { MenuProps, ...otherBaseSelectProps } = rootProps.slotProps?.baseSelect || {};
+  const isSelectNative = false;
 
   useEnhancedEffect(() => {
     if (hasFocus) {
@@ -77,91 +79,79 @@ function GridEditSingleSelectCell(props: GridEditSingleSelectCellProps) {
     return null;
   }
 
-  const getOptionValue = colDef.getOptionValue!;
-  const getOptionLabel = colDef.getOptionLabel!;
+  const getOptionValue = colDef.editCellParams.getOptionValue!;
+  const getOptionLabel = colDef.editCellParams.getOptionLabel!;
+  console.log('colDef', colDef);
 
-  const handleChange: SelectProps['onChange'] = async (event) => {
+  const handleChange = async (value: string) => {
     if (!isSingleSelectColDef(colDef) || !valueOptions) {
       return;
     }
 
     setOpen(false);
-    const target = event.target as HTMLInputElement;
     // NativeSelect casts the value to a string.
-    const formattedTargetValue = getValueFromValueOptions(
-      target.value,
-      valueOptions,
-      getOptionValue,
-    );
+    const formattedTargetValue = getValueFromValueOptions(value, valueOptions, getOptionValue);
 
     if (onValueChange) {
-      await onValueChange(event, formattedTargetValue);
+      await onValueChange(formattedTargetValue);
     }
 
-    await apiRef.current.setEditCellValue({ id, field, value: formattedTargetValue }, event);
+    await apiRef.current.setEditCellValue({ id, field, value: formattedTargetValue });
   };
 
-  const handleClose = (event: React.KeyboardEvent, reason: string) => {
+  const handleClose = (reason: GridCellEditStopReasons) => {
     if (rootProps.editMode === GridEditModes.Row) {
       setOpen(false);
       return;
     }
-    if (reason === 'backdropClick' || event.key === 'Escape') {
+    if (!open) {
+      return;
+    }
+    if (
+      reason === GridCellEditStopReasons.escapeKeyDown ||
+      reason === GridCellEditStopReasons.enterKeyDown
+    ) {
       const params = apiRef.current.getCellParams(id, field);
       apiRef.current.publishEvent('cellEditStop', {
         ...params,
-        reason:
-          event.key === 'Escape'
-            ? GridCellEditStopReasons.escapeKeyDown
-            : GridCellEditStopReasons.cellFocusOut,
+        reason,
       });
     }
-  };
-
-  const handleOpen: SelectProps['onOpen'] = (event) => {
-    if (isKeyboardEvent(event) && event.key === 'Enter') {
-      return;
-    }
-    setOpen(true);
   };
 
   if (!valueOptions || !colDef) {
     return null;
   }
 
-  return (
-    <rootProps.slots.baseSelect
-      ref={ref}
-      inputRef={inputRef}
-      value={valueProp}
-      onChange={handleChange}
-      open={open}
-      onOpen={handleOpen}
-      MenuProps={{
-        onClose: handleClose,
-        ...MenuProps,
-      }}
-      error={error}
-      native={isSelectNative}
-      fullWidth
-      {...other}
-      {...otherBaseSelectProps}
-    >
-      {valueOptions.map((valueOption) => {
-        const value = getOptionValue(valueOption);
+  const Select = rootProps.slots.baseSelect;
 
-        return (
-          <rootProps.slots.baseSelectOption
-            {...(rootProps.slotProps?.baseSelectOption || {})}
-            native={isSelectNative}
-            key={value}
-            value={value}
-          >
-            {getOptionLabel(valueOption)}
-          </rootProps.slots.baseSelectOption>
-        );
-      })}
-    </rootProps.slots.baseSelect>
+  return (
+    <Select.Root
+      value={valueProp || ''}
+      onValueChange={handleChange}
+      open={open}
+      onOpenChange={(open) => {
+        if (!open) {
+          handleClose(GridCellEditStopReasons.cellFocusOut);
+        }
+        setOpen(open);
+      }}
+    >
+      <Select.Trigger ref={inputRef} variant="ghost" className={classes.root} tabIndex={tabIndex}>
+        <Select.Value>{formattedValue}</Select.Value>
+      </Select.Trigger>
+      <Select.Content onEscapeKeyDown={() => handleClose(GridCellEditStopReasons.escapeKeyDown)}>
+        {valueOptions.map((valueOption) => {
+          const value = getOptionValue(valueOption);
+
+          return (
+            <Select.Item key={value} value={value}>
+              {getOptionLabel(valueOption)}
+            </Select.Item>
+          );
+        })}
+      </Select.Content>
+    </Select.Root>
   );
 }
 

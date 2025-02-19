@@ -81,11 +81,12 @@ const className = {
       // makes drag-drop easier, we can catch onPointerMove discretely at cell level, not cell content level
     ].join(' '),
     editable: '',
-    editing: 'p-0.25 flex shadow-md bg-[#121212]',
+    editing:
+      'shadow-md shadow-black/20 !bg-grid-edit-cell/30 dark:!bg-grid-edit-cell/15 outline-1 outline-offset-[-1px] !outline-grid-edit-cell-border [&[data-align=right]_input]:text-right',
     editingFocus: 'outline outline-[#90caf9] -outline-offset-1',
-    boolean: 'flex h-full w-full items-center justify-center',
-    booleanTrue: 'text-[rgba(255,255,255,0.7)]',
-    booleanFalse: 'text-[rgba(255,255,255,0.5)]',
+    boolean: 'size-4',
+    booleanTrue: '',
+    booleanFalse: '',
     actions: 'inline-flex items-center gap-2',
     showLeftBorder: 'border-l border-l-grid-border',
     showRightBorder: 'border-r border-r-grid-border',
@@ -101,7 +102,10 @@ const className = {
   },
 
   editCell: {
-    base: '',
+    // padding on actual input for datepicker alignment
+    base: 'h-full -mx-cell w-auto px-0 [&_input]:px-cell [&_input]:!field-sizing-content [&_input]:static',
+    error: '',
+    singleSelect: 'px-cell !outline-0 flex-1 !ring-0 w-[var(--width)] rounded-none',
   },
 
   row: {
@@ -119,7 +123,7 @@ const className = {
       // last visible
       'data-bottom-border:border-b data-bottom-border:border-b-grid-border',
       // selected
-      'data-selected:*:!bg-grid-selected-bg data-selected:*:hover:bg-grid-selected-bg data-selected:[--color-grid-border:var(--color-grid-selected-border)] data-selected:[&+.twg-row>.twg-cell]:border-t-[var(--color-grid-selected-border)]',
+      'data-selected:*:bg-grid-selected-bg data-selected:*:hover:bg-grid-selected-bg data-selected:[--color-grid-border:var(--color-grid-selected-border)] data-selected:[&+.twg-row>.twg-cell]:border-t-[var(--color-grid-selected-border)]',
       'data-selectable:active:bg-grid-selected-bg',
       // editing
       'data-editing:bg-grid-editing-bg',
@@ -128,7 +132,7 @@ const className = {
     skeleton: 'hover:bg-transparent',
 
     editable: '',
-    editing: 'bg-[#121212]',
+    editing: 'bg-grid-hover-bg',
     dynamicHeight: '[&>.twg-cell]:white-space-[initial] [&>.twg-cell]:leading-inherit',
   },
 
@@ -155,7 +159,7 @@ const className = {
       'bg-grid-hover-bg px-1.5 py-0.5 rounded-md text-xs min-w-[20px] text-center border border-grid-border text-grid-text/40 tabular-nums font-normal',
   },
   selectedRowCount: {
-    base: 'flex items-center gap-1.5 text-highlight-text cursor-pointer hover:bg-grid-hover-bg hover:opacity-50 pl-1.5 pr-1 -mr-1 py-1 rounded-grid transition-all',
+    base: 'flex items-center gap-1.5 text-highlight-text cursor-pointer hover:bg-grid-hover-bg hover:opacity-50 pl-1.5 pr-1 first:-ml-1 last:-mr-1 py-1 rounded-grid transition-all',
     badge:
       'bg-highlight px-1.5 py-0.5 rounded-md text-xs min-w-[20px] text-center border border-highlight-border/50 text-highlight-text tabular-nums font-normal',
   },
@@ -174,7 +178,7 @@ const className = {
   columnsPanel: {
     base: 'flex flex-col gap-2.5 px-3 py-3 overflow-auto max-h-[400px] flex-1 text-sm',
     header: 'p-1 bg-grid-hover-bg/50 border-b border-b-grid-border',
-    searchInput: 'bg-grid-bg h-8.5',
+    searchInput: 'bg-grid-bg h-8.5 [&_input::-webkit-search-cancel-button]:hidden',
     checkboxLabel: 'group/label flex gap-2 items-center select-none relative',
     footer:
       'flex bg-grid-hover-bg/50 rounded-b-[inherit] border-t border-t-grid-border px-3 py-1 justify-between pr-1',
@@ -183,6 +187,11 @@ const className = {
     draggingOverIndicator: 'absolute left-0 w-full h-0.5 bg-highlight-border pointer-events-none',
     dragHandle: 'inline-flex size-4 text-grid-text/50 ml-auto',
     pinIcon: 'size-4 text-grid-text hover:text-grid-text/50 inline-flex',
+  },
+  pagination: {
+    base: 'flex items-center gap-2 tabular-nums ml-auto',
+    page: '[&_strong]:font-medium tabular-nums',
+    controls: 'flex items-center gap-1',
   },
 };
 

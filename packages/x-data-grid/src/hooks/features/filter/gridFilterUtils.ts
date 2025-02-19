@@ -9,18 +9,18 @@ import {
 } from '../../../models';
 import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
 import { GridStateCommunity } from '../../../models/gridStateCommunity';
-import {
-  getDefaultGridFilterModel,
-  GridAggregatedFilterItemApplier,
-  GridFilterItemResult,
-  GridQuickFilterValueResult,
-} from './gridFilterState';
 import { getPublicApiRef } from '../../../utils/getPublicApiRef';
 import {
   gridColumnFieldsSelector,
   gridColumnLookupSelector,
   gridVisibleColumnFieldsSelector,
 } from '../columns';
+import {
+  getDefaultGridFilterModel,
+  GridAggregatedFilterItemApplier,
+  GridFilterItemResult,
+  GridQuickFilterValueResult,
+} from './gridFilterState';
 
 let hasEval: boolean;
 
@@ -65,12 +65,15 @@ export const cleanFilterItem = (
     cleanItem.id = Math.round(Math.random() * 1e5);
   }
 
-  if (cleanItem.operator == null) {
-    // Selects a default operator
-    // We don't use `apiRef.current.getColumn` because it is not ready during state initialization
-    const column = gridColumnLookupSelector(apiRef)[cleanItem.field];
-    cleanItem.operator = column && column!.filterOperators![0].value!;
-  }
+  cleanItem.conditions = cleanItem.conditions.map((condition) => {
+    if (condition.value == null) {
+      // We don't use `apiRef.current.getColumn` because it is not ready during state initialization
+      const column = gridColumnLookupSelector(apiRef)[cleanItem.field];
+      condition.operator = column && column!.filterOperators![0].value!;
+      return condition;
+    }
+    return condition;
+  });
 
   return cleanItem;
 };
@@ -99,7 +102,9 @@ export const sanitizeFilterModel = (
   }
 
   const hasItemsWithoutIds = hasSeveralItems && items.some((item) => item.id == null);
-  const hasItemWithoutOperator = items.some((item) => item.operator == null);
+  const hasItemWithoutOperator = items.some((item) =>
+    item.conditions.some((c) => c.operator == null),
+  );
 
   if (process.env.NODE_ENV !== 'production') {
     if (hasItemsWithoutIds) {
@@ -158,7 +163,7 @@ const getFilterCallbackFromItem = (
   filterItem: GridFilterItem,
   apiRef: RefObject<GridPrivateApiCommunity>,
 ): GridFilterItemApplier | null => {
-  if (!filterItem.field || !filterItem.operator) {
+  if (!filterItem.field || !filterItem.conditions.length) {
     return null;
   }
 
@@ -166,53 +171,62 @@ const getFilterCallbackFromItem = (
   if (!column) {
     return null;
   }
-  let parsedValue;
-
-  if (column.valueParser) {
-    const parser = column.valueParser;
-    parsedValue = Array.isArray(filterItem.value)
-      ? filterItem.value?.map((x) => parser(x, undefined, column, apiRef))
-      : parser(filterItem.value, undefined, column, apiRef);
-  } else {
-    parsedValue = filterItem.value;
-  }
 
   const { ignoreDiacritics } = apiRef.current.rootProps;
-
-  if (ignoreDiacritics) {
-    parsedValue = removeDiacritics(parsedValue);
-  }
-
-  const newFilterItem: GridFilterItem = { ...filterItem, value: parsedValue };
-
-  const filterOperators = column.filterOperators;
-  if (!filterOperators?.length) {
-    throw new Error(`MUI X: No filter operators found for column '${column.field}'.`);
-  }
-
-  const filterOperator = filterOperators.find(
-    (operator) => operator.value === newFilterItem.operator,
-  )!;
-  if (!filterOperator) {
-    throw new Error(
-      `MUI X: No filter operator found for column '${column.field}' and operator value '${newFilterItem.operator}'.`,
-    );
-  }
-
   const publicApiRef = getPublicApiRef(apiRef);
 
-  const applyFilterOnRow = filterOperator.getApplyFilterFn(newFilterItem, column)!;
-  if (typeof applyFilterOnRow !== 'function') {
-    return null;
-  }
-  return {
-    item: newFilterItem,
-    fn: (row: GridValidRowModel) => {
+  const conditionCallbacks = filterItem.conditions.map((condition) => {
+    let parsedValue;
+
+    if (column.valueParser) {
+      const parser = column.valueParser;
+      parsedValue = Array.isArray(condition.value)
+        ? condition.value?.map((x) => parser(x, undefined, column, apiRef))
+        : parser(condition.value, undefined, column, apiRef);
+    } else {
+      parsedValue = condition.value;
+    }
+
+    if (ignoreDiacritics) {
+      parsedValue = removeDiacritics(parsedValue);
+    }
+
+    const newCondition = { ...condition, value: parsedValue };
+
+    const filterOperator = column.filterOperators?.find(
+      (operator) => operator.value === newCondition.operator,
+    );
+    if (!filterOperator) {
+      throw new Error(
+        `MUI X: No filter operator found for column '${column.field}' and operator value '${newCondition.operator}'.`,
+      );
+    }
+
+    const applyFilterOnRow = filterOperator.getApplyFilterFn(newCondition, column)!;
+    if (typeof applyFilterOnRow !== 'function') {
+      return null;
+    }
+
+    return (row: GridValidRowModel) => {
       let value = apiRef.current.getRowValue(row, column);
       if (ignoreDiacritics) {
         value = removeDiacritics(value);
       }
       return applyFilterOnRow(value, row, column, publicApiRef);
+    };
+  });
+
+  if (conditionCallbacks.some((cb) => cb === null)) {
+    return null;
+  }
+
+  return {
+    item: filterItem,
+    fn: (row: GridValidRowModel) => {
+      const results = conditionCallbacks.map((cb) => cb!(row));
+      return filterItem.logicOperator === 'or'
+        ? results.some((result) => result)
+        : results.every((result) => result);
     },
   };
 };

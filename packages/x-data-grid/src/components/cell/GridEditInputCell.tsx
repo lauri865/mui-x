@@ -1,13 +1,10 @@
-import { unstable_useEnhancedEffect as useEnhancedEffect } from '@mui/utils';
+import { unstable_useForkRef, unstable_useEnhancedEffect as useEnhancedEffect } from '@mui/utils';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import * as React from 'react';
 import { useThemedComponent } from '../../context/GridThemeContext';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { GridRenderEditCellParams } from '../../models/params/gridCellParams';
-import { DataGridProcessedProps } from '../../models/props/DataGridProps';
-
-type OwnerState = DataGridProcessedProps;
 
 export interface GridEditInputCellProps extends GridRenderEditCellParams {
   debounceMs?: number;
@@ -48,8 +45,11 @@ const GridEditInputCell = forwardRef<HTMLInputElement, GridEditInputCellProps>((
 
   const apiRef = useGridApiContext();
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const handleRef = unstable_useForkRef(inputRef, ref);
   const [valueState, setValueState] = React.useState(value);
-  const classes = useThemedComponent('editCell');
+  const classes = useThemedComponent('editCell', {
+    error: other.error,
+  });
 
   const handleChange = React.useCallback(
     async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,19 +90,14 @@ const GridEditInputCell = forwardRef<HTMLInputElement, GridEditInputCellProps>((
   }, [hasFocus]);
 
   return (
-    <GridEditInputCellRoot
-      inputRef={inputRef}
+    <rootProps.slots.baseTextField
       className={classes.root}
-      ownerState={rootProps}
-      fullWidth
       type={colDef.type === 'number' ? colDef.type : 'text'}
       value={valueState ?? ''}
       onChange={handleChange}
-      endAdornment={
-        isProcessingProps ? <rootProps.slots.loadIcon fontSize="small" color="action" /> : undefined
-      }
-      {...other}
-      ref={ref}
+      right={isProcessingProps && <rootProps.slots.loadIcon />}
+      ref={handleRef}
+      variant="ghost"
     />
   );
 });

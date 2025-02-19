@@ -5,7 +5,7 @@ import type { ReactNode } from 'react';
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <HomeLayout {...baseOptions} className="dark:bg-neutral-950">
+    <HomeLayout {...baseOptions} className="dark:bg-[#121212]">
       {children}
       <Footer />
     </HomeLayout>

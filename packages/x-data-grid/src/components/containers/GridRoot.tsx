@@ -1,4 +1,5 @@
 import { unstable_useForkRef as useForkRef } from '@mui/utils';
+import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
 import { fastMemo } from '@mui/x-internals/fastMemo';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import clsx from 'clsx';
@@ -6,7 +7,6 @@ import * as React from 'react';
 import { useThemedComponent } from '../../context/GridThemeContext';
 import { useGridPrivateApiContext } from '../../hooks/utils/useGridPrivateApiContext';
 import { useIsSSR } from '../../hooks/utils/useIsSSR';
-import { useOnMount } from '../../hooks/utils/useOnMount';
 import { GridHeader } from '../GridHeader';
 import { GridBody, GridFooterPlaceholder } from '../base';
 
@@ -17,7 +17,7 @@ const GridRoot = forwardRef<HTMLDivElement, GridRootProps>(function GridRoot(pro
   const apiRef = useGridPrivateApiContext();
   const rootElementRef = apiRef.current.rootElementRef;
 
-  useOnMount(() => {
+  useEnhancedEffect(() => {
     const portal = document.getElementById('twg-portal');
     if (!portal) {
       const newPortal = document.createElement('div');
@@ -25,7 +25,7 @@ const GridRoot = forwardRef<HTMLDivElement, GridRootProps>(function GridRoot(pro
       newPortal.classList.add('twg-root');
       document.body.appendChild(newPortal);
     }
-  });
+  }, []);
 
   const rootMountCallback = React.useCallback(
     (node: HTMLElement | null) => {

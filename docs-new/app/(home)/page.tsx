@@ -461,7 +461,7 @@ function Hero() {
           }}
         />
         <div
-          className="absolute inset-x-0 top-0 z-[-1] h-200 opacity-30 duration-1000 animate-in fade-in dark:hidden"
+          className="absolute inset-x-0 top-0 z-[-1] h-200 opacity-30 duration-1000 animate-in fade-in dark:opacity-15"
           style={{
             maskImage: 'linear-gradient(to top,transparent,white)',
             backgroundImage: 'linear-gradient(to right, #4ebfff, transparent, #e92a67)',

@@ -1,10 +1,10 @@
-import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
-import { GridFilterItem } from './gridFilterItem';
-import type { GridColDef } from './colDef/gridColDef';
-import type { GridValidRowModel } from './gridRows';
+import * as React from 'react';
 import type { GridApiCommunity } from './api/gridApiCommunity';
+import type { GridColDef } from './colDef/gridColDef';
 import type { GridFilterInputValueProps } from './gridFilterInputComponent';
+import { GridFilterCondition, GridFilterItem } from './gridFilterItem';
+import type { GridValidRowModel } from './gridRows';
 
 type ApplyFilterFn<R extends GridValidRowModel = any, V = any, F = V> = (
   value: V,
@@ -14,7 +14,7 @@ type ApplyFilterFn<R extends GridValidRowModel = any, V = any, F = V> = (
 ) => boolean;
 
 export type GetApplyFilterFn<R extends GridValidRowModel = any, V = any, F = V> = (
-  filterItem: GridFilterItem,
+  filterItem: GridFilterCondition,
   column: GridColDef<R, V, F>,
 ) => null | ApplyFilterFn<R, V, F>;
 

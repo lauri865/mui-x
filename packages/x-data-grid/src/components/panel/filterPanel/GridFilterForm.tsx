@@ -6,7 +6,11 @@ import { useGridApiContext } from '../../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../../hooks/utils/useGridRootProps';
 import { useGridSelector } from '../../../hooks/utils/useGridSelector';
 import { GridColDef, GridStateColDef } from '../../../models/colDef/gridColDef';
-import { GridFilterItem, GridLogicOperator } from '../../../models/gridFilterItem';
+import {
+  GridFilterCondition,
+  GridFilterItem,
+  GridLogicOperator,
+} from '../../../models/gridFilterItem';
 
 export interface FilterColumnsArgs {
   field: GridColDef['field'];
@@ -18,7 +22,8 @@ export interface GridFilterFormProps {
   /**
    * The [[GridFilterItem]] representing this form.
    */
-  item: GridFilterItem;
+  item: GridFilterItem['conditions'][0];
+  filter: GridFilterItem;
   /**
    * If `true`, the logic operator field is rendered.
    * The field will be invisible if `showMultiFilterOperators` is also `true`.
@@ -41,7 +46,7 @@ export interface GridFilterFormProps {
    * Callback called when the operator, column field or value is changed.
    * @param {GridFilterItem} item The updated [[GridFilterItem]].
    */
-  applyFilterChanges: (item: GridFilterItem) => void;
+  applyFilterChanges: (item: GridFilterCondition) => void;
   /**
    * Callback called when the logic operator is changed.
    * @param {GridLogicOperator} operator The new logic operator.
@@ -51,7 +56,7 @@ export interface GridFilterFormProps {
    * Callback called when the delete button is clicked.
    * @param {GridFilterItem} item The deleted [[GridFilterItem]].
    */
-  deleteFilter: (item: GridFilterItem) => void;
+  deleteFilter: () => void;
   /**
    * Allows to filter the columns displayed in the filter form.
    * @param {FilterColumnsArgs} args The columns of the grid and name of field.
@@ -63,6 +68,7 @@ export interface GridFilterFormProps {
    * @default [GridLogicOperator.And, GridLogicOperator.Or]
    */
   logicOperators?: GridLogicOperator[];
+  logicOperator?: GridLogicOperator;
   /**
    * Changes how the options in the columns selector should be ordered.
    * If not specified, the order is derived from the `columns` prop.
@@ -125,6 +131,7 @@ const GridFilterForm = forwardRef<HTMLDivElement, GridFilterFormProps>(
   function GridFilterForm(props, ref) {
     const {
       item,
+      filter,
       hasMultipleFilters,
       deleteFilter,
       applyFilterChanges,
@@ -142,6 +149,7 @@ const GridFilterForm = forwardRef<HTMLDivElement, GridFilterFormProps>(
       valueInputProps = {},
       readOnly,
       children,
+      index,
       ...other
     } = props;
     const apiRef = useGridApiContext();
@@ -149,13 +157,13 @@ const GridFilterForm = forwardRef<HTMLDivElement, GridFilterFormProps>(
     const rootProps = useGridRootProps();
     const valueRef = React.useRef<any>(null);
     const filterSelectorRef = React.useRef<HTMLInputElement>(null);
-    const multiFilterOperator = filterModel.logicOperator ?? GridLogicOperator.And;
+    const multiFilterOperator = filter.logicOperator ?? GridLogicOperator.And;
 
     const hasLogicOperatorColumn: boolean = hasMultipleFilters && logicOperators.length > 0;
 
     const { InputComponentProps } = valueInputProps;
 
-    const currentColumn = item.field ? apiRef.current.getColumn(item.field) : null;
+    const currentColumn = filter.field ? apiRef.current.getColumn(filter.field) : null;
 
     const currentOperator = React.useMemo(() => {
       if (!item.operator || !currentColumn) {
@@ -175,15 +183,15 @@ const GridFilterForm = forwardRef<HTMLDivElement, GridFilterFormProps>(
 
         applyFilterChanges({
           ...item,
-          operator,
-          value: eraseItemValue ? undefined : item.value,
+          operator: newOperator!.value,
+          value: eraseItemValue ? null : item.value,
         });
       },
       [applyFilterChanges, item, currentColumn, currentOperator],
     );
 
     const handleDeleteFilter = () => {
-      deleteFilter(item);
+      deleteFilter();
     };
 
     React.useImperativeHandle(
@@ -193,7 +201,7 @@ const GridFilterForm = forwardRef<HTMLDivElement, GridFilterFormProps>(
           if (currentOperator?.InputComponent) {
             valueRef?.current?.focus();
           } else {
-            filterSelectorRef.current!.focus();
+            filterSelectorRef.current?.focus();
           }
         },
       }),
@@ -205,7 +213,7 @@ const GridFilterForm = forwardRef<HTMLDivElement, GridFilterFormProps>(
     return (
       <div
         className="flex flex-col gap-2 w-[240px] p-2 border-b last:border-b-0"
-        data-id={item.id}
+        data-id={filter.id}
         {...other}
         ref={ref}
       >
@@ -273,7 +281,7 @@ const GridFilterForm = forwardRef<HTMLDivElement, GridFilterFormProps>(
                 </rootProps.slots.baseIconButton>
               )
             }
-            key={item.field}
+            key={filter.field}
             onKeyDown={(event: React.KeyboardEvent) => {
               if (event.key === 'Enter' && event.currentTarget === event.target) {
                 event.stopPropagation();

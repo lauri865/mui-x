@@ -207,15 +207,15 @@ export const useGridCellEditing = (
       apiRef.current.runPendingEditCellValueMutation(id, field);
 
       let cellToFocusAfter: GridStopCellEditModeParams['cellToFocusAfter'];
-      if (reason === GridCellEditStopReasons.enterKeyDown) {
+      /* if (reason === GridCellEditStopReasons.enterKeyDown) {
         cellToFocusAfter = 'below';
       } else if (reason === GridCellEditStopReasons.tabKeyDown) {
         cellToFocusAfter = 'right';
       } else if (reason === GridCellEditStopReasons.shiftTabKeyDown) {
         cellToFocusAfter = 'left';
-      }
+      } */
 
-      const ignoreModifications = reason === 'escapeKeyDown';
+      const ignoreModifications = reason === 'escapeKeyDown' || !reason;
 
       apiRef.current.stopCellEditMode({
         id,

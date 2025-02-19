@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { useGridColumnMenuSlots } from '../../../hooks/features/columnMenu/useGridColumnMenuSlots';
 import { useGridApiContext } from '../../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../../hooks/utils/useGridRootProps';
@@ -20,7 +21,7 @@ export const GRID_COLUMN_MENU_SLOTS = {
 
 export const GRID_COLUMN_MENU_SLOT_PROPS = {
   columnMenuSortItem: { displayOrder: 10 },
-  columnMenuFilterItem: { displayOrder: 20 },
+  columnMenuFilterItem: { displayOrder: 40 },
   columnMenuColumnPinning: { displayOrder: 25 },
   columnMenuRowGrouping: { displayOrder: 30 },
   columnMenuAggregationItem: { displayOrder: 50 },
@@ -43,6 +44,17 @@ function GridColumnMenu(props: GridColumnMenuProps) {
   });
 
   const DropdownMenu = rootProps.slots.baseDropdownMenu;
+
+  React.useEffect(() => {
+    if (props.open) {
+      return () => {
+        const focusedEl = apiRef.current.rootElementRef?.current?.querySelector(
+          '[tabindex="0"]',
+        ) as HTMLElement;
+        focusedEl?.focus();
+      };
+    }
+  }, [props.open]);
 
   return (
     <DropdownMenu.Root

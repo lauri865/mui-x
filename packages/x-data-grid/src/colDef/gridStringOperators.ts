@@ -1,10 +1,10 @@
-import { GridFilterInputValue } from '../components/panel/filterPanel/GridFilterInputValue';
-import { escapeRegExp } from '../utils/utils';
-import type { GetApplyQuickFilterFn } from '../models/colDef/gridColDef';
-import { GridFilterItem } from '../models/gridFilterItem';
-import { GridFilterOperator } from '../models/gridFilterOperator';
 import { GridFilterInputMultipleValue } from '../components/panel/filterPanel/GridFilterInputMultipleValue';
+import { GridFilterInputValue } from '../components/panel/filterPanel/GridFilterInputValue';
 import { removeDiacritics } from '../hooks/features/filter/gridFilterUtils';
+import type { GetApplyQuickFilterFn } from '../models/colDef/gridColDef';
+import { GridFilterCondition } from '../models/gridFilterItem';
+import { GridFilterOperator } from '../models/gridFilterOperator';
+import { escapeRegExp } from '../utils/utils';
 
 export const getGridStringQuickFilterFn: GetApplyQuickFilterFn<any, unknown> = (value) => {
   if (!value) {
@@ -21,7 +21,7 @@ export const getGridStringQuickFilterFn: GetApplyQuickFilterFn<any, unknown> = (
 };
 
 const createContainsFilterFn =
-  (disableTrim: boolean, negate: boolean) => (filterItem: GridFilterItem) => {
+  (disableTrim: boolean, negate: boolean) => (filterItem: GridFilterCondition) => {
     if (!filterItem.value) {
       return null;
     }
@@ -37,7 +37,7 @@ const createContainsFilterFn =
   };
 
 const createEqualityFilterFn =
-  (disableTrim: boolean, negate: boolean) => (filterItem: GridFilterItem) => {
+  (disableTrim: boolean, negate: boolean) => (filterItem: GridFilterCondition) => {
     if (!filterItem.value) {
       return null;
     }
@@ -85,7 +85,7 @@ export const getGridStringOperators = (
   },
   {
     value: 'startsWith',
-    getApplyFilterFn: (filterItem: GridFilterItem) => {
+    getApplyFilterFn: (filterItem: GridFilterCondition) => {
       if (!filterItem.value) {
         return null;
       }
@@ -100,7 +100,7 @@ export const getGridStringOperators = (
   },
   {
     value: 'endsWith',
-    getApplyFilterFn: (filterItem: GridFilterItem) => {
+    getApplyFilterFn: (filterItem: GridFilterCondition) => {
       if (!filterItem.value) {
         return null;
       }
@@ -125,7 +125,7 @@ export const getGridStringOperators = (
   },
   {
     value: 'isAnyOf',
-    getApplyFilterFn: (filterItem: GridFilterItem) => {
+    getApplyFilterFn: (filterItem: GridFilterCondition) => {
       if (!Array.isArray(filterItem.value) || filterItem.value.length === 0) {
         return null;
       }
@@ -136,11 +136,11 @@ export const getGridStringOperators = (
 
       return (value): boolean =>
         value != null
-          ? filterItemValue.some((filterValue: GridFilterItem['value']) => {
+          ? filterItemValue.some((filterValue: GridFilterCondition['value']) => {
               return collator.compare(filterValue, value.toString() || '') === 0;
             })
           : false;
     },
-    InputComponent: GridFilterInputMultipleValue,
+    InputComponent: GridFilterInputMultipleValue as any,
   },
 ];

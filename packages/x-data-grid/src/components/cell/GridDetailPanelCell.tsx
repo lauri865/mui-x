@@ -10,7 +10,7 @@ import { useGridSelector } from '../../hooks/utils/useGridSelector';
 import type { GridRenderCellParams } from '../../models/params/gridCellParams';
 
 export const GridDetailPanelCell = forwardRef<HTMLInputElement, GridRenderCellParams>(
-  function GridCellDetailPanelRenderer(props, ref) {
+  function GridCellDetailPanelCellRenderer(props, ref) {
     const {
       field,
       id,
@@ -23,12 +23,11 @@ export const GridDetailPanelCell = forwardRef<HTMLInputElement, GridRenderCellPa
       hasFocus,
       tabIndex,
       api,
+      focusElementRef,
       ...other
     } = props;
     const apiRef = useGridApiContext();
     const rootProps = useGridRootProps();
-    const buttonRef = React.useRef<HTMLElement>(null);
-    const handleRef = useForkRef(buttonRef, ref);
     const isExpanded = useGridSelector(apiRef, gridDetailPanelIsExpandedForRowIdSelector, id);
 
     const hasDetailPanel = React.useMemo(() => {
@@ -37,6 +36,8 @@ export const GridDetailPanelCell = forwardRef<HTMLInputElement, GridRenderCellPa
       }
       return rootProps.getDetailPanelContent(apiRef.current.getRowParams(id));
     }, [rootProps.getCellClassName]);
+
+    const handleRef = useForkRef(focusElementRef, ref);
 
     // disable animations on mount / when reodering columns
     const enableAnimations = React.useRef(false);
@@ -52,12 +53,6 @@ export const GridDetailPanelCell = forwardRef<HTMLInputElement, GridRenderCellPa
         }
       }
     }, [apiRef, tabIndex, id, field, hasDetailPanel]);
-
-    useEnhancedEffect(() => {
-      if (hasFocus && hasDetailPanel) {
-        buttonRef.current?.focus({ preventScroll: true });
-      }
-    }, [hasFocus, hasDetailPanel]);
 
     if (rowNode.type === 'footer' || rowNode.type === 'pinnedRow') {
       return null;

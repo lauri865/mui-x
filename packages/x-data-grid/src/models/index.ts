@@ -15,6 +15,7 @@ export type { GridFilterInputValueProps } from './gridFilterInputComponent';
 export * from './gridFilterItem';
 export * from './gridFilterModel';
 export * from './gridIconSlotsComponent';
+export * from './gridMeta';
 export * from './gridPaginationProps';
 export * from './gridRenderContextProps';
 export * from './gridRows';

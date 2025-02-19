@@ -2,6 +2,7 @@ import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 import * as React from 'react';
 
 import { cn } from '../../lib/utils';
+import { useTwgPortal } from './useTwgPortal';
 
 const TooltipProvider = TooltipPrimitive.Provider;
 
@@ -13,13 +14,7 @@ const TooltipContent = React.forwardRef<
   React.ElementRef<typeof TooltipPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>
 >(({ className, sideOffset = 4, ...props }, ref) => (
-  <TooltipPrimitive.Portal
-    container={
-      typeof document !== undefined
-        ? document.getElementById('twg-portal') || document.body
-        : undefined
-    }
-  >
+  <TooltipPrimitive.Portal container={useTwgPortal()}>
     <TooltipPrimitive.Content
       ref={ref}
       sideOffset={sideOffset}

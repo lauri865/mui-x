@@ -19,7 +19,6 @@ import { GridStateColDef } from '../../../models/colDef/gridColDef';
 import { GridEventListener } from '../../../models/events';
 import { GridColumnGroup } from '../../../models/gridColumnGrouping';
 import type { GridColumnsRenderContext } from '../../../models/params/gridScrollParams';
-import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import {
   shouldCellShowLeftBorder,
   shouldCellShowRightBorder,
@@ -76,8 +75,6 @@ export interface GetHeadersParams {
   renderContext?: GridColumnsRenderContext;
   maxLastColumn?: number;
 }
-
-type OwnerState = DataGridProcessedProps;
 
 export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
   const {

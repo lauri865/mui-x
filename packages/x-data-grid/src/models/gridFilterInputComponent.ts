@@ -1,8 +1,8 @@
-import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
-import { GridFilterItem } from './gridFilterItem';
+import * as React from 'react';
 import type { GridApiCommon } from './api/gridApiCommon';
 import type { GridApiCommunity } from './api/gridApiCommunity';
+import { GridFilterCondition, GridFilterItem } from './gridFilterItem';
 
 export type GridFilterInputSlotProps = {
   size?: 'small' | 'medium';
@@ -14,8 +14,9 @@ export type GridFilterInputValueProps<
   T extends GridFilterInputSlotProps = GridFilterInputSlotProps,
   Api extends GridApiCommon = GridApiCommunity,
 > = {
-  item: GridFilterItem;
-  applyValue: (value: GridFilterItem) => void;
+  item: GridFilterCondition;
+  filter: GridFilterItem;
+  applyValue: (value: GridFilterCondition) => void;
   // Is any because if typed as GridApiRef a dep cycle occurs. Same happens if ApiContext is used.
   apiRef: RefObject<Api>;
   inputRef?: React.Ref<HTMLElement | null>;

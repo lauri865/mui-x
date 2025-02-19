@@ -18,6 +18,8 @@
     --spacing-cell: 10px;
     --cell-padding: 10px;
     --color-grid-resizer-color: var(--color-neutral-950);
+    --color-grid-edit-cell: var(--color-amber-500);
+    --color-grid-edit-cell-border: var(--color-amber-600);
   }
 }
 

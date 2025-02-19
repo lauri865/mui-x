@@ -1,5 +1,5 @@
+import { unstable_useId as useId } from '@mui/utils';
 import * as React from 'react';
-import { refType, unstable_useId as useId } from '@mui/utils';
 import { useGridRootProps } from '../../../hooks/utils/useGridRootProps';
 import { TextFieldProps } from '../../../models/gridBaseSlots';
 import { GridFilterInputValueProps } from '../../../models/gridFilterInputComponent';
@@ -51,59 +51,57 @@ function GridFilterInputBoolean(props: GridFilterInputBooleanProps) {
 
   return (
     <React.Fragment>
-      <rootProps.slots.baseFormControl fullWidth>
-        <rootProps.slots.baseInputLabel
-          {...rootProps.slotProps?.baseInputLabel}
-          id={labelId}
-          shrink
-          variant="outlined"
-        >
-          {label}
-        </rootProps.slots.baseInputLabel>
-        <rootProps.slots.baseSelect
-          labelId={labelId}
-          id={selectId}
-          label={label}
-          value={filterValueState === undefined ? '' : String(filterValueState)}
-          onChange={onFilterChange}
-          variant="outlined"
-          notched
+      <rootProps.slots.baseInputLabel
+        {...rootProps.slotProps?.baseInputLabel}
+        id={labelId}
+        shrink
+        variant="outlined"
+      >
+        {label}
+      </rootProps.slots.baseInputLabel>
+      <rootProps.slots.baseSelect
+        labelId={labelId}
+        id={selectId}
+        label={label}
+        value={filterValueState === undefined ? '' : String(filterValueState)}
+        onChange={onFilterChange}
+        variant="outlined"
+        notched
+        native={isSelectNative}
+        displayEmpty
+        inputProps={{
+          ref: focusElementRef,
+          tabIndex,
+          ...rootSlotProps?.htmlInput,
+        }}
+        {...baseSelectProps}
+        {
+          ...(others as any) /* FIXME: typing error */
+        }
+        {...slotProps?.root}
+      >
+        <rootProps.slots.baseSelectOption
+          {...baseSelectOptionProps}
           native={isSelectNative}
-          displayEmpty
-          inputProps={{
-            ref: focusElementRef,
-            tabIndex,
-            ...rootSlotProps?.htmlInput,
-          }}
-          {...baseSelectProps}
-          {
-            ...(others as any) /* FIXME: typing error */
-          }
-          {...slotProps?.root}
+          value=""
         >
-          <rootProps.slots.baseSelectOption
-            {...baseSelectOptionProps}
-            native={isSelectNative}
-            value=""
-          >
-            {apiRef.current.getLocaleText('filterValueAny')}
-          </rootProps.slots.baseSelectOption>
-          <rootProps.slots.baseSelectOption
-            {...baseSelectOptionProps}
-            native={isSelectNative}
-            value="true"
-          >
-            {apiRef.current.getLocaleText('filterValueTrue')}
-          </rootProps.slots.baseSelectOption>
-          <rootProps.slots.baseSelectOption
-            {...baseSelectOptionProps}
-            native={isSelectNative}
-            value="false"
-          >
-            {apiRef.current.getLocaleText('filterValueFalse')}
-          </rootProps.slots.baseSelectOption>
-        </rootProps.slots.baseSelect>
-      </rootProps.slots.baseFormControl>
+          {apiRef.current.getLocaleText('filterValueAny')}
+        </rootProps.slots.baseSelectOption>
+        <rootProps.slots.baseSelectOption
+          {...baseSelectOptionProps}
+          native={isSelectNative}
+          value="true"
+        >
+          {apiRef.current.getLocaleText('filterValueTrue')}
+        </rootProps.slots.baseSelectOption>
+        <rootProps.slots.baseSelectOption
+          {...baseSelectOptionProps}
+          native={isSelectNative}
+          value="false"
+        >
+          {apiRef.current.getLocaleText('filterValueFalse')}
+        </rootProps.slots.baseSelectOption>
+      </rootProps.slots.baseSelect>
       {headerFilterMenu}
       {clearButton}
     </React.Fragment>

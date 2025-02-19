@@ -1,13 +1,13 @@
 import { RefObject } from '@mui/x-internals/types';
 import type { GridApiCommon, GridPrivateApiCommon } from '../../models/api/gridApiCommon';
 import { DataGridProcessedProps } from '../../models/props/DataGridProps';
-import { useGridRefs } from './useGridRefs';
-import { useGridIsRtl } from './useGridIsRtl';
-import { useGridLoggerFactory } from './useGridLoggerFactory';
-import { useGridApiInitialization } from './useGridApiInitialization';
-import { useGridLocaleText } from './useGridLocaleText';
 import { useGridPipeProcessing } from './pipeProcessing';
 import { useGridStrategyProcessing } from './strategyProcessing';
+import { useGridApiInitialization } from './useGridApiInitialization';
+import { useGridIsRtl } from './useGridIsRtl';
+import { useGridLocaleText } from './useGridLocaleText';
+import { useGridLoggerFactory } from './useGridLoggerFactory';
+import { useGridRefs } from './useGridRefs';
 import { useGridStateInitialization } from './useGridStateInitialization';
 
 /**
@@ -30,6 +30,7 @@ export const useGridInitialization = <
   useGridStrategyProcessing(privateApiRef);
   useGridLocaleText(privateApiRef, props);
 
+  privateApiRef.current.register('public', { meta: props.meta });
   privateApiRef.current.register('private', { rootProps: props });
 
   return privateApiRef;

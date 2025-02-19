@@ -4,6 +4,7 @@ import { GridPinnedRowPosition } from '../../hooks/features/rowPinning';
 import { useGridApiEventHandler } from '../../hooks/utils/useGridApiEventHandler';
 import { useGridPrivateApiContext } from '../../hooks/utils/useGridPrivateApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import { GridGroupNode } from '../../models';
 import { GridCellParams } from '../../models/params/gridCellParams';
 
 export const GridContextMenu = () => {
@@ -32,6 +33,19 @@ export const GridContextMenu = () => {
     cellElementRef.current.dataset.open = 'true';
 
     triggerRef.current?.dispatchEvent(new MouseEvent('contextmenu', { ...(event as any) }));
+  });
+
+  useGridApiEventHandler(apiRef, 'cellKeyDown', (params, event) => {
+    if (event.key === 'x' && (event.ctrlKey || event.metaKey)) {
+      const bbox = (event.currentTarget as HTMLElement).getBoundingClientRect();
+      event.currentTarget.dispatchEvent(
+        new MouseEvent('contextmenu', {
+          ...(event as any),
+          clientX: bbox.left - 2,
+          clientY: bbox.bottom + 4,
+        }),
+      );
+    }
   });
 
   if (!hasCustomContextMenu) {
@@ -164,6 +178,35 @@ export const GridContextMenu = () => {
               Copy with headers{selection.size ? ` (${selection.size})` : ''}
             </ContextMenu.Item>
             <ContextMenu.Separator />
+            {cell.rowNode.type === 'group' && (
+              <>
+                <ContextMenu.Item
+                  onSelect={() =>
+                    apiRef.current.setRowChildrenExpansion(
+                      cell.id,
+                      !(cell.rowNode as GridGroupNode).childrenExpanded,
+                    )
+                  }
+                >
+                  {apiRef.current.getLocaleText(
+                    cell.rowNode.childrenExpanded ? 'groupCollapse' : 'groupExpand',
+                  )}
+                  <ContextMenu.Shortcut>⌘E</ContextMenu.Shortcut>
+                </ContextMenu.Item>
+              </>
+            )}
+            {rootProps.getDetailPanelContent?.(apiRef.current.getRowParams(cell.id)) && (
+              <>
+                <ContextMenu.Item onSelect={() => apiRef.current.toggleDetailPanel(cell.id)}>
+                  {apiRef.current.getLocaleText(
+                    apiRef.current.isDetailPanelExpanded(cell.id)
+                      ? 'collapseDetailPanel'
+                      : 'expandDetailPanel',
+                  )}
+                  <ContextMenu.Shortcut>⌘D</ContextMenu.Shortcut>
+                </ContextMenu.Item>
+              </>
+            )}
             {cell.rowNode.type !== 'group' && (
               <>
                 <ContextMenu.Sub>
@@ -194,10 +237,9 @@ export const GridContextMenu = () => {
                     </ContextMenu.RadioGroup>
                   </ContextMenu.SubContent>
                 </ContextMenu.Sub>
-                <ContextMenu.Separator />
               </>
             )}
-
+            <ContextMenu.Separator />
             <ContextMenu.Sub>
               <ContextMenu.SubTrigger>
                 <span>

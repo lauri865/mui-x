@@ -190,4 +190,6 @@ export interface GridIconSlotsComponent {
   groupExpandIcon: React.JSXElementConstructor<any>;
   aggregationIcon: React.JSXElementConstructor<any>;
   dragHandleIcon: React.JSXElementConstructor<any>;
+  paginationPrevIcon: React.JSXElementConstructor<any>;
+  paginationNextIcon: React.JSXElementConstructor<any>;
 }

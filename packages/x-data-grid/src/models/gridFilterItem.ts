@@ -3,6 +3,19 @@
  * @demos
  *   - [Custom filter operator](/x/react-data-grid/filtering/customization/#create-a-custom-operator)
  */
+
+export interface GridFilterCondition {
+  /**
+   * The filtering value.
+   * The operator filtering function will decide for each row if the row values is correct compared to this value.
+   */
+  value?: any;
+  /**
+   * The name of the operator we want to apply.
+   */
+  operator: string;
+}
+
 export interface GridFilterItem {
   /**
    * Must be unique.
@@ -14,24 +27,12 @@ export interface GridFilterItem {
    */
   field: string;
   /**
-   * The filtering value.
-   * The operator filtering function will decide for each row if the row values is correct compared to this value.
-   */
-  value?: any;
-  /**
-   * The name of the operator we want to apply.
-   */
-  operator: string;
-  /**
    * - `GridLogicOperator.And`: the row must pass all the filter items.
    * - `GridLogicOperator.Or`: the row must pass at least on filter item.
    * @default GridLogicOperator.And
    */
   logicOperator?: GridLogicOperator;
-  conditions: Array<{
-    value?: any;
-    operator: string;
-  }>;
+  conditions: GridFilterCondition[];
 }
 
 enum GridLogicOperator {

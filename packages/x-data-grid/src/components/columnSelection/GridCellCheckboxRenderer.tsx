@@ -1,7 +1,6 @@
 import { unstable_useForkRef as useForkRef } from '@mui/utils';
 import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
 import { forwardRef } from '@mui/x-internals/forwardRef';
-import * as React from 'react';
 import { getCheckboxPropsSelector } from '../../hooks/features/rowSelection/utils';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
@@ -23,13 +22,13 @@ const GridCellCheckboxForwardRef = forwardRef<HTMLInputElement, GridRenderCellPa
       hasFocus,
       tabIndex,
       api,
+      focusElementRef,
       ...other
     } = props;
     const apiRef = useGridApiContext();
     const rootProps = useGridRootProps();
-    const checkboxElement = React.useRef<HTMLElement>(null);
 
-    const handleRef = useForkRef(checkboxElement, ref);
+    const handleRef = useForkRef(focusElementRef, ref);
 
     const isSelectable = apiRef.current.isRowSelectable(id);
 
@@ -58,13 +57,6 @@ const GridCellCheckboxForwardRef = forwardRef<HTMLInputElement, GridRenderCellPa
         }
       }
     }, [apiRef, tabIndex, id, field]);
-
-    useEnhancedEffect(() => {
-      if (hasFocus) {
-        const input = checkboxElement.current?.querySelector('input');
-        input?.focus({ preventScroll: true });
-      }
-    }, [hasFocus]);
 
     if (rowNode.type === 'footer' || rowNode.type === 'pinnedRow') {
       return null;

@@ -15,6 +15,7 @@ import type { GridPaginationApi } from '../../hooks/features/pagination';
 import { GridRowGroupingApi } from '../../hooks/features/rowGrouping';
 import { GridRowPinningApi } from '../../hooks/features/rowPinning/rowPinningInterfaces';
 import type { GridStatePersistenceApi } from '../../hooks/features/statePersistence';
+import { GridMetaApi } from '../gridMeta';
 import type { GridInitialStateCommunity, GridStateCommunity } from '../gridStateCommunity';
 import type { DataGridProcessedProps } from '../props/DataGridProps';
 import { GridColumnApi } from './gridColumnApi';
@@ -75,7 +76,8 @@ export interface GridApiCommon<
     GridRowPinningApi,
     GridDetailPanelApi,
     GridRowGroupingApi,
-    GridAggregationApi {}
+    GridAggregationApi,
+    GridMetaApi {}
 
 export interface GridPrivateOnlyApiCommon<
   Api extends GridApiCommon,

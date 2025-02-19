@@ -4,6 +4,7 @@ import * as PopoverPrimitive from '@radix-ui/react-popover';
 import * as React from 'react';
 
 import { cn } from '../../lib/utils';
+import { useTwgPortal } from './useTwgPortal';
 
 const Root = PopoverPrimitive.Root;
 
@@ -15,13 +16,7 @@ const Content = React.forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>
 >(({ className, align = 'center', sideOffset = 4, ...props }, ref) => (
-  <PopoverPrimitive.Portal
-    container={
-      typeof document !== undefined
-        ? (document.getElementById('twg-portal') ?? undefined)
-        : undefined
-    }
-  >
+  <PopoverPrimitive.Portal container={useTwgPortal()}>
     <PopoverPrimitive.Content
       ref={ref}
       align={align}

@@ -1,8 +1,6 @@
-import composeClasses from '@mui/utils/composeClasses';
 import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import * as React from 'react';
-import { getDataGridUtilityClass } from '../../constants/gridClasses';
 import { gridTabIndexColumnHeaderSelector } from '../../hooks/features/focus/gridFocusStateSelector';
 import { gridRowSelectionStateSelector } from '../../hooks/features/rowSelection/gridRowSelectionSelector';
 import { isMultipleRowSelectionEnabled } from '../../hooks/features/rowSelection/utils';
@@ -13,27 +11,12 @@ import { useGridVisibleRows } from '../../hooks/utils/useGridVisibleRows';
 import type { GridRowId } from '../../models/gridRows';
 import type { GridColumnHeaderParams } from '../../models/params/gridColumnHeaderParams';
 import type { GridHeaderSelectionCheckboxParams } from '../../models/params/gridHeaderSelectionCheckboxParams';
-import type { DataGridProcessedProps } from '../../models/props/DataGridProps';
-
-type OwnerState = { classes: DataGridProcessedProps['classes'] };
-
-const useUtilityClasses = (ownerState: OwnerState) => {
-  const { classes } = ownerState;
-
-  const slots = {
-    root: ['checkboxInput'],
-  };
-
-  return composeClasses(slots, getDataGridUtilityClass, classes);
-};
 
 const GridHeaderCheckbox = forwardRef<HTMLButtonElement, GridColumnHeaderParams>(
   function GridHeaderCheckbox(props, ref) {
     const { field, colDef, ...other } = props;
     const apiRef = useGridApiContext();
     const rootProps = useGridRootProps();
-    const ownerState = { classes: rootProps.classes };
-    const classes = useUtilityClasses(ownerState);
     const tabIndexState = useGridSelector(apiRef, gridTabIndexColumnHeaderSelector);
     const selection = useGridSelector(apiRef, gridRowSelectionStateSelector);
     const visibleRows = useGridVisibleRows(apiRef).rows;
@@ -120,7 +103,6 @@ const GridHeaderCheckbox = forwardRef<HTMLButtonElement, GridColumnHeaderParams>
       <rootProps.slots.baseCheckbox
         checked={isIndeterminate ? 'indeterminate' : isChecked}
         onCheckedChange={handleChange}
-        className={classes.root}
         aria-label={label}
         name={'select_all_rows'}
         tabIndex={tabIndex}

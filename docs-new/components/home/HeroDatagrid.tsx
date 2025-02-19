@@ -64,11 +64,42 @@ const columns: GridColDef<(typeof rows)[number]>[] = [
   {
     field: 'nested.description',
     headerName: 'Description',
+    editable: true,
+  },
+  {
+    field: 'updated_at',
+    headerName: 'Updated At',
+    type: 'date',
+    editable: true,
+  },
+  {
+    field: 'is_filled',
+    headerName: 'Is Filled',
+    type: 'boolean',
+    editable: true,
+  },
+  {
+    field: 'gender',
+    type: 'string',
+    editCell: 'singleSelect',
+    editCellParams: {
+      valueOptions: ['Male', 'Female'],
+    },
+    editable: true,
   },
 ];
 
 const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 14, nested: { description: 'test' } },
+  {
+    id: 1,
+    lastName: 'Snow',
+    firstName: 'Jon',
+    age: 14,
+    nested: { description: 'test' },
+    updated_at: new Date(),
+    is_filled: true,
+    gender: 'Male',
+  },
   { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 30, nested: { description: 'test' } },
   { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 15 },
   { id: 4, lastName: 'Stark', firstName: 'Arya', age: 11 },
@@ -122,9 +153,14 @@ export const HeroDataGrid = () => {
         className="hidden dark:flex"
       />
       <DataGrid
+        meta={{
+          test: 123,
+        }}
         className="text-[13px]"
         rows={data}
         columns={columns}
+        /* pagination
+        autoPageSize */
         initialState={{
           pagination: {
             paginationModel: {

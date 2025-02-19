@@ -88,6 +88,7 @@ function GridColumnsManagement(props: GridColumnsManagementProps) {
   const initalColumnOrder = useLazyRef(() => initialState.orderedFields).current;
   const columnVisibilityModel = useGridSelector(apiRef, gridColumnVisibilityModelSelector);
   const [searchValue, setSearchValue] = React.useState('');
+  const inputRef = React.useRef<HTMLInputElement>(null);
   const classes = useThemedComponent('columnsPanel');
 
   const {
@@ -238,9 +239,23 @@ function GridColumnsManagement(props: GridColumnsManagementProps) {
           value={searchValue}
           onChange={handleSearchValueChange}
           left={<rootProps.slots.quickFilterIcon />}
+          right={
+            searchValue && (
+              <rootProps.slots.baseIconButton
+                onClick={() => {
+                  setSearchValue('');
+                  inputRef.current?.focus();
+                }}
+                variant="ghost"
+              >
+                <rootProps.slots.columnMenuClearIcon />
+              </rootProps.slots.baseIconButton>
+            )
+          }
           size="small"
           type="search"
           autoComplete="off"
+          ref={inputRef}
           {...rootProps.slotProps?.baseTextField}
           {...searchInputProps}
         />

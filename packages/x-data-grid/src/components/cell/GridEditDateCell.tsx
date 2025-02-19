@@ -1,25 +1,9 @@
-import {
-  unstable_composeClasses as composeClasses,
-  unstable_useEnhancedEffect as useEnhancedEffect,
-} from '@mui/utils';
+import { unstable_useEnhancedEffect as useEnhancedEffect } from '@mui/utils';
 import * as React from 'react';
-import { getDataGridUtilityClass } from '../../constants/gridClasses';
+import { useThemedComponent } from '../../context/GridThemeContext';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { GridRenderEditCellParams } from '../../models/params/gridCellParams';
-import { DataGridProcessedProps } from '../../models/props/DataGridProps';
-
-type OwnerState = { classes: DataGridProcessedProps['classes'] };
-
-const useUtilityClasses = (ownerState: OwnerState) => {
-  const { classes } = ownerState;
-
-  const slots = {
-    root: ['editInputCell'],
-  };
-
-  return composeClasses(slots, getDataGridUtilityClass, classes);
-};
 
 export interface GridEditDateCellProps extends GridRenderEditCellParams {
   /**
@@ -58,6 +42,7 @@ function GridEditDateCell(props: GridEditDateCellProps) {
   const isDateTime = colDef.type === 'dateTime';
   const apiRef = useGridApiContext();
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const isFirstRender = React.useRef(true);
 
   const valueTransformed = React.useMemo(() => {
     let parsedDate: Date | null;
@@ -84,10 +69,12 @@ function GridEditDateCell(props: GridEditDateCellProps) {
     };
   }, [valueProp, isDateTime]);
 
+  const initialValue = React.useRef(valueTransformed);
   const [valueState, setValueState] = React.useState(valueTransformed);
   const rootProps = useGridRootProps();
-  const ownerState = { classes: rootProps.classes };
-  const classes = useUtilityClasses(ownerState);
+  const classes = useThemedComponent('editCell', {
+    error: other.error,
+  });
 
   const parseValueToDate = React.useCallback((value: string) => {
     if (value === '') {
@@ -139,24 +126,33 @@ function GridEditDateCell(props: GridEditDateCellProps) {
   useEnhancedEffect(() => {
     if (hasFocus) {
       inputRef.current!.focus();
+      if (isFirstRender.current) {
+        isFirstRender.current = false;
+        inputRef.current!.showPicker?.();
+      }
     }
   }, [hasFocus]);
 
-  return null;
-  // TODO: use custom datepicker
   return (
-    <StyledInputBase
-      inputRef={inputRef}
-      fullWidth
+    <rootProps.slots.baseTextField
+      ref={inputRef}
       className={classes.root}
       type={isDateTime ? 'datetime-local' : 'date'}
-      inputProps={{
-        max: isDateTime ? '9999-12-31T23:59' : '9999-12-31',
-        ...inputProps,
-      }}
+      max={isDateTime ? '9999-12-31T23:59' : '9999-12-31'}
+      variant="ghost"
       value={valueState.formatted}
       onChange={handleChange}
-      {...other}
+      onKeyUp={(event: React.KeyboardEvent) => {
+        if ((event.target as HTMLElement).tagName !== 'INPUT') {
+          return;
+        }
+        if (event.key === 'Enter' || event.key === 'Escape') {
+          apiRef.current.stopCellEditMode({
+            id,
+            field,
+          });
+        }
+      }}
     />
   );
 }
