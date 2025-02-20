@@ -1,9 +1,9 @@
 'use client';
 
-import { buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/cn';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 import { useEffect, useState } from 'react';
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/cn';
 
 export function UrlBar() {
   const [url, setUrl] = useState('');
@@ -24,7 +24,7 @@ export function WithoutValueTest() {
   const [items, setItems] = useState(['Item 1', 'Item 2']);
 
   return (
-    <>
+    <React.Fragment>
       <Tabs items={items}>
         {items.map((item) => (
           <Tab key={item}>{item}</Tab>
@@ -40,6 +40,6 @@ export function WithoutValueTest() {
       >
         Change Items
       </button>
-    </>
+    </React.Fragment>
   );
 }

@@ -7,13 +7,13 @@ import clsx from 'clsx';
 import * as React from 'react';
 import { getTotalHeaderHeight } from '../hooks/features/columns/gridColumnsUtils';
 import { gridDensityFactorSelector } from '../hooks/features/density/densitySelector';
+import { gridDimensionsColumnsTotalWidthSelector } from '../hooks/features/dimensions/dimensionSelectors';
 import { gridDimensionsSelector } from '../hooks/features/dimensions/gridDimensionsSelectors';
 import { useGridApiContext } from '../hooks/utils/useGridApiContext';
 import { useGridApiEventHandler } from '../hooks/utils/useGridApiEventHandler';
 import { useGridRootProps } from '../hooks/utils/useGridRootProps';
 import { useGridSelector } from '../hooks/utils/useGridSelector';
 import { useTimeout } from '../hooks/utils/useTimeout';
-import { gridDimensionsColumnsTotalWidthSelector } from '../internals/selectors/dimensionSelectors';
 import { GridEventListener } from '../models/events';
 import { GridScrollParams } from '../models/params/gridScrollParams';
 import { createSelector } from '../utils/createSelector';
@@ -70,7 +70,7 @@ function GridScrollAreaContent(props: ScrollAreaProps) {
   const columnsTotalWidth = useGridSelector(apiRef, gridDimensionsColumnsTotalWidthSelector);
   const sideOffset = useGridSelector(apiRef, offsetSelector, scrollDirection);
 
-  const getCanScrollMore = () => {
+  const getCanScrollMore = React.useCallback(() => {
     const dimensions = gridDimensionsSelector(apiRef.current.state);
     if (scrollDirection === 'left') {
       // Only render if the user has not reached yet the start of the list
@@ -84,7 +84,7 @@ function GridScrollAreaContent(props: ScrollAreaProps) {
     }
 
     return false;
-  };
+  }, [apiRef]);
 
   const [canScrollMore, setCanScrollMore] = React.useState<boolean>(getCanScrollMore);
 
@@ -109,9 +109,7 @@ function GridScrollAreaContent(props: ScrollAreaProps) {
 
   useEnhancedEffect(() => {
     setCanScrollMore(getCanScrollMore);
-  }, [columnsTotalWidth]);
-
-  const resetTimeout = React.useRef<NodeJS.Timeout | null>(null);
+  }, [columnsTotalWidth, getCanScrollMore]);
 
   const handleDragOver = useEventCallback((event: React.PointerEvent<HTMLDivElement>) => {
     let offset: number;

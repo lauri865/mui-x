@@ -14,9 +14,9 @@ export function AISearchTrigger(props: ButtonHTMLAttributes<HTMLButtonElement>) 
   const [open, setOpen] = useState<boolean>();
 
   return (
-    <>
+    <React.Fragment>
       <button {...props} onClick={() => setOpen(true)} />
       {open !== undefined ? <Dialog open={open} onOpenChange={setOpen} /> : null}
-    </>
+    </React.Fragment>
   );
 }

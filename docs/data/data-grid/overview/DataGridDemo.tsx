@@ -49,7 +49,7 @@ const rows = [
   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
 ];
 
-let index = rows.length;
+const index = rows.length;
 
 const detailPanel = (row) => {
   return <div style={{ height: 100, width: 600 }}>{row.id}</div>;

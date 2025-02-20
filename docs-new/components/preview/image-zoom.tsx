@@ -1,6 +1,6 @@
-import BannerImage from '@/public/banner.png';
 import { ImageZoom } from 'fumadocs-ui/components/image-zoom';
 import type { ReactNode } from 'react';
+import BannerImage from '@/public/banner.png';
 
 export default function Preview(): ReactNode {
   return (

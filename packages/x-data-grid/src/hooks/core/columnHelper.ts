@@ -1,11 +1,17 @@
-import { GridInitialState } from '../..';
-import { getGridDefaultColumnTypes, GRID_CHECKBOX_SELECTION_COL_DEF } from '../../colDef';
-import { GridBaseColDef } from '../../internals';
-import { GridActionsColDef, GridColDef, GridSingleSelectColDef } from '../../models';
+import { GRID_CHECKBOX_SELECTION_COL_DEF } from '../../colDef/gridCheckboxSelectionColDef';
+import { getGridDefaultColumnTypes } from '../../colDef/gridDefaultColumnTypes';
+import {
+  GridActionsColDef,
+  GridBaseColDef,
+  GridColDef,
+  GridSingleSelectColDef,
+} from '../../models/colDef/gridColDef';
 import { GridValidRowModel } from '../../models/gridRows';
-import { GridPinnedColumnPosition } from '../features';
+import { GridInitialStateCommunity as GridInitialState } from '../../models/gridStateCommunity';
+import { get } from '../features/columns/get';
+import { GridPinnedColumnPosition } from '../features/columns/gridColumnsInterfaces';
 
-const defaultColDef = {
+export const defaultColDef = {
   ...getGridDefaultColumnTypes(),
   checkboxSelection: GRID_CHECKBOX_SELECTION_COL_DEF,
 };
@@ -13,7 +19,7 @@ const defaultColDef = {
 type DefaultColumnTypes<R extends GridValidRowModel> = {
   string: GridBaseColDef<R>;
   number: GridBaseColDef<R>;
-  date: GridBaseColDef<R>;
+  date: GridBaseColDef<R, Date, any>;
   dateString: GridBaseColDef<R>;
   dateTime: GridBaseColDef<R>;
   boolean: GridBaseColDef<R>;
@@ -24,7 +30,7 @@ type DefaultColumnTypes<R extends GridValidRowModel> = {
   checkboxSelection: Omit<GridBaseColDef<R>, 'field'>;
 };
 
-export type DotSeparatedKeys<T> = T extends object
+type DotSeparatedKeys<T> = T extends object
   ? {
       [K in Exclude<keyof T, keyof any[]> & string]: T[K] extends object
         ? K | `${K}.${DotSeparatedKeys<T[K]>}`
@@ -40,13 +46,16 @@ type AdditionalProps = {
   aggregation?: string;
 };
 
+type Field<ColDef, R extends GridValidRowModel> = 'field' extends keyof ColDef
+  ? { field: DotSeparatedKeys<R> }
+  : {};
+
 // New helper type merging default and custom types.
 type DefaultHelper<R extends GridValidRowModel> = {
   [K in DefaultColumnType<R>]: (
     colDef: Omit<Partial<DefaultColumnTypes<R>[K]>, 'field'> &
-      AdditionalProps & {
-        field: DotSeparatedKeys<R>;
-      },
+      AdditionalProps &
+      Field<DefaultColumnTypes<R>[K], R>,
   ) => GridColDef;
 };
 
@@ -58,21 +67,22 @@ type CustomHelper<
   [K in keyof C]: C[K] extends { extends: infer U extends DefaultColumnType<R> }
     ? (
         colDef: Omit<Partial<DefaultColumnTypes<R>[U]>, 'field'> &
-          AdditionalProps & {
-            field: DotSeparatedKeys<R>;
-          },
+          AdditionalProps &
+          Field<DefaultColumnTypes<R>[U], R>,
       ) => GridColDef
     : (
-        colDef: Omit<Partial<GridColDef<R>>, 'field'> &
-          AdditionalProps & {
-            field: DotSeparatedKeys<R>;
-          },
+        colDef: Omit<Partial<GridColDef<R, any, any, C[K]['renderCellProps']>>, 'field'> &
+          AdditionalProps &
+          Field<C[K], R>,
       ) => GridColDef;
 };
 
 export function createColumnHelper<
   R extends GridValidRowModel,
-  C extends Record<string, Partial<GridColDef<R>> & { extends?: DefaultColumnType<R> }>,
+  C extends Record<
+    string,
+    Partial<GridColDef<R, any, any, any>> & { extends?: DefaultColumnType<R> }
+  >,
 >(customColumnTypes: C = {} as C) {
   // Combine default and custom helpers.
   const helper = {} as Exclude<DefaultHelper<R>, keyof C> & CustomHelper<R, C>;
@@ -80,6 +90,8 @@ export function createColumnHelper<
   // Build helper with a method for each default column type.
   (Object.keys(defaultColDef) as DefaultColumnType<R>[]).forEach((type) => {
     helper[type] = (colDef) => ({
+      // satisfy the compiler
+      field: '',
       ...defaultColDef[type],
       ...colDef,
     });
@@ -88,6 +100,8 @@ export function createColumnHelper<
   for (const type in customColumnTypes) {
     const { extends: baseType, ...customType } = customColumnTypes[type];
     helper[type as keyof DefaultColumnTypes<R>] = (colDef) => ({
+      // satisfy the compiler
+      field: '',
       ...(baseType && defaultColDef[baseType]),
       ...customType,
       ...colDef,
@@ -146,16 +160,100 @@ export function createColumnHelper<
         initialState,
       };
     },
+    inferFromData: <Row extends GridValidRowModel>(
+      data: Row[],
+      options?: {
+        skipFields?: Array<keyof Row>;
+        staticTypes?: Record<keyof Row, keyof typeof helper>;
+        rowSampleSize?: number;
+        maxDepth?: number;
+        maxColumnWidth?: number;
+        defaultColumnWidth?: number;
+        minColumnWidth?: number;
+      },
+    ) => {
+      const columnNames = new Set<string>();
+      const columnType = new Map<string, keyof typeof helper>();
+      const columnWidths = new Map<string, number>();
+      const columns: Partial<GridColDef>[] = [];
+      const rowSampleSize = options?.rowSampleSize ?? 10;
+      const maxDepth = options?.maxDepth ?? 3;
+      const maxColumnWidth = options?.maxColumnWidth ?? 300;
+      const defaultColumnWidth = options?.defaultColumnWidth ?? 100;
+      const minColumnWidth = options?.minColumnWidth ?? 50;
+
+      const traverseRow = (row: Row, path: string[] = [], depth = 1) => {
+        Object.keys(row).forEach((field) => {
+          if (!options?.skipFields?.includes(field as keyof Row)) {
+            const currentPath = [...path, field];
+            const currentPathString = currentPath.join('.');
+            const value = get(row, currentPathString);
+
+            const isPureObject =
+              value &&
+              typeof value === 'object' &&
+              !Array.isArray(value) &&
+              !(value instanceof Date);
+
+            if (isPureObject) {
+              if (depth < maxDepth) {
+                traverseRow(value, currentPath, depth + 1);
+              }
+            } else {
+              if (typeof value === 'number') {
+                columnType.set(currentPathString, 'number');
+              } else if (value instanceof Date) {
+                columnType.set(currentPathString, 'date');
+              } else if (typeof value === 'boolean') {
+                columnType.set(currentPathString, 'boolean');
+              } else if (Array.isArray(value)) {
+                columnType.set(currentPathString, 'array');
+              } else if (value && new Date(value).toString() !== 'Invalid Date') {
+                columnType.set(currentPathString, 'dateString');
+              }
+
+              const currentWidth = Math.min(maxColumnWidth, String(value).length * 7);
+              const existingWidth = columnWidths.get(currentPathString);
+              if (
+                existingWidth == null ||
+                (currentWidth > existingWidth && currentWidth < maxColumnWidth)
+              ) {
+                columnWidths.set(currentPathString, currentWidth);
+              }
+
+              columnNames.add(currentPathString);
+            }
+          }
+        });
+      };
+
+      data.slice(0, rowSampleSize).forEach((row) => {
+        traverseRow(row, [], 1);
+      });
+
+      columnNames.forEach((field) => {
+        const type = columnType.get(field) ?? ('string' as keyof typeof helper);
+        columns.push(
+          helper[type]({
+            field: field as any,
+            headerName: humanize(field),
+            width: Math.max(
+              minColumnWidth,
+              Math.min(maxColumnWidth, columnWidths.get(field) ?? defaultColumnWidth),
+            ),
+          }),
+        );
+      });
+
+      return columns;
+    },
   };
 }
 
 export const columnHelper = createColumnHelper({
   multiSelect: {
-    extends: 'actions',
+    field: 'tags',
     type: 'array',
-  },
-  test: {
-    extends: 'actions',
   },
 });
 
@@ -169,21 +267,11 @@ type Row = {
   };
 };
 
-type S = DotSeparatedKeys<Row>; // "name" | "tags" | "actions" | "test" | "person" | "person.name"
-const props = columnHelper.createColumns<Row>((c) => [
-  c.string({
-    field: 'name',
-    headerName: 'Name',
-  }),
-  c.checkboxSelection({
-    field: 'name',
-    headerName: 'Checkbox',
-  }),
-  c.multiSelect({ field: 'name', headerName: 'Tags' }),
-  c.actions({ field: 'name', headerName: 'Actions', getActions: (params) => [] }),
-  c.test({ field: 'actions', getActions: (params) => [] }),
-  // ...other columns...
-]);
+export function createCustomColDef<RenderCellProps = never>(
+  colDef: Partial<GridColDef<any, any, any, RenderCellProps>>,
+) {
+  return colDef;
+}
 
 function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();

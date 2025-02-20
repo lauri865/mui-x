@@ -1,8 +1,8 @@
 'use client';
 
-import { cn } from '@/lib/cn';
 import { useParams } from 'next/navigation';
 import { type ReactNode } from 'react';
+import { cn } from '@/lib/cn';
 
 export function Body({ children }: { children: ReactNode }): React.ReactElement {
   const mode = useMode();
@@ -17,8 +17,7 @@ export function useMode(): string | undefined {
 
 export function TWGridIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <>
-      <svg
+    <svg
         width="24"
         height="24"
         viewBox="0 0 24 24"
@@ -53,6 +52,5 @@ export function TWGridIcon(props: React.SVGProps<SVGSVGElement>) {
           />
         </g>
       </svg>
-    </>
   );
 }

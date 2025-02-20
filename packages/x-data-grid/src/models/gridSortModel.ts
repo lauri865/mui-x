@@ -1,4 +1,4 @@
-import { GridApiCommon } from './api';
+import { GridApiCommunity } from "./api/gridApiCommunity";
 import { GridRowId, GridTreeNode } from './gridRows';
 
 export type GridSortDirection = 'asc' | 'desc' | null | undefined;
@@ -8,7 +8,7 @@ export interface GridSortCellParams<V = any> {
   field: string;
   value: V;
   rowNode: GridTreeNode;
-  api: GridApiCommon;
+  api: GridApiCommunity;
 }
 
 /**

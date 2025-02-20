@@ -1,9 +1,9 @@
-import { Body } from '@/app/layout.client';
-import { baseUrl, createMetadata } from '@/lib/metadata';
 import { GeistMono } from 'geist/font/mono';
 import { GeistSans } from 'geist/font/sans';
 import type { Viewport } from 'next';
 import type { ReactNode } from 'react';
+import { baseUrl, createMetadata } from '@/lib/metadata';
+import { Body } from '@/app/layout.client';
 import './global.css';
 import { Provider } from './provider';
 

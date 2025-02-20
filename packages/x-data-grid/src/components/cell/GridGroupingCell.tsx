@@ -3,9 +3,10 @@ import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import clsx from 'clsx';
 import * as React from 'react';
+import { gridFilteredChildrenCountLookupSelector } from '../../hooks/features/filter/gridFilterSelector';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-import { gridFilteredChildrenCountLookupSelector, useGridSelector } from '../../internals';
+import { useGridSelector } from '../../hooks/utils/useGridSelector';
 import type { GridRenderCellParams } from '../../models/params/gridCellParams';
 
 export const GridGroupingCell = forwardRef<HTMLInputElement, GridRenderCellParams>(
@@ -36,13 +37,13 @@ export const GridGroupingCell = forwardRef<HTMLInputElement, GridRenderCellParam
 
     if (rowNode.type === 'footer') {
       /* return <div className="total font-medium tracking-wide">Total</div>; */
-      return <>&nbsp;</>;
+      return <React.Fragment>&nbsp;</React.Fragment>;
     }
 
     if (rowNode.type === 'leaf') {
       // don't render leaves
       // TODO: maybe we want to allow it in the future
-      return <>&nbsp;</>;
+      return <React.Fragment>&nbsp;</React.Fragment>;
     }
 
     useEnhancedEffect(() => {
@@ -80,7 +81,7 @@ export const GridGroupingCell = forwardRef<HTMLInputElement, GridRenderCellParam
     }
 
     return (
-      <>
+      <React.Fragment>
         <rootProps.slots.baseIconButton
           tabIndex={hasFocus ? 0 : -1}
           aria-label={label}
@@ -108,7 +109,7 @@ export const GridGroupingCell = forwardRef<HTMLInputElement, GridRenderCellParam
         </rootProps.slots.baseIconButton>
         <span className="grouping-label">{value}</span>{' '}
         <Badge>{childrenCount[id] ?? rowNode.children.length}</Badge>
-      </>
+      </React.Fragment>
     );
   },
 );

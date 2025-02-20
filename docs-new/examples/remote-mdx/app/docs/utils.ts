@@ -25,7 +25,7 @@ export async function getPage(slugs: string[] = []): Promise<
     if (stats && stats.isDirectory()) {
       file = path.join(file, 'index.mdx');
     } else {
-      file = file + '.mdx';
+      file += '.mdx';
     }
 
     return {
@@ -50,7 +50,7 @@ export async function getPages(): Promise<Page[]> {
     const last = slugs[slugs.length - 1];
 
     slugs[slugs.length - 1] = last.slice(0, -path.extname(last).length);
-    if (slugs[slugs.length - 1] === 'index') slugs.pop();
+    if (slugs[slugs.length - 1] === 'index') {slugs.pop();}
 
     return {
       path: file,

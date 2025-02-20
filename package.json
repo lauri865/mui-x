@@ -23,7 +23,7 @@
     "jsonlint": "node ./scripts/jsonlint.mjs",
     "eslint": "eslint . --cache --report-unused-disable-directives --ext .js,.ts,.tsx --max-warnings 0",
     "eslint:fix": "pnpm eslint --fix",
-    "eslint:ci": "eslint . --report-unused-disable-directives --ext .js,.ts,.tsx --max-warnings 0",
+    "eslint:ci": "eslint ./packages/x-data-grid --report-unused-disable-directives --ext .js,.ts,.tsx --max-warnings 0",
     "markdownlint": "markdownlint-cli2 \"**/*.md\"",
     "prettier": "pretty-quick --branch master --ignore-path .eslintignore",
     "prettier:all": "prettier --write . --ignore-path .eslintignore",

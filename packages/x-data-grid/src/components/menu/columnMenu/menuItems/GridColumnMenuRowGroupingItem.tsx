@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD } from '../../../../colDef';
 import { gridRowTreeSelector } from '../../../../hooks';
 import { gridFilteredRowGroupingModel } from '../../../../hooks/features/rowGrouping/rowGroupingSelector';
@@ -24,7 +25,7 @@ function GridColumnRowGroupingItem(props: GridColumnMenuItemProps) {
       (node) => node.type === 'group' && node.depth >= 0 && node.childrenExpanded,
     );
     return (
-      <>
+      <React.Fragment>
         <DropdownMenu.Sub>
           <DropdownMenu.SubTrigger>
             <rootProps.slots.groupExpandIcon />
@@ -69,7 +70,7 @@ function GridColumnRowGroupingItem(props: GridColumnMenuItemProps) {
             {apiRef.current.getLocaleText('unGroupAll')}
           </DropdownMenu.Item>
         )}
-      </>
+      </React.Fragment>
     );
   }
 

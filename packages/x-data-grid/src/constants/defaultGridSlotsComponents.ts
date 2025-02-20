@@ -8,7 +8,6 @@ import {
   GridLoadingOverlay,
   GridNoRowsOverlay,
   GridPagination,
-  GridPanel,
   GridRow,
   GridRowCount,
   GridSkeletonCell,
@@ -44,6 +43,5 @@ export const DATA_GRID_DEFAULT_SLOTS_COMPONENTS: GridSlotsComponent = {
   filterPanel: GridFilterPanel,
   columnsPanel: GridColumnsPanel,
   columnsManagement: GridColumnsManagement,
-  panel: GridPanel,
   row: GridRow,
 };

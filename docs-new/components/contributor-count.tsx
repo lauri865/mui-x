@@ -1,7 +1,7 @@
-import { cn } from '@/lib/cn';
-import { fetchContributors } from '@/lib/get-contributors';
 import Image from 'next/image';
 import type { HTMLAttributes } from 'react';
+import { cn } from '@/lib/cn';
+import { fetchContributors } from '@/lib/get-contributors';
 
 export interface ContributorCounterProps extends HTMLAttributes<HTMLDivElement> {
   repoOwner: string;

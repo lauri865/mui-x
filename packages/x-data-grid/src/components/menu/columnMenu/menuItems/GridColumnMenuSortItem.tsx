@@ -7,7 +7,7 @@ import { GridSortDirection } from '../../../../models/gridSortModel';
 import { GridColumnMenuItemProps } from '../GridColumnMenuItemProps';
 
 function GridColumnMenuSortItem(props: GridColumnMenuItemProps) {
-  const { colDef, onClick } = props;
+  const { colDef } = props;
   const apiRef = useGridApiContext();
   const sortModel = useGridSelector(apiRef, gridSortModelSelector);
   const rootProps = useGridRootProps();
@@ -30,7 +30,7 @@ function GridColumnMenuSortItem(props: GridColumnMenuItemProps) {
         (direction === sortDirection ? null : direction) as GridSortDirection,
       );
     },
-    [apiRef, colDef, onClick, sortDirection],
+    [apiRef, colDef, sortDirection],
   );
 
   if (
@@ -50,34 +50,32 @@ function GridColumnMenuSortItem(props: GridColumnMenuItemProps) {
   const DropdownMenu = rootProps.slots.baseDropdownMenu;
 
   return (
-    <React.Fragment>
-      <DropdownMenu.Sub>
-        <DropdownMenu.SubTrigger>
-          <rootProps.slots.groupExpandIcon />
-          {apiRef.current.getLocaleText('columnHeaderSortIconLabel')}
-        </DropdownMenu.SubTrigger>
-        <DropdownMenu.SubContent>
-          {sortingOrder.includes('asc') && sortDirection !== 'asc' ? (
-            <DropdownMenu.Item onSelect={onSortMenuItemClick} data-value="asc" defaultChecked>
-              <rootProps.slots.columnMenuSortAscendingIcon />
-              {getLabel('columnMenuSortAsc')}
-            </DropdownMenu.Item>
-          ) : null}
-          {sortingOrder.includes('desc') && sortDirection !== 'desc' ? (
-            <DropdownMenu.Item onSelect={onSortMenuItemClick} data-value="desc">
-              <rootProps.slots.columnMenuSortDescendingIcon />
-              {getLabel('columnMenuSortDesc')}
-            </DropdownMenu.Item>
-          ) : null}
-          {sortingOrder.includes(null) && sortDirection != null ? (
-            <DropdownMenu.Item onSelect={onSortMenuItemClick}>
-              <rootProps.slots.filterPanelDeleteIcon />
-              {apiRef.current.getLocaleText('columnMenuUnsort')}
-            </DropdownMenu.Item>
-          ) : null}
-        </DropdownMenu.SubContent>
-      </DropdownMenu.Sub>
-    </React.Fragment>
+    <DropdownMenu.Sub>
+      <DropdownMenu.SubTrigger>
+        <rootProps.slots.groupExpandIcon />
+        {apiRef.current.getLocaleText('columnHeaderSortIconLabel')}
+      </DropdownMenu.SubTrigger>
+      <DropdownMenu.SubContent>
+        {sortingOrder.includes('asc') && sortDirection !== 'asc' ? (
+          <DropdownMenu.Item onSelect={onSortMenuItemClick} data-value="asc" defaultChecked>
+            <rootProps.slots.columnMenuSortAscendingIcon />
+            {getLabel('columnMenuSortAsc')}
+          </DropdownMenu.Item>
+        ) : null}
+        {sortingOrder.includes('desc') && sortDirection !== 'desc' ? (
+          <DropdownMenu.Item onSelect={onSortMenuItemClick} data-value="desc">
+            <rootProps.slots.columnMenuSortDescendingIcon />
+            {getLabel('columnMenuSortDesc')}
+          </DropdownMenu.Item>
+        ) : null}
+        {sortingOrder.includes(null) && sortDirection != null ? (
+          <DropdownMenu.Item onSelect={onSortMenuItemClick}>
+            <rootProps.slots.filterPanelDeleteIcon />
+            {apiRef.current.getLocaleText('columnMenuUnsort')}
+          </DropdownMenu.Item>
+        ) : null}
+      </DropdownMenu.SubContent>
+    </DropdownMenu.Sub>
   );
 }
 

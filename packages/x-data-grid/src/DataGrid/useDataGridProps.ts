@@ -66,7 +66,7 @@ export const useDataGridProps = <R extends GridValidRowModel>(inProps: DataGridP
       ...injectDefaultProps,
       localeText,
       slots,
-      signature: 'DataGridPremium',
+      ...DATA_GRID_FORCED_PROPS,
       // @ts-ignore
       ...(themedProps.unstable_dataSource
         ? {

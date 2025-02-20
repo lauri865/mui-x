@@ -1,7 +1,8 @@
 import * as React from 'react';
+
 const createSvgIcon = (path: React.ReactNode, displayName: string) => {
-  return (props: any) => (
-    <svg
+  return function(props: any) {
+  return <svg
       focusable="false"
       viewBox="0 0 24 24"
       aria-hidden="true"
@@ -11,7 +12,7 @@ const createSvgIcon = (path: React.ReactNode, displayName: string) => {
     >
       {path}
     </svg>
-  );
+};
 };
 
 export const GridArrowUpwardIcon = createSvgIcon(

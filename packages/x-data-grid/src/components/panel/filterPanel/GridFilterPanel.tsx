@@ -85,7 +85,7 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
     const applyFilter = apiRef.current.upsertFilterItem;
 
     const getDefaultFilter = React.useCallback((): GridFilterItem | null => {
-      let nextColumnWithOperator = filterableColumns.find((colDef) => colDef.field === field);
+      const nextColumnWithOperator = filterableColumns.find((colDef) => colDef.field === field);
 
       if (!nextColumnWithOperator) {
         return null;
@@ -108,7 +108,7 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
       }
 
       return placeholderFilter.current ? [placeholderFilter.current] : [];
-    }, [filterModel.items, getDefaultFilter]);
+    }, [field, filterModel.items, getDefaultFilter]);
 
     const hasMultipleFilters = items.length > 1;
 
@@ -131,7 +131,7 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
           },
           { readOnlyFilters: [] as GridFilterItem[], validFilters: [] as GridFilterItem[] },
         ),
-      [items, filterableColumnsLookup],
+      [field, items, filterableColumnsLookup],
     );
 
     const applyFilterLogicOperator = React.useCallback(
@@ -153,7 +153,7 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
           { operator: validFilter.conditions.at(-1)!.operator },
         ],
       });
-    }, [apiRef, getNewFilter, items]);
+    }, [apiRef, getNewFilter, items, validFilters]);
 
     const deleteFilter = React.useCallback(
       (item: GridFilterItem) => {
@@ -172,7 +172,7 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
         'removeAllFilterItems',
       );
       return apiRef.current.hideFilterPanel();
-    }, [apiRef, readOnlyFilters, filterModel, validFilters]);
+    }, [apiRef, readOnlyFilters, filterModel]);
 
     const validFilterCount = validFilters.reduce(
       (acc, filter) => acc + filter.conditions.length,
@@ -180,13 +180,13 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
     );
 
     React.useEffect(() => {
-      if (validFilters.length > 0) {
+      if (validFilterCount > 0) {
         lastFilterRef.current?.focus?.();
       }
     }, [validFilterCount]);
 
     return (
-      <>
+      <div ref={ref}>
         <div className={clsx('overflow-auto max-h-[400px]')}>
           {readOnlyFilters.map((filter) =>
             filter.conditions.map((item, index) => (
@@ -282,7 +282,7 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
             ) : null}
           </GridPanelFooter>
         ) : null}
-      </>
+      </div>
     );
   },
 );

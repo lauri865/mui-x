@@ -1,9 +1,9 @@
 'use client';
 
-import { useMode } from '@/app/layout.client';
 import { OramaClient } from '@oramacloud/client';
 import type { SharedProps } from 'fumadocs-ui/components/dialog/search';
 import SearchDialog from 'fumadocs-ui/components/dialog/search-orama';
+import { useMode } from '@/app/layout.client';
 
 const client = new OramaClient({
   endpoint: 'https://cloud.orama.run/v1/indexes/docs-fk97oe',

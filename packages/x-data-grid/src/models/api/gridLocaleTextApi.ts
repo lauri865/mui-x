@@ -212,7 +212,7 @@ export interface GridLocaleText {
   paginationPreviousPage: string;
   paginationNextPage: string;
   // Used core components translation keys
-  //MuiTablePagination: MuiTablePaginationLocalizedProps;
+  // MuiTablePagination: MuiTablePaginationLocalizedProps;
 }
 
 export type GridTranslationKeys = keyof GridLocaleText;

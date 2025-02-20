@@ -47,7 +47,7 @@ export const GRID_GROUPING_COLUMN_COL_DEF: GridColDef = {
       };
     });
 
-    for (let i = 0; i < sortComparators.length; i++) {
+    for (let i = 0; i < sortComparators.length; i += 1) {
       const col = sortComparators[i];
       const comparator = col.comparator;
       if (!comparator) {

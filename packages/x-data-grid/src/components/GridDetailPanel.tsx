@@ -13,7 +13,7 @@ export interface GridDetailPanelsProps {
   borderBottom?: boolean;
 }
 
-const GridDetailPanelImpl = (props: GridDetailPanelsProps) => {
+function GridDetailPanelImpl(props: GridDetailPanelsProps) {
   const apiRef = useGridPrivateApiContext();
   const [height, setHeight] = React.useState<number>(0);
   const [mode, setMode] = React.useState<'sticky' | 'static'>('sticky');
@@ -63,7 +63,6 @@ const GridDetailPanelImpl = (props: GridDetailPanelsProps) => {
         const dimensions = gridDimensionsSelector(apiRef.current.state);
         const containerWidth = dimensions.viewportInnerSize.width;
         const mode = containerWidth >= contentWidth ? 'sticky' : 'static';
-        console.log('contentWidth', contentWidth, 'containerWidth', containerWidth, 'mode', mode);
         setMode(mode);
       });
       observer.observe(node);
@@ -104,7 +103,7 @@ const GridDetailPanelImpl = (props: GridDetailPanelsProps) => {
         height: Math.max(borderHeight + 1, height),
         opacity: height === 0 ? 0 : 1,
         transitionDuration:
-          enableTransition.current && height > 0 ? Math.min(0.5, height / 500) + 's' : undefined,
+          enableTransition.current && height > 0 ? `${Math.min(0.5, height / 500)}s` : undefined,
       }}
     >
       <div className={clsx(classes.variants.content)} ref={handleRef}>
@@ -114,6 +113,6 @@ const GridDetailPanelImpl = (props: GridDetailPanelsProps) => {
       </div>
     </div>
   );
-};
+}
 
 export const GridDetailPanel = fastMemo(GridDetailPanelImpl);

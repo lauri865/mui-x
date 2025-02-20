@@ -1,5 +1,6 @@
 import type { GridColumnTypesRecord } from '../models/colDef/gridColumnTypesRecord';
 import { GRID_ACTIONS_COL_DEF, GRID_ACTIONS_COLUMN_TYPE } from './gridActionsColDef';
+import { GRID_ARRAY_COL_DEF } from './gridArrayColDef';
 import { GRID_BOOLEAN_COL_DEF } from './gridBooleanColDef';
 import { GRID_DATE_COL_DEF, GRID_DATE_STR_COL_DEF, GRID_DATETIME_COL_DEF } from './gridDateColDef';
 import { GRID_NUMERIC_COL_DEF } from './gridNumericColDef';
@@ -18,7 +19,7 @@ export const getGridDefaultColumnTypes = () => {
     singleSelect: GRID_SINGLE_SELECT_COL_DEF,
     [GRID_ACTIONS_COLUMN_TYPE]: GRID_ACTIONS_COL_DEF,
     custom: GRID_STRING_COL_DEF,
-    array: GRID_STRING_COL_DEF,
+    array: GRID_ARRAY_COL_DEF,
   };
 
   return nativeColumnTypes;

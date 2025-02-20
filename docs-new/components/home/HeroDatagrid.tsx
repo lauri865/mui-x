@@ -1,8 +1,8 @@
 'use client';
 import {
+  columnHelper,
   DataGrid,
   GRID_DETAIL_PANEL_TOGGLE_FIELD,
-  GridColDef,
   useGridApiRef,
 } from '@mui/x-data-grid';
 import { GRID_ROOT_FOOTER_ID } from '@mui/x-data-grid/hooks/features/aggregation/useGridAggregation';
@@ -10,39 +10,41 @@ import * as React from 'react';
 import { cn } from '../../lib/cn';
 import { GlowingEffect } from './glowing-effect';
 
-const columns: GridColDef<(typeof rows)[number]>[] = [
-  { field: 'id', headerName: 'ID', width: 90 },
-  {
+const { columns } = columnHelper.createColumns((c) => [
+  c.string({
+    field: 'id',
+    headerName: 'ID',
+    width: 90,
+  }),
+  c.string({
     field: 'firstName',
     headerName: 'First name',
     width: 150,
     editable: true,
-  },
-  {
+  }),
+  c.string({
     field: 'lastName',
     headerName: 'Last name',
     width: 150,
     editable: true,
     renderCell: (params) => {
       return (
-        <>
-          <span className="size-2 bg-blue-600 rounded-full"></span>
+        <React.Fragment>
+          <span className="size-2 bg-blue-600 rounded-full" />
           {params.value}
-        </>
+        </React.Fragment>
       );
     },
-  },
-  {
+  }),
+  c.number({
     field: 'age',
     headerName: 'Age',
-    type: 'number',
     width: 110,
     editable: true,
-  },
-  {
+  }),
+  c.number({
     field: 'fakeAge',
     headerName: 'Age',
-    type: 'number',
     width: 110,
     editable: true,
     valueGetter: (value, row) => row.age,
@@ -52,33 +54,31 @@ const columns: GridColDef<(typeof rows)[number]>[] = [
       }
       return `${Math.round(value)} years`;
     },
-  },
-  {
+  }),
+  c.string({
     field: 'fullName',
     headerName: 'Full name',
     description: 'This column has a value getter and is not sortable.',
     sortable: false,
     width: 160,
     valueGetter: (value, row) => `${row.firstName || ''} ${row.lastName || ''}`,
-  },
-  {
+  }),
+  c.string({
     field: 'nested.description',
     headerName: 'Description',
     editable: true,
-  },
-  {
+  }),
+  c.date({
     field: 'updated_at',
     headerName: 'Updated At',
-    type: 'date',
     editable: true,
-  },
-  {
+  }),
+  c.boolean({
     field: 'is_filled',
     headerName: 'Is Filled',
-    type: 'boolean',
     editable: true,
-  },
-  {
+  }),
+  c.singleSelect({
     field: 'gender',
     type: 'string',
     editCell: 'singleSelect',
@@ -86,8 +86,8 @@ const columns: GridColDef<(typeof rows)[number]>[] = [
       valueOptions: ['Male', 'Female'],
     },
     editable: true,
-  },
-];
+  }),
+]);
 
 const rows = [
   {
@@ -110,7 +110,7 @@ const rows = [
   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
 ];
 
-let index = rows.length;
+const index = rows.length;
 
 const detailPanel = (row) => {
   return (
@@ -124,16 +124,24 @@ const getRowHeight = (params) => {
   }
 };
 
-export const HeroDataGrid = () => {
+export function HeroDataGrid() {
   const apiRef = useGridApiRef();
   const [data, setData] = React.useState(rows);
+  const [columnsState, setColumns] = React.useState(columns);
   const [isLoading, setIsLoading] = React.useState(false);
 
   React.useEffect(() => {
-    //apiRef.current?.showPreferences(GridPreferencePanelsValue.columns);
+    // apiRef.current?.showPreferences(GridPreferencePanelsValue.columns);
     requestAnimationFrame(() => {
       document.activeElement?.blur();
     });
+  }, []);
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setColumns((cols) => [{ ...cols[0], width: 100 + Math.random() * 100 }, ...cols.slice(1)]);
+    }, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -146,13 +154,14 @@ export const HeroDataGrid = () => {
     >
       <GlowingEffect
         spread={60}
-        glow={true}
+        glow
         disabled={false}
         proximity={64}
         inactiveZone={0.01}
         className="hidden dark:flex"
       />
       <DataGrid
+        dependencies={[columnsState]}
         meta={{
           test: 123,
         }}
@@ -189,7 +198,7 @@ export const HeroDataGrid = () => {
         }}
         onSortModelChange={(model, detail) => {
           detail.api.scrollToIndexes({ rowIndex: 0 });
-          //detail.api.setRows([]);
+          // detail.api.setRows([]);
         }}
         pageSizeOptions={[5]}
         // checkboxSelection
@@ -218,4 +227,4 @@ export const HeroDataGrid = () => {
       />
     </div>
   );
-};
+}

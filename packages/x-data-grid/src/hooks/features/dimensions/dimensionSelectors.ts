@@ -1,4 +1,4 @@
-import { GridStateCommunity } from '../../models/gridStateCommunity';
+import { GridStateCommunity } from '../../../models/gridStateCommunity';
 
 export const gridRowHeightSelector = (state: GridStateCommunity) => state.dimensions.rowHeight;
 

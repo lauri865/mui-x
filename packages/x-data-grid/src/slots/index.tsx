@@ -82,7 +82,9 @@ const iconSlots: GridIconSlotsComponent = {
   booleanCellFalseIcon: icons.false,
 };
 
-const Missing = () => null;
+function Missing() {
+  return null
+}
 const baseSlots: GridBaseSlots = {
   baseBadge: (props: React.HTMLAttributes<HTMLSpanElement>) => (
     <span

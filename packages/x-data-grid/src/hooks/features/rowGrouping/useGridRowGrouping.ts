@@ -233,7 +233,7 @@ export const useGridRowGroupingPreProcessors = (
         apiRef.current.state,
       );
       const groupBy = gridFilteredRowGroupingModel(apiRef);
-      let rowIds =
+      const rowIds =
         params.updates.type === 'full'
           ? params.updates.rows
           : Object.values(params.dataRowIdToModelLookup).reduce((acc: GridRowId[], row) => {
@@ -255,7 +255,9 @@ export const useGridRowGroupingPreProcessors = (
 
       for (const id of rowIds) {
         const row = params.dataRowIdToModelLookup[id];
-        if (!row) continue;
+        if (!row) {
+          continue;
+        }
 
         let depth = 0;
         let parent = GRID_ROOT_GROUP_ID;
@@ -309,7 +311,7 @@ export const useGridRowGroupingPreProcessors = (
           }
 
           parent = groupId;
-          depth++;
+          depth += 1;
         }
 
         // Add the actual row as a leaf
@@ -425,13 +427,15 @@ export const useGridRowGroupingPreProcessors = (
 
       function addAncestors(nodeId: GridRowId) {
         const ancestors: GridRowId[] = [];
-        let node = tree[nodeId];
-        if (!node) return;
+        const node = tree[nodeId];
+        if (!node) {
+          return;
+        }
 
         // Traverse up the tree and collect groups
         let parentId = node.parent;
         while (parentId && !seenGroups.has(parentId)) {
-          let parent = tree[parentId];
+          const parent = tree[parentId];
           if (parent && parent.depth >= 0) {
             ancestors.push(parentId);
             seenGroups.add(parentId);
@@ -449,7 +453,9 @@ export const useGridRowGroupingPreProcessors = (
 
       for (const leafId of sortedChildren) {
         const node = tree[leafId] as GridLeafNode;
-        if (!node) continue;
+        if (!node) {
+          continue;
+        }
 
         const slotIndex = parentSlots.get(node.parent)!;
         if (slotIndex != null) {
@@ -545,7 +551,7 @@ export const useGridRowGroupingPreProcessors = (
             descendantCount += childDescendantCount;
 
             if (result.filteredRowsLookup[childId] !== false) {
-              matchingChildrenCount++;
+              matchingChildrenCount += 1;
             }
           }
 

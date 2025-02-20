@@ -2,6 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import urls from './data.json' assert { type: 'json' };
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 async function downloadImage(url, folder, name) {

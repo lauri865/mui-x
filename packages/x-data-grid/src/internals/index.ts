@@ -187,4 +187,4 @@ export type { Localization } from '../utils/getGridLocalization';
 export * from './constants';
 export * from './utils';
 
-export * from './selectors/dimensionSelectors';
+export * from '../hooks/features/dimensions/dimensionSelectors';

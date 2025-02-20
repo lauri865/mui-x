@@ -1,7 +1,5 @@
 'use client';
 
-import { buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/cn';
 import { TerminalIcon } from 'lucide-react';
 import Link from 'next/link';
 import {
@@ -14,6 +12,8 @@ import {
   type ReactNode,
 } from 'react';
 import scrollIntoView from 'scroll-into-view-if-needed';
+import { cn } from '@/lib/cn';
+import { buttonVariants } from '@/components/ui/button';
 
 export function CreateAppAnimation() {
   const installCmd = 'npm create fumadocs-app';
@@ -49,31 +49,30 @@ export function CreateAppAnimation() {
     lines.push(<span key="space"> </span>);
   }
 
-  if (tick > timeCommandRun)
-    lines.push(
+  if (tick > timeCommandRun) {lines.push(
       <Fragment key="command_response">
         <span className="font-bold">┌ Create Fumadocs App</span>
         <span>│</span>
         {tick > timeCommandRun + 1 && (
-          <>
+          <React.Fragment>
             <span className="font-bold">◇ Project name</span>
             <span>│ my-app</span>
-          </>
+          </React.Fragment>
         )}
         {tick > timeCommandRun + 2 && (
-          <>
+          <React.Fragment>
             <span>│</span>
             <span className="font-bold">◆ Choose a content source</span>
-          </>
+          </React.Fragment>
         )}
         {tick > timeCommandRun + 3 && (
-          <>
+          <React.Fragment>
             <span>│ ● Fumadocs MDX</span>
             <span>│ ○ Content Collections</span>
-          </>
+          </React.Fragment>
         )}
       </Fragment>,
-    );
+    );}
 
   return (
     <div
@@ -138,7 +137,7 @@ export function WhyInteractive(props: {
   ];
 
   useEffect(() => {
-    if (!autoActive) return;
+    if (!autoActive) {return;}
     const timer = setTimeout(() => {
       setActive((prev) => (prev + 1) % items.length);
     }, duration);
@@ -158,7 +157,7 @@ export function WhyInteractive(props: {
           <button
             key={item}
             ref={(element) => {
-              if (!element || i !== active) return;
+              if (!element || i !== active) {return;}
 
               scrollIntoView(element, {
                 behavior: 'smooth',
@@ -174,7 +173,7 @@ export function WhyInteractive(props: {
               i === active && autoActive ? '' : 'max-lg:pb-2.5 lg:pl-3',
             )}
             onClick={() => {
-              if (active === i) setAutoActive((prev) => !prev);
+              if (active === i) {setAutoActive((prev) => !prev);}
               else {
                 setAutoActive(false);
                 setActive(i);

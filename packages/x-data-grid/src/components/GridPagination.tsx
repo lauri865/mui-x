@@ -138,7 +138,7 @@ const GridPagination = forwardRef<HTMLDivElement>(function GridPagination(props,
   return (
     <div className={classes.root} ref={ref}>
       {pageSizeOptions.length > 1 && (
-        <>
+        <React.Fragment>
           <div className="whitespace-nowrap">
             {apiRef.current.getLocaleText('paginationRowsPerPage')}
           </div>
@@ -157,7 +157,7 @@ const GridPagination = forwardRef<HTMLDivElement>(function GridPagination(props,
               ))}
             </Select.Content>
           </Select.Root>
-        </>
+        </React.Fragment>
       )}
       <Select.Root
         value={String(computedPage)}

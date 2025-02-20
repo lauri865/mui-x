@@ -3,7 +3,7 @@ import {
   getValueOptions,
   isSingleSelectColDef,
 } from '../components/panel/filterPanel/filterPanelUtils';
-import { get } from '../hooks/features/columns/gridColumnsUtils';
+import { get } from '../hooks/features/columns/get';
 import { GridSingleSelectColDef, ValueOptions } from '../models/colDef/gridColDef';
 import { isObject } from '../utils/utils';
 import { getGridSingleSelectOperators } from './gridSingleSelectOperators';
@@ -54,7 +54,6 @@ export const GRID_SINGLE_SELECT_COL_DEF: Omit<
     }
 
     if (!isArrayOfObjects(valueOptions)) {
-      console.log('codef', colDef.editCellParams);
       return colDef.editCellParams.getOptionLabel!(value);
     }
 

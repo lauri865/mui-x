@@ -80,7 +80,12 @@ export type GridColSpanFn<R extends GridValidRowModel = GridValidRowModel, V = a
 /**
  * Column Definition base interface.
  */
-export interface GridBaseColDef<R extends GridValidRowModel = GridValidRowModel, V = any, F = V> {
+export interface GridBaseColDef<
+  R extends GridValidRowModel = GridValidRowModel,
+  V = any,
+  F = V,
+  RCP = never,
+> {
   /**
    * The unique identifier of the column. Used to map with [[GridRowModel]] values.
    */
@@ -211,10 +216,12 @@ export interface GridBaseColDef<R extends GridValidRowModel = GridValidRowModel,
   /**
    * Override the component rendered as cell for this column.
    * @template R, V, F
+   * @param props
    * @param {GridRenderCellParams<R, V, F>} params Object containing parameters for the renderer.
    * @returns {React.ReactNode} The element to be rendered.
    */
-  renderCell?: (params: GridRenderCellParams<R, V, F>) => React.ReactNode;
+  renderCell?: (params: GridRenderCellParams<R, V, F>, props?: RCP) => React.ReactNode;
+  renderCellProps?: RCP;
   /**
    * Override the component rendered in edit cell mode for this column.
    * @param {GridRenderEditCellParams} params Object containing parameters for the renderer.
@@ -302,8 +309,8 @@ export interface GridBaseColDef<R extends GridValidRowModel = GridValidRowModel,
  * @demos
  *   - [Special column properties](/x/react-data-grid/column-definition/#special-properties)
  */
-export interface GridActionsColDef<R extends GridValidRowModel = any, V = any, F = V>
-  extends GridBaseColDef<R, V, F> {
+export interface GridActionsColDef<R extends GridValidRowModel = any, V = any, F = V, RCP = never>
+  extends GridBaseColDef<R, V, F, RCP> {
   /**
    * The type of the column.
    * @default 'actions'
@@ -322,8 +329,12 @@ export interface GridActionsColDef<R extends GridValidRowModel = any, V = any, F
  * @demos
  *   - [Special column properties](/x/react-data-grid/column-definition/#special-properties)
  */
-export interface GridSingleSelectColDef<R extends GridValidRowModel = any, V = any, F = V>
-  extends Omit<GridBaseColDef<R, V, F>, 'editCell' | 'editCellParams'> {
+export interface GridSingleSelectColDef<
+  R extends GridValidRowModel = any,
+  V = any,
+  F = V,
+  RCP = never,
+> extends Omit<GridBaseColDef<R, V, F, RCP>, 'editCell' | 'editCellParams'> {
   /**
    * The type of the column.
    * @default 'singleSelect'
@@ -368,10 +379,10 @@ export interface GridSingleSelectColDef<R extends GridValidRowModel = any, V = a
  * @demos
  *   - [Column definition](/x/react-data-grid/column-definition/)
  */
-export type GridColDef<R extends GridValidRowModel = any, V = any, F = V> =
-  | GridBaseColDef<R, V, F>
-  | GridActionsColDef<R, V, F>
-  | GridSingleSelectColDef<R, V, F>;
+export type GridColDef<R extends GridValidRowModel = any, V = any, F = V, RCP = never> =
+  | GridBaseColDef<R, V, F, RCP>
+  | GridActionsColDef<R, V, F, RCP>
+  | GridSingleSelectColDef<R, V, F, RCP>;
 
 /**
  * Column Definition interface used for the list view column.

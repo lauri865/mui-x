@@ -8,6 +8,7 @@ export class Timeout {
   }
 
   currentId: ReturnType<typeof setTimeout> | null = null;
+
   fn: Function | null = null;
 
   /**

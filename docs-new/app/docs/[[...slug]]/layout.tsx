@@ -1,6 +1,6 @@
+import { DocsLayout, type DocsLayoutProps } from 'fumadocs-ui/layouts/docs';
 import { baseOptions, linkItems } from '@/app/layout.config';
 import { source } from '@/lib/source';
-import { DocsLayout, type DocsLayoutProps } from 'fumadocs-ui/layouts/docs';
 import 'katex/dist/katex.min.css';
 import type { ReactNode } from 'react';
 
@@ -12,7 +12,7 @@ const docsOptions: DocsLayoutProps = {
     tabs: {
       transform(option, node) {
         const meta = source.getNodeMeta(node);
-        if (!meta) return option;
+        if (!meta) {return option;}
 
         const color = `var(--${meta.file.dirname}-color, var(--color-fd-foreground))`;
 

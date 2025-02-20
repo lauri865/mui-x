@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
 import useEventCallback from '@mui/utils/useEventCallback';
 import clsx from 'clsx';
 import * as React from 'react';
@@ -11,10 +10,11 @@ import {
   gridColumnVisibilityModelSelector,
   gridPinnedColumnsSelector,
 } from '../../hooks/features/columns/gridColumnsSelector';
+import { createColumnsState } from '../../hooks/features/columns/gridColumnsUtils';
+import { useGridPrivateApiContext } from '../../hooks/utils/useGridPrivateApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { arrayShallowCompare, useGridSelector } from '../../hooks/utils/useGridSelector';
 import { useLazyRef } from '../../hooks/utils/useLazyRef';
-import { createColumnsState, useGridPrivateApiContext } from '../../internals';
 import type { GridColDef } from '../../models/colDef/gridColDef';
 import { TextFieldProps } from '../../models/gridBaseSlots';
 import { checkColumnVisibilityModelsSame, defaultSearchPredicate } from './utils';
@@ -315,19 +315,17 @@ function GridColumnsManagement(props: GridColumnsManagementProps) {
       {!disableShowHideToggle || !disableResetButton ? (
         <div className={classes.variants.footer}>
           {!disableShowHideToggle ? (
-            <>
-              <rootProps.slots.baseInputLabel className={classes.variants.checkboxLabel}>
-                <rootProps.slots.baseCheckbox
-                  disabled={hideableColumns.length === 0}
-                  checked={allHideableColumnsVisible}
-                  onClick={() => toggleAllColumns(!allHideableColumnsVisible)}
-                  name={apiRef.current.getLocaleText('columnsManagementShowHideAllText')}
-                  {...rootProps.slotProps?.baseCheckbox}
-                />
+            <rootProps.slots.baseInputLabel className={classes.variants.checkboxLabel}>
+              <rootProps.slots.baseCheckbox
+                disabled={hideableColumns.length === 0}
+                checked={allHideableColumnsVisible}
+                onClick={() => toggleAllColumns(!allHideableColumnsVisible)}
+                name={apiRef.current.getLocaleText('columnsManagementShowHideAllText')}
+                {...rootProps.slotProps?.baseCheckbox}
+              />
 
-                {apiRef.current.getLocaleText('columnsManagementShowHideAllText')}
-              </rootProps.slots.baseInputLabel>
-            </>
+              {apiRef.current.getLocaleText('columnsManagementShowHideAllText')}
+            </rootProps.slots.baseInputLabel>
           ) : (
             <span />
           )}

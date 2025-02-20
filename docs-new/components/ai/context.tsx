@@ -57,7 +57,7 @@ export function AIProvider({
   const [engine, setEngine] = useState<Engine>();
 
   useEffect(() => {
-    if (!loadEngine || pendingRef.current) return;
+    if (!loadEngine || pendingRef.current) {return;}
     pendingRef.current = true;
     // preload processor
     void import('./markdown-processor');

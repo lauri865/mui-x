@@ -5,18 +5,19 @@ import {
   getGridDefaultColumnTypes,
   GRID_STRING_COL_DEF,
 } from '../../../colDef';
-import { isSingleSelectColDef } from '../../../internals';
+import { isSingleSelectColDef } from '../../../components/panel/filterPanel/filterPanelUtils';
 import { GridColType } from '../../../models';
 import { GridApiCommon } from '../../../models/api/gridApiCommon';
 import { GridApiCommunity, GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
 import { GridColDef, GridStateColDef } from '../../../models/colDef/gridColDef';
-import { GridRowEntry, GridValidRowModel } from '../../../models/gridRows';
+import { GridRowEntry } from '../../../models/gridRows';
 import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { clamp } from '../../../utils/utils';
 import { gridColumnGroupsHeaderMaxDepthSelector } from '../columnGrouping/gridColumnGroupsSelector';
 import { gridDensityFactorSelector } from '../density/densitySelector';
 import type { GridDimensions } from '../dimensions/gridDimensionsApi';
 import { gridHeaderFilteringEnabledSelector } from '../headerFiltering/gridHeaderFilteringSelectors';
+import { get } from './get';
 import {
   GridColumnLookup,
   GridColumnRawLookup,
@@ -434,28 +435,6 @@ export const createColumnsState = ({
     apiRef.current.getRootDimensions?.() ?? undefined,
   );
 };
-
-export function get(obj: GridValidRowModel, path: string) {
-  if (!obj || !path) {
-    return;
-  }
-  if (obj[path] !== undefined) {
-    return obj[path];
-  }
-  const props = path.split('.');
-  let prop: string;
-  while (props.length) {
-    prop = props.shift() as string;
-    if (!obj) {
-      return;
-    }
-    obj = obj[prop];
-    if (obj === undefined) {
-      return;
-    }
-  }
-  return obj;
-}
 
 export function getFirstNonSpannedColumnToRender({
   firstColumnToRender,

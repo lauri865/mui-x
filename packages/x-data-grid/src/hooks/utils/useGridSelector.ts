@@ -52,26 +52,12 @@ export const argsEqual = (prev: any, curr: any) => {
 const createRefs = () =>
   ({ state: null, equals: null, selector: null, args: undefined, subscription: null }) as any;
 
-const EMPTY = [] as unknown[];
-
 type Refs<T> = {
   state: T;
   equals: <U = T>(a: U, b: U) => boolean;
   selector: Selector<any, any, T>;
   args: any;
   subscription: undefined | (() => void);
-};
-
-const emptyGetSnapshot = () => null;
-
-export const useGridConditionalSelector = <Api extends GridApiCommon, Args, T>(
-  apiRef: RefObject<Api>,
-  enabled: boolean = true,
-  selector: Selector<Api, Args, T>,
-  args: Args = undefined as Args,
-  equals: <U = T>(a: U, b: U) => boolean = defaultCompare,
-) => {
-  return useGridSelector(apiRef, selector, args, equals, enabled);
 };
 
 export const useGridSelector = <Api extends GridApiCommon, Args, T>(
@@ -137,4 +123,14 @@ export const useGridSelector = <Api extends GridApiCommon, Args, T>(
   }, [enabled]);
 
   return state;
+};
+
+export const useGridConditionalSelector = <Api extends GridApiCommon, Args, T>(
+  apiRef: RefObject<Api>,
+  enabled: boolean = true,
+  selector: Selector<Api, Args, T>,
+  args: Args = undefined as Args,
+  equals: <U = T>(a: U, b: U) => boolean = defaultCompare,
+) => {
+  return useGridSelector(apiRef, selector, args, equals, enabled);
 };

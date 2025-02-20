@@ -1,9 +1,3 @@
-import { CodeBlock } from '@/components/code-block';
-import ContributorCounter from '@/components/contributor-count';
-import { HeroDataGrid } from '@/components/home/HeroDatagrid';
-import { buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/cn';
-import SourceImage from '@/public/source.png';
 import { cva } from 'class-variance-authority';
 import { File, Files, Folder } from 'fumadocs-ui/components/files';
 import { TypeTable } from 'fumadocs-ui/components/type-table';
@@ -28,6 +22,13 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import type { HTMLAttributes, ReactNode } from 'react';
+import * as React from 'react';
+import SourceImage from '@/public/source.png';
+import { cn } from '@/lib/cn';
+import { buttonVariants } from '@/components/ui/button';
+import { HeroDataGrid } from '@/components/home/HeroDatagrid';
+import ContributorCounter from '@/components/contributor-count';
+import { CodeBlock } from '@/components/code-block';
 import { BackgroundBeams } from '../../components/home/background-beams';
 import ArchImg from './arch.png';
 import { EarthIcon, NetlifyLogo, NextSVG, OpenAPIIcon, VercelLogo } from './icons';
@@ -41,42 +42,40 @@ export default function Page() {
   const gridColor = 'color-mix(in oklab, var(--color-fd-primary) 10%, transparent)';
 
   return (
-    <>
-      <main className="container relative max-w-[1100px] px-2 py-4 z-[2] lg:py-16">
+    <main className="container relative max-w-[1100px] px-2 py-4 z-[2] lg:py-16">
+      <div
+        className="shadow-lg rounded-xl"
+        style={{
+          background:
+            'repeating-linear-gradient(to bottom, transparent, color-mix(in oklab, var(--color-fd-primary) 1%, transparent) 500px, transparent 1000px)',
+        }}
+      >
+        <div className="relative">
+          <Hero />
+        </div>
+        {/* <Feedback /> */}
+        {/* <Introduction /> */}
+        {/* <Architecture /> */}
         <div
-          className="shadow-lg rounded-xl"
+          className="relative overflow-hidden border-x border-t px-8 py-16 sm:py-24"
           style={{
-            background:
-              'repeating-linear-gradient(to bottom, transparent, color-mix(in oklab, var(--color-fd-primary) 1%, transparent) 500px, transparent 1000px)',
+            backgroundImage:
+              'radial-gradient(circle at bottom center, var(--color-fd-secondary), var(--color-fd-background))',
           }}
         >
-          <div className="relative">
-            <Hero />
-          </div>
-          {/* <Feedback /> */}
-          {/* <Introduction /> */}
-          {/* <Architecture /> */}
-          <div
-            className="relative overflow-hidden border-x border-t px-8 py-16 sm:py-24"
-            style={{
-              backgroundImage:
-                'radial-gradient(circle at bottom center, var(--color-fd-secondary), var(--color-fd-background))',
-            }}
-          >
-            <h2 className="bg-gradient-to-b from-fd-primary to-fd-foreground/40 bg-clip-text text-center text-2xl font-semibold text-transparent sm:text-3xl">
-              Loved by users.
-              <br />
-              Built for developers.
-            </h2>
-          </div>
-          <Features />
-          <Highlights />
-          <Why />
-          {/* <Contributing /> */}
-          <End />
+          <h2 className="bg-gradient-to-b from-fd-primary to-fd-foreground/40 bg-clip-text text-center text-2xl font-semibold text-transparent sm:text-3xl">
+            Loved by users.
+            <br />
+            Built for developers.
+          </h2>
         </div>
-      </main>
-    </>
+        <Features />
+        <Highlights />
+        <Why />
+        {/* <Contributing /> */}
+        <End />
+      </div>
+    </main>
   );
 }
 
@@ -403,33 +402,32 @@ function Highlight({
 
 function Hero() {
   return (
-    <>
-      <div className="relative z-[2] flex flex-col overflow-hidden border-x border-t bg-fd-background px-6 pt-12 max-md:text-center md:px-12 md:pt-12 rounded-t-xl">
-        <div className="relative z-0">
-          <BackgroundBeams />
-        </div>
-        <h1 className="mb-4 max-w-[540px] md:text-4xl font-bold text-3xl leading-[1.25]">
-          Blazing Fast React <div className="flex md:hidden" />
-          Data Grid for Tailwind CSS
-        </h1>
-        <p className="mb-8 text-fd-muted-foreground md:max-w-[80%] md:text-xl leading-[1.5]">
-          Build <span className="text-fd-foreground">highly-performant</span> data-centric apps
-          without breaking a sweat or your budget.
-          <br />
-          <span className="text-fd-foreground">Performant</span>,{' '}
-          <span className="text-fd-foreground">Customizable</span> and{' '}
-          <span className="text-fd-foreground">Affordable</span>.
-        </p>
-        <div className="inline-flex items-center gap-2 max-md:mx-auto">
-          <Link
-            href="/docs"
-            className={cn(
-              buttonVariants({ size: 'lg', className: 'rounded-full', variant: 'primary' }),
-            )}
-          >
-            Read the docs
-          </Link>
-          {/* <a
+    <div className="relative z-[2] flex flex-col overflow-hidden border-x border-t bg-fd-background px-6 pt-12 max-md:text-center md:px-12 md:pt-12 rounded-t-xl">
+      <div className="relative z-0">
+        <BackgroundBeams />
+      </div>
+      <h1 className="mb-4 max-w-[540px] md:text-4xl font-bold text-3xl leading-[1.25]">
+        Blazing Fast React <div className="flex md:hidden" />
+        Data Grid for Tailwind CSS
+      </h1>
+      <p className="mb-8 text-fd-muted-foreground md:max-w-[80%] md:text-xl leading-[1.5]">
+        Build <span className="text-fd-foreground">highly-performant</span> data-centric apps
+        without breaking a sweat or your budget.
+        <br />
+        <span className="text-fd-foreground">Performant</span>,{' '}
+        <span className="text-fd-foreground">Customizable</span> and{' '}
+        <span className="text-fd-foreground">Affordable</span>.
+      </p>
+      <div className="inline-flex items-center gap-2 max-md:mx-auto">
+        <Link
+          href="/docs"
+          className={cn(
+            buttonVariants({ size: 'lg', className: 'rounded-full', variant: 'primary' }),
+          )}
+        >
+          Read the docs
+        </Link>
+        {/* <a
             href="/docs/demo"
             className={cn(
               buttonVariants({
@@ -441,34 +439,33 @@ function Hero() {
           >
             Open Demo
           </a> */}
-          <CodeBlock
-            wrapper={{
-              className: 'h-12 leading-none px-3 rounded-full select-all',
-            }}
-            lang="bash"
-            code="pnpm install @twgrid/react"
-          />
-        </div>
-
-        <HeroDataGrid />
-        <div
-          className="absolute inset-0 z-[-1]"
-          style={{
-            backgroundImage: [
-              'radial-gradient(ellipse at top, transparent 80%, color-mix(in oklab, var(--color-fd-primary) 10%, transparent))',
-              'linear-gradient(to bottom, var(--color-fd-background) 80%, transparent)',
-            ].join(', '),
+        <CodeBlock
+          wrapper={{
+            className: 'h-12 leading-none px-3 rounded-full select-all',
           }}
-        />
-        <div
-          className="absolute inset-x-0 top-0 z-[-1] h-200 opacity-30 duration-1000 animate-in fade-in dark:opacity-15"
-          style={{
-            maskImage: 'linear-gradient(to top,transparent,white)',
-            backgroundImage: 'linear-gradient(to right, #4ebfff, transparent, #e92a67)',
-          }}
+          lang="bash"
+          code="pnpm install @twgrid/react"
         />
       </div>
-    </>
+
+      <HeroDataGrid />
+      <div
+        className="absolute inset-0 z-[-1]"
+        style={{
+          backgroundImage: [
+            'radial-gradient(ellipse at top, transparent 80%, color-mix(in oklab, var(--color-fd-primary) 10%, transparent))',
+            'linear-gradient(to bottom, var(--color-fd-background) 80%, transparent)',
+          ].join(', '),
+        }}
+      />
+      <div
+        className="absolute inset-x-0 top-0 z-[-1] h-200 opacity-30 duration-1000 animate-in fade-in dark:opacity-15"
+        style={{
+          maskImage: 'linear-gradient(to top,transparent,white)',
+          backgroundImage: 'linear-gradient(to right, #4ebfff, transparent, #e92a67)',
+        }}
+      />
+    </div>
   );
 }
 
@@ -618,7 +615,7 @@ function Features() {
         subheading="Source Agnostic"
         heading="Your source. Your choice"
         description={
-          <>
+          <React.Fragment>
             <span className="font-medium text-fd-foreground">
               Designed to integrate with any content source:{' '}
             </span>
@@ -626,7 +623,7 @@ function Features() {
               Fumadocs has native support for Content Collections and Fumadocs MDX, and compatible
               with your own CMS.
             </span>
-          </>
+          </React.Fragment>
         }
         className="overflow-hidden"
         style={{

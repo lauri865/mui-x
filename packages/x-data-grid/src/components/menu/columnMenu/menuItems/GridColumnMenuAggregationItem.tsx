@@ -1,5 +1,6 @@
+import * as React from 'react';
+import { useGridPrivateApiContext } from '../../../../hooks/utils/useGridPrivateApiContext';
 import { useGridRootProps } from '../../../../hooks/utils/useGridRootProps';
-import { useGridPrivateApiContext } from '../../../../internals';
 import { GridPrivateApiCommon } from '../../../../models/api/gridApiCommon';
 import { GridColDef } from '../../../../models/colDef/gridColDef';
 import { GridColumnMenuItemProps } from '../GridColumnMenuItemProps';

@@ -31,7 +31,7 @@ export const GridAggregationCell: React.FC<AggregationCellProps> = ({ params, ag
       <slots.baseDropdownMenu.Root
         onOpenChange={(open) => {
           const el = apiRef.current.getCellElement(params.id, params.field);
-          if (!el) return;
+          if (!el) {return;}
           if (open) {
             el.dataset.open = 'true';
           } else {
@@ -59,7 +59,7 @@ export const GridAggregationCell: React.FC<AggregationCellProps> = ({ params, ag
               data-variant="aggregation"
               className={clsx(
                 'opacity-0 group-hover/cell:opacity-100 !px-1.5 !h-7 group-data-[state=open]/menu:opacity-100 shadow-xs',
-                //params.hasFocus && 'opacity-100',
+                // params.hasFocus && 'opacity-100',
               )}
             >
               Aggregate

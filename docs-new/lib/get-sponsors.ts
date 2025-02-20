@@ -21,11 +21,10 @@ export async function getSponsors(login: string, excluded: string[]): Promise<Sp
   }
 }`;
   const headers = new Headers();
-  if (process.env.GITHUB_TOKEN) headers.set('Authorization', `Bearer ${process.env.GITHUB_TOKEN}`);
-  else
-    console.warn(
+  if (process.env.GITHUB_TOKEN) {headers.set('Authorization', `Bearer ${process.env.GITHUB_TOKEN}`);}
+  else {console.warn(
       'Highly suggested to add a `GITHUB_TOKEN` environment variable to avoid rate limits.',
-    );
+    );}
 
   const res = await fetch('https://api.github.com/graphql', {
     method: 'POST',
@@ -33,7 +32,7 @@ export async function getSponsors(login: string, excluded: string[]): Promise<Sp
     headers,
     next: { revalidate: 3600 },
   });
-  if (!res.ok) throw new Error(`Failed to fetch sponsors: ${await res.text()}`);
+  if (!res.ok) {throw new Error(`Failed to fetch sponsors: ${await res.text()}`);}
 
   const { data } = (await res.json()) as {
     data: {

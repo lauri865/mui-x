@@ -1,18 +1,18 @@
 import clsx from 'clsx';
 import * as React from 'react';
 import { useThemedComponent } from '../../context/GridThemeContext';
-import { useGridOverlays } from '../../hooks/features/overlays/useGridOverlays';
-import { useGridVirtualScroller } from '../../hooks/features/virtualization/useGridVirtualScroller';
-import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
-import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-import { useGridSelector } from '../../hooks/utils/useGridSelector';
 import {
   gridHasBottomFillerSelector,
   gridHasFillerSelector,
   gridHasScrollXSelector,
   gridHasScrollYSelector,
   gridVerticalScrollbarWidthSelector,
-} from '../../internals/selectors/dimensionSelectors';
+} from '../../hooks/features/dimensions/dimensionSelectors';
+import { useGridOverlays } from '../../hooks/features/overlays/useGridOverlays';
+import { useGridVirtualScroller } from '../../hooks/features/virtualization/useGridVirtualScroller';
+import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
+import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
+import { useGridSelector } from '../../hooks/utils/useGridSelector';
 import { GridStateCommunity } from '../../models/gridStateCommunity';
 import { GridContextMenu } from '../contextMenu/GridContextMenu';
 import { GridDragDrop } from '../dragdrop/GridDragDrop';

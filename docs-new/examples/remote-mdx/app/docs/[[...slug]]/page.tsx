@@ -1,14 +1,14 @@
-import { type Frontmatter, getPage, getPages } from '@/app/docs/utils';
 import { compileMDX, parseFrontmatter } from '@fumadocs/mdx-remote';
 import defaultComponents from 'fumadocs-ui/mdx';
 import { DocsBody, DocsDescription, DocsPage, DocsTitle } from 'fumadocs-ui/page';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { type Frontmatter, getPage, getPages } from '@/app/docs/utils';
 
 export default async function Page(props: { params: Promise<{ slug?: string[] }> }) {
   const params = await props.params;
   const page = await getPage(params.slug);
-  if (!page) notFound();
+  if (!page) {notFound();}
 
   const {
     frontmatter,
@@ -37,7 +37,7 @@ export async function generateStaticParams() {
 export async function generateMetadata(props: { params: Promise<{ slug?: string[] }> }) {
   const params = await props.params;
   const page = await getPage(params.slug);
-  if (!page) notFound();
+  if (!page) {notFound();}
 
   const { frontmatter } = parseFrontmatter(page.content);
 

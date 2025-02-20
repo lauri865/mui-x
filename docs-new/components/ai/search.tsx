@@ -1,6 +1,4 @@
 'use client';
-import { AIProvider, Context, type MessageRecord } from '@/components/ai/context';
-import { cn } from '@/lib/cn';
 import {
   Dialog,
   DialogClose,
@@ -23,12 +21,14 @@ import {
   useRef,
   useState,
 } from 'react';
+import { cn } from '@/lib/cn';
+import { AIProvider, Context, type MessageRecord } from '@/components/ai/context';
 import type { Processor } from './markdown-processor';
 
 const listeners: (() => void)[] = [];
 
 function onUpdate() {
-  for (const listener of listeners) listener();
+  for (const listener of listeners) {listener();}
 }
 
 function View() {
@@ -37,7 +37,7 @@ function View() {
   const { loading, setLoading, engine } = use(Context);
 
   const onTry = () => {
-    if (!engine) return;
+    if (!engine) {return;}
 
     setLoading(true);
     void engine.regenerateLast(onUpdate).finally(() => {
@@ -51,7 +51,7 @@ function View() {
   };
 
   const onSubmit = (message: string) => {
-    if (!engine || message.length === 0) return;
+    if (!engine || message.length === 0) {return;}
 
     setLoading(true);
     void engine.prompt(message, onUpdate).finally(() => {
@@ -81,7 +81,7 @@ function View() {
   const messages = engine?.getHistory() ?? [];
 
   return (
-    <>
+    <React.Fragment>
       <List className={cn(messages.length === 0 && 'hidden')}>
         {messages.map((item, i) => (
           <Message key={i} message={item} onSuggestionSelected={onSubmit} />
@@ -133,7 +133,7 @@ function View() {
         </button>
       ) : null}
       <AIInput loading={loading} onSubmit={onSubmit} />
-    </>
+    </React.Fragment>
   );
 }
 
@@ -192,11 +192,11 @@ function List(props: HTMLAttributes<HTMLDivElement>) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!containerRef.current) {return;}
 
     const observer = new ResizeObserver(() => {
       const container = containerRef.current;
-      if (!container) return;
+      if (!container) {return;}
 
       container.scrollTo({
         top: container.scrollHeight,

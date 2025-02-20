@@ -14,7 +14,7 @@ const arraySortComparator = (v1: Array<number | string>, v2: Array<number | stri
   return v1[0] < v2[0] ? -1 : 1;
 };
 
-export const GRID_DATE_COL_DEF: GridColTypeDef<Array<number | string>, string> = {
+export const GRID_ARRAY_COL_DEF: GridColTypeDef<Array<number | string>, string> = {
   ...GRID_STRING_COL_DEF,
   type: 'array',
   sortComparator: arraySortComparator,

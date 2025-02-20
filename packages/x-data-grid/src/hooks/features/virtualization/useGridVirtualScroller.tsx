@@ -11,13 +11,6 @@ import * as ReactDOM from 'react-dom';
 import { GridDetailPanel } from '../../../components/GridDetailPanel';
 import { GridInfiniteLoader } from '../../../components/virtualization/GridInfiniteLoader';
 import {
-  gridContentHeightSelector,
-  gridDimensionsColumnsTotalWidthSelector,
-  gridHasFillerSelector,
-  gridRowHeightSelector,
-  gridVerticalScrollbarWidthSelector,
-} from '../../../internals/selectors/dimensionSelectors';
-import {
   type GridColumnsRenderContext,
   type GridRenderContext,
   type GridRowEntry,
@@ -47,6 +40,13 @@ import {
 } from '../columns/gridColumnsSelector';
 import { getFirstNonSpannedColumnToRender } from '../columns/gridColumnsUtils';
 import { gridDetailPanelExpandedRowIdsSelector } from '../detailPanel/gridDetailPanelSelector';
+import {
+  gridContentHeightSelector,
+  gridDimensionsColumnsTotalWidthSelector,
+  gridHasFillerSelector,
+  gridRowHeightSelector,
+  gridVerticalScrollbarWidthSelector,
+} from '../dimensions/dimensionSelectors';
 import { gridDimensionsSelector } from '../dimensions/gridDimensionsSelectors';
 import { gridListColumnSelector } from '../listView/gridListViewSelectors';
 import { gridVisiblePinnedRowsSelector } from '../rowPinning';
@@ -359,7 +359,7 @@ export const useGridVirtualScroller = () => {
       updateRenderContext(nextRenderContext);
     });
 
-    //scrollTimeout.start(1000, triggerUpdateRenderContext);
+    // scrollTimeout.start(1000, triggerUpdateRenderContext);
 
     return nextRenderContext;
   });
@@ -603,7 +603,7 @@ export const useGridVirtualScroller = () => {
               columns: visibleColumns,
               dimensions: gridDimensionsSelector(apiRef.current.state),
               positions: gridColumnPositionsSelector(apiRef),
-              pinnedColumns: pinnedColumns,
+              pinnedColumns,
               showCellVerticalBorder: rootProps.showCellVerticalBorder,
               isLastVisible: true,
             }}

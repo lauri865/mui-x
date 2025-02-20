@@ -14,11 +14,11 @@ import {
   useGridApiEventHandler,
   useGridSelector,
 } from '../hooks';
+import { gridDimensionsColumnsTotalWidthSelector } from '../hooks/features/dimensions/dimensionSelectors';
 import { useGridApiContext } from '../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../hooks/utils/useGridRootProps';
 import { useRtl } from '../hooks/utils/useRtl';
 import { PinnedColumnPosition } from '../internals/constants';
-import { gridDimensionsColumnsTotalWidthSelector } from '../internals/selectors/dimensionSelectors';
 import { getPinnedCellOffset } from '../internals/utils/getPinnedCellOffset';
 import { GridEventListener } from '../models';
 import type { GridStateColDef } from '../models/colDef/gridColDef';
@@ -35,10 +35,8 @@ const getPinnedPosition = (
 ) => {
   if (pinnedColumns.left.length && colIndex < pinnedColumns.left.length) {
     return PinnedColumnPosition.LEFT;
-  } else if (
-    pinnedColumns.right.length &&
-    colIndex >= columns.length - pinnedColumns.right.length
-  ) {
+  }
+  if (pinnedColumns.right.length && colIndex >= columns.length - pinnedColumns.right.length) {
     return PinnedColumnPosition.RIGHT;
   }
 };

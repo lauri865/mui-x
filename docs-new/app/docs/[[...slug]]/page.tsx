@@ -1,9 +1,3 @@
-import * as Preview from '@/components/preview';
-import { Wrapper } from '@/components/preview/wrapper';
-import { AutoTypeTable } from '@/components/type-table';
-import { createMetadata } from '@/lib/metadata';
-import { metadataImage } from '@/lib/metadata-image';
-import { openapi, source } from '@/lib/source';
 import { Mermaid } from '@theguild/remark-mermaid/mermaid';
 import { Popup, PopupContent, PopupTrigger } from 'fumadocs-twoslash/ui';
 import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
@@ -16,6 +10,12 @@ import { DocsBody, DocsCategory, DocsDescription, DocsPage, DocsTitle } from 'fu
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { type ComponentProps, type FC, type ReactElement, type ReactNode } from 'react';
+import { openapi, source } from '@/lib/source';
+import { metadataImage } from '@/lib/metadata-image';
+import { createMetadata } from '@/lib/metadata';
+import { AutoTypeTable } from '@/components/type-table';
+import { Wrapper } from '@/components/preview/wrapper';
+import * as Preview from '@/components/preview';
 
 function PreviewRenderer({ preview }: { preview: string }): ReactNode {
   if (preview && preview in Preview) {
@@ -36,7 +36,7 @@ export default async function Page(props: {
   console.log('TEST', params.slug);
   const page = source.getPage(params.slug);
 
-  if (!page) notFound();
+  if (!page) {notFound();}
 
   const path = `apps/docs/content/docs/${page.file.path}`;
   const preview = page.data.preview;
@@ -102,7 +102,7 @@ export async function generateMetadata(props: {
   const params = await props.params;
   const page = source.getPage(params.slug);
 
-  if (!page) notFound();
+  if (!page) {notFound();}
 
   const description = page.data.description ?? 'The library for building documentation sites';
 

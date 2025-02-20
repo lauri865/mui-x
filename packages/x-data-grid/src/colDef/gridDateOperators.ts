@@ -50,19 +50,8 @@ function buildApplyFilterFn(
   };
 }
 
-const strToDateMaybe = (str: string | Date | number): Date | undefined => {
-  if (!str) {
-    return;
-  }
-  if (str instanceof Date) {
-    return str;
-  }
-  return new Date(str);
-};
-
 export const getGridDateOperators = <T = Date>(
   showTime?: boolean,
-  convertStringToDate?: boolean,
 ): GridFilterOperator<any, T, any, GridFilterInputDateProps>[] => [
   {
     value: 'is',

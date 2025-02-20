@@ -1,13 +1,25 @@
 import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
 import { forwardRef } from '@mui/x-internals/forwardRef';
 import clsx from 'clsx';
-import React from 'react';
+import * as React from 'react';
 import { gridColumnDefinitionsSelector } from '../../hooks/features/columns/gridColumnsSelector';
 import { gridPreferencePanelStateSelector } from '../../hooks/features/preferencesPanel/gridPreferencePanelSelector';
 import { GridPreferencePanelsValue } from '../../hooks/features/preferencesPanel/gridPreferencePanelsValue';
+import { useGridApiOptionHandler } from '../../hooks/utils/useGridApiEventHandler';
+import { useGridPrivateApiContext } from '../../hooks/utils/useGridPrivateApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { useGridSelector } from '../../hooks/utils/useGridSelector';
-import { useGridApiOptionHandler, useGridPrivateApiContext } from '../../internals';
+
+const FakeAnchor = forwardRef<HTMLElement, { anchorEl: HTMLElement | null }>(
+  ({ anchorEl = null }, ref) => {
+    useEnhancedEffect(() => {
+      if (typeof ref === 'function') {
+        ref(anchorEl);
+      }
+    }, [anchorEl]);
+    return null;
+  },
+);
 
 export function GridPreferencesPanel() {
   const apiRef = useGridPrivateApiContext();
@@ -37,15 +49,16 @@ export function GridPreferencesPanel() {
       return null;
     }
     return apiRef.current.getColumnHeaderElement(preferencePanelState.labelId);
-  }, [preferencePanelState.labelId, open]);
+  }, [apiRef, preferencePanelState.labelId, open]);
 
   React.useLayoutEffect(() => {
     if (open) {
+      const api = apiRef.current;
       return () => {
         if (document.activeElement !== document.body) {
           return;
         }
-        const focusedEl = apiRef.current.mainElementRef?.current?.querySelector(
+        const focusedEl = api.mainElementRef?.current?.querySelector(
           '[tabindex="0"]',
         ) as HTMLElement;
         focusedEl?.focus();
@@ -88,27 +101,4 @@ export function GridPreferencesPanel() {
       </Popover.Content>
     </Popover.Root>
   );
-  return (
-    <rootProps.slots.panel
-      as={rootProps.slots.basePopper}
-      open={columns.length > 0 && preferencePanelState.open}
-      id={preferencePanelState.panelId}
-      aria-labelledby={preferencePanelState.labelId}
-      {...rootProps.slotProps?.panel}
-      {...rootProps.slotProps?.basePopper}
-    >
-      {panelContent}
-    </rootProps.slots.panel>
-  );
 }
-
-const FakeAnchor = forwardRef<HTMLElement, { anchorEl: HTMLElement | null }>(
-  ({ anchorEl = null }, ref) => {
-    useEnhancedEffect(() => {
-      if (typeof ref === 'function') {
-        ref(anchorEl);
-      }
-    }, [anchorEl]);
-    return null;
-  },
-);

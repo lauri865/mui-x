@@ -7,7 +7,7 @@ import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { GridGroupNode } from '../../models';
 import { GridCellParams } from '../../models/params/gridCellParams';
 
-export const GridContextMenu = () => {
+export function GridContextMenu() {
   const contextMenuRef = React.useRef<HTMLDivElement>(null);
   const triggerRef = React.useRef<HTMLDivElement>(null);
   const apiRef = useGridPrivateApiContext();
@@ -98,7 +98,7 @@ export const GridContextMenu = () => {
             onCloseAutoFocus={(e) => e.preventDefault()}
           >
             {cell.colDef.editable && cell.rowNode.type === 'leaf' && (
-              <>
+              <React.Fragment>
                 <ContextMenu.Item
                   onSelect={() => {
                     requestAnimationFrame(() => {
@@ -119,7 +119,7 @@ export const GridContextMenu = () => {
                   <ContextMenu.Shortcut>↵</ContextMenu.Shortcut>
                 </ContextMenu.Item>
                 <ContextMenu.Separator />
-              </>
+              </React.Fragment>
             )}
             {cell.colDef.editable && (
               <ContextMenu.Item>
@@ -179,8 +179,7 @@ export const GridContextMenu = () => {
             </ContextMenu.Item>
             <ContextMenu.Separator />
             {cell.rowNode.type === 'group' && (
-              <>
-                <ContextMenu.Item
+              <ContextMenu.Item
                   onSelect={() =>
                     apiRef.current.setRowChildrenExpansion(
                       cell.id,
@@ -193,11 +192,9 @@ export const GridContextMenu = () => {
                   )}
                   <ContextMenu.Shortcut>⌘E</ContextMenu.Shortcut>
                 </ContextMenu.Item>
-              </>
             )}
             {rootProps.getDetailPanelContent?.(apiRef.current.getRowParams(cell.id)) && (
-              <>
-                <ContextMenu.Item onSelect={() => apiRef.current.toggleDetailPanel(cell.id)}>
+              <ContextMenu.Item onSelect={() => apiRef.current.toggleDetailPanel(cell.id)}>
                   {apiRef.current.getLocaleText(
                     apiRef.current.isDetailPanelExpanded(cell.id)
                       ? 'collapseDetailPanel'
@@ -205,11 +202,9 @@ export const GridContextMenu = () => {
                   )}
                   <ContextMenu.Shortcut>⌘D</ContextMenu.Shortcut>
                 </ContextMenu.Item>
-              </>
             )}
             {cell.rowNode.type !== 'group' && (
-              <>
-                <ContextMenu.Sub>
+              <ContextMenu.Sub>
                   <ContextMenu.SubTrigger>
                     <rootProps.slots.pinIcon />
                     Pin Row
@@ -237,7 +232,6 @@ export const GridContextMenu = () => {
                     </ContextMenu.RadioGroup>
                   </ContextMenu.SubContent>
                 </ContextMenu.Sub>
-              </>
             )}
             <ContextMenu.Separator />
             <ContextMenu.Sub>
@@ -277,4 +271,4 @@ export const GridContextMenu = () => {
       )}
     </ContextMenu.Root>
   );
-};
+}

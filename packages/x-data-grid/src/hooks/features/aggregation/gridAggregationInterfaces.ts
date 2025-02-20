@@ -1,12 +1,7 @@
-import { GridApiCommunity } from '../../../internals';
-import {
-  GridCallbackDetails,
-  GridColDef,
-  GridRowId,
-  GridTreeNode,
-  GridValidRowModel,
-  GridValueFormatter,
-} from '../../../models';
+import { GridApiCommunity } from '../../../models/api/gridApiCommunity';
+import type { GridCallbackDetails } from '../../../models/api/gridCallbackDetails';
+import type { GridColDef, GridValueFormatter } from '../../../models/colDef';
+import type { GridRowId, GridTreeNode, GridValidRowModel } from '../../../models/gridRows';
 
 export interface GridAggregationColdef {
   aggregable?: boolean;
@@ -50,7 +45,7 @@ export interface GridAggregationReducerFunction<Value = any, ReturnValue = Value
   reduce: (
     acc: Value,
     value: Value | null | undefined,
-    params: GridAggregationApplierParams<Value> & {
+    params: GridAggregationApplierParams & {
       row: GridValidRowModel;
       rowNode: GridTreeNode;
     },
@@ -60,17 +55,14 @@ export interface GridAggregationReducerFunction<Value = any, ReturnValue = Value
     meta: {
       count: number;
     },
-    params: GridAggregationApplierParams<Value>,
+    params: GridAggregationApplierParams,
   ) => ReturnValue;
   apply?: never;
 }
 
 export interface GridAggregationApplierFunction<ReturnValue = any, Value = ReturnValue>
   extends GridAggregationFunctionCommon {
-  apply: (
-    values: (Value | undefined)[],
-    params: GridAggregationApplierParams<Value>,
-  ) => ReturnValue;
+  apply: (values: (Value | undefined)[], params: GridAggregationApplierParams) => ReturnValue;
   reduce?: never;
   postReduce?: never;
 }
@@ -79,7 +71,7 @@ export type GridAggregationFunction =
   | GridAggregationReducerFunction<any>
   | GridAggregationApplierFunction<any>;
 
-export interface GridAggregationApplierParams<Value = any> {
+export interface GridAggregationApplierParams {
   field: GridColDef['field'];
   api: GridApiCommunity;
 }

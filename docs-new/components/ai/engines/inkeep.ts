@@ -1,10 +1,10 @@
-import type { Engine, MessageRecord } from '@/components/ai/context';
 import { InkeepAI } from '@inkeep/ai-api/sdk';
+import type { Engine, MessageRecord } from '@/components/ai/context';
 
 const integrationId = process.env.NEXT_PUBLIC_INKEEP_INTEGRATION_ID;
 const apiKey = process.env.NEXT_PUBLIC_INKEEP_API_KEY;
 
-if (!integrationId || !apiKey) throw new Error('Missing required api keys');
+if (!integrationId || !apiKey) {throw new Error('Missing required api keys');}
 
 export async function createInkeepEngine(): Promise<Engine> {
   const ai = new InkeepAI({
@@ -54,7 +54,7 @@ export async function createInkeepEngine(): Promise<Engine> {
     messages.push(message);
 
     for await (const event of result.chatResultStream) {
-      if (aborted) break;
+      if (aborted) {break;}
       if (event.event === 'records_cited') {
         message.references = event.data.citations.map((cite) => ({
           breadcrumbs: cite.record.breadcrumbs ?? [],

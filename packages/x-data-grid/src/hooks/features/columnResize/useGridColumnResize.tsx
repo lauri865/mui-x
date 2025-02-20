@@ -7,17 +7,12 @@ import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
 import { GridColumnHeaderSeparatorSides } from '../../../components/columnHeaders/GridColumnHeaderSeparator';
 import { gridClasses } from '../../../constants/gridClasses';
-import { useRtl } from '../../../hooks/utils/useRtl';
 import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
 import type { GridStateColDef } from '../../../models/colDef/gridColDef';
 import { CursorCoordinates } from '../../../models/cursorCoordinates';
 import type { GridEventListener } from '../../../models/events/gridEventListener';
 import type { GridColumnResizeParams } from '../../../models/params/gridColumnResizeParams';
 import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
-import {
-  ControllablePromise,
-  createControllablePromise,
-} from '../../../utils/createControllablePromise';
 import {
   escapeOperandAttributeSelector,
   findGridCellElementsFromCol,
@@ -41,10 +36,10 @@ import {
   useGridApiOptionHandler,
   useGridLogger,
   useGridNativeEventListener,
-  useGridSelector,
   useOnMount,
 } from '../../utils';
 import { GridStateInitializer } from '../../utils/useGridInitializeState';
+import { useRtl } from '../../utils/useRtl';
 import { useTimeout } from '../../utils/useTimeout';
 import { gridColumnsStateSelector } from '../columns';
 import { GridPinnedColumnPosition } from '../columns/gridColumnsInterfaces';
@@ -131,31 +126,13 @@ function preventClick(event: MouseEvent) {
 
 /**
  * Checker that returns a promise that resolves when the column virtualization
- * is disabled.
+ * is disabled. Needs to be async to force out of the event loop.
  */
-function useColumnVirtualizationDisabled(apiRef: RefObject<GridPrivateApiCommunity>) {
-  const promise = React.useRef<ControllablePromise>(undefined);
-  const selector = () => gridVirtualizationColumnEnabledSelector(apiRef);
-  const value = useGridSelector(apiRef, selector);
-
-  React.useEffect(() => {
-    if (promise.current && value === false) {
-      promise.current.resolve();
-      promise.current = undefined;
-    }
-  });
-
-  const asyncCheck = () => {
-    if (!promise.current) {
-      if (selector() === false) {
-        return Promise.resolve();
-      }
-      promise.current = createControllablePromise();
-    }
-    return promise.current;
-  };
-
-  return asyncCheck;
+async function isColumnVirtualizationDisabledNow(apiRef: RefObject<GridPrivateApiCommunity>) {
+  if (gridVirtualizationColumnEnabledSelector(apiRef) === false) {
+    return true;
+  }
+  throw new Error('Column virtualization was not disabled');
 }
 
 /**
@@ -683,7 +660,6 @@ export const useGridColumnResize = (
    * API METHODS
    */
 
-  const columnVirtualizationDisabled = useColumnVirtualizationDisabled(apiRef);
   const isAutosizingRef = React.useRef(false);
   const autosizeColumns = React.useCallback<GridColumnResizeApi['autosizeColumns']>(
     async (userOptions) => {
@@ -709,7 +685,7 @@ export const useGridColumnResize = (
       try {
         if (!props.disableVirtualization && options.disableColumnVirtualization) {
           apiRef.current.unstable_setColumnVirtualization(false);
-          await columnVirtualizationDisabled();
+          await isColumnVirtualizationDisabledNow(apiRef);
         }
 
         const widthByField = extractColumnWidths(apiRef, options, columns);
@@ -764,7 +740,7 @@ export const useGridColumnResize = (
         isAutosizingRef.current = false;
       }
     },
-    [apiRef, columnVirtualizationDisabled, props.disableVirtualization],
+    [apiRef, props.disableVirtualization],
   );
 
   /**

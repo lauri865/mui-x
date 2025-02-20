@@ -33,7 +33,7 @@ import {
 } from '../hooks/features/rowPinning/rowPinningInterfaces';
 import type { GridRowsMetaState } from '../hooks/features/rows/gridRowsMetaState';
 import type { GridRowSpanningState } from '../hooks/features/rows/useGridRowSpanning';
-import { GridCellCoordinates } from '../models/gridCell';
+import { GridCellCoordinates } from "./gridCell";
 import type { GridEditingState } from './gridEditRowModel';
 import { GridHeaderFilteringState } from './gridHeaderFilteringModel';
 import type { GridRowSelectionModel } from './gridRowSelectionModel';

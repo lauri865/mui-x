@@ -1,6 +1,4 @@
 import {
-  unstable_capitalize as capitalize,
-  unstable_composeClasses as composeClasses,
   unstable_ownerDocument as ownerDocument,
   unstable_useForkRef as useForkRef,
 } from '@mui/utils';
@@ -10,7 +8,7 @@ import { forwardRef } from '@mui/x-internals/forwardRef';
 import clsx from 'clsx';
 import * as React from 'react';
 import { GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD } from '../../colDef';
-import { getDataGridUtilityClass, gridClasses } from '../../constants/gridClasses';
+import { gridClasses } from '../../constants/gridClasses';
 import { useThemedComponent } from '../../context/GridThemeContext';
 import { gridPreferencePanelStateSelector } from '../../hooks';
 import { GridPinnedColumnPosition } from '../../hooks/features/columns/gridColumnsInterfaces';
@@ -44,7 +42,6 @@ import {
   GridCellParams,
   GridRenderEditCellParams,
 } from '../../models/params/gridCellParams';
-import type { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { doesSupportPreventScroll } from '../../utils/doesSupportPreventScroll';
 
 export const gridPinnedColumnPositionLookup = {
@@ -85,45 +82,6 @@ export type GridCellProps = React.HTMLAttributes<HTMLDivElement> & {
   children?: React.ReactNode;
   style?: React.CSSProperties;
   [x: `data-${string}`]: string;
-};
-
-type OwnerState = Pick<GridCellProps, 'align' | 'pinnedPosition'> & {
-  showLeftBorder: boolean;
-  showRightBorder: boolean;
-  isEditable: boolean;
-  isSelected: boolean;
-  isSelectionMode: boolean;
-  classes: DataGridProcessedProps['classes'];
-};
-
-const useUtilityClasses = (ownerState: OwnerState) => {
-  const {
-    align,
-    showLeftBorder,
-    showRightBorder,
-    pinnedPosition,
-    isEditable,
-    isSelected,
-    isSelectionMode,
-    classes,
-  } = ownerState;
-
-  const slots = {
-    root: [
-      'cell',
-      `cell--text${capitalize(align)}`,
-      isSelected && 'selected',
-      isEditable && 'cell--editable',
-      showLeftBorder && 'cell--withLeftBorder',
-      showRightBorder && 'cell--withRightBorder',
-      // needed for resizer
-      pinnedPosition === PinnedColumnPosition.LEFT && 'cell--pinnedLeft',
-      pinnedPosition === PinnedColumnPosition.RIGHT && 'cell--pinnedRight',
-      isSelectionMode && !isEditable && 'cell--selectionMode',
-    ],
-  };
-
-  return composeClasses(slots, getDataGridUtilityClass, classes);
 };
 
 let warnedOnce = false;
@@ -429,7 +387,7 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
   let children: React.ReactNode;
 
   if (editCellState === null && column.renderCell) {
-    children = column.renderCell(cellParams);
+    children = column.renderCell(cellParams, column.renderCellProps);
   }
 
   if (editCellState !== null && column.renderEditCell) {
@@ -505,29 +463,31 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
   );
 });
 
-const showOverflow = (showRightBorder: boolean) => (event: Event) => {
-  const el = event.currentTarget as HTMLElement;
-  const isOverflowingX = el.scrollWidth > el.clientWidth;
-  const isOverflowingY = el.scrollHeight > el.clientHeight;
-  if (isOverflowingX) {
-    const delta = Math.max(100, el.scrollWidth - el.clientWidth + 10);
-    el.style.minWidth = `${el.clientWidth + delta}px`;
-    el.style.overflow = 'visible';
-    el.style.marginRight = `-${delta + (showRightBorder ? -1 : 0)}px`;
-    el.style.zIndex = '1';
-    el.style.borderRight = '1px solid var(--color-grid-border)';
-  }
-  if (isOverflowingY) {
-    const delta = el.scrollHeight - el.clientHeight;
-    el.style.overflow = 'visible';
-    el.style.marginBottom = `-${delta}px`;
-    el.style.zIndex = '1';
-    el.style.borderRight = '1px solid var(--color-grid-border)';
-    el.style.borderBottom = '1px solid var(--color-grid-border)';
-  }
-};
+function showOverflow(showRightBorder: boolean) {
+  return (event: Event) => {
+    const el = event.currentTarget as HTMLElement;
+    const isOverflowingX = el.scrollWidth > el.clientWidth;
+    const isOverflowingY = el.scrollHeight > el.clientHeight;
+    if (isOverflowingX) {
+      const delta = Math.min(100, el.scrollWidth - el.clientWidth + 10);
+      el.style.minWidth = `${el.clientWidth + delta}px`;
+      el.style.overflow = 'visible';
+      el.style.marginRight = `-${delta + (showRightBorder ? -1 : 0)}px`;
+      el.style.zIndex = '1';
+      el.style.borderRight = '1px solid var(--color-grid-border)';
+    }
+    if (isOverflowingY) {
+      const delta = Math.min(100, el.scrollHeight - el.clientHeight);
+      el.style.overflow = 'visible';
+      el.style.marginBottom = `-${delta}px`;
+      el.style.zIndex = '1';
+      el.style.borderRight = '1px solid var(--color-grid-border)';
+      el.style.borderBottom = '1px solid var(--color-grid-border)';
+    }
+  };
+}
 
-const hideOverflow = (event: Event) => {
+function hideOverflow(event: Event) {
   const el = event.currentTarget as HTMLElement;
   el.style.minWidth = '';
   el.style.overflow = '';
@@ -536,7 +496,7 @@ const hideOverflow = (event: Event) => {
   el.style.zIndex = '';
   el.style.borderRight = '';
   el.style.borderBottom = '';
-};
+}
 
 const MemoizedGridCell = fastMemo(GridCell);
 

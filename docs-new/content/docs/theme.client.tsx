@@ -1,7 +1,7 @@
 'use client';
+import { type ReactElement, useState } from 'react';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/cn';
-import { type ReactElement, useState } from 'react';
 
 export function WidthTrigger(): ReactElement {
   const [enabled, setEnabled] = useState(false);

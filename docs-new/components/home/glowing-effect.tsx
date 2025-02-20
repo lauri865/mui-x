@@ -1,6 +1,7 @@
 'use client';
 
 import { animate } from 'framer-motion';
+import * as React from 'react';
 import { memo, useCallback, useEffect, useRef } from 'react';
 import { cn } from '../../lib/cn';
 
@@ -35,7 +36,9 @@ const GlowingEffect = memo(
 
     const handleMove = useCallback(
       (e?: MouseEvent | { x: number; y: number }) => {
-        if (!containerRef.current) return;
+        if (!containerRef.current) {
+          return;
+        }
 
         if (animationFrameRef.current) {
           cancelAnimationFrame(animationFrameRef.current);
@@ -43,7 +46,9 @@ const GlowingEffect = memo(
 
         animationFrameRef.current = requestAnimationFrame(() => {
           const element = containerRef.current;
-          if (!element) return;
+          if (!element) {
+            return;
+          }
 
           const { left, top, width, height } = element.getBoundingClientRect();
           const mouseX = e?.x ?? lastPosition.current.x;
@@ -58,7 +63,7 @@ const GlowingEffect = memo(
           const inactiveRadius = 0.5 * Math.min(width, height) * inactiveZone;
 
           if (distanceFromCenter < inactiveRadius) {
-            //element.style.setProperty('--active', '0');
+            // element.style.setProperty('--active', '0');
             return;
           }
 
@@ -68,12 +73,14 @@ const GlowingEffect = memo(
             mouseY > top - proximity &&
             mouseY < top + height + proximity;
 
-          //element.style.setProperty('--active', isActive ? '1' : '0');
+          // element.style.setProperty('--active', isActive ? '1' : '0');
 
-          if (!isActive) return;
+          if (!isActive) {
+            return;
+          }
 
           const currentAngle = parseFloat(element.style.getPropertyValue('--start')) || 0;
-          let targetAngle =
+          const targetAngle =
             (180 * Math.atan2(mouseY - center[1], mouseX - center[0])) / Math.PI + 90;
 
           const angleDiff = ((targetAngle - currentAngle + 180) % 360) - 180;
@@ -92,7 +99,9 @@ const GlowingEffect = memo(
     );
 
     useEffect(() => {
-      if (disabled) return;
+      if (disabled) {
+        return;
+      }
 
       const handleScroll = () => handleMove();
       const handlePointerMove = (e: PointerEvent) => handleMove(e);
@@ -116,7 +125,7 @@ const GlowingEffect = memo(
     }, [handleMove, disabled]);
 
     return (
-      <>
+      <React.Fragment>
         <div
           className={cn(
             'pointer-events-none absolute -inset-px hidden rounded-[inherit] border opacity-0 transition-opacity',
@@ -178,7 +187,7 @@ const GlowingEffect = memo(
             )}
           />
         </div>
-      </>
+      </React.Fragment>
     );
   },
 );

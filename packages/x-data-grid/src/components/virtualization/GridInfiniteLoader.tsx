@@ -2,32 +2,25 @@
 
 import { unstable_useEventCallback } from '@mui/utils';
 import * as React from 'react';
-import { flushSync } from 'react-dom';
+import * as ReactDOM from 'react-dom';
 import { gridVisibleColumnDefinitionsSelector } from '../../hooks/features/columns';
-import { gridDimensionsSelector } from '../../hooks/features/dimensions';
+import { InfiniteLoaderOnRowsScrollEnd } from '../../hooks/features/dataLoading/gridInfiniteLoaderInterfaces';
+import { gridDimensionsSelector } from '../../hooks/features/dimensions/gridDimensionsSelectors';
 import { useGridPrivateApiContext } from '../../hooks/utils/useGridPrivateApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { getVisibleRows } from '../../hooks/utils/useGridVisibleRows';
 import { GridRowId } from '../../models/gridRows';
-import { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { GridSkeletonLoadingOverlay, SkeletonRow } from '../GridSkeletonLoadingOverlay';
-
-export type InfiniteLoaderPayload = {
-  viewportPageSize: number;
-  visibleRowsCount: number;
-  visibleColumns: any[];
-  lastRowId?: GridRowId;
-};
 
 interface InfiniteLoaderProps {
   lastRowId?: GridRowId;
-  onRowsScrollEnd: NonNullable<DataGridProcessedProps['onRowsScrollEnd']>;
+  onRowsScrollEnd: InfiniteLoaderOnRowsScrollEnd;
   margin?: number;
   skeletonRowProps?: React.ComponentProps<typeof SkeletonRow>;
   empty?: boolean;
 }
 
-export const InfiniteLoadingOverlay = () => {
+export function InfiniteLoadingOverlay() {
   const rootProps = useGridRootProps();
   return (
     <GridInfiniteLoader
@@ -38,22 +31,24 @@ export const InfiniteLoadingOverlay = () => {
       empty
     />
   );
-};
+}
 
-export const GridInfiniteLoader = ({
+export function GridInfiniteLoader({
   lastRowId,
   onRowsScrollEnd,
   margin = 100,
   skeletonRowProps,
   empty,
-}: InfiniteLoaderProps) => {
+}: InfiniteLoaderProps) {
   const [skeletonRowCount, setSkeletonRowCount] = React.useState<number | null>(empty ? 1 : null);
   const apiRef = useGridPrivateApiContext();
   const observerRef = React.useRef<HTMLDivElement | null>(null);
 
   const onRowsScrollEndCallback = unstable_useEventCallback(onRowsScrollEnd);
   React.useEffect(() => {
-    if (!observerRef.current) return;
+    if (!observerRef.current) {
+      return;
+    }
 
     const root = apiRef.current.virtualScrollerRef.current;
     const observer = new IntersectionObserver(
@@ -79,7 +74,7 @@ export const GridInfiniteLoader = ({
               },
             );
             if (res) {
-              flushSync(() => {
+              ReactDOM.flushSync(() => {
                 setSkeletonRowCount(null);
                 apiRef.current.updateRows(res.map((row) => ({ ...row, _action: 'insert' })));
               });
@@ -94,6 +89,7 @@ export const GridInfiniteLoader = ({
               });
             }
           } catch (err) {
+            // do nothing
           } finally {
             setSkeletonRowCount(null);
           }
@@ -121,4 +117,4 @@ export const GridInfiniteLoader = ({
       {empty && skeletonRowCount && <GridSkeletonLoadingOverlay />}
     </div>
   );
-};
+}

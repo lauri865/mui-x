@@ -2,12 +2,12 @@ import { GridLoadingOverlayVariant } from '../../../components/GridLoadingOverla
 import type { GridOverlayType } from '../../../components/base/GridOverlays';
 import { GridOverlayWrapper } from '../../../components/base/GridOverlays';
 import { InfiniteLoadingOverlay } from '../../../components/virtualization/GridInfiniteLoader';
-import { gridVisiblePinnedRowsCountSelector } from '../../features/rowPinning';
 import { useGridSelector } from '../../utils';
 import { useGridApiContext } from '../../utils/useGridApiContext';
 import { useGridRootProps } from '../../utils/useGridRootProps';
 import { gridVisibleColumnFieldsSelector } from '../columns';
 import { gridExpandedRowCountSelector } from '../filter';
+import { gridVisiblePinnedRowsCountSelector } from '../rowPinning';
 import { gridRowCountSelector, gridRowsLoadingSelector } from '../rows';
 
 /**
@@ -60,7 +60,9 @@ export const useGridOverlays = () => {
     const overlayProps = rootProps.slotProps?.[overlayType];
     return (
       <GridOverlayWrapper {...overlaysProps}>
-        {overlayType === 'noRowsOverlay' && rootProps.onRowsScrollEnd && <InfiniteLoadingOverlay />}
+        {overlayType === 'noRowsOverlay' && !rootProps.loading && rootProps.onRowsScrollEnd && (
+          <InfiniteLoadingOverlay />
+        )}
         <Overlay {...overlayProps} />
       </GridOverlayWrapper>
     );

@@ -1,16 +1,16 @@
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
-import { InfiniteLoaderPayload } from '../../components/virtualization/GridInfiniteLoader';
-import { GridClasses } from '../../constants/gridClasses';
 import { GridAggregationProps } from '../../hooks/features/aggregation';
 import type { GridAutosizeOptions } from '../../hooks/features/columnResize';
 import {
   GridColumnVisibilityModel,
   GridPinnedColumnFields,
 } from '../../hooks/features/columns/gridColumnsInterfaces';
+import { InfiniteLoaderOnRowsScrollEnd } from '../../hooks/features/dataLoading/gridInfiniteLoaderInterfaces';
 import { GridExpandedRowIds } from '../../hooks/features/detailPanel';
 import { GridRowGroupingModel } from '../../hooks/features/rowGrouping';
 import { GridPinnedRowsModel } from '../../hooks/features/rowPinning/rowPinningInterfaces';
+import { theme } from '../../theme';
 import { GridCallbackDetails, GridLocaleText } from '../api';
 import { GridApiCommunity } from '../api/gridApiCommunity';
 import { GridCellModesModel, GridRowModesModel } from '../api/gridEditingApi';
@@ -28,7 +28,6 @@ import {
   GridGroupNode,
   GridRowId,
   GridRowIdGetter,
-  GridRowModel,
   GridRowsProp,
   GridValidRowModel,
 } from '../gridRows';
@@ -417,6 +416,7 @@ export interface DataGridPropsWithDefaultValues<R extends GridValidRowModel = an
   rowSelectionPropagation: GridRowSelectionPropagation;
 
   defaultGroupingExpansionDepth: number;
+  theme?: typeof theme;
 }
 
 interface CommonProps {
@@ -428,21 +428,31 @@ interface CommonProps {
  * The Data Grid props with no default value.
  */
 export interface DataGridPropsWithoutDefaultValue<R extends GridValidRowModel = any>
-  extends CommonProps {
+  extends CommonProps,
+    GridAggregationProps {
   /**
    * The ref object that allows Data Grid manipulation. Can be instantiated with `useGridApiRef()`.
    */
   apiRef?: RefObject<GridApiCommunity | null>;
+  /**
+   * A string to force data grid props to refresh
+   */
+  refreshKey?: string;
+  /**
+   * List of dependencies (similar to React.useEffect/useMemo dependency array) to watch for changes to force the data grid props to refresh; by default listens to rows and all controlled props.
+   * Anything defined here should ideally be memoized to prevent performance issues. For things (especially functions) that don't need to be synchronised with the grid state, useEventCallback (`react-use-event-hook`) could be used to provide stable reference that can depend on up-to-date external state.
+   */
+  dependencies?: any[];
+  /**
+   * Disables automatic memoization of the Data Grid props – it's now your duty to take care of the memoization yourself.
+   */
+  disableAutoMemo?: boolean;
   /**
    * Signal to the underlying logic what version of the public component API
    * of the Data Grid is exposed [[GridSignature]].
    * @ignore - do not document.
    */
   signature?: string;
-  /**
-   * Override or extend the styles applied to the component.
-   */
-  classes?: Partial<GridClasses>;
   /**
    * Set the density of the Data Grid.
    * @default "standard"
@@ -792,11 +802,6 @@ export interface DataGridPropsWithoutDefaultValue<R extends GridValidRowModel = 
    */
   getRowId?: GridRowIdGetter<R>;
   /**
-   * Nonce of the inline styles for [Content Security Policy](https://www.w3.org/TR/2016/REC-CSP2-20161215/#script-src-the-nonce-attribute).
-   * @deprecated
-   */
-  nonce?: string;
-  /**
    * The initial state of the DataGrid.
    * The data in it will be set in the state on initialization but will not be controlled.
    * If one of the data in `initialState` is also being controlled, then the control state wins.
@@ -860,12 +865,7 @@ export interface DataGridPropsWithoutDefaultValue<R extends GridValidRowModel = 
   pinnedColumns?: GridPinnedColumnFields;
   pinnedRows?: GridPinnedRowsModel;
   detailPanelExpandedRowIds?: GridExpandedRowIds;
-  onRowsScrollEnd?: (
-    params: InfiniteLoaderPayload,
-    detail: {
-      setSkeletonRowCount: (count: number) => void;
-    },
-  ) => Promise<void | GridRowModel<R>[]>;
+  onRowsScrollEnd?: InfiniteLoaderOnRowsScrollEnd;
   rowGroupingModel?: GridRowGroupingModel;
   isGroupExpandedByDefault?: (node: GridGroupNode) => boolean;
   onRowGroupingModelChange?: (model: GridRowGroupingModel, details: GridCallbackDetails) => void;
@@ -916,5 +916,4 @@ export interface DataGridProcessedProps<R extends GridValidRowModel = any>
     DataGridPropsWithoutDefaultValue<R>,
     DataGridProSharedPropsWithoutDefaultValue,
     Partial<DataGridProSharedPropsWithDefaultValue>,
-    Partial<DataGridPremiumSharedPropsWithDefaultValue>,
-    GridAggregationProps {}
+    Partial<DataGridPremiumSharedPropsWithDefaultValue> {}

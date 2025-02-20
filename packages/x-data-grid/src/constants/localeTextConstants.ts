@@ -201,7 +201,7 @@ export const GRID_DEFAULT_LOCALE_TEXT: GridLocaleText = {
   paginationNextPage: 'Next page',
 
   // Used core components translation keys
-  //MuiTablePagination: {},
+  // MuiTablePagination: {},
 
   // Row reordering text
   rowReorderingHeaderName: 'Row reordering',

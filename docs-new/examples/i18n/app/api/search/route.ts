@@ -1,7 +1,7 @@
-import { source } from '@/lib/source';
 import { createFromSource } from 'fumadocs-core/search/server';
 // @ts-expect-error -- untyped
 import { createTokenizer } from '@orama/tokenizers/mandarin';
+import { source } from '@/lib/source';
 
 export const { GET, search } = createFromSource(source, undefined, {
   localeMap: {

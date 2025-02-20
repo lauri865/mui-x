@@ -37,19 +37,7 @@ import { GridCellModes, GridEditModes } from '../models/gridEditRowModel';
 import { GridRowId, GridRowModel } from '../models/gridRows';
 import { GridRowClassNameParams } from '../models/params/gridRowParams';
 import { shouldCellShowLeftBorder, shouldCellShowRightBorder } from '../utils/cellBorderUtils';
-import { createSelector } from '../utils/createSelector';
 import { findParentElementFromClassName, isEventTargetInPortal } from '../utils/domUtils';
-
-const isRowReorderingEnabledSelector = createSelector(
-  gridEditRowsStateSelector,
-  (editRows, rowReordering: boolean) => {
-    if (!rowReordering) {
-      return false;
-    }
-    const isEditingRows = !isObjectEmpty(editRows);
-    return !isEditingRows;
-  },
-);
 
 export interface GridRowProps extends React.HTMLAttributes<HTMLDivElement> {
   row: GridRowModel;
@@ -466,40 +454,38 @@ const GridRow = forwardRef<HTMLDivElement, GridRowProps>(function GridRow(props,
     : null;
 
   return (
-    <>
+    <div
+      data-id={rowId}
+      data-rowindex={index}
+      data-first-visible={isFirstVisible || undefined}
+      data-last-visible={isLastVisible || undefined}
+      data-selected={selected || undefined}
+      data-editing={editing || undefined}
+      data-editable={editable || undefined}
+      data-bottom-border={showBottomBorder || undefined}
+      role="row"
+      className={clsx(...rowClassNames, classes.root, className)}
+      style={style}
+      {...ariaAttributes}
+      {...eventHandlers}
+      {...other}
+      ref={handleRef}
+    >
+      {leftCells}
       <div
-        data-id={rowId}
-        data-rowindex={index}
-        data-first-visible={isFirstVisible || undefined}
-        data-last-visible={isLastVisible || undefined}
-        data-selected={selected || undefined}
-        data-editing={editing || undefined}
-        data-editable={editable || undefined}
-        data-bottom-border={showBottomBorder || undefined}
-        role="row"
-        className={clsx(...rowClassNames, classes.root, className)}
-        style={style}
-        {...ariaAttributes}
-        {...eventHandlers}
-        {...other}
-        ref={handleRef}
-      >
-        {leftCells}
-        <div
-          role="presentation"
-          className={gridClasses.cellOffsetLeft}
-          style={{ width: offsetLeft }}
-        />
-        {cells}
-        <div
-          role="presentation"
-          className={clsx(cellClasses.root)}
-          data-empty="true"
-          data-field="«filler-right-body»"
-        />
-        {rightCells}
-      </div>
-    </>
+        role="presentation"
+        className={gridClasses.cellOffsetLeft}
+        style={{ width: offsetLeft }}
+      />
+      {cells}
+      <div
+        role="presentation"
+        className={clsx(cellClasses.root)}
+        data-empty="true"
+        data-field="«filler-right-body»"
+      />
+      {rightCells}
+    </div>
   );
 });
 

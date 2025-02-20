@@ -7,13 +7,6 @@ import { GridScrollbarFillerCell as ScrollbarFiller } from '../../../components/
 import { gridClasses } from '../../../constants/gridClasses';
 import { useThemedComponent } from '../../../context/GridThemeContext';
 import { PinnedColumnPosition } from '../../../internals/constants';
-import {
-  gridDimensionsColumnsTotalWidthSelector,
-  gridGroupHeaderHeightSelector,
-  gridHasFillerSelector,
-  gridHeaderHeightSelector,
-  gridVerticalScrollbarWidthSelector,
-} from '../../../internals/selectors/dimensionSelectors';
 import { getPinnedCellOffset } from '../../../internals/utils/getPinnedCellOffset';
 import { GridStateColDef } from '../../../models/colDef/gridColDef';
 import { GridEventListener } from '../../../models/events';
@@ -39,6 +32,13 @@ import {
   gridColumnPositionsSelector,
   gridVisiblePinnedColumnsSelector,
 } from '../columns';
+import {
+  gridDimensionsColumnsTotalWidthSelector,
+  gridGroupHeaderHeightSelector,
+  gridHasFillerSelector,
+  gridHeaderHeightSelector,
+  gridVerticalScrollbarWidthSelector,
+} from '../dimensions/dimensionSelectors';
 import { GridFilterActiveItemsLookup } from '../filter';
 import { GridColumnGroupIdentifier, GridColumnIdentifier } from '../focus';
 import { GridSortColumnLookup } from '../sorting';

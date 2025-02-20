@@ -58,7 +58,7 @@ export const avg: GridAggregationReducerFunction<number> = {
   postReduce: (acc, { count }) => {
     return acc / count;
   },
-  valueFormatter: (value) => round(value, 2) + 'haha',
+  valueFormatter: (value) => `${round(value, 2)  }haha`,
 };
 
 export const count: GridAggregationReducerFunction<any> = {
