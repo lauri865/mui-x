@@ -445,7 +445,7 @@ describe('<DataGrid /> - Column grouping', () => {
           console.error(error);
         }
       }).toErrorDev(
-        'MUI-DataGrid: an element of the columnGroupingModel does not have either `field` or `groupId`',
+        'TWGrid: an element of the columnGroupingModel does not have either `field` or `groupId`',
       );
     });
 
@@ -462,7 +462,7 @@ describe('<DataGrid /> - Column grouping', () => {
             ]}
           />,
         );
-      }).toWarnDev('MUI-DataGrid: group groupId=col12 has no children.');
+      }).toWarnDev('TWGrid: group groupId=col12 has no children.');
       expect(() => {
         render(
           <TestWithError
@@ -475,7 +475,7 @@ describe('<DataGrid /> - Column grouping', () => {
             ]}
           />,
         );
-      }).toWarnDev('MUI-DataGrid: group groupId=col12 has no children.');
+      }).toWarnDev('TWGrid: group groupId=col12 has no children.');
     });
   });
 });
