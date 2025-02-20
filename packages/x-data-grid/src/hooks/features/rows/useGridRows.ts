@@ -189,7 +189,7 @@ export const useGridRows = (
       if (props.signature === GridSignature.DataGrid && updates.length > 1) {
         throw new Error(
           [
-            'MUI X: You cannot update several rows at once in `apiRef.current.updateRows` on the DataGrid.',
+            'TWGrid: You cannot update several rows at once in `apiRef.current.updateRows` on the DataGrid.',
             'You need to upgrade to DataGridPro or DataGridPremium component to unlock this feature.',
           ].join('\n'),
         );
@@ -270,11 +270,11 @@ export const useGridRows = (
     (id, isExpanded) => {
       const currentNode = apiRef.current.getRowNode(id);
       if (!currentNode) {
-        throw new Error(`MUI X: No row with id #${id} found.`);
+        throw new Error(`TWGrid: No row with id #${id} found.`);
       }
 
       if (currentNode.type !== 'group') {
-        throw new Error('MUI X: Only group nodes can be expanded or collapsed.');
+        throw new Error('TWGrid: Only group nodes can be expanded or collapsed.');
       }
 
       const newNode: GridGroupNode = { ...currentNode, childrenExpanded: isExpanded };
@@ -343,16 +343,18 @@ export const useGridRows = (
       const node = apiRef.current.getRowNode(rowId);
 
       if (!node) {
-        throw new Error(`MUI X: No row with id #${rowId} found.`);
+        throw new Error(`TWGrid: No row with id #${rowId} found.`);
       }
 
       if (node.parent !== GRID_ROOT_GROUP_ID) {
-        throw new Error(`MUI X: The row reordering do not support reordering of grouped rows yet.`);
+        throw new Error(
+          `TWGrid: The row reordering do not support reordering of grouped rows yet.`,
+        );
       }
 
       if (node.type !== 'leaf') {
         throw new Error(
-          `MUI X: The row reordering do not support reordering of footer or grouping rows.`,
+          `TWGrid: The row reordering do not support reordering of footer or grouping rows.`,
         );
       }
 
@@ -395,7 +397,7 @@ export const useGridRows = (
       if (props.signature === GridSignature.DataGrid && newRows.length > 1) {
         throw new Error(
           [
-            'MUI X: You cannot replace rows using `apiRef.current.unstable_replaceRows` on the DataGrid.',
+            'TWGrid: You cannot replace rows using `apiRef.current.unstable_replaceRows` on the DataGrid.',
             'You need to upgrade to DataGridPro or DataGridPremium component to unlock this feature.',
           ].join('\n'),
         );

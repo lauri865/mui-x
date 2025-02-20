@@ -303,7 +303,7 @@ export const useGridPrintExport = (
       logger.debug(`Export data as Print`);
 
       if (!apiRef.current.rootElementRef!.current) {
-        throw new Error('MUI X: No grid root element available.');
+        throw new Error('TWGrid: No grid root element available.');
       }
 
       previousGridState.current = apiRef.current.exportState();

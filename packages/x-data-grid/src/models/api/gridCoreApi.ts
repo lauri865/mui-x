@@ -1,10 +1,10 @@
+import { EventListenerOptions, EventManager } from '@mui/x-internals/EventManager';
 import * as React from 'react';
-import { EventManager, EventListenerOptions } from '@mui/x-internals/EventManager';
-import { GridEventPublisher, GridEventListener, GridEvents } from '../events';
 import { Store } from '../../utils/Store';
+import { GridEventListener, GridEventPublisher, GridEvents } from '../events';
 import { GridApiCaches } from '../gridApiCaches';
-import type { GridApiCommon, GridPrivateApiCommon } from './gridApiCommon';
 import type { DataGridProcessedProps } from '../props/DataGridProps';
+import type { GridApiCommon, GridPrivateApiCommon } from './gridApiCommon';
 
 /**
  * The core API interface that is available in the grid `apiRef`.
@@ -108,5 +108,11 @@ export interface GridCorePrivateApi<
    * Allows to access the root props outside of the React component.
    * Do not use in React components - use the `useGridRootProps` hook instead.
    */
-  rootProps: GridProps;
+  /* rootProps: GridProps; */
+  /**
+   * Allows to access the root props outside of the React component.
+   * Do not use in React components - use the `useGridRootProps` hook instead.
+   * Fine to use in e.g. useCallback to avoid unnecessary re-renders due to the context updates.
+   */
+  getRootProps: () => GridProps;
 }

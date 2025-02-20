@@ -73,7 +73,7 @@ export const createSelector = ((
   b: Function,
   c?: Function,
   d?: Function,
-   
+
   e?: Function,
   f?: Function,
   ...other: any[]
@@ -84,7 +84,6 @@ export const createSelector = ((
 
   let selector: any;
 
-   
   if (a && b && c && d && e && f) {
     selector = (stateOrApiRef: any, args: any, instanceIdParam: any) => {
       const isAPIRef = checkIsAPIRef(stateOrApiRef);
@@ -98,7 +97,6 @@ export const createSelector = ((
       const ve = e(state, args, instanceId);
       return f(va, vb, vc, vd, ve, args);
     };
-     
   } else if (a && b && c && d && e) {
     selector = (stateOrApiRef: any, args: any, instanceIdParam: any) => {
       const isAPIRef = checkIsAPIRef(stateOrApiRef);
@@ -162,7 +160,7 @@ export const createSelectorMemoized: CreateSelectorFunction = (...args: any) => 
     if (process.env.NODE_ENV !== 'production') {
       if (cacheKey.id === 'default') {
         warnOnce([
-          'MUI X: A selector was called without passing the instance ID, which may impact the performance of the grid.',
+          'TWGrid: A selector was called without passing the instance ID, which may impact the performance of the grid.',
           'To fix, call it with `apiRef`, for example `mySelector(apiRef)`, or pass the instance ID explicitly, for example `mySelector(state, args, apiRef.current.instanceId)`.',
         ]);
       }

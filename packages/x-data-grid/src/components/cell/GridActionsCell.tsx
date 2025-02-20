@@ -46,7 +46,7 @@ function GridActionsCell(props: GridActionsCellProps) {
   const rootProps = useGridRootProps();
 
   if (!hasActions(colDef)) {
-    throw new Error('MUI X: Missing the `getActions` property in the `GridColDef`.');
+    throw new Error('TWGrid: Missing the `getActions` property in the `GridColDef`.');
   }
 
   const options = colDef.getActions(apiRef.current.getRowParams(id));

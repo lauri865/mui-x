@@ -1,7 +1,7 @@
 import { warnOnce } from '@mui/x-internals/warning';
-import { isNumber } from '../../utils/utils';
-import { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { GridSignature } from '../../hooks/utils/useGridApiEventHandler';
+import { DataGridProcessedProps } from '../../models/props/DataGridProps';
+import { isNumber } from '../../utils/utils';
 
 export type PropValidator<TProps> = (props: TProps) => string | undefined;
 
@@ -10,7 +10,7 @@ export const propValidatorsDataGrid: PropValidator<DataGridProcessedProps>[] = [
     (props.autoPageSize &&
       props.autoHeight &&
       [
-        'MUI X: `<DataGrid autoPageSize={true} autoHeight={true} />` are not valid props.',
+        'TWGrid: `<DataGrid autoPageSize={true} autoHeight={true} />` are not valid props.',
         'You cannot use both the `autoPageSize` and `autoHeight` props at the same time because `autoHeight` scales the height of the Data Grid according to the `pageSize`.',
         '',
         'Please remove one of these two props.',
@@ -20,7 +20,7 @@ export const propValidatorsDataGrid: PropValidator<DataGridProcessedProps>[] = [
     (props.paginationMode === 'client' &&
       props.paginationMeta != null &&
       [
-        'MUI X: Usage of the `paginationMeta` prop with client-side pagination (`paginationMode="client"`) has no effect.',
+        'TWGrid: Usage of the `paginationMeta` prop with client-side pagination (`paginationMode="client"`) has no effect.',
         '`paginationMeta` is only meant to be used with `paginationMode="server"`.',
       ].join('\n')) ||
     undefined,
@@ -29,7 +29,7 @@ export const propValidatorsDataGrid: PropValidator<DataGridProcessedProps>[] = [
       props.paginationMode === 'client' &&
       isNumber(props.rowCount) &&
       [
-        'MUI X: Usage of the `rowCount` prop with client side pagination (`paginationMode="client"`) has no effect.',
+        'TWGrid: Usage of the `rowCount` prop with client side pagination (`paginationMode="client"`) has no effect.',
         '`rowCount` is only meant to be used with `paginationMode="server"`.',
       ].join('\n')) ||
     undefined,
@@ -38,7 +38,7 @@ export const propValidatorsDataGrid: PropValidator<DataGridProcessedProps>[] = [
       props.rowCount == null &&
       !props.unstable_dataSource &&
       [
-        "MUI X: The `rowCount` prop must be passed using `paginationMode='server'`",
+        "TWGrid: The `rowCount` prop must be passed using `paginationMode='server'`",
         'For more detail, see http://mui.com/components/data-grid/pagination/#index-based-pagination',
       ].join('\n')) ||
     undefined,

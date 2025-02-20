@@ -1,8 +1,8 @@
 import { RefObject } from '@mui/x-internals/types';
 import { expect } from 'chai';
-import { createSelectorMemoized, OutputSelector } from './createSelector';
-import { GridStateCommunity } from '../models/gridStateCommunity';
 import { GridApiCommunity } from '../models/api/gridApiCommunity';
+import { GridStateCommunity } from '../models/gridStateCommunity';
+import { createSelectorMemoized, OutputSelector } from './createSelector';
 
 describe('createSelector', () => {
   describe('state as argument', () => {
@@ -10,7 +10,7 @@ describe('createSelector', () => {
       const selector = createSelectorMemoized([], () => []);
       const state = {} as GridStateCommunity;
       expect(() => selector(state)).toWarnDev(
-        'MUI X: A selector was called without passing the instance ID, which may impact the performance of the grid.',
+        'TWGrid: A selector was called without passing the instance ID, which may impact the performance of the grid.',
       );
       expect(() => selector(state, undefined, { id: 0 })).not.toWarnDev();
     });

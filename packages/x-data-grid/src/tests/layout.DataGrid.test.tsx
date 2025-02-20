@@ -199,7 +199,7 @@ describe('<DataGrid /> - Layout & warnings', () => {
           // Use timeout to allow simpler tests in JSDOM.
           clock.tick(0);
         }).toErrorDev(
-          'MUI X: useResizeContainer - The parent DOM element of the Data Grid has an empty height.',
+          'TWGrid: useResizeContainer - The parent DOM element of the Data Grid has an empty height.',
         );
       });
 
@@ -215,7 +215,7 @@ describe('<DataGrid /> - Layout & warnings', () => {
           // Use timeout to allow simpler tests in JSDOM.
           clock.tick(0);
         }).toErrorDev(
-          'MUI X: useResizeContainer - The parent DOM element of the Data Grid has an empty width',
+          'TWGrid: useResizeContainer - The parent DOM element of the Data Grid has an empty width',
         );
       });
     });
@@ -926,7 +926,7 @@ describe('<DataGrid /> - Layout & warnings', () => {
             <DataGrid pagination={false} columns={[]} rows={[]} />
           </div>,
         );
-      }).toErrorDev('MUI X: `<DataGrid pagination={false} />` is not a valid prop.');
+      }).toErrorDev('TWGrid: `<DataGrid pagination={false} />` is not a valid prop.');
     });
 
     // can't catch render errors in the browser for unknown reason

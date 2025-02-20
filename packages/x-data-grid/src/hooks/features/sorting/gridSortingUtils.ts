@@ -27,7 +27,7 @@ export const sanitizeSortModel = (model: GridSortModel, disableMultipleColumnsSo
     if (process.env.NODE_ENV !== 'production') {
       warnOnce(
         [
-          'MUI X: The `sortModel` can only contain a single item when the `disableMultipleColumnsSorting` prop is set to `true`.',
+          'TWGrid: The `sortModel` can only contain a single item when the `disableMultipleColumnsSorting` prop is set to `true`.',
           'If you are using the community version of the Data Grid, this prop is always `true`.',
         ],
         'error',

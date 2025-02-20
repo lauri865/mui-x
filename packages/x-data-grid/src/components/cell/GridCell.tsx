@@ -372,7 +372,7 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
       if (!warnedOnce) {
         console.warn(
           [
-            `MUI X: The cell with id=${rowId} and field=${field} received focus.`,
+            `TWGrid: The cell with id=${rowId} and field=${field} received focus.`,
             `According to the state, the focus should be at id=${focusedCell?.id}, field=${focusedCell?.field}.`,
             "Not syncing the state may cause unwanted behaviors since the `cellFocusIn` event won't be fired.",
             'Call `fireEvent.mouseUp` before the `fireEvent.click` to sync the focus with the state.',

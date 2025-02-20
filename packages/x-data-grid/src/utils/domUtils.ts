@@ -88,7 +88,7 @@ export function findGroupHeaderElementsFromField(elem: Element, field: string): 
 export function findGridCellElementsFromCol(col: HTMLElement, api: GridPrivateApiCommunity) {
   const root = findParentElementFromClassName(col, gridClasses.root);
   if (!root) {
-    throw new Error('MUI X: The root element is not found.');
+    throw new Error('TWGrid: The root element is not found.');
   }
 
   const ariaColIndex = col.getAttribute('aria-colindex');

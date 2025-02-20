@@ -1,18 +1,17 @@
-import * as React from 'react';
 import { createRenderer, fireEvent, screen } from '@mui/internal-test-utils';
-import { expect } from 'chai';
 import {
   DataGrid,
   DataGridProps,
-  GridToolbarFilterButton,
   GridColDef,
   GridFilterItem,
+  GridFilterOperator,
   GridPreferencePanelsValue,
   GridToolbar,
-  GridFilterOperator,
+  GridToolbarFilterButton,
 } from '@mui/x-data-grid';
-import { getColumnValues } from 'test/utils/helperFn';
+import { expect } from 'chai';
 import { spy } from 'sinon';
+import { getColumnValues } from 'test/utils/helperFn';
 
 const isJSDOM = /jsdom/.test(window.navigator.userAgent);
 
@@ -73,7 +72,7 @@ describe('<DataGrid /> - Filter', () => {
           />,
         );
       }).toErrorDev(
-        'MUI X: The `filterModel` can only contain a single item when the `disableMultipleColumnsFiltering` prop is set to `true`.',
+        'TWGrid: The `filterModel` can only contain a single item when the `disableMultipleColumnsFiltering` prop is set to `true`.',
       );
     });
 

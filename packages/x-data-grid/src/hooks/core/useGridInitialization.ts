@@ -1,3 +1,4 @@
+import { unstable_useEventCallback } from '@mui/utils';
 import { RefObject } from '@mui/x-internals/types';
 import type { GridApiCommon, GridPrivateApiCommon } from '../../models/api/gridApiCommon';
 import { DataGridProcessedProps } from '../../models/props/DataGridProps';
@@ -30,8 +31,10 @@ export const useGridInitialization = <
   useGridStrategyProcessing(privateApiRef);
   useGridLocaleText(privateApiRef, props);
 
+  const getRootProps = unstable_useEventCallback(() => props);
+
   privateApiRef.current.register('public', { meta: props.meta });
-  privateApiRef.current.register('private', { rootProps: props });
+  privateApiRef.current.register('private', { rootProps: props, getRootProps });
 
   return privateApiRef;
 };

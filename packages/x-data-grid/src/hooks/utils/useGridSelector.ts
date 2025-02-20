@@ -70,7 +70,7 @@ export const useGridSelector = <Api extends GridApiCommon, Args, T>(
   if (process.env.NODE_ENV !== 'production') {
     if (!apiRef.current.state) {
       warnOnce([
-        'MUI X: `useGridSelector` has been called before the initialization of the state.',
+        'TWGrid: `useGridSelector` has been called before the initialization of the state.',
         'This hook can only be used inside the context of the grid.',
       ]);
     }

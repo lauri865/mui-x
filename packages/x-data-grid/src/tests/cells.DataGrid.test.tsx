@@ -174,7 +174,7 @@ describe('<DataGrid /> - Cells', () => {
 
     expect(() => {
       getCell(1, 0).focus();
-    }).toWarnDev(['MUI X: The cell with id=1 and field=brand received focus.']);
+    }).toWarnDev(['TWGrid: The cell with id=1 and field=brand received focus.']);
   });
 
   testSkipIf(isJSDOM)(

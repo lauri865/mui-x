@@ -317,9 +317,9 @@ describe('<DataGrid /> - Pagination', () => {
           />,
         );
       }).toWarnDev([
-        `MUI X: The page size \`${pageSize}\` is not present in the \`pageSizeOptions\``,
+        `TWGrid: The page size \`${pageSize}\` is not present in the \`pageSizeOptions\``,
         reactMajor < 19 &&
-          `MUI X: The page size \`${pageSize}\` is not present in the \`pageSizeOptions\``,
+          `TWGrid: The page size \`${pageSize}\` is not present in the \`pageSizeOptions\``,
       ]);
     });
 
@@ -346,9 +346,9 @@ describe('<DataGrid /> - Pagination', () => {
       expect(() => {
         render(<BaselineTestCase paginationModel={{ pageSize, page: 0 }} />);
       }).toWarnDev([
-        `MUI X: The page size \`${pageSize}\` is not present in the \`pageSizeOptions\``,
+        `TWGrid: The page size \`${pageSize}\` is not present in the \`pageSizeOptions\``,
         reactMajor < 19 &&
-          `MUI X: The page size \`${pageSize}\` is not present in the \`pageSizeOptions\``,
+          `TWGrid: The page size \`${pageSize}\` is not present in the \`pageSizeOptions\``,
       ]);
     });
 
@@ -356,8 +356,9 @@ describe('<DataGrid /> - Pagination', () => {
       expect(() => {
         render(<BaselineTestCase pageSizeOptions={[25, 50]} />);
       }).toWarnDev([
-        `MUI X: The page size \`100\` is not present in the \`pageSizeOptions\``,
-        reactMajor < 19 && `MUI X: The page size \`100\` is not present in the \`pageSizeOptions\``,
+        `TWGrid: The page size \`100\` is not present in the \`pageSizeOptions\``,
+        reactMajor < 19 &&
+          `TWGrid: The page size \`100\` is not present in the \`pageSizeOptions\``,
       ]);
     });
 
@@ -733,7 +734,7 @@ describe('<DataGrid /> - Pagination', () => {
       render(<BaselineTestCase paginationMode="client" rowCount={100} />);
     }).toErrorDev(
       [
-        'MUI X: Usage of the `rowCount` prop with client side pagination (`paginationMode="client"`) has no effect.',
+        'TWGrid: Usage of the `rowCount` prop with client side pagination (`paginationMode="client"`) has no effect.',
         '`rowCount` is only meant to be used with `paginationMode="server"`.',
       ].join('\n'),
     );

@@ -113,7 +113,7 @@ const serializeRow = ({
     if (process.env.NODE_ENV !== 'production') {
       if (String(cellParams.formattedValue) === '[object Object]') {
         warnOnce([
-          'MUI X: When the value of a field is an object or a `renderCell` is provided, the CSV export might not display the value correctly.',
+          'TWGrid: When the value of a field is an object or a `renderCell` is provided, the CSV export might not display the value correctly.',
           'You can provide a `valueFormatter` with a string representation to be used.',
         ]);
       }

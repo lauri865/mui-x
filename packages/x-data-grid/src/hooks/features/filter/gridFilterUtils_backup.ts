@@ -163,7 +163,7 @@ const getFilterCallbackFromItem = (
   filterItem: GridFilterItem,
   apiRef: RefObject<GridPrivateApiCommunity>,
 ): GridFilterItemApplier | null => {
-  if (!filterItem.field || !filterItem.conditions.length) {
+  if (!filterItem.field || !filterItem.operator) {
     return null;
   }
 
@@ -171,62 +171,53 @@ const getFilterCallbackFromItem = (
   if (!column) {
     return null;
   }
+  let parsedValue;
 
-  const { ignoreDiacritics } = apiRef.current.getRootProps();
+  if (column.valueParser) {
+    const parser = column.valueParser;
+    parsedValue = Array.isArray(filterItem.value)
+      ? filterItem.value?.map((x) => parser(x, undefined, column, apiRef))
+      : parser(filterItem.value, undefined, column, apiRef);
+  } else {
+    parsedValue = filterItem.value;
+  }
+
+  const { ignoreDiacritics } = apiRef.current.rootProps;
+
+  if (ignoreDiacritics) {
+    parsedValue = removeDiacritics(parsedValue);
+  }
+
+  const newFilterItem: GridFilterItem = { ...filterItem, value: parsedValue };
+
+  const filterOperators = column.filterOperators;
+  if (!filterOperators?.length) {
+    throw new Error(`TWGrid: No filter operators found for column '${column.field}'.`);
+  }
+
+  const filterOperator = filterOperators.find(
+    (operator) => operator.value === newFilterItem.operator,
+  )!;
+  if (!filterOperator) {
+    throw new Error(
+      `TWGrid: No filter operator found for column '${column.field}' and operator value '${newFilterItem.operator}'.`,
+    );
+  }
+
   const publicApiRef = getPublicApiRef(apiRef);
 
-  const conditionCallbacks = filterItem.conditions.map((condition) => {
-    let parsedValue;
-
-    if (column.valueParser) {
-      const parser = column.valueParser;
-      parsedValue = Array.isArray(condition.value)
-        ? condition.value?.map((x) => parser(x, undefined, column, apiRef))
-        : parser(condition.value, undefined, column, apiRef);
-    } else {
-      parsedValue = condition.value;
-    }
-
-    if (ignoreDiacritics) {
-      parsedValue = removeDiacritics(parsedValue);
-    }
-
-    const newCondition = { ...condition, value: parsedValue };
-
-    const filterOperator = column.filterOperators?.find(
-      (operator) => operator.value === newCondition.operator,
-    );
-    if (!filterOperator) {
-      throw new Error(
-        `TWGrid: No filter operator found for column '${column.field}' and operator value '${newCondition.operator}'.`,
-      );
-    }
-
-    const applyFilterOnRow = filterOperator.getApplyFilterFn(newCondition, column)!;
-    if (typeof applyFilterOnRow !== 'function') {
-      return null;
-    }
-
-    return (row: GridValidRowModel) => {
+  const applyFilterOnRow = filterOperator.getApplyFilterFn(newFilterItem, column)!;
+  if (typeof applyFilterOnRow !== 'function') {
+    return null;
+  }
+  return {
+    item: newFilterItem,
+    fn: (row: GridValidRowModel) => {
       let value = apiRef.current.getRowValue(row, column);
       if (ignoreDiacritics) {
         value = removeDiacritics(value);
       }
       return applyFilterOnRow(value, row, column, publicApiRef);
-    };
-  });
-
-  if (conditionCallbacks.some((cb) => cb === null)) {
-    return null;
-  }
-
-  return {
-    item: filterItem,
-    fn: (row: GridValidRowModel) => {
-      const results = conditionCallbacks.map((cb) => cb!(row));
-      return filterItem.logicOperator === 'or'
-        ? results.some((result) => result)
-        : results.every((result) => result);
     },
   };
 };
@@ -337,7 +328,7 @@ const buildAggregatedQuickFilterApplier = (
     }[];
   }[];
 
-  const { ignoreDiacritics } = apiRef.current.getRootProps();
+  const { ignoreDiacritics } = apiRef.current.rootProps;
   const publicApiRef = getPublicApiRef(apiRef);
 
   columnFields.forEach((field) => {

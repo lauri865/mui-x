@@ -119,7 +119,7 @@ function GridScrollAreaContent(props: ScrollAreaProps) {
     } else if (scrollDirection === 'right') {
       offset = Math.max(1, event.clientX - rootRef.current!.getBoundingClientRect().left);
     } else {
-      throw new Error('MUI X: Wrong drag direction');
+      throw new Error('TWGrid: Wrong drag direction');
     }
 
     offset = (offset - CLIFF) * SLOP + CLIFF;

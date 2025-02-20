@@ -173,7 +173,7 @@ export const useGridRowSelection = (
       ) {
         throw new Error(
           [
-            'MUI X: `rowSelectionModel` can only contain 1 item in DataGrid.',
+            'TWGrid: `rowSelectionModel` can only contain 1 item in DataGrid.',
             'You need to upgrade to DataGridPro or DataGridPremium component to unlock multiple selection.',
           ].join('\n'),
         );

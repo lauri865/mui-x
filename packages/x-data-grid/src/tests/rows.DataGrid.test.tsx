@@ -250,8 +250,8 @@ describe('<DataGrid /> - Rows', () => {
           </ErrorBoundary>,
         );
       }).toErrorDev([
-        'MUI X: Missing the `getActions` property in the `GridColDef`.',
-        reactMajor < 19 && 'MUI X: Missing the `getActions` property in the `GridColDef`.',
+        'TWGrid: Missing the `getActions` property in the `GridColDef`.',
+        reactMajor < 19 && 'TWGrid: Missing the `getActions` property in the `GridColDef`.',
         reactMajor < 19 && 'The above error occurred in the <GridActionsCell> component',
       ]);
     });
@@ -1087,7 +1087,7 @@ describe('<DataGrid /> - Rows', () => {
         render(<TestCase autoPageSize autoHeight />);
       }).toErrorDev(
         [
-          'MUI X: `<DataGrid autoPageSize={true} autoHeight={true} />` are not valid props.',
+          'TWGrid: `<DataGrid autoPageSize={true} autoHeight={true} />` are not valid props.',
           'You cannot use both the `autoPageSize` and `autoHeight` props at the same time because `autoHeight` scales the height of the Data Grid according to the `pageSize`.',
           '',
           'Please remove one of these two props.',

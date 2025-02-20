@@ -1,9 +1,9 @@
-import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
+import * as React from 'react';
 import { Logger } from '../../models';
 import { GridPrivateApiCommon } from '../../models/api/gridApiCommon';
-import { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { GridLoggerApi } from '../../models/api/gridLoggerApi';
+import { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { localStorageAvailable } from '../../utils/utils';
 import { useGridApiMethod } from '../utils';
 
@@ -24,7 +24,7 @@ function getAppender(name: string, logLevel: string, appender: Logger = console)
   const minLogLevelIdx = LOG_LEVELS.indexOf(logLevel);
 
   if (minLogLevelIdx === -1) {
-    throw new Error(`MUI X: Log level ${logLevel} not recognized.`);
+    throw new Error(`TWGrid: Log level ${logLevel} not recognized.`);
   }
 
   const logger = LOG_LEVELS.reduce((loggerObj, method, idx) => {
@@ -32,7 +32,7 @@ function getAppender(name: string, logLevel: string, appender: Logger = console)
       loggerObj[method] = (...args: any[]) => {
         const [message, ...other] = args;
 
-        (appender as any)[method](`MUI X: ${name} - ${message}`, ...other);
+        (appender as any)[method](`TWGrid: ${name} - ${message}`, ...other);
       };
     } else {
       loggerObj[method] = noop;

@@ -1,14 +1,14 @@
-import * as React from 'react';
 import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
 import { RefObject } from '@mui/x-internals/types';
 import { warnOnce } from '@mui/x-internals/warning';
-import type { GridListColDef } from '../../../models/colDef/gridColDef';
-import { GridStateInitializer } from '../../utils/useGridInitializeState';
+import * as React from 'react';
 import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
-import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
+import type { GridListColDef } from '../../../models/colDef/gridColDef';
 import { GridEventListener } from '../../../models/events';
-import { gridDimensionsSelector } from '../dimensions';
+import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { useGridApiEventHandler } from '../../utils/useGridApiEventHandler';
+import { GridStateInitializer } from '../../utils/useGridInitializeState';
+import { gridDimensionsSelector } from '../dimensions';
 
 export type GridListViewState = (GridListColDef & { computedWidth: number }) | undefined;
 
@@ -77,7 +77,7 @@ export function useGridListView(
   React.useEffect(() => {
     if (props.unstable_listView && !props.unstable_listColumn) {
       warnOnce([
-        'MUI X: The `unstable_listColumn` prop must be set if `unstable_listView` is enabled.',
+        'TWGrid: The `unstable_listColumn` prop must be set if `unstable_listView` is enabled.',
         'To fix, pass a column definition to the `unstable_listColumn` prop, e.g. `{ field: "example", renderCell: (params) => <div>{params.row.id}</div> }`.',
         'For more details, see https://mui.com/x/react-data-grid/list-view/',
       ]);

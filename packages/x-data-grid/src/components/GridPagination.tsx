@@ -113,7 +113,7 @@ const GridPagination = forwardRef<HTMLDivElement>(function GridPagination(props,
     ) {
       console.warn(
         [
-          `MUI X: The page size \`${paginationModel.pageSize}\` is not present in the \`pageSizeOptions\`.`,
+          `TWGrid: The page size \`${paginationModel.pageSize}\` is not present in the \`pageSizeOptions\`.`,
           `Add it to show the pagination select.`,
         ].join('\n'),
       );

@@ -7,7 +7,7 @@ export const useGridRootProps = () => {
 
   if (!contextValue) {
     throw new Error(
-      'MUI X: useGridRootProps should only be used inside the DataGrid, DataGridPro or DataGridPremium component.',
+      'TWGrid: useGridRootProps should only be used inside the DataGrid, DataGridPro or DataGridPremium component.',
     );
   }
 

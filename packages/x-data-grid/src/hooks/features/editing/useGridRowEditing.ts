@@ -88,7 +88,7 @@ export const useGridRowEditing = (
     (id: GridRowId, field: string) => {
       const params = apiRef.current.getCellParams(id, field);
       if (!apiRef.current.isCellEditable(params)) {
-        throw new Error(`MUI X: The cell with id=${id} and field=${field} is not editable.`);
+        throw new Error(`TWGrid: The cell with id=${id} and field=${field} is not editable.`);
       }
     },
     [apiRef],
@@ -97,7 +97,7 @@ export const useGridRowEditing = (
   const throwIfNotInMode = React.useCallback(
     (id: GridRowId, mode: GridRowModes) => {
       if (apiRef.current.getRowMode(id) !== mode) {
-        throw new Error(`MUI X: The row with id=${id} is not in ${mode} mode.`);
+        throw new Error(`TWGrid: The row with id=${id} is not in ${mode} mode.`);
       }
     },
     [apiRef],
@@ -546,7 +546,7 @@ export const useGridRowEditing = (
           } else if (process.env.NODE_ENV !== 'production') {
             warnOnce(
               [
-                'MUI X: A call to `processRowUpdate` threw an error which was not handled because `onProcessRowUpdateError` is missing.',
+                'TWGrid: A call to `processRowUpdate` threw an error which was not handled because `onProcessRowUpdateError` is missing.',
                 'To handle the error pass a callback to the `onProcessRowUpdateError` prop, for example `<DataGrid onProcessRowUpdateError={(error) => ...} />`.',
                 'For more detail, see https://mui.com/x/react-data-grid/editing/persistence/.',
               ],

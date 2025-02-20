@@ -212,7 +212,7 @@ const GridSkeletonLoadingOverlay = forwardRef<HTMLDivElement, React.HTMLAttribut
 
       if (!cells) {
         throw new Error(
-          'MUI X: Expected skeleton cells to be defined with `data-field` attribute.',
+          'TWGrid: Expected skeleton cells to be defined with `data-field` attribute.',
         );
       }
 
