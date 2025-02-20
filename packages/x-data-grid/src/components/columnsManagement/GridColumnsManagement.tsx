@@ -1,6 +1,7 @@
 import useEventCallback from '@mui/utils/useEventCallback';
 import clsx from 'clsx';
 import * as React from 'react';
+import { GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD } from '../../colDef';
 import { useThemedComponent } from '../../context/GridThemeContext';
 import { EMPTY_PINNED_COLUMN_FIELDS } from '../../hooks';
 import { getPinnedColumnState } from '../../hooks/features/columnPinning/useGridColumnPinning';
@@ -288,8 +289,11 @@ function GridColumnsManagement(props: GridColumnsManagementProps) {
                 onCheckedChange={toggleColumn(column.field)}
                 name={column.field}
               />
-
+              {column.field === GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD && (
+                <rootProps.slots.groupIcon className="size-4 -mr-1" />
+              )}
               {column.headerName || column.field}
+
               <div className="ml-auto flex items-center">
                 {apiRef.current.isColumnPinned(column.field) && (
                   <rootProps.slots.pinIcon

@@ -8,7 +8,7 @@ import { Store } from '../../utils/Store';
 import { GridSignature } from '../utils/useGridApiEventHandler';
 import { useGridApiMethod } from '../utils/useGridApiMethod';
 
-const SYMBOL_API_PRIVATE = Symbol('mui.api_private');
+const SYMBOL_API_PRIVATE = Symbol('twg.api_private');
 
 const isSyntheticEvent = (event: any): event is React.SyntheticEvent => {
   return event.isPropagationStopped !== undefined;

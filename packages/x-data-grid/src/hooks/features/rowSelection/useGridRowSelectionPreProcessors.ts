@@ -1,45 +1,32 @@
-import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
-import composeClasses from '@mui/utils/composeClasses';
-import { GridColDef } from '../../../models/colDef/gridColDef';
-import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
-import { getDataGridUtilityClass } from '../../../constants';
-import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
+import * as React from 'react';
 import { GRID_CHECKBOX_SELECTION_COL_DEF, GRID_CHECKBOX_SELECTION_FIELD } from '../../../colDef';
 import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
-
-type OwnerState = { classes: DataGridProcessedProps['classes'] };
-
-const useUtilityClasses = (ownerState: OwnerState) => {
-  const { classes } = ownerState;
-
-  return React.useMemo(() => {
-    const slots = {
-      cellCheckbox: ['cellCheckbox'],
-      columnHeaderCheckbox: ['columnHeaderCheckbox'],
-    };
-
-    return composeClasses(slots, getDataGridUtilityClass, classes);
-  }, [classes]);
-};
+import { GRID_USER_DEFINED_SPECIAL_COLUMN, GridColDef } from '../../../models/colDef/gridColDef';
+import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
+import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
 
 export const useGridRowSelectionPreProcessors = (
   apiRef: RefObject<GridPrivateApiCommunity>,
   props: DataGridProcessedProps,
 ) => {
-  const ownerState = { classes: props.classes };
-  const classes = useUtilityClasses(ownerState);
-
   const updateSelectionColumn = React.useCallback<GridPipeProcessor<'hydrateColumns'>>(
     (columnsState) => {
+      const userDefinedCheckbox = columnsState.lookup[GRID_CHECKBOX_SELECTION_FIELD]?.[
+        GRID_USER_DEFINED_SPECIAL_COLUMN
+      ]
+        ? columnsState.lookup[GRID_CHECKBOX_SELECTION_FIELD]
+        : undefined;
+
       const selectionColumn: GridColDef = {
-        ...GRID_CHECKBOX_SELECTION_COL_DEF,
-        cellClassName: classes.cellCheckbox,
-        headerClassName: classes.columnHeaderCheckbox,
+        ...(userDefinedCheckbox ?? GRID_CHECKBOX_SELECTION_COL_DEF),
+        cellClassName: 'twg-cellCheckbox',
+        headerClassName: 'twg-columnHeaderCheckbox',
         headerName: apiRef.current.getLocaleText('checkboxSelectionHeaderName'),
       };
 
-      const shouldHaveSelectionColumn = props.checkboxSelection;
+      const shouldHaveSelectionColumn =
+        props.checkboxSelection || userDefinedCheckbox !== undefined;
       const haveSelectionColumn = columnsState.lookup[GRID_CHECKBOX_SELECTION_FIELD] != null;
 
       if (shouldHaveSelectionColumn && !haveSelectionColumn) {
@@ -54,12 +41,13 @@ export const useGridRowSelectionPreProcessors = (
         columnsState.lookup[GRID_CHECKBOX_SELECTION_FIELD] = {
           ...selectionColumn,
           ...columnsState.lookup[GRID_CHECKBOX_SELECTION_FIELD],
+          headerName: selectionColumn.headerName,
         };
       }
 
       return columnsState;
     },
-    [apiRef, classes, props.checkboxSelection],
+    [apiRef, props.checkboxSelection],
   );
 
   useGridRegisterPipeProcessor(apiRef, 'hydrateColumns', updateSelectionColumn);

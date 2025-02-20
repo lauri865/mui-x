@@ -14,7 +14,6 @@ export const GRID_CHECKBOX_SELECTION_COL_DEF: GridColDef = {
   resizable: false,
   sortable: false,
   filterable: false,
-  // @ts-ignore
   aggregable: false,
   disableColumnMenu: true,
   disableExport: true,

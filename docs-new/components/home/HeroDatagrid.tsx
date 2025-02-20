@@ -1,16 +1,21 @@
 'use client';
-import {
-  columnHelper,
-  DataGrid,
-  GRID_DETAIL_PANEL_TOGGLE_FIELD,
-  useGridApiRef,
-} from '@mui/x-data-grid';
+import { columnHelper, DataGrid, GridPreferencePanelsValue, useGridApiRef } from '@mui/x-data-grid';
 import { GRID_ROOT_FOOTER_ID } from '@mui/x-data-grid/hooks/features/aggregation/useGridAggregation';
 import * as React from 'react';
 import { cn } from '../../lib/cn';
 import { GlowingEffect } from './glowing-effect';
 
-const { columns } = columnHelper.createColumns((c) => [
+const props = columnHelper.createColumns((c) => [
+  c.detailPanel({
+    pinned: 'left',
+    hide: true,
+  }),
+  c.checkboxSelection({
+    pinned: 'left',
+  }),
+  /*  c.group({
+    pinned: 'left',
+  }), */
   c.string({
     field: 'id',
     headerName: 'ID',
@@ -109,6 +114,11 @@ const rows = [
   { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
 ];
+const props2 = columnHelper.inferFromData(rows, {
+  initialPinnedColumns: {
+    left: ['id'],
+  },
+});
 
 const index = rows.length;
 
@@ -127,21 +137,15 @@ const getRowHeight = (params) => {
 export function HeroDataGrid() {
   const apiRef = useGridApiRef();
   const [data, setData] = React.useState(rows);
-  const [columnsState, setColumns] = React.useState(columns);
+
   const [isLoading, setIsLoading] = React.useState(false);
 
   React.useEffect(() => {
-    // apiRef.current?.showPreferences(GridPreferencePanelsValue.columns);
+    apiRef.current?.showPreferences(GridPreferencePanelsValue.columns);
+
     requestAnimationFrame(() => {
       document.activeElement?.blur();
     });
-  }, []);
-
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setColumns((cols) => [{ ...cols[0], width: 100 + Math.random() * 100 }, ...cols.slice(1)]);
-    }, 1000);
-    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -161,24 +165,20 @@ export function HeroDataGrid() {
         className="hidden dark:flex"
       />
       <DataGrid
-        dependencies={[columnsState]}
         meta={{
           test: 123,
         }}
         className="text-[13px]"
         rows={data}
-        columns={columns}
+        {...props}
         /* pagination
         autoPageSize */
         initialState={{
+          ...props.initialState,
           pagination: {
             paginationModel: {
               pageSize: 5,
             },
-          },
-          pinnedColumns: {
-            left: [GRID_DETAIL_PANEL_TOGGLE_FIELD, 'lastName'],
-            right: ['id'],
           },
 
           /* pinnedRows: {
@@ -189,21 +189,14 @@ export function HeroDataGrid() {
           rowGrouping: {
             model: ['lastName'],
           },
-          aggregation: {
-            model: {
-              age: 'avg',
-              fakeAge: 'avg',
-            },
-          },
         }}
         onSortModelChange={(model, detail) => {
           detail.api.scrollToIndexes({ rowIndex: 0 });
           // detail.api.setRows([]);
         }}
         pageSizeOptions={[5]}
-        // checkboxSelection
-        disableRowSelectionOnClick
         checkboxSelection
+        disableRowSelectionOnClick
         loading={isLoading}
         getDetailPanelContent={detailPanel}
         /* onRowsScrollEnd={async (params, detail) => {

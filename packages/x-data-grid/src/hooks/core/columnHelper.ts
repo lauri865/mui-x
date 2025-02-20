@@ -1,6 +1,9 @@
+import { GRID_DETAIL_PANEL_COL_DEF, GRID_GROUPING_COLUMN_COL_DEF } from '../../colDef';
 import { GRID_CHECKBOX_SELECTION_COL_DEF } from '../../colDef/gridCheckboxSelectionColDef';
 import { getGridDefaultColumnTypes } from '../../colDef/gridDefaultColumnTypes';
+import { clamp } from '../../internals';
 import {
+  GRID_USER_DEFINED_SPECIAL_COLUMN,
   GridActionsColDef,
   GridBaseColDef,
   GridColDef,
@@ -9,11 +12,19 @@ import {
 import { GridValidRowModel } from '../../models/gridRows';
 import { GridInitialStateCommunity as GridInitialState } from '../../models/gridStateCommunity';
 import { get } from '../features/columns/get';
-import { GridPinnedColumnPosition } from '../features/columns/gridColumnsInterfaces';
 
 export const defaultColDef = {
   ...getGridDefaultColumnTypes(),
-  checkboxSelection: GRID_CHECKBOX_SELECTION_COL_DEF,
+  checkboxSelection: {
+    ...GRID_CHECKBOX_SELECTION_COL_DEF,
+    [GRID_USER_DEFINED_SPECIAL_COLUMN]: true,
+  } as GridColDef,
+  group: {
+    field: GRID_GROUPING_COLUMN_COL_DEF.field,
+    type: GRID_GROUPING_COLUMN_COL_DEF.type,
+    [GRID_USER_DEFINED_SPECIAL_COLUMN]: true,
+  },
+  detailPanel: GRID_DETAIL_PANEL_COL_DEF,
 };
 
 type DefaultColumnTypes<R extends GridValidRowModel> = {
@@ -28,6 +39,11 @@ type DefaultColumnTypes<R extends GridValidRowModel> = {
   custom: GridBaseColDef<R>;
   array: GridBaseColDef<R>;
   checkboxSelection: Omit<GridBaseColDef<R>, 'field'>;
+  group: Omit<
+    GridBaseColDef<R>,
+    'field' | 'aggregable' | 'editable' | 'groupable' | 'getApplyQuickFilterFn'
+  >;
+  detailPanel: Omit<GridBaseColDef<R>, 'field' | 'aggregable' | 'editable' | 'groupable'>;
 };
 
 type DotSeparatedKeys<T> = T extends object
@@ -41,7 +57,7 @@ type DotSeparatedKeys<T> = T extends object
 type DefaultColumnType<R extends GridValidRowModel> = keyof DefaultColumnTypes<R>;
 
 type AdditionalProps = {
-  pinned?: GridPinnedColumnPosition;
+  pinned?: 'left' | 'right';
   hide?: boolean;
   aggregation?: string;
 };
@@ -50,13 +66,23 @@ type Field<ColDef, R extends GridValidRowModel> = 'field' extends keyof ColDef
   ? { field: DotSeparatedKeys<R> }
   : {};
 
-// New helper type merging default and custom types.
+// Helper type: if Field<T,R> has no keys, then it is empty.
+type HasField<ColDef, R extends GridValidRowModel> = [keyof Field<ColDef, R>] extends [never]
+  ? false
+  : true;
+
 type DefaultHelper<R extends GridValidRowModel> = {
-  [K in DefaultColumnType<R>]: (
-    colDef: Omit<Partial<DefaultColumnTypes<R>[K]>, 'field'> &
-      AdditionalProps &
-      Field<DefaultColumnTypes<R>[K], R>,
-  ) => GridColDef;
+  [K in DefaultColumnType<R>]: HasField<DefaultColumnTypes<R>[K], R> extends true
+    ? (
+        colDef: Omit<Partial<DefaultColumnTypes<R>[K]>, 'field'> &
+          AdditionalProps &
+          Field<DefaultColumnTypes<R>[K], R>,
+      ) => GridColDef
+    : (
+        colDef?: Omit<Partial<DefaultColumnTypes<R>[K]>, 'field'> &
+          AdditionalProps &
+          Field<DefaultColumnTypes<R>[K], R>,
+      ) => GridColDef;
 };
 
 // Updated CustomHelper type to use the default type from extends if provided.
@@ -147,7 +173,11 @@ export function createColumnHelper<
             initialState.aggregation!.model![colDef.field] = aggregation;
           }
 
-          if (!colDef.headerName && options.autoFillMissingHeaders) {
+          if (
+            !colDef.headerName &&
+            options.autoFillMissingHeaders &&
+            !colDef[GRID_USER_DEFINED_SPECIAL_COLUMN]
+          ) {
             colDef.headerName = humanize(colDef.field);
           }
 
@@ -164,12 +194,18 @@ export function createColumnHelper<
       data: Row[],
       options?: {
         skipFields?: Array<keyof Row>;
+        hideFieldsByDefault?: Array<keyof Row>;
+        initialPinnedColumns?: {
+          left?: Array<keyof Row>;
+          right?: Array<keyof Row>;
+        };
         staticTypes?: Record<keyof Row, keyof typeof helper>;
         rowSampleSize?: number;
         maxDepth?: number;
         maxColumnWidth?: number;
         defaultColumnWidth?: number;
         minColumnWidth?: number;
+        shortenNestedHeaders?: boolean;
       },
     ) => {
       const columnNames = new Set<string>();
@@ -181,6 +217,7 @@ export function createColumnHelper<
       const maxColumnWidth = options?.maxColumnWidth ?? 300;
       const defaultColumnWidth = options?.defaultColumnWidth ?? 100;
       const minColumnWidth = options?.minColumnWidth ?? 50;
+      const shortenNestedHeaders = options?.shortenNestedHeaders ?? true;
 
       const traverseRow = (row: Row, path: string[] = [], depth = 1) => {
         Object.keys(row).forEach((field) => {
@@ -212,12 +249,16 @@ export function createColumnHelper<
                 columnType.set(currentPathString, 'dateString');
               }
 
-              const currentWidth = Math.min(maxColumnWidth, String(value).length * 7);
+              const currentWidth = getEstimatedStringWidth(
+                value != null
+                  ? value instanceof Date
+                    ? value.toISOString().split('T')[0]
+                    : String(value)
+                  : '',
+              );
               const existingWidth = columnWidths.get(currentPathString);
-              if (
-                existingWidth == null ||
-                (currentWidth > existingWidth && currentWidth < maxColumnWidth)
-              ) {
+              console.log(currentWidth, existingWidth);
+              if (existingWidth == null || currentWidth > existingWidth) {
                 columnWidths.set(currentPathString, currentWidth);
               }
 
@@ -233,22 +274,44 @@ export function createColumnHelper<
 
       columnNames.forEach((field) => {
         const type = columnType.get(field) ?? ('string' as keyof typeof helper);
+        const headerName = humanize(field, shortenNestedHeaders);
+        const headerWidth = getEstimatedStringWidth(headerName) + 30;
+        const baseWidth = Math.max(headerWidth, columnWidths.get(field) ?? defaultColumnWidth);
         columns.push(
           helper[type]({
             field: field as any,
-            headerName: humanize(field),
-            width: Math.max(
-              minColumnWidth,
-              Math.min(maxColumnWidth, columnWidths.get(field) ?? defaultColumnWidth),
-            ),
+            headerName,
+            width: clamp(baseWidth, minColumnWidth, maxColumnWidth),
           }),
         );
       });
 
-      return columns;
+      return {
+        columns,
+
+        initialState: {
+          ...(options?.hideFieldsByDefault && {
+            columns: {
+              columnVisibilityModel: Object.fromEntries(
+                options.hideFieldsByDefault.map((field) => [field, false]),
+              ),
+            },
+          }),
+          ...(options?.initialPinnedColumns && {
+            pinnedColumns: {
+              left: options.initialPinnedColumns.left ?? [],
+              right: options.initialPinnedColumns.right ?? [],
+            },
+          }),
+        },
+      };
     },
   };
 }
+
+const getEstimatedStringWidth = (str: string) => {
+  return str.length * 7 + 20;
+};
 
 export const columnHelper = createColumnHelper({
   multiSelect: {
@@ -274,8 +337,17 @@ export function createCustomColDef<RenderCellProps = never>(
 }
 
 function capitalize(str: string) {
+  if (str.match(/^id$/i)) {
+    return 'ID';
+  }
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
-function humanize(str: string) {
+function humanize(str: string, shortenNested?: boolean) {
+  if (shortenNested && str.match(/\./)) {
+    return capitalize(str.split('.').at(-1)!);
+  }
+  if (str.match(/\.|_/)) {
+    return str.split(/\.|_/).map(capitalize).join(' ');
+  }
   return capitalize(str.replace(/_ids?$/g, '').replace(/_/g, ' '));
 }

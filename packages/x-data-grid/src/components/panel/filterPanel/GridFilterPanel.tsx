@@ -220,7 +220,6 @@ const GridFilterPanel = forwardRef<HTMLDivElement, GridFilterPanelProps>(
                 item={item}
                 filter={filter}
                 applyFilterChanges={(values) => {
-                  console.log('filter', filter);
                   applyFilter({
                     ...filter,
                     conditions: filter.conditions.map((condition, i) =>

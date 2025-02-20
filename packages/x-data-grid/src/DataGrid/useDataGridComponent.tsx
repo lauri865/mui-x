@@ -17,6 +17,7 @@ import {
 import {
   columnPinningStateInitializer,
   useGridColumnPinning,
+  useGridColumnPinningPreProcessors,
 } from '../hooks/features/columnPinning/useGridColumnPinning';
 import {
   columnResizeStateInitializer,
@@ -28,6 +29,7 @@ import { densityStateInitializer, useGridDensity } from '../hooks/features/densi
 import {
   detailPanelStateInitializer,
   useGridDetailPanel,
+  useGridDetailPanelPreProcessors,
 } from '../hooks/features/detailPanel/useGridDetailPanel';
 import {
   dimensionsStateInitializer,
@@ -101,6 +103,8 @@ export const useDataGridComponent = (
   useGridRowGroupingPreProcessors(apiRef, props);
   useGridRowSelectionPreProcessors(apiRef, props);
   useGridAggregationPreProcessors(apiRef, props);
+  useGridDetailPanelPreProcessors(apiRef, props);
+  useGridColumnPinningPreProcessors(apiRef, props);
 
   // TO-DO SEPARATE COLUMN PINNING AND ROW PINNING PREPROCESSORS HERe
 
@@ -110,9 +114,9 @@ export const useDataGridComponent = (
   useGridInitializeState(rowGroupingStateInitializer, apiRef, props);
   useGridInitializeState(gridAggregationStateInitializer, apiRef, props);
   useGridInitializeState(rowSelectionStateInitializer, apiRef, props);
+  useGridInitializeState(columnPinningStateInitializer, apiRef, props);
   useGridInitializeState(columnsStateInitializer, apiRef, props);
   useGridInitializeState(detailPanelStateInitializer, apiRef, props);
-  useGridInitializeState(columnPinningStateInitializer, apiRef, props);
   useGridInitializeState(rowsStateInitializer, apiRef, props);
   useGridInitializeState(paginationStateInitializer, apiRef, props);
   useGridInitializeState(editingStateInitializer, apiRef, props);

@@ -89,7 +89,7 @@ export function GridPreferencesPanel() {
         side="bottom"
         align={headerEl ? 'center' : 'end'}
         sideOffset={headerEl ? -4 : 0}
-        alignOffset={headerEl ? undefined : 12}
+        alignOffset={headerEl ? undefined : 0}
         className={clsx(
           'bg-grid-bg/80 backdrop-blur-sm  w-auto min-w-[200px] p-0',
           !headerEl && 'rounded-t-none -mt-px -mx-px',

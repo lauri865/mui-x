@@ -24,6 +24,8 @@ export type GridAlignment = 'left' | 'right' | 'center';
 
 export type ValueOptions = string | number | { value: any; label: string } | Record<string, any>;
 
+export const GRID_USER_DEFINED_SPECIAL_COLUMN = Symbol('twg.specialColumn');
+
 /**
  * Value that can be used as a key for grouping rows
  */
@@ -302,6 +304,7 @@ export interface GridBaseColDef<
 
   aggregable?: boolean;
   availableAggregationFunctions?: string[];
+  [GRID_USER_DEFINED_SPECIAL_COLUMN]?: boolean;
 }
 
 /**

@@ -49,7 +49,6 @@ export {
   useGridColumnResize,
 } from '../hooks/features/columnResize/useGridColumnResize';
 export type {
-  GridColumnPinningState,
   GridColumnRawLookup,
   GridColumnsRawState,
   GridHydrateColumnsValue,

@@ -15,13 +15,16 @@ import { gridPinnedColumnsSelector } from '../columns/gridColumnsSelector';
 import { GridColumnPinningApi, GridColumnPinningState } from './gridColumnPinningInterfaces';
 
 export const columnPinningStateInitializer: GridStateInitializer<
-  Pick<DataGridProcessedProps, 'pinnedColumns' | 'initialState'>
+  Pick<DataGridProcessedProps, 'pinnedColumns' | 'initialState' | 'columnVisibilityModel'>
 > = (state, props, apiRef) => {
   const model =
     props.pinnedColumns ?? props.initialState?.pinnedColumns ?? EMPTY_PINNED_COLUMN_FIELDS;
   return {
     ...state,
-    pinnedColumns: getPinnedColumnState(model, state.columns as GridColumnsState),
+    pinnedColumns: {
+      model,
+      visible: model,
+    },
   };
 };
 
@@ -126,50 +129,6 @@ export const useGridColumnPinning = (
 
   useGridApiMethod(apiRef, methods, 'public');
 
-  const hydratePinnedColumns = React.useCallback<GridPipeProcessor<'hydrateColumns'>>(
-    (columns) => {
-      if (columns.orderedFields.length === 0) {
-        return columns;
-      }
-
-      const pinnedColumns = gridPinnedColumnsSelector(apiRef.current.state);
-      const hasPinnedColumns = pinnedColumns.left?.length || pinnedColumns.right?.length;
-
-      if (!hasPinnedColumns) {
-        return columns;
-      }
-
-      const filteredColumns = columns.orderedFields.filter(
-        (field) => !apiRef.current.isColumnPinned(field),
-      );
-
-      const visiblePinnedColumns = getPinnedColumnState(
-        pinnedColumns,
-        columns as GridColumnsState,
-      ).visible;
-      apiRef.current.state.pinnedColumns.visible = visiblePinnedColumns;
-
-      const newOrderedFields = [
-        ...(pinnedColumns.left ?? []),
-        ...filteredColumns,
-        ...(pinnedColumns.right ?? []),
-      ];
-
-      return {
-        ...columns,
-        orderedFields: newOrderedFields,
-      };
-    },
-    [apiRef],
-  );
-
-  const addColumnMenuItem = React.useCallback<GridPipeProcessor<'columnMenu'>>((columnMenu) => {
-    return [...columnMenu, 'columnMenuColumnPinning'];
-  }, []);
-
-  useGridRegisterPipeProcessor(apiRef, 'hydrateColumns', hydratePinnedColumns);
-  useGridRegisterPipeProcessor(apiRef, 'columnMenu', addColumnMenuItem);
-
   React.useEffect(() => {
     if (props.pinnedColumns) {
       apiRef.current.setPinnedColumns(props.pinnedColumns);
@@ -221,3 +180,54 @@ function keepVisiblePinnedColumns(
     right,
   };
 }
+
+export const useGridColumnPinningPreProcessors = (
+  apiRef: RefObject<GridPrivateApiCommunity>,
+  _: Pick<DataGridProcessedProps, 'pinnedColumns'>,
+) => {
+  const hydratePinnedColumns = React.useCallback<GridPipeProcessor<'hydrateColumns'>>(
+    (columns) => {
+      if (columns.orderedFields.length === 0) {
+        return columns;
+      }
+
+      const pinnedColumns = gridPinnedColumnsSelector(apiRef.current.state);
+      const hasPinnedColumns = pinnedColumns.left?.length || pinnedColumns.right?.length;
+
+      if (!hasPinnedColumns) {
+        return columns;
+      }
+
+      const filteredColumns = columns.orderedFields.filter(
+        (field) => !(pinnedColumns.left?.includes(field) || pinnedColumns.right?.includes(field)),
+      );
+
+      const visiblePinnedColumns = getPinnedColumnState(
+        pinnedColumns,
+        columns as GridColumnsState,
+      ).visible;
+      apiRef.current.state.pinnedColumns.visible = visiblePinnedColumns;
+
+      const newOrderedFields = [
+        ...(pinnedColumns.left ?? []).filter((field) => columns.lookup[field] !== undefined),
+        ...filteredColumns,
+        ...(pinnedColumns.right ?? []).filter((field) => columns.lookup[field] !== undefined),
+      ];
+
+      console.log('orderedFields', newOrderedFields);
+
+      return {
+        ...columns,
+        orderedFields: newOrderedFields,
+      };
+    },
+    [apiRef],
+  );
+
+  const addColumnMenuItem = React.useCallback<GridPipeProcessor<'columnMenu'>>((columnMenu) => {
+    return [...columnMenu, 'columnMenuColumnPinning'];
+  }, []);
+
+  useGridRegisterPipeProcessor(apiRef, 'hydrateColumns', hydratePinnedColumns);
+  useGridRegisterPipeProcessor(apiRef, 'columnMenu', addColumnMenuItem);
+};

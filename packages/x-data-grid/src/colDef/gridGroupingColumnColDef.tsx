@@ -12,8 +12,6 @@ export const GRID_GROUPING_COLUMN_COL_DEF: GridColDef = {
   editable: false,
   sortable: true,
   resizable: true,
-  // @ts-ignore
-  editable: false,
   groupable: false,
   aggregable: false,
   getApplyQuickFilterFn: undefined,

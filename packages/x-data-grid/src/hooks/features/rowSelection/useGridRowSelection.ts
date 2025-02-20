@@ -19,6 +19,7 @@ import { GridSignature, useGridApiEventHandler } from '../../utils/useGridApiEve
 import { useGridApiMethod } from '../../utils/useGridApiMethod';
 import { GridStateInitializer } from '../../utils/useGridInitializeState';
 import { useGridLogger } from '../../utils/useGridLogger';
+import { getVisibleRows } from '../../utils/useGridVisibleRows';
 import { gridFilteredRowsLookupSelector } from '../filter/gridFilterSelector';
 import { gridFocusCellSelector } from '../focus/gridFocusStateSelector';
 import {
@@ -699,12 +700,20 @@ export const useGridRowSelection = (
         return;
       }
 
-      if (String.fromCharCode(event.keyCode) === 'A' && (event.ctrlKey || event.metaKey)) {
+      if (event.key === 'a' && (event.ctrlKey || event.metaKey)) {
         event.preventDefault();
-        if (apiRef.current.getSelectedRows().size === apiRef.current.getAllRowIds().length) {
+        const allRowIds = apiRef.current.getAllRowIds();
+        const selectedRowIds = Array.from(apiRef.current.getSelectedRows().keys()).filter((id) =>
+          allRowIds.includes(id),
+        );
+        if (selectedRowIds.length === allRowIds.length) {
           apiRef.current.setRowSelectionModel([]);
         } else {
-          selectRows(apiRef.current.getAllRowIds(), true);
+          const visibleRows = getVisibleRows(apiRef);
+          selectRows(
+            visibleRows.rows.map((row) => row.id),
+            true,
+          );
         }
       }
     },

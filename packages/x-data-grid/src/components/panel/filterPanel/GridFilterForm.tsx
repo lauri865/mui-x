@@ -200,6 +200,7 @@ const GridFilterForm = forwardRef<HTMLDivElement, GridFilterFormProps>(
         focus: () => {
           if (currentOperator?.InputComponent) {
             valueRef?.current?.focus();
+            valueRef?.current?.select();
           } else {
             filterSelectorRef.current?.focus();
           }

@@ -5,6 +5,7 @@ import {
   GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD,
 } from '../../../colDef';
 import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GRID_USER_DEFINED_SPECIAL_COLUMN } from '../../../models/colDef/gridColDef';
 import {
   GridGroupNode,
   GridLeafNode,
@@ -378,6 +379,13 @@ export const useGridRowGroupingPreProcessors = (
           (acc, field) => Math.max(acc, columns.lookup[field]?.width ?? 0),
           0,
         );
+
+      const hasGroupingCol = columns.lookup[GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD];
+      const userDefinedColDef = columns.lookup[GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD]?.[
+        GRID_USER_DEFINED_SPECIAL_COLUMN
+      ]
+        ? columns.lookup[GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD]
+        : undefined;
       const firstGroup = columns.lookup[rowGroupingModel[0]];
       columns.lookup[GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD] = {
         ...GRID_GROUPING_COLUMN_COL_DEF,
@@ -389,14 +397,17 @@ export const useGridRowGroupingPreProcessors = (
         sortingOrder: firstGroup.sortingOrder,
         filterable: firstGroup.filterable,
         filterOperators: firstGroup.filterOperators,
+        ...userDefinedColDef,
       };
 
-      columns.orderedFields = [
-        GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD,
-        ...columns.orderedFields.filter(
-          (field) => field !== GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD,
-        ),
-      ];
+      if (!hasGroupingCol) {
+        columns.orderedFields = [
+          GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD,
+          ...columns.orderedFields.filter(
+            (field) => field !== GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD,
+          ),
+        ];
+      }
 
       rowGroupingModel.forEach((field) => {
         columns.columnVisibilityModel[field] = false;
@@ -492,6 +503,13 @@ export const useGridRowGroupingPreProcessors = (
 
       const tree = gridRowTreeSelector(apiRef.current.state);
       const rowLookup = gridRowsLookupSelector(apiRef.current.state);
+      const groupFilterItems = params.filterModel.items.filter(
+        (item) => item.field === GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD,
+      );
+      const groupFilterModel = {
+        ...params.filterModel,
+        items: groupFilterItems,
+      };
 
       // TODO: finish implementation, this is a rough idea, but untested
       const traverse = (
@@ -503,6 +521,7 @@ export const useGridRowGroupingPreProcessors = (
           passingFilterItems: [],
           passingQuickFilterValues: [],
         },
+        isParentMatching = true,
       ): number => {
         const node = tree[rowId];
         let descendantCount = 0;
@@ -533,7 +552,7 @@ export const useGridRowGroupingPreProcessors = (
           ],
         };
 
-        if (!isMatching) {
+        if (!isMatching && isParentMatching) {
           isMatching = passFilterLogic(
             filterResultsWithParents.passingFilterItems,
             filterResultsWithParents.passingQuickFilterValues,
@@ -545,19 +564,36 @@ export const useGridRowGroupingPreProcessors = (
 
         // If it's a group, traverse its children
         if (node.type === 'group') {
-          let matchingChildrenCount = 0;
-          for (const childId of node.children) {
-            const childDescendantCount = traverse(childId, filterResultsWithParents);
-            descendantCount += childDescendantCount;
-
-            if (result.filteredRowsLookup[childId] !== false) {
-              matchingChildrenCount += 1;
-            }
-          }
+          const isMatchingGroup =
+            node.id === GRID_ROOT_GROUP_ID ||
+            !groupFilterItems.length ||
+            passFilterLogic(
+              [filterResults.passingFilterItems],
+              [filterResults.passingQuickFilterValues],
+              groupFilterModel,
+              apiRef,
+              filterCache,
+            );
 
           // Update filteredChildrenCountLookup
-          result.filteredChildrenCountLookup[rowId] = matchingChildrenCount;
-          isMatching = descendantCount > 0;
+          if (isMatchingGroup && isParentMatching) {
+            let matchingChildrenCount = 0;
+            for (const childId of node.children) {
+              const childDescendantCount = traverse(childId, filterResultsWithParents);
+              descendantCount += childDescendantCount;
+
+              if (result.filteredRowsLookup[childId] !== false) {
+                matchingChildrenCount += 1;
+              }
+            }
+            result.filteredChildrenCountLookup[rowId] = matchingChildrenCount;
+            isMatching = descendantCount > 0;
+          } else {
+            isMatching = false;
+            for (const childId of node.children) {
+              traverse(childId, filterResultsWithParents, false);
+            }
+          }
         }
 
         // Update filteredRowsLookup
@@ -626,7 +662,20 @@ export const useGridRowGroupingPreProcessors = (
 
   useGridApiEventHandler(apiRef, 'cellKeyDown', (params, event) => {
     if (params.rowNode.type === 'group' && event.key === 'e' && (event.ctrlKey || event.metaKey)) {
-      apiRef.current.setRowChildrenExpansion(params.rowNode.id, !params.rowNode.childrenExpanded);
+      const selection = apiRef.current.getSelectedRows();
+      if (selection.size) {
+        const tree = gridRowTreeSelector(apiRef.current.state);
+        const filteredSelection = Array.from(selection).filter(
+          ([id]) => tree[id]?.type === 'group',
+        );
+        if (filteredSelection.length) {
+          for (const [id] of filteredSelection) {
+            apiRef.current.setRowChildrenExpansion(id, !params.rowNode.childrenExpanded);
+          }
+        }
+      } else {
+        apiRef.current.setRowChildrenExpansion(params.rowNode.id, !params.rowNode.childrenExpanded);
+      }
       return;
     }
     if (

@@ -9,7 +9,11 @@ import { isSingleSelectColDef } from '../../../components/panel/filterPanel/filt
 import { GridColType } from '../../../models';
 import { GridApiCommon } from '../../../models/api/gridApiCommon';
 import { GridApiCommunity, GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
-import { GridColDef, GridStateColDef } from '../../../models/colDef/gridColDef';
+import {
+  GRID_USER_DEFINED_SPECIAL_COLUMN,
+  GridColDef,
+  GridStateColDef,
+} from '../../../models/colDef/gridColDef';
 import { GridRowEntry } from '../../../models/gridRows';
 import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { clamp } from '../../../utils/utils';
@@ -176,6 +180,7 @@ export const hydrateColumnsWidth = (
 
   // For the non-flex columns, compute their width
   // For the flex columns, compute their minimum width and how much width must be allocated during the flex allocation
+  console.log('rawState', rawState);
   rawState.orderedFields.forEach((columnField) => {
     let column = rawState.lookup[columnField] as GridStateColDef;
     let computedWidth = 0;
@@ -298,6 +303,9 @@ export const applyInitialState = (
 };
 
 function getDefaultColTypeDef(type: GridColDef['type'], colDefParam: GridColDef) {
+  if (colDefParam[GRID_USER_DEFINED_SPECIAL_COLUMN]) {
+    return {};
+  }
   if (isSingleSelectColDef(colDefParam) && COLUMN_TYPES[colDefParam.editCell as GridColType]) {
     return COLUMN_TYPES[colDefParam.editCell as GridColType];
   }

@@ -75,7 +75,6 @@ export const useGridDetailPanel = (
 
   const setExpandedDetailPanels = React.useCallback<GridDetailPanelApi['setExpandedDetailPanels']>(
     (expandedRowIds) => {
-      console.log('set');
       apiRef.current.setState((state) => ({
         ...state,
         detailPanel: {
@@ -126,30 +125,7 @@ export const useGridDetailPanel = (
   );
 
   const isEnabled = props.getDetailPanelContent !== undefined;
-  const addDetailPanelColumn = React.useCallback<GridPipeProcessor<'hydrateColumns'>>(
-    (columns) => {
-      const hasColumn = columns.lookup[GRID_DETAIL_PANEL_TOGGLE_FIELD];
-      if (hasColumn) {
-        if (!isEnabled) {
-          delete columns.lookup[GRID_DETAIL_PANEL_TOGGLE_FIELD];
-          delete columns.columnVisibilityModel[GRID_DETAIL_PANEL_TOGGLE_FIELD];
-          columns.orderedFields = columns.orderedFields.filter(
-            (field) => field !== GRID_DETAIL_PANEL_TOGGLE_FIELD,
-          );
-        }
-        return columns;
-      }
-
-      columns.orderedFields.unshift(GRID_DETAIL_PANEL_TOGGLE_FIELD);
-      columns.lookup[GRID_DETAIL_PANEL_TOGGLE_FIELD] = { ...GRID_DETAIL_PANEL_COL_DEF };
-
-      return columns;
-    },
-    [isEnabled],
-  );
-
   useGridRegisterPipeProcessor(apiRef, 'rowHeight', hydrateDetailPanelHeight, isEnabled);
-  useGridRegisterPipeProcessor(apiRef, 'hydrateColumns', addDetailPanelColumn);
 
   useGridApiMethod(
     apiRef,
@@ -195,4 +171,40 @@ export const useGridDetailPanel = (
       apiRef.current.setExpandedDetailPanels(props.detailPanelExpandedRowIds);
     }
   }, [apiRef, props.detailPanelExpandedRowIds]);
+};
+
+export const useGridDetailPanelPreProcessors = (
+  apiRef: RefObject<GridPrivateApiCommunity>,
+  props: Pick<DataGridProcessedProps, 'getDetailPanelContent'>,
+) => {
+  const isEnabled = props.getDetailPanelContent !== undefined;
+  const addDetailPanelColumn = React.useCallback<GridPipeProcessor<'hydrateColumns'>>(
+    (columns) => {
+      const hasColumn = columns.lookup[GRID_DETAIL_PANEL_TOGGLE_FIELD];
+      if (hasColumn) {
+        if (!isEnabled) {
+          const newColumns = { ...columns };
+          delete newColumns.lookup[GRID_DETAIL_PANEL_TOGGLE_FIELD];
+          delete newColumns.columnVisibilityModel[GRID_DETAIL_PANEL_TOGGLE_FIELD];
+          newColumns.orderedFields = newColumns.orderedFields.filter(
+            (field) => field !== GRID_DETAIL_PANEL_TOGGLE_FIELD,
+          );
+          console.log('newColumns', newColumns);
+          return newColumns;
+        }
+        return columns;
+      }
+      if (!isEnabled) {
+        return columns;
+      }
+
+      columns.orderedFields.unshift(GRID_DETAIL_PANEL_TOGGLE_FIELD);
+      columns.lookup[GRID_DETAIL_PANEL_TOGGLE_FIELD] = { ...GRID_DETAIL_PANEL_COL_DEF };
+
+      return columns;
+    },
+    [isEnabled],
+  );
+
+  useGridRegisterPipeProcessor(apiRef, 'hydrateColumns', addDetailPanelColumn);
 };

@@ -1,10 +1,12 @@
 import * as React from 'react';
+import { GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD } from '../../colDef';
+import { gridFilterModelSelector } from '../../hooks';
 import { copyToClipboard } from '../../hooks/features/clipboard/useGridClipboard';
 import { GridPinnedRowPosition } from '../../hooks/features/rowPinning';
 import { useGridApiEventHandler } from '../../hooks/utils/useGridApiEventHandler';
 import { useGridPrivateApiContext } from '../../hooks/utils/useGridPrivateApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-import { GridGroupNode } from '../../models';
+import { GridGroupNode, GridLogicOperator } from '../../models';
 import { GridCellParams } from '../../models/params/gridCellParams';
 
 export function GridContextMenu() {
@@ -97,178 +99,292 @@ export function GridContextMenu() {
             }}
             onCloseAutoFocus={(e) => e.preventDefault()}
           >
-            {cell.colDef.editable && cell.rowNode.type === 'leaf' && (
-              <React.Fragment>
-                <ContextMenu.Item
-                  onSelect={() => {
-                    requestAnimationFrame(() => {
-                      if (rootProps.editMode === 'cell') {
-                        apiRef.current.startCellEditMode({
-                          id: cell.id,
-                          field: cell.field,
-                        });
-                      } else {
-                        apiRef.current.startRowEditMode({
-                          id: cell.id,
-                        });
-                      }
-                    });
-                  }}
-                >
-                  Edit {rootProps.editMode === 'cell' ? 'Cell' : 'Row'}
-                  <ContextMenu.Shortcut>↵</ContextMenu.Shortcut>
-                </ContextMenu.Item>
-                <ContextMenu.Separator />
-              </React.Fragment>
-            )}
-            {cell.colDef.editable && (
-              <ContextMenu.Item>
-                Cut<ContextMenu.Shortcut>⌘+V</ContextMenu.Shortcut>
-              </ContextMenu.Item>
-            )}
-            <ContextMenu.Item
-              onSelect={() => {
-                apiRef.current.setCellFocus(cell.id, cell.field);
-                cellElementRef.current?.dispatchEvent(
-                  new KeyboardEvent('keydown', {
-                    key: 'c',
-                    keyCode: 67,
-                    ctrlKey: true,
-                    metaKey: true,
-                    bubbles: true,
-                  }),
-                );
-              }}
-            >
-              Copy{selection.size ? ` (${selection.size})` : ''}
-              <ContextMenu.Shortcut>⌘+C</ContextMenu.Shortcut>
-            </ContextMenu.Item>
-            <ContextMenu.Item
-              onSelect={() => {
-                const selection = apiRef.current.getSelectedRows();
-                let textToCopy = '';
-                if (selection.size === 0) {
-                  textToCopy = apiRef.current.getDataAsCsv({
-                    includeHeaders: true,
-                    delimiter: rootProps.clipboardCopyCellDelimiter,
-                    shouldAppendQuotes: false,
-                    escapeFormulas: false,
-                    fields: [cell.field],
-                    getRowsToExport: () => [cell.id],
-                  });
-                } else {
-                  textToCopy = apiRef.current.getDataAsCsv({
-                    includeHeaders: true,
-                    delimiter: rootProps.clipboardCopyCellDelimiter,
-                    shouldAppendQuotes: false,
-                    escapeFormulas: false,
-                  });
-                }
-                textToCopy = apiRef.current.unstable_applyPipeProcessors(
-                  'clipboardCopy',
-                  textToCopy,
-                );
-
-                if (textToCopy) {
-                  copyToClipboard(textToCopy);
-                  apiRef.current.publishEvent('clipboardCopy', textToCopy);
-                }
-              }}
-            >
-              Copy with headers{selection.size ? ` (${selection.size})` : ''}
-            </ContextMenu.Item>
+            <ItemEdit cell={cell} apiRef={apiRef} />
+            <ItemClipboard cell={cell} apiRef={apiRef} />
             <ContextMenu.Separator />
-            {cell.rowNode.type === 'group' && (
-              <ContextMenu.Item
-                  onSelect={() =>
-                    apiRef.current.setRowChildrenExpansion(
-                      cell.id,
-                      !(cell.rowNode as GridGroupNode).childrenExpanded,
-                    )
-                  }
-                >
-                  {apiRef.current.getLocaleText(
-                    cell.rowNode.childrenExpanded ? 'groupCollapse' : 'groupExpand',
-                  )}
-                  <ContextMenu.Shortcut>⌘E</ContextMenu.Shortcut>
-                </ContextMenu.Item>
-            )}
-            {rootProps.getDetailPanelContent?.(apiRef.current.getRowParams(cell.id)) && (
-              <ContextMenu.Item onSelect={() => apiRef.current.toggleDetailPanel(cell.id)}>
-                  {apiRef.current.getLocaleText(
-                    apiRef.current.isDetailPanelExpanded(cell.id)
-                      ? 'collapseDetailPanel'
-                      : 'expandDetailPanel',
-                  )}
-                  <ContextMenu.Shortcut>⌘D</ContextMenu.Shortcut>
-                </ContextMenu.Item>
-            )}
-            {cell.rowNode.type !== 'group' && (
-              <ContextMenu.Sub>
-                  <ContextMenu.SubTrigger>
-                    <rootProps.slots.pinIcon />
-                    Pin Row
-                  </ContextMenu.SubTrigger>
-                  <ContextMenu.SubContent>
-                    <ContextMenu.RadioGroup
-                      value={apiRef.current.getRowPinnedPosition(cell.id) || ''}
-                      onValueChange={(value) => {
-                        if (value === '') {
-                          apiRef.current.unpinRow(cell.id);
-                        } else {
-                          apiRef.current.pinRow(cell.id, value as GridPinnedRowPosition);
-                        }
-                      }}
-                    >
-                      {apiRef.current.isRowPinned(cell.id) && (
-                        <ContextMenu.RadioItem value="">Unpin</ContextMenu.RadioItem>
-                      )}
-                      <ContextMenu.RadioItem value={GridPinnedRowPosition.top}>
-                        Top
-                      </ContextMenu.RadioItem>
-                      <ContextMenu.RadioItem value={GridPinnedRowPosition.bottom}>
-                        Bottom
-                      </ContextMenu.RadioItem>
-                    </ContextMenu.RadioGroup>
-                  </ContextMenu.SubContent>
-                </ContextMenu.Sub>
-            )}
+            <ItemRowGrouping cell={cell} apiRef={apiRef} />
+            <ItemDetailPanel cell={cell} apiRef={apiRef} />
+            <ItemPinRow cell={cell} apiRef={apiRef} />
             <ContextMenu.Separator />
-            <ContextMenu.Sub>
-              <ContextMenu.SubTrigger>
-                <span>
-                  Export
-                  {selection.size ? (
-                    <span className="opacity-70">&nbsp;({selection.size})</span>
-                  ) : (
-                    ''
-                  )}
-                </span>
-              </ContextMenu.SubTrigger>
-              <ContextMenu.Portal>
-                <ContextMenu.SubContent alignOffset={-4}>
-                  <ContextMenu.Item
-                    onSelect={() => {
-                      apiRef.current.exportDataAsCsv({
-                        fileName: 'export',
-                      });
-                    }}
-                  >
-                    CSV
-                  </ContextMenu.Item>
-                  <ContextMenu.Item
-                    onSelect={() => {
-                      apiRef.current.exportDataAsPrint();
-                    }}
-                  >
-                    Print
-                  </ContextMenu.Item>
-                </ContextMenu.SubContent>
-              </ContextMenu.Portal>
-            </ContextMenu.Sub>
+            <ItemExcludeRow cell={cell} apiRef={apiRef} />
+            <ItemExport cell={cell} apiRef={apiRef} />
           </ContextMenu.Content>
         </ContextMenu.Portal>
       )}
     </ContextMenu.Root>
   );
 }
+
+type ItemProps = {
+  apiRef: React.RefObject<any>;
+  cell: GridCellParams<any>;
+};
+
+const ItemEdit = ({ apiRef, cell }: ItemProps) => {
+  const rootProps = useGridRootProps();
+  const ContextMenu = rootProps.slots.baseContextMenu!;
+
+  if (!cell.colDef.editable) {
+    return null;
+  }
+
+  return (
+    <React.Fragment>
+      <ContextMenu.Item
+        onSelect={() => {
+          requestAnimationFrame(() => {
+            if (rootProps.editMode === 'cell') {
+              apiRef.current.startCellEditMode({
+                id: cell.id,
+                field: cell.field,
+              });
+            } else {
+              apiRef.current.startRowEditMode({
+                id: cell.id,
+              });
+            }
+          });
+        }}
+      >
+        Edit {rootProps.editMode === 'cell' ? 'Cell' : 'Row'}
+        <ContextMenu.Shortcut>↵</ContextMenu.Shortcut>
+      </ContextMenu.Item>
+      <ContextMenu.Separator />
+    </React.Fragment>
+  );
+};
+
+const ItemClipboard = ({ apiRef, cell }: ItemProps) => {
+  const rootProps = useGridRootProps();
+  const ContextMenu = rootProps.slots.baseContextMenu!;
+  const selection = apiRef.current.getSelectedRows();
+  return (
+    <>
+      {cell.colDef.editable && (
+        <ContextMenu.Item>
+          Cut<ContextMenu.Shortcut>⌘+V</ContextMenu.Shortcut>
+        </ContextMenu.Item>
+      )}
+      <ContextMenu.Item
+        onSelect={() => {
+          apiRef.current.setCellFocus(cell.id, cell.field);
+          const cellEl = apiRef.current.getCellElement(cell.id, cell.field);
+          cellEl.current?.dispatchEvent(
+            new KeyboardEvent('keydown', {
+              key: 'c',
+              keyCode: 67,
+              ctrlKey: true,
+              metaKey: true,
+              bubbles: true,
+            }),
+          );
+        }}
+      >
+        Copy{selection.size ? ` (${selection.size})` : ''}
+        <ContextMenu.Shortcut>⌘+C</ContextMenu.Shortcut>
+      </ContextMenu.Item>
+      <ContextMenu.Item
+        onSelect={() => {
+          const selection = apiRef.current.getSelectedRows();
+          let textToCopy = '';
+          if (selection.size === 0) {
+            textToCopy = apiRef.current.getDataAsCsv({
+              includeHeaders: true,
+              delimiter: rootProps.clipboardCopyCellDelimiter,
+              shouldAppendQuotes: false,
+              escapeFormulas: false,
+              fields: [cell.field],
+              getRowsToExport: () => [cell.id],
+            });
+          } else {
+            textToCopy = apiRef.current.getDataAsCsv({
+              includeHeaders: true,
+              delimiter: rootProps.clipboardCopyCellDelimiter,
+              shouldAppendQuotes: false,
+              escapeFormulas: false,
+            });
+          }
+          textToCopy = apiRef.current.unstable_applyPipeProcessors('clipboardCopy', textToCopy);
+
+          if (textToCopy) {
+            copyToClipboard(textToCopy);
+            apiRef.current.publishEvent('clipboardCopy', textToCopy);
+          }
+        }}
+      >
+        Copy with headers{selection.size ? ` (${selection.size})` : ''}
+      </ContextMenu.Item>
+    </>
+  );
+};
+
+const ItemRowGrouping = ({ apiRef, cell }: ItemProps) => {
+  const ContextMenu = useGridRootProps().slots.baseContextMenu!;
+
+  if (cell.rowNode.type !== 'group') {
+    return null;
+  }
+
+  return (
+    <ContextMenu.Item
+      onSelect={() =>
+        apiRef.current.setRowChildrenExpansion(
+          cell.id,
+          !(cell.rowNode as GridGroupNode).childrenExpanded,
+        )
+      }
+    >
+      {apiRef.current.getLocaleText(
+        cell.rowNode.childrenExpanded ? 'groupCollapse' : 'groupExpand',
+      )}
+      <ContextMenu.Shortcut>⌘E</ContextMenu.Shortcut>
+    </ContextMenu.Item>
+  );
+};
+
+const ItemDetailPanel = ({ apiRef, cell }: ItemProps) => {
+  const rootProps = useGridRootProps();
+  const ContextMenu = rootProps.slots.baseContextMenu!;
+
+  const hasDetailPanel = rootProps.getDetailPanelContent?.(apiRef.current.getRowParams(cell.id));
+  if (!hasDetailPanel) {
+    return null;
+  }
+
+  return (
+    <ContextMenu.Item onSelect={() => apiRef.current.toggleDetailPanel(cell.id)}>
+      {apiRef.current.getLocaleText(
+        apiRef.current.isDetailPanelExpanded(cell.id) ? 'collapseDetailPanel' : 'expandDetailPanel',
+      )}
+      <ContextMenu.Shortcut>⌘D</ContextMenu.Shortcut>
+    </ContextMenu.Item>
+  );
+};
+
+const ItemPinRow = ({ apiRef, cell }: ItemProps) => {
+  const rootProps = useGridRootProps();
+  const ContextMenu = rootProps.slots.baseContextMenu!;
+  if (cell.rowNode.type === 'group') {
+    return null;
+  }
+
+  return (
+    <ContextMenu.Sub>
+      <ContextMenu.SubTrigger>
+        <rootProps.slots.pinIcon />
+        Pin Row
+      </ContextMenu.SubTrigger>
+      <ContextMenu.SubContent>
+        <ContextMenu.RadioGroup
+          value={apiRef.current.getRowPinnedPosition(cell.id) || ''}
+          onValueChange={(value) => {
+            if (value === '') {
+              apiRef.current.unpinRow(cell.id);
+            } else {
+              apiRef.current.pinRow(cell.id, value as GridPinnedRowPosition);
+            }
+          }}
+        >
+          {apiRef.current.isRowPinned(cell.id) && (
+            <ContextMenu.RadioItem value="">Unpin</ContextMenu.RadioItem>
+          )}
+          <ContextMenu.RadioItem value={GridPinnedRowPosition.top}>Top</ContextMenu.RadioItem>
+          <ContextMenu.RadioItem value={GridPinnedRowPosition.bottom}>Bottom</ContextMenu.RadioItem>
+        </ContextMenu.RadioGroup>
+      </ContextMenu.SubContent>
+    </ContextMenu.Sub>
+  );
+};
+
+const ItemExport = ({ apiRef, cell }: ItemProps) => {
+  const ContextMenu = useGridRootProps().slots.baseContextMenu!;
+  const selection = apiRef.current.getSelectedRows();
+  return (
+    <ContextMenu.Sub>
+      <ContextMenu.SubTrigger>
+        <span>
+          Export
+          {selection.size ? <span className="opacity-70">&nbsp;({selection.size})</span> : ''}
+        </span>
+      </ContextMenu.SubTrigger>
+      <ContextMenu.Portal>
+        <ContextMenu.SubContent alignOffset={-4}>
+          <ContextMenu.Item
+            onSelect={() => {
+              apiRef.current.exportDataAsCsv({
+                fileName: 'export',
+              });
+            }}
+          >
+            CSV
+          </ContextMenu.Item>
+          <ContextMenu.Item
+            onSelect={() => {
+              apiRef.current.exportDataAsPrint();
+            }}
+          >
+            Print
+          </ContextMenu.Item>
+        </ContextMenu.SubContent>
+      </ContextMenu.Portal>
+    </ContextMenu.Sub>
+  );
+};
+const ItemExcludeRow = ({ apiRef, cell }: ItemProps) => {
+  const ContextMenu = useGridRootProps().slots.baseContextMenu!;
+
+  if (cell.rowNode.type === 'footer') {
+    return null;
+  }
+
+  if (cell.rowNode.type === 'group' && !cell.rowNode.groupingField) {
+    return null;
+  }
+
+  return (
+    <ContextMenu.Item
+      onSelect={() => {
+        const randomId = Math.floor(Math.random() * 1000);
+
+        if (cell.rowNode.type === 'group') {
+          apiRef.current.setFilterModel({
+            items: [
+              ...gridFilterModelSelector(apiRef.current.state).items,
+              {
+                field: GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD,
+                id: randomId,
+                logicOperator: GridLogicOperator.And,
+                conditions: [
+                  {
+                    operator: 'doesNotEqual',
+                    value: cell.rowNode.groupingKey,
+                  },
+                ],
+              },
+            ],
+          });
+          return;
+        }
+
+        apiRef.current.setFilterModel({
+          items: [
+            ...gridFilterModelSelector(apiRef.current.state).items,
+            {
+              field: 'id',
+              id: randomId,
+              logicOperator: GridLogicOperator.And,
+              conditions: [
+                {
+                  operator: '!=',
+                  value: cell.id,
+                },
+              ],
+            },
+          ],
+        });
+      }}
+    >
+      Exclude {cell.rowNode.type === 'group' ? 'Group' : 'Row'}
+    </ContextMenu.Item>
+  );
+};
