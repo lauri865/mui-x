@@ -133,6 +133,11 @@ export const useGridColumnMenu = (apiRef: RefObject<GridPrivateApiCommunity>): v
       apiRef.current.showColumnMenu(params.field);
     }
   });
+  useGridApiEventHandler(apiRef, 'columnHeaderKeyDown', (params, event) => {
+    if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
+      apiRef.current.showColumnMenu(params.field);
+    }
+  });
   useGridApiEventHandler(apiRef, 'columnResizeStart', hideColumnMenu);
   useGridApiEventHandler(apiRef, 'virtualScrollerWheel', apiRef.current.hideColumnMenu);
   useGridApiEventHandler(apiRef, 'virtualScrollerTouchMove', apiRef.current.hideColumnMenu);

@@ -352,11 +352,22 @@ export const useGridRowGroupingPreProcessors = (
 
       if (!rowGroupingModel.length) {
         if (columns.lookup[GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD]) {
-          delete columns.lookup[GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD];
-          columns.orderedFields = columns.orderedFields.filter(
-            (field) => field !== GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD,
-          );
-          delete columns.columnVisibilityModel[GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD];
+          const userDefinedColDef =
+            columns.lookup[GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD]?.[
+              GRID_USER_DEFINED_SPECIAL_COLUMN
+            ];
+
+          if (userDefinedColDef) {
+            // keep userdefined column around to preserve ordering, but hide it from the UI
+            columns.columnVisibilityModel[GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD] = false;
+            columns.lookup[GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD].disableColumnManagement = true;
+          } else {
+            delete columns.lookup[GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD];
+            columns.orderedFields = columns.orderedFields.filter(
+              (field) => field !== GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD,
+            );
+            delete columns.columnVisibilityModel[GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD];
+          }
 
           if (lastGroupingModel.length) {
             lastGroupingModel.forEach((field) => {
@@ -398,8 +409,12 @@ export const useGridRowGroupingPreProcessors = (
         filterable: firstGroup.filterable,
         filterOperators: firstGroup.filterOperators,
         ...userDefinedColDef,
+        disableColumnManagement: false,
       };
 
+      if (!lastGroupingModel.length) {
+        delete columns.columnVisibilityModel[GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD];
+      }
       if (!hasGroupingCol) {
         columns.orderedFields = [
           GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD,

@@ -305,6 +305,11 @@ export interface GridBaseColDef<
   aggregable?: boolean;
   availableAggregationFunctions?: string[];
   [GRID_USER_DEFINED_SPECIAL_COLUMN]?: boolean;
+  /**
+   * If `true`, the column is not manageable by the column manager.
+   * @default false
+   */
+  disableColumnManagement?: boolean;
 }
 
 /**

@@ -8,14 +8,12 @@ import { GlowingEffect } from './glowing-effect';
 const props = columnHelper.createColumns((c) => [
   c.detailPanel({
     pinned: 'left',
-    hide: true,
   }),
   c.checkboxSelection({
     pinned: 'left',
   }),
-  /*  c.group({
-    pinned: 'left',
-  }), */
+  // this is a placeholder for the row grouping column that will be added by the row grouping feature
+  c.group(),
   c.string({
     field: 'id',
     headerName: 'ID',
@@ -186,9 +184,9 @@ export function HeroDataGrid() {
             bottom: [2],
           }, */
           rowSelection: [2, 3, 'auto-generated-row-lastName/Lannister'],
-          rowGrouping: {
+          /* rowGrouping: {
             model: ['lastName'],
-          },
+          }, */
         }}
         onSortModelChange={(model, detail) => {
           detail.api.scrollToIndexes({ rowIndex: 0 });

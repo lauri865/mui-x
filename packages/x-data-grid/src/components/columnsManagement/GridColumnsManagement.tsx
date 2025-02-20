@@ -143,9 +143,11 @@ function GridColumnsManagement(props: GridColumnsManagementProps) {
   const currentColumns = React.useMemo(() => {
     const togglableColumns = getTogglableColumns ? getTogglableColumns(sortedColumns) : null;
 
-    const togglableSortedColumns = togglableColumns
-      ? sortedColumns.filter(({ field }) => togglableColumns.includes(field))
-      : sortedColumns;
+    const togglableSortedColumns = (
+      togglableColumns
+        ? sortedColumns.filter(({ field }) => togglableColumns.includes(field))
+        : sortedColumns
+    ).filter((column) => !column.disableColumnManagement);
 
     if (!searchValue) {
       return togglableSortedColumns;
@@ -290,20 +292,46 @@ function GridColumnsManagement(props: GridColumnsManagementProps) {
                 name={column.field}
               />
               {column.field === GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD && (
-                <rootProps.slots.groupIcon className="size-4 -mr-1" />
+                <rootProps.slots.baseTooltip
+                  title={apiRef.current.getLocaleText('unGroupAll')}
+                  delay={0}
+                  sideOffset={8}
+                >
+                  <rootProps.slots.groupIcon
+                    className="size-4 -mr-1 cursor-pointer"
+                    role="button"
+                    onPointerDown={(e: any) => {
+                      e.stopPropagation();
+                    }}
+                    onClick={(e: Event) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      apiRef.current.setRowGroupingModel([]);
+                    }}
+                  />
+                </rootProps.slots.baseTooltip>
               )}
               {column.headerName || column.field}
 
               <div className="ml-auto flex items-center">
                 {apiRef.current.isColumnPinned(column.field) && (
-                  <rootProps.slots.pinIcon
-                    className={classes.variants.pinIcon}
-                    onClick={(e: any) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      apiRef.current.unpinColumn(column.field);
-                    }}
-                  />
+                  <rootProps.slots.baseTooltip
+                    title={apiRef.current.getLocaleText('unpin')}
+                    delay={0}
+                    sideOffset={8}
+                  >
+                    <rootProps.slots.pinIcon
+                      className={classes.variants.pinIcon}
+                      onPointerDown={(e: any) => {
+                        e.stopPropagation();
+                      }}
+                      onClick={(e: any) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        apiRef.current.unpinColumn(column.field);
+                      }}
+                    />
+                  </rootProps.slots.baseTooltip>
                 )}
                 <rootProps.slots.dragHandleIcon className={classes.variants.dragHandle} />
               </div>

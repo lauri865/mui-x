@@ -14,6 +14,7 @@ export const GRID_GROUPING_COLUMN_COL_DEF: GridColDef = {
   resizable: true,
   groupable: false,
   aggregable: false,
+  hideable: false,
   getApplyQuickFilterFn: undefined,
   display: 'flex',
   align: 'left',
