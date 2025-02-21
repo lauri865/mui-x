@@ -1,3 +1,4 @@
+import { GridApiCommunity } from '../api/gridApiCommunity';
 import type { GridStateColDef } from '../colDef/gridColDef';
 import { GridValidRowModel } from '../gridRows';
 
@@ -17,4 +18,8 @@ export interface GridColumnHeaderParams<
    * The column of the current header component.
    */
   colDef: GridStateColDef<R, V, F>;
+  /**
+   * GridApi that let you manipulate the grid.
+   */
+  api: GridApiCommunity;
 }

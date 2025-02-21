@@ -1,4 +1,5 @@
 import { unstable_useId as useId } from '@mui/utils';
+import clsx from 'clsx';
 import * as React from 'react';
 import { gridClasses } from '../../constants/gridClasses';
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
@@ -6,7 +7,7 @@ import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { useRtl } from '../../hooks/utils/useRtl';
 import { GridActionsColDef } from '../../models/colDef/gridColDef';
 import { GridRenderCellParams } from '../../models/params/gridCellParams';
-import { GridMenu, GridMenuProps } from '../menu/GridMenu';
+import { GridMenuProps } from '../menu/GridMenu';
 
 const hasActions = (colDef: any): colDef is GridActionsColDef =>
   typeof colDef.getActions === 'function';
@@ -35,13 +36,11 @@ function GridActionsCell(props: GridActionsCellProps) {
     ...other
   } = props;
   const [focusedButtonIndex, setFocusedButtonIndex] = React.useState(-1);
-  const [open, setOpen] = React.useState(false);
   const apiRef = useGridApiContext();
   const rootRef = React.useRef<HTMLDivElement>(null);
   const buttonRef = React.useRef<HTMLButtonElement>(null);
   const ignoreCallToFocus = React.useRef(false);
   const isRtl = useRtl();
-  const menuId = useId();
   const buttonId = useId();
   const rootProps = useGridRootProps();
 
@@ -49,10 +48,21 @@ function GridActionsCell(props: GridActionsCellProps) {
     throw new Error('TWGrid: Missing the `getActions` property in the `GridColDef`.');
   }
 
-  const options = colDef.getActions(apiRef.current.getRowParams(id));
-  const iconButtons = options.filter((option) => !option.props.showInMenu);
-  const menuButtons = options.filter((option) => option.props.showInMenu);
-  const numberOfButtons = iconButtons.length + (menuButtons.length ? 1 : 0);
+  const DropdownMenu = rootProps.slots.baseDropdownMenu;
+  const options = colDef.getActions(apiRef.current.getRowParams(id), {
+    api: apiRef.current,
+    Button: rootProps.slots.baseButton,
+    IconButton: (props) => (
+      <rootProps.slots.baseIconButton {...props} className={clsx('size-6', props.className)} />
+    ),
+    MenuItem: DropdownMenu.Item,
+    MenuSeparator: DropdownMenu.Separator,
+  });
+  const iconButtons = options.filter(
+    (option) => option.type !== DropdownMenu.Item && option.type !== DropdownMenu.Separator,
+  );
+  const menuItems = options.filter((option) => option.type === DropdownMenu.Item);
+  const numberOfButtons = iconButtons.length + (menuItems.length ? 1 : 0);
 
   React.useEffect(() => {
     if (focusedButtonIndex < 0 || !rootRef.current) {
@@ -79,6 +89,7 @@ function GridActionsCell(props: GridActionsCellProps) {
     () => ({
       focus() {
         // If ignoreCallToFocus is true, then one of the buttons was clicked and the focus is already set
+        console.log('focus', ignoreCallToFocus.current);
         if (!ignoreCallToFocus.current) {
           // find the first focusable button and pass the index to the state
           const focusableButtonIndex = options.findIndex((o) => !o.props.disabled);
@@ -95,23 +106,6 @@ function GridActionsCell(props: GridActionsCellProps) {
     }
   }, [focusedButtonIndex, numberOfButtons]);
 
-  const showMenu = () => {
-    setOpen(true);
-    setFocusedButtonIndex(numberOfButtons - 1);
-    ignoreCallToFocus.current = true;
-  };
-
-  const hideMenu = () => {
-    setOpen(false);
-  };
-  const toggleMenu = () => {
-    if (open) {
-      hideMenu();
-    } else {
-      showMenu();
-    }
-  };
-
   const handleButtonClick =
     (index: number, onClick?: React.MouseEventHandler): React.MouseEventHandler =>
     (event) => {
@@ -122,6 +116,8 @@ function GridActionsCell(props: GridActionsCellProps) {
         onClick(event);
       }
     };
+
+  console.log(focusedButtonIndex);
 
   const handleRootKeyDown = (event: React.KeyboardEvent) => {
     if (numberOfButtons <= 1) {
@@ -161,65 +157,46 @@ function GridActionsCell(props: GridActionsCellProps) {
     }
   };
 
-  const handleListKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Tab') {
-      event.preventDefault();
-    }
-    if (['Tab', 'Escape'].includes(event.key)) {
-      hideMenu();
-    }
-  };
-
   return (
     <div
       role="menu"
       ref={rootRef}
       tabIndex={-1}
-      className={gridClasses.actionsCell}
+      className={clsx(gridClasses.actionsCell, 'flex gap-1 items-center')}
       onKeyDown={handleRootKeyDown}
       {...other}
     >
       {iconButtons.map((button, index) =>
         React.cloneElement(button, {
           key: index,
-          onClick: handleButtonClick(index, button.props.onClick),
           tabIndex: focusedButtonIndex === index ? tabIndex : -1,
         }),
       )}
-
-      {menuButtons.length > 0 && buttonId && (
-        <rootProps.slots.baseIconButton
-          ref={buttonRef}
-          id={buttonId}
-          aria-label={apiRef.current.getLocaleText('actionsCellMore')}
-          aria-haspopup="menu"
-          aria-expanded={open}
-          aria-controls={open ? menuId : undefined}
-          role="menuitem"
-          size="small"
-          onClick={toggleMenu}
-          tabIndex={focusedButtonIndex === iconButtons.length ? tabIndex : -1}
-          {...rootProps.slotProps?.baseIconButton}
+      {menuItems.length > 0 && (
+        <DropdownMenu.Root
+          onOpenChange={(open) => {
+            if (open) {
+              setFocusedButtonIndex(numberOfButtons - 1);
+              ignoreCallToFocus.current = true;
+            }
+          }}
         >
-          <rootProps.slots.moreActionsIcon fontSize="small" />
-        </rootProps.slots.baseIconButton>
-      )}
-
-      {menuButtons.length > 0 && (
-        <GridMenu open={open} target={buttonRef.current} position={position} onClose={hideMenu}>
-          <rootProps.slots.baseMenuList
-            id={menuId}
-            className={gridClasses.menuList}
-            onKeyDown={handleListKeyDown}
-            aria-labelledby={buttonId}
-            variant="menu"
-            autoFocusItem
-          >
-            {menuButtons.map((button, index) =>
-              React.cloneElement(button, { key: index, closeMenu: hideMenu }),
-            )}
-          </rootProps.slots.baseMenuList>
-        </GridMenu>
+          <DropdownMenu.Trigger asChild>
+            <rootProps.slots.baseIconButton
+              ref={buttonRef}
+              id={buttonId}
+              aria-label={apiRef.current.getLocaleText('actionsCellMore')}
+              tabIndex={focusedButtonIndex === iconButtons.length ? tabIndex : -1}
+              className="size-6"
+              {...rootProps.slotProps?.baseIconButton}
+            >
+              <rootProps.slots.moreActionsIcon fontSize="small" />
+            </rootProps.slots.baseIconButton>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content>
+            {menuItems.map((button, index) => React.cloneElement(button, { key: index }))}
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
       )}
     </div>
   );

@@ -7,6 +7,7 @@ import { GridColumnHeaderClassNamePropType } from '../gridColumnHeaderClass';
 import { GridEditCellProps } from '../gridEditRowModel';
 import type { GridFilterOperator } from '../gridFilterOperator';
 import type { GridValidRowModel } from '../gridRows';
+import { GridBaseSlots } from '../gridSlotsComponent';
 import { GridComparatorFn, GridSortDirection } from '../gridSortModel';
 import {
   GridPreProcessEditCellProps,
@@ -329,7 +330,16 @@ export interface GridActionsColDef<R extends GridValidRowModel = any, V = any, F
    * @param {GridRowParams} params The params for each row.
    * @returns {readonly React.ReactElement<GridActionsCellItemProps>[]} An array of [[GridActionsCell]] elements.
    */
-  getActions: (params: GridRowParams<R>) => readonly React.ReactElement<GridActionsCellItemProps>[];
+  getActions: (
+    params: GridRowParams<R>,
+    helpers: {
+      api: GridApiCommunity;
+      Button: GridBaseSlots['baseButton'];
+      IconButton: GridBaseSlots['baseIconButton'];
+      MenuItem: GridBaseSlots['baseDropdownMenu']['Item'];
+      MenuSeparator: GridBaseSlots['baseDropdownMenu']['Separator'];
+    },
+  ) => readonly React.ReactElement<GridActionsCellItemProps>[];
 }
 
 /**

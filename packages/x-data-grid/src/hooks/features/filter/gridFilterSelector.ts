@@ -3,6 +3,7 @@ import { GridFilterItem } from '../../../models/gridFilterItem';
 import { GridRowId } from '../../../models/gridRows';
 import { GridStateCommunity } from '../../../models/gridStateCommunity';
 import { createSelector, createSelectorMemoized } from '../../../utils/createSelector';
+import { GRID_ROOT_FOOTER_ID } from '../aggregation/useGridAggregation';
 import { gridColumnLookupSelector } from '../columns/gridColumnsSelector';
 import {
   gridPinnedRowsModelSelector,
@@ -207,7 +208,9 @@ export const gridFilteredTopLevelRowCountSelector = createSelector(
  */
 export const gridFilteredRowCountSelector = createSelector(
   gridFilteredSortedRowEntriesSelector,
-  (filteredSortedRowEntries) => filteredSortedRowEntries.length,
+  (filteredSortedRowEntries) =>
+    filteredSortedRowEntries.length -
+    (filteredSortedRowEntries.at(-1)?.id === GRID_ROOT_FOOTER_ID ? 1 : 0),
 );
 
 /**

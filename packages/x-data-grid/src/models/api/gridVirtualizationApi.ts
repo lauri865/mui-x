@@ -17,4 +17,8 @@ export interface GridVirtualizationPrivateApi {
    * @returns {GridRenderContext} The `GridRenderContext`.
    */
   updateRenderContext?: () => void;
+  /**
+   * The ref of the scroll position.
+   */
+  scrollPositionRef: React.RefObject<{ left: number; top: number }>;
 }

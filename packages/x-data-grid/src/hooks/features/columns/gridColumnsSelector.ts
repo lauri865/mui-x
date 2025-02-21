@@ -1,7 +1,6 @@
 import { GridStateCommunity } from '../../../models/gridStateCommunity';
 import { createSelector, createSelectorMemoized } from '../../../utils/createSelector';
 import { roundToDecimalPlaces } from '../../../utils/roundToDecimalPlaces';
-import { gridIsRtlSelector } from '../../core/gridCoreSelector';
 import {
   EMPTY_PINNED_COLUMN_FIELDS,
   GridColumnLookup,
@@ -88,18 +87,11 @@ export const gridVisiblePinnedColumnsSelector = (state: GridStateCommunity) =>
 export const gridVisiblePinnedColumnDefinitionsSelector = createSelectorMemoized(
   gridColumnsStateSelector,
   gridVisiblePinnedColumnsSelector,
-  gridIsRtlSelector,
   (columnsState, visiblePinnedFields, isRtl) => {
     const visiblePinnedColumns = {
       left: visiblePinnedFields.left.map((field) => columnsState.lookup[field]),
       right: visiblePinnedFields.right.map((field) => columnsState.lookup[field]),
     };
-    if (isRtl) {
-      return {
-        left: visiblePinnedColumns.right,
-        right: visiblePinnedColumns.left,
-      };
-    }
     return visiblePinnedColumns;
   },
 );

@@ -296,7 +296,7 @@ export const useGridRowGroupingPreProcessors = (
             if ((previousTree[groupId] as GridGroupNode)?.childrenExpanded) {
               groupNode.childrenExpanded = true;
             } else if (props.isGroupExpandedByDefault) {
-              groupNode.childrenExpanded = props.isGroupExpandedByDefault(groupValue);
+              groupNode.childrenExpanded = props.isGroupExpandedByDefault(groupNode);
             } else if (defaultGroupingExpansionDepth === -1) {
               groupNode.childrenExpanded = true;
             } else {

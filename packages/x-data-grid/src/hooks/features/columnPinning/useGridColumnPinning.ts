@@ -2,6 +2,7 @@ import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
 import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
 import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
+import { gridIsRtlSelector } from '../../core/gridCoreSelector';
 import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
 import { useGridApiMethod } from '../../utils/useGridApiMethod';
 import { GridStateInitializer } from '../../utils/useGridInitializeState';
@@ -11,7 +12,13 @@ import {
   GridPinnedColumnFields,
   GridPinnedColumnPosition,
 } from '../columns/gridColumnsInterfaces';
-import { gridPinnedColumnsSelector } from '../columns/gridColumnsSelector';
+import {
+  gridColumnPositionsSelector,
+  gridPinnedColumnsSelector,
+  gridVisibleColumnDefinitionsSelector,
+  gridVisiblePinnedColumnsSelector,
+} from '../columns/gridColumnsSelector';
+import { gridDimensionsSelector } from '../dimensions';
 import { GridColumnPinningApi, GridColumnPinningState } from './gridColumnPinningInterfaces';
 
 export const columnPinningStateInitializer: GridStateInitializer<
@@ -206,6 +213,8 @@ export const useGridColumnPinningPreProcessors = (
         pinnedColumns,
         columns as GridColumnsState,
       ).visible;
+
+      const isRtl = gridIsRtlSelector(apiRef.current.state);
       apiRef.current.state.pinnedColumns.visible = visiblePinnedColumns;
 
       const newOrderedFields = [
@@ -213,8 +222,6 @@ export const useGridColumnPinningPreProcessors = (
         ...filteredColumns,
         ...(pinnedColumns.right ?? []).filter((field) => columns.lookup[field] !== undefined),
       ];
-
-      console.log('orderedFields', newOrderedFields);
 
       return {
         ...columns,
@@ -224,10 +231,62 @@ export const useGridColumnPinningPreProcessors = (
     [apiRef],
   );
 
+  const scrollToPinnedIndexes = React.useCallback<GridPipeProcessor<'scrollToIndexes'>>(
+    (params, context) => {
+      const visiblePinnedColumns = gridVisiblePinnedColumnsSelector(apiRef.current.state);
+      if (
+        (!visiblePinnedColumns.left.length && !visiblePinnedColumns.right.length) ||
+        !context.colIndex
+      ) {
+        return params;
+      }
+      const visibleColumns = gridVisibleColumnDefinitionsSelector(apiRef.current.state);
+      const colIndex = context.colIndex;
+      const isNavigatingToPinnedColumn =
+        colIndex < visiblePinnedColumns.left.length ||
+        colIndex >= visibleColumns.length - visiblePinnedColumns.right.length;
+      if (isNavigatingToPinnedColumn) {
+        return params;
+      }
+
+      const columnPositions = gridColumnPositionsSelector(apiRef.current.state);
+      const scrollLeft = apiRef.current.scrollPositionRef.current.left;
+      const {
+        leftPinnedWidth,
+        rightPinnedWidth,
+        viewportOuterSize: { width: scrollerWidth },
+      } = gridDimensionsSelector(apiRef.current.state);
+
+      // Calculate target column's starting position and width.
+      const columnStart = columnPositions[colIndex];
+      const columnWidth = columnPositions[colIndex + 1] - columnStart;
+
+      let newScrollLeft = scrollLeft;
+      // Check if column is hidden behind left pinned area.
+      if (columnStart < scrollLeft + leftPinnedWidth) {
+        newScrollLeft = columnStart - leftPinnedWidth;
+      }
+      // Or if column's right edge is hidden behind right pinned area.
+      else if (columnStart + columnWidth > scrollLeft + scrollerWidth - rightPinnedWidth) {
+        newScrollLeft = columnStart + columnWidth - scrollerWidth + rightPinnedWidth;
+      }
+
+      if (newScrollLeft !== scrollLeft) {
+        return {
+          ...params,
+          left: newScrollLeft,
+        };
+      }
+      return params;
+    },
+    [apiRef],
+  );
+
   const addColumnMenuItem = React.useCallback<GridPipeProcessor<'columnMenu'>>((columnMenu) => {
     return [...columnMenu, 'columnMenuColumnPinning'];
   }, []);
 
   useGridRegisterPipeProcessor(apiRef, 'hydrateColumns', hydratePinnedColumns);
+  useGridRegisterPipeProcessor(apiRef, 'scrollToIndexes', scrollToPinnedIndexes);
   useGridRegisterPipeProcessor(apiRef, 'columnMenu', addColumnMenuItem);
 };

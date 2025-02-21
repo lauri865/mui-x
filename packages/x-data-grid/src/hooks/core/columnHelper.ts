@@ -20,10 +20,10 @@ export const defaultColDef = {
     [GRID_USER_DEFINED_SPECIAL_COLUMN]: true,
   } as GridColDef,
   group: {
-    field: GRID_GROUPING_COLUMN_COL_DEF.field,
     type: GRID_GROUPING_COLUMN_COL_DEF.type,
+    field: GRID_GROUPING_COLUMN_COL_DEF.field,
     [GRID_USER_DEFINED_SPECIAL_COLUMN]: true,
-  },
+  } as GridColDef,
   detailPanel: GRID_DETAIL_PANEL_COL_DEF,
 };
 
@@ -47,11 +47,15 @@ type DefaultColumnTypes<R extends GridValidRowModel> = {
 };
 
 type DotSeparatedKeys<T> = T extends object
-  ? {
-      [K in Exclude<keyof T, keyof any[]> & string]: T[K] extends object
-        ? K | `${K}.${DotSeparatedKeys<T[K]>}`
-        : K;
-    }[Exclude<keyof T, keyof any[]> & string]
+  ?
+      | {
+          [K in Exclude<keyof T, keyof any[]> & string]: T[K] extends object
+            ? K | `${K}.${DotSeparatedKeys<T[K]>}`
+            : K;
+        }[Exclude<keyof T, keyof any[]> & string]
+      | 'actions'
+      | `custom_${string}`
+      | `calc_${string}`
   : never;
 
 type DefaultColumnType<R extends GridValidRowModel> = keyof DefaultColumnTypes<R>;
@@ -71,17 +75,21 @@ type HasField<ColDef, R extends GridValidRowModel> = [keyof Field<ColDef, R>] ex
   ? false
   : true;
 
+type MakeOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 type DefaultHelper<R extends GridValidRowModel> = {
   [K in DefaultColumnType<R>]: HasField<DefaultColumnTypes<R>[K], R> extends true
     ? (
-        colDef: Omit<Partial<DefaultColumnTypes<R>[K]>, 'field'> &
+        colDef: Omit<DefaultColumnTypes<R>[K], keyof DefaultColumnTypes<R>[K]> &
           AdditionalProps &
-          Field<DefaultColumnTypes<R>[K], R>,
+          Field<DefaultColumnTypes<R>[K], R> & { type?: GridColDef['type'] } & Partial<
+            DefaultColumnTypes<R>[K]
+          >,
       ) => GridColDef
     : (
-        colDef?: Omit<Partial<DefaultColumnTypes<R>[K]>, 'field'> &
+        colDef?: Omit<DefaultColumnTypes<R>[K], keyof DefaultColumnTypes<R>[K]> &
           AdditionalProps &
-          Field<DefaultColumnTypes<R>[K], R>,
+          Field<DefaultColumnTypes<R>[K], R> &
+          Partial<DefaultColumnTypes<R>[K]>,
       ) => GridColDef;
 };
 
@@ -174,7 +182,7 @@ export function createColumnHelper<
           }
 
           if (
-            !colDef.headerName &&
+            colDef.headerName == null &&
             options.autoFillMissingHeaders &&
             !colDef[GRID_USER_DEFINED_SPECIAL_COLUMN]
           ) {
@@ -257,7 +265,6 @@ export function createColumnHelper<
                   : '',
               );
               const existingWidth = columnWidths.get(currentPathString);
-              console.log(currentWidth, existingWidth);
               if (existingWidth == null || currentWidth > existingWidth) {
                 columnWidths.set(currentPathString, currentWidth);
               }

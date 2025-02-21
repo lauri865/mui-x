@@ -100,7 +100,7 @@ export const useGridScroll = (
         // When using RTL, `scrollLeft` becomes negative, so we must ensure that we only compare values.
         scrollCoordinates.left = scrollIntoView({
           containerSize: dimensions.viewportOuterSize.width,
-          scrollPosition: Math.abs(virtualScrollerRef.current!.scrollLeft),
+          scrollPosition: Math.abs(apiRef.current.scrollPositionRef.current.left),
           elementSize: cellWidth,
           elementOffset: columnPositions[params.colIndex],
         });
@@ -120,7 +120,7 @@ export const useGridScroll = (
 
         scrollCoordinates.top = scrollIntoView({
           containerSize: dimensions.viewportInnerSize.height,
-          scrollPosition: virtualScrollerRef.current!.scrollTop,
+          scrollPosition: apiRef.current.scrollPositionRef.current.top,
           elementSize: targetOffsetHeight,
           elementOffset: rowsMeta.positions[elementIndex],
         });

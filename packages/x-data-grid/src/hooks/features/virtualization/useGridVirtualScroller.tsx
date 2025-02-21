@@ -35,7 +35,6 @@ import {
   gridColumnPositionsSelector,
   gridHasColSpanSelector,
   gridVisibleColumnDefinitionsSelector,
-  gridVisiblePinnedColumnDefinitionsSelector,
   gridVisiblePinnedColumnsSelector,
 } from '../columns/gridColumnsSelector';
 import { getFirstNonSpannedColumnToRender } from '../columns/gridColumnsUtils';
@@ -725,6 +724,7 @@ export const useGridVirtualScroller = () => {
 
   apiRef.current.register('private', {
     updateRenderContext: forceUpdateRenderContext,
+    scrollPositionRef: scrollPosition,
   });
 
   useGridApiOptionHandler(apiRef, 'sortedRowsSet', forceUpdateRenderContext);
@@ -787,7 +787,7 @@ type RenderContextInputs = {
   columnPositions: ReturnType<typeof gridColumnPositionsSelector>;
   rows: ReturnType<typeof useGridVisibleRows>['rows'];
   range: ReturnType<typeof useGridVisibleRows>['range'];
-  pinnedColumns: ReturnType<typeof gridVisiblePinnedColumnDefinitionsSelector>;
+  pinnedColumns: ReturnType<typeof gridVisiblePinnedColumnsSelector>;
   visibleColumns: ReturnType<typeof gridVisibleColumnDefinitionsSelector>;
   hiddenCellsOriginMap: ReturnType<typeof gridRowSpanningHiddenCellsOriginMapSelector>;
   listView: boolean;
@@ -833,7 +833,7 @@ function inputsSelector(
     columnPositions: gridColumnPositionsSelector(apiRef),
     rows: currentPage.rows,
     range: currentPage.range,
-    pinnedColumns: gridVisiblePinnedColumnDefinitionsSelector(apiRef),
+    pinnedColumns: gridVisiblePinnedColumnsSelector(apiRef.current.state),
     visibleColumns,
     hiddenCellsOriginMap,
     listView: rootProps.unstable_listView ?? false,
@@ -1139,6 +1139,7 @@ export function computeOffsetLeft(
   const left =
     (columnPositions[renderContext.firstColumnIndex] ?? 0) -
     (columnPositions[pinnedLeftLength] ?? 0);
+
   return Math.abs(left);
 }
 

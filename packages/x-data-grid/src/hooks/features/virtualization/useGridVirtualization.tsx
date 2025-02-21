@@ -42,7 +42,7 @@ export const virtualizationStateInitializer: GridStateInitializer<RootProps> = (
       /* renderContext: {
         firstRowIndex: 0,
         lastRowIndex: Math.min(10, state.rows?.dataRowIds?.length || 0),
-        firstColumnIndex: 0,
+        firstColumnIndex: 2,
         lastColumnIndex: Math.min(
           10,
           Object.values(state.columns?.orderedFields || {}).reduce((acc, visible) => (acc += 1), 0),

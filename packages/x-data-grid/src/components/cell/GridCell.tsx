@@ -183,12 +183,18 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
   const canManageOwnFocus =
     column.type === 'actions' &&
     (column as GridActionsColDef)
-      .getActions?.(apiRef.current.getRowParams(rowId))
+      .getActions?.(apiRef.current.getRowParams(rowId), {
+        api: apiRef.current,
+        Button: rootProps.slots.baseButton,
+        IconButton: rootProps.slots.baseIconButton,
+        MenuItem: rootProps.slots.baseDropdownMenu.Item,
+        MenuSeparator: rootProps.slots.baseDropdownMenu.Separator,
+      })
       .some((action) => !action.props.disabled);
   const tabIndex =
     (cellMode === 'view' || !isEditable) && !canManageOwnFocus ? cellParams.tabIndex : -1;
 
-  const { classes: rootClasses, getCellClassName } = rootProps;
+  const { getCellClassName } = rootProps;
 
   // There is a hidden grid state access in `applyPipeProcessor('cellClassName', ...)`
   const pipesClassName = apiRef.current
@@ -409,7 +415,6 @@ const GridCell = forwardRef<HTMLDivElement, GridCellProps>(function GridCell(pro
 
     children = column.renderEditCell(params);
     classNames.push(gridClasses['cell--editing']);
-    classNames.push(rootClasses?.['cell--editing']);
   }
 
   if (children === undefined) {

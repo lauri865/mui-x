@@ -1,11 +1,12 @@
 'use client';
 import { columnHelper, DataGrid, GridPreferencePanelsValue, useGridApiRef } from '@mui/x-data-grid';
 import { GRID_ROOT_FOOTER_ID } from '@mui/x-data-grid/hooks/features/aggregation/useGridAggregation';
+import { Edit3Icon, Trash2Icon } from 'lucide-react';
 import * as React from 'react';
 import { cn } from '../../lib/cn';
 import { GlowingEffect } from './glowing-effect';
 
-const props = columnHelper.createColumns((c) => [
+const props = columnHelper.createColumns<(typeof rows)[number]>((c) => [
   c.detailPanel({
     pinned: 'left',
   }),
@@ -24,6 +25,7 @@ const props = columnHelper.createColumns((c) => [
     headerName: 'First name',
     width: 150,
     editable: true,
+    aggregation: 'distinct',
   }),
   c.string({
     field: 'lastName',
@@ -44,9 +46,10 @@ const props = columnHelper.createColumns((c) => [
     headerName: 'Age',
     width: 110,
     editable: true,
+    aggregation: 'avg',
   }),
   c.number({
-    field: 'fakeAge',
+    field: 'custom_fakeAge',
     headerName: 'Age',
     width: 110,
     editable: true,
@@ -59,7 +62,7 @@ const props = columnHelper.createColumns((c) => [
     },
   }),
   c.string({
-    field: 'fullName',
+    field: 'calc_fullName',
     headerName: 'Full name',
     description: 'This column has a value getter and is not sortable.',
     sortable: false,
@@ -89,6 +92,35 @@ const props = columnHelper.createColumns((c) => [
       valueOptions: ['Male', 'Female'],
     },
     editable: true,
+  }),
+  c.actions({
+    field: 'actions',
+    headerName: 'Actions',
+    pinned: 'right',
+    width: 80,
+    renderHeader: ({ api }) => {
+      const rootProps = api.getRootProps();
+      return (
+        <rootProps.slots.baseIconButton
+          variant="ghost"
+          className="text-[14px] hover:bg-grid-bg tracking-widest pb-1.5"
+          onClick={() => api.showPreferences(GridPreferencePanelsValue.columns)}
+        >
+          ...
+        </rootProps.slots.baseIconButton>
+      );
+    },
+    getActions: (params, { Button, IconButton, MenuItem }) => {
+      return [
+        <IconButton>
+          <Edit3Icon />
+        </IconButton>,
+        <MenuItem>
+          <Trash2Icon />
+          Delete row
+        </MenuItem>,
+      ];
+    },
   }),
 ]);
 
@@ -135,6 +167,7 @@ const getRowHeight = (params) => {
 export function HeroDataGrid() {
   const apiRef = useGridApiRef();
   const [data, setData] = React.useState(rows);
+  const [columns, setColumns] = React.useState(props.columns);
 
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -178,15 +211,18 @@ export function HeroDataGrid() {
               pageSize: 5,
             },
           },
+          detailPanel: {
+            expandedRowIds: new Set([3]),
+          },
 
           /* pinnedRows: {
             top: [1],
             bottom: [2],
           }, */
-          rowSelection: [2, 3, 'auto-generated-row-lastName/Lannister'],
-          /* rowGrouping: {
+          rowSelection: [2],
+          rowGrouping: {
             model: ['lastName'],
-          }, */
+          },
         }}
         onSortModelChange={(model, detail) => {
           detail.api.scrollToIndexes({ rowIndex: 0 });
@@ -197,6 +233,10 @@ export function HeroDataGrid() {
         disableRowSelectionOnClick
         loading={isLoading}
         getDetailPanelContent={detailPanel}
+        isGroupExpandedByDefault={(params) => {
+          console.log('params', params);
+          return params.id === 'auto-generated-row-lastName/Lannister';
+        }}
         /* onRowsScrollEnd={async (params, detail) => {
           if (params.visibleRowsCount >= 40) {
             return;

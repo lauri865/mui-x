@@ -180,7 +180,6 @@ export const hydrateColumnsWidth = (
 
   // For the non-flex columns, compute their width
   // For the flex columns, compute their minimum width and how much width must be allocated during the flex allocation
-  console.log('rawState', rawState);
   rawState.orderedFields.forEach((columnField) => {
     let column = rawState.lookup[columnField] as GridStateColDef;
     let computedWidth = 0;
@@ -406,7 +405,7 @@ export const createColumnsState = ({
     const column = resolveProps(existingState, {
       ...newColumn,
       hasBeenResized,
-      valueGetter,
+      ...(valueGetter ? { valueGetter } : {}),
     });
 
     if ('editCellParams' in column && 'editCellParams' in existingState) {

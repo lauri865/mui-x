@@ -114,10 +114,7 @@ export const getTopLevelRowCount = ({
 }) => {
   const rootGroupNode = tree[GRID_ROOT_GROUP_ID] as GridGroupNode;
 
-  return Math.max(
-    rowCountProp,
-    rootGroupNode.children.length + (rootGroupNode.footerId == null ? 0 : 1),
-  );
+  return Math.max(rowCountProp, rootGroupNode.children.length);
 };
 
 export const getRowsStateFromCache = ({

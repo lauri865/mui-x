@@ -1,10 +1,10 @@
-import { unstable_composeClasses as composeClasses, unstable_useId as useId } from '@mui/utils';
+import { unstable_useId as useId } from '@mui/utils';
 import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
 import { fastMemo } from '@mui/x-internals/fastMemo';
 import clsx from 'clsx';
 import * as React from 'react';
 import { GRID_CHECKBOX_SELECTION_FIELD } from '../../colDef';
-import { getDataGridUtilityClass, gridClasses } from '../../constants/gridClasses';
+import { gridClasses } from '../../constants/gridClasses';
 import { useThemedComponent } from '../../context/GridThemeContext';
 import { gridColumnMenuSelector } from '../../hooks/features/columnMenu/columnMenuSelector';
 import { useGridPrivateApiContext } from '../../hooks/utils/useGridPrivateApiContext';
@@ -16,7 +16,6 @@ import { attachPinnedStyle } from '../../internals/utils';
 import { GridStateColDef } from '../../models/colDef/gridColDef';
 import { GridColumnHeaderEventLookup } from '../../models/events';
 import { GridSortDirection } from '../../models/gridSortModel';
-import { DataGridProcessedProps } from '../../models/props/DataGridProps';
 import { isEventTargetInPortal } from '../../utils/domUtils';
 import { gridPinnedColumnPositionLookup } from '../cell/GridCell';
 import { ColumnHeaderMenuIcon } from './ColumnHeaderMenuIcon';
@@ -48,62 +47,6 @@ interface GridColumnHeaderItemProps {
   showLeftBorder: boolean;
   showRightBorder: boolean;
 }
-
-type OwnerState = GridColumnHeaderItemProps & {
-  showRightBorder: boolean;
-  showLeftBorder: boolean;
-  classes?: DataGridProcessedProps['classes'];
-};
-
-const useUtilityClasses = (ownerState: OwnerState) => {
-  const {
-    colDef,
-    classes,
-    isDragging,
-    sortDirection,
-    showRightBorder,
-    showLeftBorder,
-    filterItemsCounter,
-    pinnedPosition,
-    isLastUnpinned,
-    isSiblingFocused,
-    isLastPinnedLeft,
-    isFirstPinnedRight,
-  } = ownerState;
-
-  const isColumnSorted = sortDirection != null;
-  const isColumnFiltered = filterItemsCounter != null && filterItemsCounter > 0;
-  // todo refactor to a prop on col isNumeric or ?? ie: coltype===price wont work
-  const isColumnNumeric = colDef.type === 'number';
-
-  const slots = {
-    root: [
-      'columnHeader',
-      colDef.headerAlign === 'left' && 'columnHeader--alignLeft',
-      colDef.headerAlign === 'center' && 'columnHeader--alignCenter',
-      colDef.headerAlign === 'right' && 'columnHeader--alignRight',
-      colDef.sortable && 'columnHeader--sortable',
-      isDragging && 'columnHeader--moving',
-      isColumnSorted && 'columnHeader--sorted',
-      isColumnFiltered && 'columnHeader--filtered',
-      isColumnNumeric && 'columnHeader--numeric',
-      'withBorderColor',
-      showRightBorder && 'columnHeader--withRightBorder',
-      showLeftBorder && 'columnHeader--withLeftBorder',
-      pinnedPosition === PinnedColumnPosition.LEFT && 'columnHeader--pinnedLeft',
-      pinnedPosition === PinnedColumnPosition.RIGHT && 'columnHeader--pinnedRight',
-      // TODO: Remove classes below and restore `:has` selectors when they are supported in jsdom
-      // See https://github.com/mui/mui-x/pull/14559
-      isLastUnpinned && 'columnHeader--lastUnpinned',
-      isSiblingFocused && 'columnHeader--siblingFocused',
-    ],
-    draggableContainer: ['columnHeaderDraggableContainer'],
-    titleContainer: ['columnHeaderTitleContainer'],
-    titleContainerContent: ['columnHeaderTitleContainerContent'],
-  };
-
-  return composeClasses(slots, getDataGridUtilityClass, classes);
-};
 
 function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
   const {
@@ -275,7 +218,7 @@ function GridColumnHeaderItem(props: GridColumnHeaderItemProps) {
 
   const headerClassName =
     typeof colDef.headerClassName === 'function'
-      ? colDef.headerClassName({ field: colDef.field, colDef })
+      ? colDef.headerClassName({ field: colDef.field, colDef, api: apiRef.current })
       : colDef.headerClassName;
 
   const label = colDef.headerName ?? colDef.field;

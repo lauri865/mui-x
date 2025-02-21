@@ -32,6 +32,7 @@ export function useGridParamsApi(
     (field) => ({
       field,
       colDef: apiRef.current.getColumn(field),
+      api: apiRef.current,
     }),
     [apiRef],
   );

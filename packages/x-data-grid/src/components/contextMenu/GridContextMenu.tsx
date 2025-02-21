@@ -54,8 +54,6 @@ export function GridContextMenu() {
     return null;
   }
 
-  const selection = apiRef.current.getSelectedRows();
-
   return (
     <ContextMenu.Root
       onOpenChange={(open) => {
@@ -366,6 +364,11 @@ const ItemExcludeRow = ({ apiRef, cell }: ItemProps) => {
           return;
         }
 
+        const operator =
+          cell.colDef.filterOperators?.find(
+            (op) => op.value === '!=' || op.value === 'doesNotEqual',
+          )?.value || '!=';
+        const rowId = apiRef.current.getRowId(cell.row);
         apiRef.current.setFilterModel({
           items: [
             ...gridFilterModelSelector(apiRef.current.state).items,
@@ -375,8 +378,8 @@ const ItemExcludeRow = ({ apiRef, cell }: ItemProps) => {
               logicOperator: GridLogicOperator.And,
               conditions: [
                 {
-                  operator: '!=',
-                  value: cell.id,
+                  operator: operator,
+                  value: operator === '!=' ? rowId : String(rowId),
                 },
               ],
             },

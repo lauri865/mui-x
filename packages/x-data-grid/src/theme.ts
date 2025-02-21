@@ -186,7 +186,8 @@ const className = {
     dragging: 'opacity-50',
     draggingOverIndicator: 'absolute left-0 w-full h-0.5 bg-highlight-border pointer-events-none',
     dragHandle: 'inline-flex size-4 text-grid-text/50 ml-auto',
-    pinIcon: 'size-4 text-grid-text hover:text-grid-text/50 inline-flex',
+    pinIcon: 'size-4 text-grid-text hover:text-grid-text/50 inline-flex cursor-pointer -mr-1',
+    groupIcon: 'size-4 text-grid-text hover:text-grid-text/50 inline-flex cursor-pointer',
   },
   pagination: {
     base: 'flex items-center gap-2 tabular-nums ml-auto',

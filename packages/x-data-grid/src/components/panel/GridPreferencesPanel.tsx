@@ -51,6 +51,15 @@ export function GridPreferencesPanel() {
     return apiRef.current.getColumnHeaderElement(preferencePanelState.labelId);
   }, [apiRef, preferencePanelState.labelId, open]);
 
+  React.useEffect(() => {
+    if (!anchorEl) {
+      const panelAnchor = apiRef.current.mainElementRef?.current?.querySelector(
+        '[data-id="gridPanelAnchor"]',
+      ) as HTMLElement;
+      setAnchorEl(panelAnchor);
+    }
+  }, []);
+
   React.useLayoutEffect(() => {
     if (open) {
       const api = apiRef.current;

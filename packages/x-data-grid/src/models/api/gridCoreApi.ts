@@ -44,6 +44,12 @@ export interface GridCoreApi {
    * @ignore - do not document.
    */
   store: Store<GridApiCommon['state']>;
+  /**
+   * Allows to access the root props outside of the React component.
+   * Do not use in React components - use the `useGridRootProps` hook instead.
+   * Fine to use in e.g. useCallback to avoid unnecessary re-renders due to the context updates.
+   */
+  getRootProps: () => DataGridProcessedProps;
 }
 
 export interface GridCorePrivateApi<
@@ -109,10 +115,4 @@ export interface GridCorePrivateApi<
    * Do not use in React components - use the `useGridRootProps` hook instead.
    */
   /* rootProps: GridProps; */
-  /**
-   * Allows to access the root props outside of the React component.
-   * Do not use in React components - use the `useGridRootProps` hook instead.
-   * Fine to use in e.g. useCallback to avoid unnecessary re-renders due to the context updates.
-   */
-  getRootProps: () => GridProps;
 }

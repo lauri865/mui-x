@@ -298,7 +298,7 @@ function GridColumnsManagement(props: GridColumnsManagementProps) {
                   sideOffset={8}
                 >
                   <rootProps.slots.groupIcon
-                    className="size-4 -mr-1 cursor-pointer"
+                    className={classes.variants.pinIcon}
                     role="button"
                     onPointerDown={(e: any) => {
                       e.stopPropagation();
@@ -441,6 +441,7 @@ export function useDragReorder(onReorder: (dragIndex: number, overIndex: number)
     window.removeEventListener('keydown', onKeyDown, {
       capture: true,
     });
+    document.body.classList.remove('**:cursor-grabbing');
   });
 
   const handlers: DragReorderHandlers = {
@@ -466,6 +467,7 @@ export function useDragReorder(onReorder: (dragIndex: number, overIndex: number)
         startY.current !== null &&
         Math.abs(e.clientY - startY.current) > 5
       ) {
+        document.body.classList.add('**:cursor-grabbing');
         let index = getIndex(e);
 
         if (index !== dragIndex) {

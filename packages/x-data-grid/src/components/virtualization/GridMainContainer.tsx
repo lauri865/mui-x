@@ -3,20 +3,11 @@ import * as React from 'react';
 import { useThemedComponent } from '../../context/GridThemeContext';
 import { useGridConfiguration } from '../../hooks/utils/useGridConfiguration';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
-import { DataGridProcessedProps } from '../../models/props/DataGridProps';
-import { GridLoadingOverlayVariant } from '../GridLoadingOverlay';
-
-type OwnerState = Pick<DataGridProcessedProps, 'classes'> & {
-  hasScrollX: boolean;
-  hasPinnedRight: boolean;
-  loadingOverlayVariant: GridLoadingOverlayVariant | null;
-};
 
 export const GridMainContainer = forwardRef<
   HTMLDivElement,
   React.PropsWithChildren<{
     className: string;
-    ownerState: OwnerState;
   }>
 >((props, ref) => {
   const rootProps = useGridRootProps();
