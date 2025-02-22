@@ -63,14 +63,10 @@ var source_config_default = defineConfig({
           name: "transformers:remove-notation-escape",
           code(hast) {
             for (const line of hast.children) {
-              if (line.type !== "element") {
-                continue;
-              }
+              if (line.type !== "element") continue;
               const lastSpan = line.children.findLast((v) => v.type === "element");
               const head = lastSpan?.children[0];
-              if (head?.type !== "text") {
-                return;
-              }
+              if (head?.type !== "text") return;
               head.value = head.value.replace(/\[\\!code/g, "[!code");
             }
           }

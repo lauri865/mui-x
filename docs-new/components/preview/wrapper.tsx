@@ -1,12 +1,12 @@
-import type { HTMLAttributes } from 'react';
 import { cn } from '@/lib/cn';
+import type { HTMLAttributes } from 'react';
 
 export function Wrapper(props: HTMLAttributes<HTMLDivElement>): React.ReactElement {
   return (
     <div
       {...props}
       className={cn(
-        'rounded-xl bg-gradient-to-br from-pink-500 to-blue-500 p-4 prose-no-margin',
+        'rounded-lg bg-gradient-to-br from-pink-500/20 to-blue-500/20 p-4 prose-no-margin [&_.twg-root]:shadow-sm',
         props.className,
       )}
     >

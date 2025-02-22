@@ -1,3 +1,9 @@
+import { CodeBlock } from '@/components/code-block';
+import ContributorCounter from '@/components/contributor-count';
+import { HeroDataGrid } from '@/components/home/HeroDatagrid';
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/cn';
+import SourceImage from '@/public/source.png';
 import { cva } from 'class-variance-authority';
 import { File, Files, Folder } from 'fumadocs-ui/components/files';
 import { TypeTable } from 'fumadocs-ui/components/type-table';
@@ -23,12 +29,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { HTMLAttributes, ReactNode } from 'react';
 import * as React from 'react';
-import SourceImage from '@/public/source.png';
-import { cn } from '@/lib/cn';
-import { buttonVariants } from '@/components/ui/button';
-import { HeroDataGrid } from '@/components/home/HeroDatagrid';
-import ContributorCounter from '@/components/contributor-count';
-import { CodeBlock } from '@/components/code-block';
+import { GithubStarsButton } from '../../components/GithubStarButton';
 import { BackgroundBeams } from '../../components/home/background-beams';
 import ArchImg from './arch.png';
 import { EarthIcon, NetlifyLogo, NextSVG, OpenAPIIcon, VercelLogo } from './icons';
@@ -57,13 +58,13 @@ export default function Page() {
         {/* <Introduction /> */}
         {/* <Architecture /> */}
         <div
-          className="relative overflow-hidden border-x border-t px-8 py-16 sm:py-24"
+          className="relative overflow-hidden border-x border-t px-8 py-16 sm:py-16"
           style={{
             backgroundImage:
               'radial-gradient(circle at bottom center, var(--color-fd-secondary), var(--color-fd-background))',
           }}
         >
-          <h2 className="bg-gradient-to-b from-fd-primary to-fd-foreground/40 bg-clip-text text-center text-2xl font-semibold text-transparent sm:text-3xl">
+          <h2 className="bg-gradient-to-b from-fd-primary to-fd-foreground/40 bg-clip-text text-center text-2xl font-semibold text-transparent sm:text-3xl saturate-0">
             Loved by users.
             <br />
             Built for developers.
@@ -446,6 +447,7 @@ function Hero() {
           lang="bash"
           code="pnpm install @twgrid/react"
         />
+        <GithubStarsButton />
       </div>
 
       <HeroDataGrid />
@@ -739,7 +741,7 @@ function Feature({
 }): React.ReactElement {
   return (
     <div className={cn('border-l border-t px-6 py-12 md:py-16', className)} {...props}>
-      <div className="mb-4 inline-flex items-center gap-2 text-sm font-medium text-blue-600">
+      <div className="mb-4 inline-flex items-center gap-2 text-sm font-medium text-fd-primary">
         <Icon className="size-4" />
         <p>{subheading}</p>
       </div>

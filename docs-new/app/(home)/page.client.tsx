@@ -1,7 +1,9 @@
 'use client';
-
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/cn';
 import { TerminalIcon } from 'lucide-react';
 import Link from 'next/link';
+import * as React from 'react';
 import {
   Fragment,
   useEffect,
@@ -12,8 +14,6 @@ import {
   type ReactNode,
 } from 'react';
 import scrollIntoView from 'scroll-into-view-if-needed';
-import { cn } from '@/lib/cn';
-import { buttonVariants } from '@/components/ui/button';
 
 export function CreateAppAnimation() {
   const installCmd = 'npm create fumadocs-app';
@@ -49,7 +49,8 @@ export function CreateAppAnimation() {
     lines.push(<span key="space"> </span>);
   }
 
-  if (tick > timeCommandRun) {lines.push(
+  if (tick > timeCommandRun) {
+    lines.push(
       <Fragment key="command_response">
         <span className="font-bold">┌ Create Fumadocs App</span>
         <span>│</span>
@@ -72,7 +73,8 @@ export function CreateAppAnimation() {
           </React.Fragment>
         )}
       </Fragment>,
-    );}
+    );
+  }
 
   return (
     <div
@@ -137,7 +139,9 @@ export function WhyInteractive(props: {
   ];
 
   useEffect(() => {
-    if (!autoActive) {return;}
+    if (!autoActive) {
+      return;
+    }
     const timer = setTimeout(() => {
       setActive((prev) => (prev + 1) % items.length);
     }, duration);
@@ -157,7 +161,9 @@ export function WhyInteractive(props: {
           <button
             key={item}
             ref={(element) => {
-              if (!element || i !== active) {return;}
+              if (!element || i !== active) {
+                return;
+              }
 
               scrollIntoView(element, {
                 behavior: 'smooth',
@@ -173,8 +179,9 @@ export function WhyInteractive(props: {
               i === active && autoActive ? '' : 'max-lg:pb-2.5 lg:pl-3',
             )}
             onClick={() => {
-              if (active === i) {setAutoActive((prev) => !prev);}
-              else {
+              if (active === i) {
+                setAutoActive((prev) => !prev);
+              } else {
                 setAutoActive(false);
                 setActive(i);
               }

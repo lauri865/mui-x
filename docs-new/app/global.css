@@ -14,26 +14,12 @@
 @source '../node_modules/fumadocs-twoslash/dist/**/*.js';
 
 @layer base {
-  #nd-nav {
-    @apply !bg-fd-background/80;
-  }
-  #nd-sidebar .logo {
-    @apply *:text-[20px] [&_svg]:!size-6 [&_svg>path]:!fill-blue-600;
-  }
   button {
     cursor: pointer;
   }
 
-  #nd-nav {
-    @apply !max-w-[1100px];
-
-    ul:first-of-type li a {
-      @apply !text-neutral-950 dark:!text-neutral-200 hover:!text-neutral-400 data-active:text-blue-600;
-    }
-  }
-
   ::selection {
-    @apply bg-blue-600 text-white;
+    @apply bg-blue-500 text-white;
   }
 }
 
@@ -64,13 +50,10 @@
   --color-fd-primary: var(--ui-color);
 }
 
-.headless {
-  --color-fd-primary: var(--headless-color);
-}
-
 :root {
   --headless-color: hsl(250, 80%, 54%);
   --ui-color: hsl(220, 91%, 54%);
+  --color-fd-primary: var(--color-blue-500);
 }
 
 body {
@@ -107,4 +90,9 @@ body {
     opacity: 0;
     transform: translateX(212px);
   }
+}
+
+@utility fade-bottom {
+  --mask-size: 50%;
+  mask: linear-gradient(to bottom, #000 0%, #000 calc(100% - var(--mask-size)), transparent 100%);
 }

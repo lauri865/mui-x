@@ -93,11 +93,16 @@ const props = columnHelper.createColumns<(typeof rows)[number]>((c) => [
     },
     editable: true,
   }),
+  c.array({
+    field: 'tags',
+    headerName: 'Tags',
+  }),
   c.actions({
     field: 'actions',
     headerName: 'Actions',
     pinned: 'right',
-    width: 80,
+    cellClassName: '!px-0',
+    width: 70,
     renderHeader: ({ api }) => {
       const rootProps = api.getRootProps();
       return (
@@ -134,6 +139,7 @@ const rows = [
     updated_at: new Date(),
     is_filled: true,
     gender: 'Male',
+    tags: ['tag1', 'tag2'],
   },
   { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 30, nested: { description: 'test' } },
   { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 15 },

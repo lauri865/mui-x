@@ -1,6 +1,6 @@
 import { type Registry } from '@fumadocs/cli/build';
+import * as ui from 'fumadocs-ui/components/registry';
 import { fileURLToPath } from 'node:url';
-import * as ui from '../../../packages/ui/src/components/registry';
 
 export const registry: Registry = {
   path: fileURLToPath(import.meta.url),

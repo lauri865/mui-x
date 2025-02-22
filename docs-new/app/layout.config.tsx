@@ -1,17 +1,14 @@
+import { TWGridIcon } from '@/app/layout.client';
 import { type LinkItemType } from 'fumadocs-ui/layouts/docs';
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
-import { AlbumIcon } from 'lucide-react';
-import { TWGridIcon } from '@/app/layout.client';
 
 export const linkItems: LinkItemType[] = [
   {
-    icon: <AlbumIcon />,
     text: 'Pricing',
     url: '/pricing',
     active: 'nested-url',
   },
   {
-    icon: <AlbumIcon />,
     text: 'About',
     url: '#about',
     active: 'nested-url',
@@ -29,9 +26,7 @@ export const linkItems: LinkItemType[] = [
   },
 ];
 
-export const logo = (
-  <TWGridIcon className="size-4 [header_&]:size-5 dark:[&_g_path]:!fill-black" />
-);
+export const logo = <TWGridIcon className="size-4 [header_&]:size-5 dark:[&_g_path]:!fill-black" />;
 
 export const baseOptions: BaseLayoutProps = {
   nav: {

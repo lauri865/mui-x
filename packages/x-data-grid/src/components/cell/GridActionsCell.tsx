@@ -181,7 +181,14 @@ function GridActionsCell(props: GridActionsCellProps) {
             }
           }}
         >
-          <DropdownMenu.Trigger asChild>
+          <DropdownMenu.Trigger
+            asChild
+            onKeyDown={(e) => {
+              if (e.key === 'ArrowDown') {
+                e.preventDefault();
+              }
+            }}
+          >
             <rootProps.slots.baseIconButton
               ref={buttonRef}
               id={buttonId}
