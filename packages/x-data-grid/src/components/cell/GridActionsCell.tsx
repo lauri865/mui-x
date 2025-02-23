@@ -7,14 +7,12 @@ import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { useRtl } from '../../hooks/utils/useRtl';
 import { GridActionsColDef } from '../../models/colDef/gridColDef';
 import { GridRenderCellParams } from '../../models/params/gridCellParams';
-import { GridMenuProps } from '../menu/GridMenu';
 
 const hasActions = (colDef: any): colDef is GridActionsColDef =>
   typeof colDef.getActions === 'function';
 
 interface GridActionsCellProps extends Omit<GridRenderCellParams, 'api'> {
   api?: GridRenderCellParams['api'];
-  position?: GridMenuProps['position'];
 }
 
 function GridActionsCell(props: GridActionsCellProps) {
@@ -31,7 +29,6 @@ function GridActionsCell(props: GridActionsCellProps) {
     rowNode,
     cellMode,
     tabIndex,
-    position = 'bottom-end',
     focusElementRef,
     ...other
   } = props;
@@ -89,7 +86,6 @@ function GridActionsCell(props: GridActionsCellProps) {
     () => ({
       focus() {
         // If ignoreCallToFocus is true, then one of the buttons was clicked and the focus is already set
-        console.log('focus', ignoreCallToFocus.current);
         if (!ignoreCallToFocus.current) {
           // find the first focusable button and pass the index to the state
           const focusableButtonIndex = options.findIndex((o) => !o.props.disabled);

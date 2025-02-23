@@ -179,7 +179,7 @@ export function rootToggle(): ReactNode {
   );
 }
 
-const DynamicCodeBlock = dynamic(() => import('./dynamic-codeblock'));
+const DynamicCodeBlock = dynamic(() => import('../demo/dynamic-codeblock'));
 
 export function dynamicCodeBlock() {
   return (

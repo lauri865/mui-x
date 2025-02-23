@@ -78,7 +78,7 @@ export function Header({ collapse }: { collapse?: boolean }) {
               <NavbarLinkItem
                 key={i}
                 item={item}
-                className="text-neutral-700 dark:text-neutral-300 hover:text-neutral-400 text-sm data-[active=true]:bg-fd-secondary rounded-lg px-3 h-8 data-[active=true]:text-fd-accent-foreground border data-[active=false]:border-transparent text-[14px] font-medium"
+                className="text-neutral-700 dark:text-neutral-300 hover:text-neutral-400 data-[active=true]:bg-fd-card rounded-lg px-3 h-8 data-[active=true]:text-fd-accent-foreground border data-[active=true]:shadow-xs data-[active=false]:border-transparent text-[13.5px] font-medium"
               />
             ))}
         </ul>

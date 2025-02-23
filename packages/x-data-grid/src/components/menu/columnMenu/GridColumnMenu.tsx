@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { gridPreferencePanelStateSelector } from '../../../hooks';
 import { useGridColumnMenuSlots } from '../../../hooks/features/columnMenu/useGridColumnMenuSlots';
 import { useGridApiContext } from '../../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../../hooks/utils/useGridRootProps';
@@ -48,6 +49,10 @@ function GridColumnMenu(props: GridColumnMenuProps) {
   React.useEffect(() => {
     if (props.open) {
       return () => {
+        const isOpen = gridPreferencePanelStateSelector(apiRef.current.state);
+        if (isOpen) {
+          return;
+        }
         const focusedEl = apiRef.current.rootElementRef?.current?.querySelector(
           '[tabindex="0"]',
         ) as HTMLElement;
@@ -97,6 +102,7 @@ function GridColumnMenu(props: GridColumnMenuProps) {
             event.target?.addEventListener(
               'click',
               (event) => {
+                console.log('event', event);
                 event.preventDefault();
                 event.stopPropagation();
               },

@@ -41,8 +41,8 @@ export function createProcessor(): Processor {
   }
 
   const themes = {
-    light: 'vitesse-light',
-    dark: 'vitesse-dark',
+    light: 'github-light',
+    dark: 'github-dark-default',
   };
 
   const rehypeShiki = createHighlighter({

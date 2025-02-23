@@ -198,7 +198,10 @@
   },
   "resolutions": {
     "react-is": "^19.0.0",
-    "@types/node": "^20.17.16"
+    "@types/node": "^20.17.16",
+    "shiki": "^3.0.0",
+    "@shikijs/core": "^3.0.0",
+    "@shikijs/twoslash": "^3.0.0"
   },
   "packageManager": "pnpm@9.15.4",
   "engines": {

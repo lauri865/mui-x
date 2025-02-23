@@ -1,5 +1,6 @@
 import { highlight } from 'fumadocs-core/server';
 import * as Base from 'fumadocs-ui/components/codeblock';
+import { highlighterConfig } from '../lib/constants';
 
 export interface CodeBlockProps {
   code: string;
@@ -10,10 +11,7 @@ export interface CodeBlockProps {
 export async function CodeBlock({ code, lang, wrapper }: CodeBlockProps) {
   const rendered = await highlight(code, {
     lang,
-    themes: {
-      light: 'github-light',
-      dark: 'vesper',
-    },
+    ...highlighterConfig,
     components: {
       pre: Base.Pre,
     },

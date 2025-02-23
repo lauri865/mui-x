@@ -4,3 +4,4 @@ packages:
   - 'docs-new'
   - 'test'
   - 'test/performance-charts'
+  - 'templates/*'

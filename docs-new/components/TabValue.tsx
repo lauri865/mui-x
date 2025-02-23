@@ -1,5 +1,5 @@
 export const TAB = {
-  TS: 'ts',
-  JS: 'js',
+  TS: 'tsx',
+  JS: 'jsx',
 } as const;
 export type TabValue = (typeof TAB)[keyof typeof TAB];

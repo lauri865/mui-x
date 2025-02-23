@@ -16,6 +16,7 @@ import { transformerTwoslash } from 'fumadocs-twoslash';
 import rehypeKatex from 'rehype-katex';
 import remarkMath from 'remark-math';
 import { z } from 'zod';
+import { highlighterConfig } from './lib/constants';
 
 export const docs = defineDocs({
   docs: {
@@ -54,10 +55,7 @@ export default defineConfig({
       experimentalJSEngine: true,
       langs: ['ts', 'js', 'html', 'tsx', 'mdx'],
       inline: 'tailing-curly-colon',
-      themes: {
-        light: 'catppuccin-latte',
-        dark: 'catppuccin-mocha',
-      },
+      ...highlighterConfig,
       transformers: [
         ...(rehypeCodeDefaultOptions.transformers ?? []),
         transformerTwoslash(),

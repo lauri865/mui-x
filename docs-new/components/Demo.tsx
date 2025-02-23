@@ -1,14 +1,18 @@
+import { templates } from '@/templates/templates';
+import { getGitTrackedFiles } from '@/templates/utils';
 import * as Tabs from '@radix-ui/react-tabs';
+import { getParameters } from 'codesandbox/lib/api/define';
 import fs from 'fs/promises';
 import dynamic from 'next/dynamic';
 import path from 'path';
 import prettier from 'prettier';
 import tsBlankSpace from 'ts-blank-space';
 import { cn } from '../lib/cn';
-import { CodeBlock } from './code-block';
-import { DemoCollapsibleCodeBlock, DemoProvider, Resettable, Toolbar } from './Demo.client';
+import { DemoCollapsibleCodeBlock, DemoProvider, Resettable, Toolbar } from './demo/Demo.client';
+import { DynamicCodeBlock } from './demo/dynamic-codeblock';
+import { Runner } from './demo/Runner';
 import { Wrapper } from './preview/wrapper';
-import { TAB } from './TabValue';
+import { TAB, TabValue } from './TabValue';
 
 async function convertTypeScriptString(tsCode: string) {
   const result = tsBlankSpace(tsCode);
@@ -38,16 +42,78 @@ async function getComponentCode(src: string): Promise<string> {
   return fs.readFile(componentPath, 'utf-8');
 }
 
+async function getCodeSandboxUrl({
+  template,
+  name,
+  src,
+  lang,
+}: {
+  template: string;
+  name: string;
+  src: string;
+  lang: TabValue;
+}) {
+  const baseFiles = await getGitTrackedFiles(template);
+  const parameters = getParameters({
+    files: {
+      ...baseFiles,
+      [`src/Demo.${lang}`]: {
+        content: src,
+        isBinary: false,
+      },
+      'package.json': {
+        ...baseFiles['package.json'],
+        content: baseFiles['package.json'].content
+          .replace('{{name}}', `TWGrid – ${name.replace(/\.(t|j)sx$/, '')}`)
+          .replace('{{description}}', 'https://github.com/twgrid/react/blob/main/examples/' + name),
+      },
+    },
+  });
+  const url = `https://codesandbox.io/api/v1/sandboxes/define?json=1`;
+  const response = await fetch(url, {
+    method: 'POST',
+    body: new URLSearchParams({
+      parameters,
+    }),
+  });
+  const data = await response.json();
+  return data.sandbox_id;
+}
+
 export async function Demo({ src }: DemoProps) {
   const tsx = stripFinalNewline(await getComponentCode(src));
   const jsx = stripFinalNewline(await convertTypeScriptString(tsx));
+  const sandboxIdTs = await getCodeSandboxUrl({
+    template: templates.codesandbox[TAB.TS],
+    name: src,
+    src: tsx,
+    lang: TAB.TS,
+  });
+  const sandboxIdJs = await getCodeSandboxUrl({
+    template: templates.codesandbox[TAB.JS],
+    name: src,
+    src: jsx,
+    lang: TAB.JS,
+  });
 
   const InteractiveDemo = getDynamicComponent(src);
   return (
-    <DemoProvider code={{ [TAB.TS]: tsx, [TAB.JS]: jsx, fileName: src }}>
+    <DemoProvider
+      code={{
+        [TAB.TS]: tsx,
+        [TAB.JS]: jsx,
+        fileName: src,
+      }}
+      codeSandboxIds={{
+        [TAB.TS]: sandboxIdTs,
+        [TAB.JS]: sandboxIdJs,
+      }}
+    >
       <Wrapper className="rounded-b-none border">
         <Resettable>
-          <InteractiveDemo />
+          <Runner>
+            <InteractiveDemo />
+          </Runner>
         </Resettable>
       </Wrapper>
       <Toolbar>
@@ -62,24 +128,18 @@ export async function Demo({ src }: DemoProps) {
         </Tabs.List>
       </Toolbar>
       <DemoCollapsibleCodeBlock>
-        <Tabs.Content value={TAB.TS}>
-          <CodeBlock
-            lang="tsx"
-            code={tsx}
-            wrapper={{
-              className: 'm-0 border-0 rounded-t-none opacity-90',
-            }}
-          />
-        </Tabs.Content>
-        <Tabs.Content value={TAB.JS}>
-          <CodeBlock
-            lang="jsx"
-            code={jsx}
-            wrapper={{
-              className: 'm-0 border-0 rounded-t-none opacity-90',
-            }}
-          />
-        </Tabs.Content>
+        {Object.values(TAB).map((tab) => (
+          <Tabs.Content key={tab} value={tab}>
+            <DynamicCodeBlock
+              lang={tab}
+              code={(tab === TAB.TS ? tsx : jsx).replace("'use client';\n", '')}
+              wrapper={{
+                className:
+                  'm-0 border-0 rounded-t-none group-data-[state=closed]/collapsible:opacity-80 transition-opacity',
+              }}
+            />
+          </Tabs.Content>
+        ))}
       </DemoCollapsibleCodeBlock>
     </DemoProvider>
   );

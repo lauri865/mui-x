@@ -1,19 +1,16 @@
 'use client';
+import { templates } from '@/templates/templates';
 import { Root as TabsRoot } from '@radix-ui/react-tabs';
+import StackBlitz from '@stackblitz/sdk';
 import { Collapsible, CollapsibleContent } from 'fumadocs-ui/components/ui/collapsible';
-import { CopyCheckIcon, CopyIcon, DownloadIcon, RotateCcwIcon } from 'lucide-react';
+import { CopyCheckIcon, CopyIcon, LightbulbIcon, RotateCcwIcon } from 'lucide-react';
 import * as React from 'react';
-import { cn } from '../lib/cn';
-import { TAB, TabValue } from './TabValue';
-import { buttonVariants } from './ui/button';
-import { Tooltip } from './ui/tooltip';
-
-const DemoContext = React.createContext<{
-  key: string;
-  reset: () => void;
-  activeTabRef: React.RefObject<TabValue>;
-  code: Record<TabValue | 'fileName', string>;
-}>(null!);
+import { cn } from '../../lib/cn';
+import { TAB, TabValue } from '../TabValue';
+import { buttonVariants } from '../ui/button';
+import { Tooltip } from '../ui/tooltip';
+import { DemoContext, DemoContextValue, useDemoContext } from './DemoContext';
+import { DownloadButton } from './DownloadButton';
 
 const subscribeToLocalStorage = (listener: () => void) => {
   window.addEventListener('storage', listener);
@@ -28,12 +25,12 @@ const getClientSnapshot = () => {
 };
 const getServersideSnapshot = () => TAB.TS;
 
-export const useDemoContext = () => React.use(DemoContext);
 export const DemoProvider = (props: {
   children: React.ReactNode;
-  code: Record<TabValue | 'fileName', string>;
+  code: DemoContextValue['code'];
+  codeSandboxIds: DemoContextValue['codeSandboxIds'];
 }) => {
-  const { code } = props;
+  const [editedCode, setEditedCode] = React.useState<string | null>(null);
   const [key, setKey] = React.useState('0');
   const value = React.useSyncExternalStore(
     subscribeToLocalStorage,
@@ -41,14 +38,21 @@ export const DemoProvider = (props: {
     getServersideSnapshot,
   );
   const activeTabRef = React.useRef<TabValue>(TAB.TS);
+  const reset = () => {
+    setEditedCode(null);
+    setKey((key) => String(Number(key) + 1));
+  };
   const context = React.useMemo(
     () => ({
       key,
       code: props.code,
       activeTabRef,
-      reset: () => setKey((key) => String(Number(key) + 1)),
+      reset,
+      codeSandboxIds: props.codeSandboxIds,
+      editedCode,
+      setEditedCode,
     }),
-    [key],
+    [key, props.codeSandboxIds, props.code, editedCode],
   );
 
   return (
@@ -56,7 +60,6 @@ export const DemoProvider = (props: {
       <TabsRoot
         value={value}
         onValueChange={(value) => {
-          console.log('value', value);
           if (!value) return;
 
           activeTabRef.current = value as TabValue;
@@ -64,6 +67,7 @@ export const DemoProvider = (props: {
           window.dispatchEvent(
             new StorageEvent('storage', { key: 'docs.code.lang', newValue: value }),
           );
+          setEditedCode(null);
         }}
       >
         {props.children}
@@ -84,13 +88,12 @@ export const DemoCollapsibleCodeBlock = (props: { children: React.ReactNode }) =
     isAnimationPrevented.current = false;
   }, []);
   return (
-    <Collapsible open={isCodeExpanded} onOpenChange={setIsCodeExpanded}>
-      <div className="relative border rounded-b-lg">
+    <Collapsible open={isCodeExpanded} onOpenChange={setIsCodeExpanded} asChild>
+      <div className="@container relative border rounded-b-lg group/collapsible">
         <CollapsibleContent
           className={cn(
             'data-[state=closed]:max-h-[150px] overflow-hidden data-[state=closed]:fade-bottom',
-
-            true && '!animate-none',
+            '!animate-none',
           )}
           forceMount
           onClick={() => {
@@ -101,6 +104,9 @@ export const DemoCollapsibleCodeBlock = (props: { children: React.ReactNode }) =
         >
           {props.children}
         </CollapsibleContent>
+        <div className="flex items-center gap-1 absolute bottom-3 right-3 text-xs text-fd-foreground/50 select-none pointer-events-none group-data-[state=open]/collapsible:hidden rounded-full backdrop-blur-sm @max-md:hidden">
+          <LightbulbIcon className="size-3.5" /> Edit the demo code live
+        </div>
         <button
           className={cn(
             'absolute bottom-2 left-1/2 -translate-x-1/2 shadow-xs',
@@ -127,10 +133,10 @@ export const Toolbar = (props: { children: React.ReactNode }) => {
       {props.children}
 
       <div className="flex gap-1 items-center h-full">
-        <CodesandboxButton />
         <StackblitzButton />
-        <CopyButton />
-        <DownloadButton />
+        <CodesandboxButton />
+        {/* <CopyButton /> */}
+        <DownloadButton className={toolbarBtnClasses} />
         <GithubButton />
 
         <div className="h-[20px] w-px mx-1 bg-fd-ring/20" />
@@ -141,20 +147,6 @@ export const Toolbar = (props: { children: React.ReactNode }) => {
         </Tooltip>
       </div>
     </div>
-  );
-};
-
-const DownloadButton = () => {
-  const { activeTabRef, code } = useDemoContext();
-
-  const downloadFile = () => {};
-
-  return (
-    <Tooltip title={'Download code'}>
-      <button className={cn(toolbarBtnClasses)} onClick={downloadFile}>
-        <DownloadIcon />
-      </button>
-    </Tooltip>
   );
 };
 
@@ -178,9 +170,14 @@ const GithubButton = () => {
 };
 
 const CodesandboxButton = () => {
-  const { activeTabRef, code } = useDemoContext();
+  const { activeTabRef, code, codeSandboxIds } = useDemoContext();
 
-  const openInCodeSandbox = () => {};
+  const openInCodeSandbox = () => {
+    const sandboxId = codeSandboxIds[activeTabRef.current];
+    if (!sandboxId) return;
+    const url = `https://codesandbox.io/p/sandbox/${sandboxId}?embed=1&file=/src/Demo.${activeTabRef.current}`;
+    window.open(url, '_blank');
+  };
 
   return (
     <Tooltip title={'Open in CodeSandbox'}>
@@ -194,11 +191,38 @@ const CodesandboxButton = () => {
 const StackblitzButton = () => {
   const { activeTabRef, code } = useDemoContext();
 
-  const openInCodeSandbox = () => {};
+  const openInStackBlitz = async () => {
+    const activeTab = activeTabRef.current;
+    const template = templates.stackblitz[activeTab];
+    const files = await fetch(`/templates/${template}.json`).then((res) => res.json());
+
+    files[`src/Demo.${activeTab}`] = code[activeTab];
+
+    files['package.json'] = files['package.json'].replace(
+      '{{name}}',
+      `TWGrid – ${code.fileName.replace(/\.(t|j)sx$/, '')}`,
+    );
+    files['package.json'] = files['package.json'].replace(
+      '{{description}}',
+      `https://github.com/twgrid/react/blob/main/docs/examples/${code.fileName}`,
+    );
+
+    StackBlitz.openProject(
+      {
+        files,
+        title: `TWGrid – ${code.fileName.replace(/\.(t|j)sx$/, '')}`,
+        description: `https://github.com/twgrid/react/blob/main/docs/examples/${code.fileName}`,
+        template: 'node',
+      },
+      {
+        openFile: `src/Demo.${activeTab}`,
+      },
+    );
+  };
 
   return (
-    <Tooltip title={'Open in CodeSandbox'}>
-      <button className={cn(toolbarBtnClasses)} onClick={openInCodeSandbox}>
+    <Tooltip title={'Open in StackBlitz'}>
+      <button className={cn(toolbarBtnClasses)} onClick={openInStackBlitz}>
         <StackblitzIcon />
       </button>
     </Tooltip>

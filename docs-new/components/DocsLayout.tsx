@@ -17,6 +17,7 @@ import {
   SidebarCollapseTrigger,
   SidebarFooter,
   SidebarHeader,
+  SidebarPageTree,
   SidebarViewport,
 } from 'fumadocs-ui/layouts/docs/sidebar';
 import { BaseLinkItem } from 'fumadocs-ui/layouts/links';
@@ -25,7 +26,6 @@ import { StylesProvider, TreeContextProvider, type PageStyles } from 'fumadocs-u
 import { ChevronRight } from 'lucide-react';
 import { type ReactNode } from 'react';
 import { cn } from '../lib/cn';
-import { SidebarPageTree } from './PageTree';
 
 export function DocsLayout({
   nav: { enabled: navEnabled = true, component: navReplace, transparentMode, ...nav } = {},
