@@ -1,53 +1,47 @@
 'use client';
-import { DataGrid } from '@mui/x-data-grid';
+import dynamic from 'next/dynamic';
 import * as React from 'react';
-import { useRunner } from 'react-runner';
-import { cn } from '../../lib/cn';
-import { buttonVariants } from '../ui/button';
 import { useDemoContext } from './DemoContext';
-const scope = {
-  import: {
-    react: React,
-    '@mui/x-data-grid': { DataGrid },
-  },
-};
+
 export const Runner = (props: { children: React.ReactNode }) => {
   const { editedCode } = useDemoContext();
-  if (!editedCode) {
-    return props.children;
+  const hasEditedCode = Boolean(editedCode);
+
+  const LazyRunner = React.useMemo(() => {
+    return editedCode
+      ? dynamic(() => import('./LazyRunner').then((m) => m.LazyRunner), {
+          ssr: false,
+          loading: () => <>{props.children}</>,
+        })
+      : null;
+  }, [hasEditedCode]);
+  if (!editedCode || !LazyRunner) {
+    return <div>{props.children}</div>;
   }
 
-  return <DynamicRunner fallback={props.children} />;
+  return <LazyRunner fallback={props.children} />;
 };
 
-function DynamicRunner({ fallback }: { fallback: React.ReactNode }) {
-  const { editedCode, reset } = useDemoContext();
-  const defferedCode = React.useDeferredValue(editedCode);
-  const { element, error } = useRunner({
-    code: defferedCode!,
-    scope,
-  });
+const useKeepMinHeight = () => {
+  const { editedCode } = useDemoContext();
+  const hasEditedCode = Boolean(editedCode);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const minHeightRef = React.useRef<number>(undefined);
 
-  return (
-    <div className="relative @container">
-      {error && (
-        <div className="absolute -bottom-11.5 pl-2 left-1/2 -translate-x-1/2 flex gap-2 items-center @max-xl:-right-3 @max-xl:translate-x-0 @max-xl:left-auto text-[12px] leading-none  z-10 bg-red-400/50 rounded-md shadow-md whitespace-nowrap backdrop-blur-sm text-fd-foreground">
-          {error}
-          <button
-            className={cn(
-              buttonVariants({
-                size: 'xs',
-                variant: 'ghost',
-              }),
-              'rounded-l-none bg-red-900/10 border-l h-6 border-l-red-900/10 hover:bg-red-950/30',
-            )}
-            onClick={reset}
-          >
-            Reset
-          </button>
-        </div>
-      )}
-      {element || fallback}
-    </div>
-  );
-}
+  React.useEffect(() => {
+    if (hasEditedCode || !containerRef.current) {
+      return;
+    }
+
+    const observer = new ResizeObserver((entries) => {
+      minHeightRef.current = entries[0].contentRect.height;
+    });
+    observer.observe(containerRef.current!);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [hasEditedCode]);
+
+  return { containerRef, minHeight: minHeightRef.current };
+};

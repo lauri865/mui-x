@@ -1,4 +1,5 @@
 'use client';
+import { highlight } from 'fumadocs-core/highlight';
 import * as Base from 'fumadocs-ui/components/codeblock';
 import { DynamicCodeBlock as DynamicCodeBlockBase } from 'fumadocs-ui/components/dynamic-codeblock';
 import { CheckIcon, CopyIcon } from 'lucide-react';
@@ -17,35 +18,43 @@ const style: React.CSSProperties = {
   fontSize: 13,
 };
 
+const codeblockOptions = {
+  ...highlighterConfig,
+  components: {
+    pre: (props: any) => <Base.Pre {...props} className={cn(props.className, 'p-0')} />,
+  },
+};
+
 export function DynamicCodeBlock({
   lang,
-  code,
   wrapper,
 }: {
   lang: string;
-  code: string;
   wrapper?: HTMLAttributes<HTMLDivElement>;
 }) {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const isShikiInitialized = React.useRef(false);
+  const {
+    editedCode,
+    setEditedCode,
+    key,
+    tabInitialCode,
+    isPreview,
+    isExpanded,
+    preview,
+    activeTabRef,
+  } = useDemoContext();
+
+  const initialCode = isPreview ? (preview[activeTabRef.current]! ?? '') : tabInitialCode;
+
   const isFirstChange = React.useRef(true);
   const editorRef: React.ComponentProps<typeof Editor>['ref'] = React.useRef(null);
-  const { editedCode, setEditedCode, key } = useDemoContext();
   const onCopy = () => {
-    navigator.clipboard.writeText(editedCode ?? code);
+    navigator.clipboard.writeText(editedCode ?? initialCode);
   };
 
   const highlighter = React.useCallback(
-    (code: string) => (
-      <DynamicCodeBlockBase
-        lang={lang}
-        code={code}
-        options={{
-          ...highlighterConfig,
-          components: {
-            pre: (props) => <Base.Pre {...props} className={cn(props.className, 'p-0')} />,
-          },
-        }}
-      />
-    ),
+    (code: string) => <DynamicCodeBlockBase lang={lang} code={code} options={codeblockOptions} />,
     [lang],
   );
 
@@ -53,46 +62,97 @@ export function DynamicCodeBlock({
     isFirstChange.current = true;
   }, [key]);
 
-  return (
-    <div
-      {...wrapper}
-      className={cn(
-        'group not-prose rounded-b-lg bg-fd-secondary/50 p-4 border text-sm overflow-x-auto',
-        wrapper?.className,
-      )}
-    >
-      <CopyButton className="absolute right-2 top-2 z-[2] backdrop-blur-md" onCopy={onCopy} />
-      <div className="relative *:w-max *:!pr-4 *:min-w-full">
-        <Editor
-          ref={editorRef}
-          key={key}
-          value={editedCode ?? code}
-          onKeyDownCapture={(e) => {
-            // patch history stack to keep initial selection
-            if (isFirstChange.current) {
-              isFirstChange.current = false;
-              if (e.key.length !== 1) return;
-              const textarea = e.target as HTMLTextAreaElement;
-              if (!textarea || !editorRef.current?.session.history.stack[0]) return;
-              editorRef.current.session.history.stack = [
-                {
-                  selectionStart: textarea.selectionStart,
-                  selectionEnd: textarea.selectionEnd,
-                  value: code,
-                  timestamp: 0,
-                },
-              ];
+  const handleKeyDown = React.useCallback((e: React.KeyboardEvent) => {
+    // patch history stack to keep initial selection
+    if (isFirstChange.current) {
+      isFirstChange.current = false;
+      if (e.key?.length !== 1) return;
+      const textarea = e.target as HTMLTextAreaElement;
+      if (!textarea || !editorRef.current?.session.history.stack[0]) return;
+      const value = editorRef.current.session.history.stack[0].value;
+      editorRef.current.session.history.stack = [
+        {
+          selectionStart: textarea.selectionStart,
+          selectionEnd: textarea.selectionEnd,
+          value,
+          timestamp: 0,
+        },
+      ];
 
-              editorRef.current.session.history.offset = 0;
-            }
-          }}
-          onValueChange={setEditedCode}
-          className="*:focus-visible:outline-0 *:selection:bg-fd-primary/20"
-          highlight={highlighter}
-          style={style}
-        />
+      editorRef.current.session.history.offset = 0;
+    }
+  }, []);
+
+  const initShiki = React.useCallback(() => {
+    if (isShikiInitialized.current) return;
+    isShikiInitialized.current = true;
+    highlight('', {
+      lang,
+      ...highlighterConfig,
+    }).then(() => {
+      // initialized
+    });
+  }, []);
+
+  React.useEffect(() => {
+    const onRender = () => {
+      if (!topRef.current) return;
+      const rect = containerRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      if (rect.top !== topRef.current) {
+        const diff = rect.top - topRef.current;
+        window.scrollBy({
+          top: diff,
+        });
+      }
+    };
+    document.addEventListener('runnerRender', onRender);
+    return () => {
+      document.removeEventListener('runnerRender', onRender);
+    };
+  }, []);
+
+  const topRef = React.useRef<number>(0);
+  const handleFocus = React.useCallback(() => {
+    topRef.current = containerRef.current?.getBoundingClientRect().top ?? 0;
+    window.addEventListener('scroll', handleFocus, {
+      passive: true,
+    });
+  }, []);
+
+  const handleBlur = React.useCallback(() => {
+    topRef.current = 0;
+    window.removeEventListener('scroll', handleFocus);
+  }, []);
+
+  return (
+    <>
+      <CopyButton className="absolute right-2 top-2 z-[2] backdrop-blur-md" onCopy={onCopy} />
+      <div
+        {...wrapper}
+        className={cn(
+          'group not-prose rounded-b-lg bg-fd-secondary/50 p-4 border text-sm overflow-x-auto',
+          wrapper?.className,
+        )}
+        ref={containerRef}
+      >
+        <div className="relative *:w-max *:!pr-4 *:min-w-full">
+          <Editor
+            ref={editorRef}
+            key={`${key}.${isPreview}`}
+            value={editedCode ?? initialCode}
+            onKeyDownCapture={handleKeyDown}
+            onValueChange={setEditedCode}
+            className="*:focus-visible:outline-0 *:selection:bg-fd-primary/20"
+            highlight={highlighter}
+            style={style}
+            onFocus={initShiki}
+            onFocusCapture={handleFocus}
+            onBlur={handleBlur}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -139,8 +199,8 @@ function CopyButton({
             variant: 'ghost',
             size: 'sm',
           }),
-          'size-7.5 p-0',
-          'transition-opacity group-hover:opacity-100 [&_svg]:size-3.5',
+          'size-7.5 p-0 hover:z-50',
+          'transition-opacity group-hover:opacity-100 [&_svg]:size-3.5 backdrop-blur-md',
           !checked && '[@media(hover:hover)]:opacity-0',
 
           className,

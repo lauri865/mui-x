@@ -6,7 +6,7 @@ export function Wrapper(props: HTMLAttributes<HTMLDivElement>): React.ReactEleme
     <div
       {...props}
       className={cn(
-        'rounded-lg bg-gradient-to-br from-pink-500/20 to-blue-500/20 p-4 prose-no-margin [&_.twg-root]:shadow-sm',
+        'rounded-lg bg-gradient-to-br from-pink-500/20 to-blue-500/20 p-4 prose-no-margin [&_.twg-root]:shadow-sm overflow-hidden',
         props.className,
       )}
     >

@@ -11,6 +11,7 @@ import { buttonVariants } from '../ui/button';
 import { Tooltip } from '../ui/tooltip';
 import { DemoContext, DemoContextValue, useDemoContext } from './DemoContext';
 import { DownloadButton } from './DownloadButton';
+import { extractLastReturnFromJSX } from './extractLastReturnFromJSX';
 
 const subscribeToLocalStorage = (listener: () => void) => {
   window.addEventListener('storage', listener);
@@ -28,8 +29,11 @@ const getServersideSnapshot = () => TAB.TS;
 export const DemoProvider = (props: {
   children: React.ReactNode;
   code: DemoContextValue['code'];
+  preview: DemoContextValue['preview'];
   codeSandboxIds: DemoContextValue['codeSandboxIds'];
+  toolbarId: string;
 }) => {
+  const [isExpanded, setIsExpanded] = React.useState(false);
   const [editedCode, setEditedCode] = React.useState<string | null>(null);
   const [key, setKey] = React.useState('0');
   const value = React.useSyncExternalStore(
@@ -42,17 +46,47 @@ export const DemoProvider = (props: {
     setEditedCode(null);
     setKey((key) => String(Number(key) + 1));
   };
+
+  const hasPreview = props.preview[activeTabRef.current] !== null;
+  const tabInitialCode = props.code[activeTabRef.current].replace(/^[\s\n]*'use client';\n*/gm, '');
   const context = React.useMemo(
     () => ({
       key,
       code: props.code,
+      preview: props.preview,
       activeTabRef,
       reset,
       codeSandboxIds: props.codeSandboxIds,
       editedCode,
       setEditedCode,
+      isExpanded,
+      setIsExpanded: ((value) => {
+        const expanded = typeof value === 'function' ? value(isExpanded) : value;
+
+        if (hasPreview) {
+          if (!expanded) {
+            if (editedCode) {
+              setEditedCode((edits) => {
+                return extractLastReturnFromJSX(edits!);
+              });
+            }
+          } else {
+            if (editedCode) {
+              setEditedCode((edits) => {
+                return tabInitialCode.replace(props.preview[activeTabRef.current]!, edits!);
+              });
+            }
+          }
+        }
+
+        setIsExpanded(expanded);
+      }) as DemoContextValue['setIsExpanded'],
+      hasPreview,
+      isPreview: hasPreview && !isExpanded,
+      tabInitialCode,
+      toolbarId: props.toolbarId,
     }),
-    [key, props.codeSandboxIds, props.code, editedCode],
+    [key, props.codeSandboxIds, props.code, editedCode, isExpanded, hasPreview],
   );
 
   return (
@@ -82,44 +116,72 @@ export const Resettable = (props: { children: React.ReactNode }) => {
 };
 
 export const DemoCollapsibleCodeBlock = (props: { children: React.ReactNode }) => {
-  const [isCodeExpanded, setIsCodeExpanded] = React.useState(false);
+  const { isExpanded, setIsExpanded, preview, activeTabRef, editedCode, hasPreview, isPreview } =
+    useDemoContext();
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const [isExpandable, setIsExpandable] = React.useState<boolean | null>(true);
   const isAnimationPrevented = React.useRef(true);
+
   React.useEffect(() => {
     isAnimationPrevented.current = false;
+
+    const observer = new ResizeObserver((entries) => {
+      const hasPreview = preview[activeTabRef.current] !== null;
+      if (hasPreview) return;
+      const { height } = entries[0].contentRect;
+      setIsExpanded((isExanded) => {
+        if (height > 150) return isExanded;
+        return true;
+      });
+      setIsExpandable(height > 150);
+    });
+    observer.observe(containerRef.current!);
+    return () => observer.disconnect();
   }, []);
+
   return (
-    <Collapsible open={isCodeExpanded} onOpenChange={setIsCodeExpanded} asChild>
-      <div className="@container relative border rounded-b-lg group/collapsible">
+    <Collapsible open={isExpandable === false || isExpanded} onOpenChange={setIsExpanded} asChild>
+      <div className="group @container relative border rounded-b-lg group/collapsible">
         <CollapsibleContent
           className={cn(
-            'data-[state=closed]:max-h-[150px] overflow-hidden data-[state=closed]:fade-bottom',
+            'overflow-hidden',
             '!animate-none',
+            !isPreview &&
+              'peer data-[state=closed]:max-h-[150px] not-focus-within:data-[state=closed]:fade-bottom',
           )}
           forceMount
           onClick={() => {
-            if (!isCodeExpanded) {
-              setIsCodeExpanded(true);
+            if (isPreview) {
+              return;
+            }
+            if (!isExpanded) {
+              setIsExpanded(true);
             }
           }}
         >
-          {props.children}
+          <div ref={containerRef}>{props.children}</div>
         </CollapsibleContent>
-        <div className="flex items-center gap-1 absolute bottom-3 right-3 text-xs text-fd-foreground/50 select-none pointer-events-none group-data-[state=open]/collapsible:hidden rounded-full backdrop-blur-sm @max-md:hidden">
-          <LightbulbIcon className="size-3.5" /> Edit the demo code live
+
+        <div className="flex items-center gap-1 absolute bottom-3 right-3 text-xs text-fd-foreground/50 select-none pointer-events-none group-data-[state=open]/collapsible:hidden rounded-full @max-md:hidden peer-focus-within:hidden">
+          <LightbulbIcon className="size-3.5" /> Live edit the demo code
         </div>
-        <button
-          className={cn(
-            'absolute bottom-2 left-1/2 -translate-x-1/2 shadow-xs',
-            buttonVariants({
-              variant: 'secondary',
-              size: 'xs',
-            }),
-            'px-2 py-1',
-          )}
-          onClick={() => setIsCodeExpanded((prev) => !prev)}
-        >
-          {isCodeExpanded ? 'Collapse code' : 'Expand code'}
-        </button>
+
+        {isExpandable && (
+          <button
+            className={cn(
+              'absolute bottom-2 left-1/2 -translate-x-1/2 shadow-xs @',
+              buttonVariants({
+                variant: 'secondary',
+                size: 'xs',
+              }),
+              'px-2 py-1',
+              isPreview && '-bottom-6.5 rounded-t-none',
+            )}
+            onClick={() => setIsExpanded((prev) => !prev)}
+          >
+            {isExpanded ? 'Collapse code' : 'Expand code'}
+          </button>
+        )}
       </div>
     </Collapsible>
   );
@@ -127,9 +189,12 @@ export const DemoCollapsibleCodeBlock = (props: { children: React.ReactNode }) =
 
 const toolbarBtnClasses = cn(buttonVariants({ variant: 'ghost' }), 'size-7 p-0 ', '[&_svg]:size-4');
 export const Toolbar = (props: { children: React.ReactNode }) => {
-  const { reset } = useDemoContext();
+  const { reset, toolbarId } = useDemoContext();
   return (
-    <div className="flex items-center justify-between pr-2 bg-fd-secondary border-x shadow-[0_-3px_3px_-2px_#00000020] border-t border-t-white/40 dark:border-t-transparent">
+    <div
+      className="relative flex items-center justify-between pr-2 bg-fd-secondary border-x shadow-[0_-3px_3px_-2px_#00000020] border-t border-t-white/40 dark:border-t-transparent"
+      id={toolbarId}
+    >
       {props.children}
 
       <div className="flex gap-1 items-center h-full">

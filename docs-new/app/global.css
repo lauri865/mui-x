@@ -56,6 +56,9 @@
   --color-fd-primary: var(--color-blue-500);
 }
 
+html {
+  @apply scroll-pt-16;
+}
 body {
   overscroll-behavior-y: none;
   background-color: var(--color-fd-background);

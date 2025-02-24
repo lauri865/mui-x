@@ -42,7 +42,7 @@ export const DATA_GRID_PROPS_DEFAULT_VALUES: DataGridPropsWithDefaultValues = {
   loading: false,
   logger: console,
   logLevel: process.env.NODE_ENV === 'production' ? ('error' as const) : ('warn' as const),
-  pageSizeOptions: [25, 50, 100],
+  pageSizeOptions: [], //[25, 50, 100],
   pagination: false,
   paginationMode: 'client',
   rowSelectionPropagation: {

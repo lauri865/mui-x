@@ -6,10 +6,12 @@ import fs from 'fs/promises';
 import dynamic from 'next/dynamic';
 import path from 'path';
 import prettier from 'prettier';
+import React from 'react';
 import tsBlankSpace from 'ts-blank-space';
 import { cn } from '../lib/cn';
 import { DemoCollapsibleCodeBlock, DemoProvider, Resettable, Toolbar } from './demo/Demo.client';
 import { DynamicCodeBlock } from './demo/dynamic-codeblock';
+import { extractLastReturnFromJSX } from './demo/extractLastReturnFromJSX';
 import { Runner } from './demo/Runner';
 import { Wrapper } from './preview/wrapper';
 import { TAB, TabValue } from './TabValue';
@@ -27,6 +29,7 @@ async function convertTypeScriptString(tsCode: string) {
 
 interface DemoProps {
   src: string;
+  showPreview?: boolean;
 }
 
 const getDynamicComponent = (c: string) => {
@@ -80,9 +83,12 @@ async function getCodeSandboxUrl({
   return data.sandbox_id;
 }
 
-export async function Demo({ src }: DemoProps) {
+export async function Demo({ src, showPreview = false }: DemoProps) {
+  const toolbarId = React.useId();
   const tsx = stripFinalNewline(await getComponentCode(src));
   const jsx = stripFinalNewline(await convertTypeScriptString(tsx));
+  const tsxPreview = extractLastReturnFromJSX(jsx);
+  const jsxPreview = extractLastReturnFromJSX(jsx);
   const sandboxIdTs = await getCodeSandboxUrl({
     template: templates.codesandbox[TAB.TS],
     name: src,
@@ -96,18 +102,32 @@ export async function Demo({ src }: DemoProps) {
     lang: TAB.JS,
   });
 
+  const code = {
+    [TAB.TS]: tsx,
+    [TAB.JS]: jsx,
+    fileName: src,
+  };
+
+  const preview = showPreview
+    ? {
+        [TAB.TS]: tsxPreview,
+        [TAB.JS]: jsxPreview,
+      }
+    : {
+        [TAB.TS]: null,
+        [TAB.JS]: null,
+      };
+
   const InteractiveDemo = getDynamicComponent(src);
   return (
     <DemoProvider
-      code={{
-        [TAB.TS]: tsx,
-        [TAB.JS]: jsx,
-        fileName: src,
-      }}
+      code={code}
+      preview={preview}
       codeSandboxIds={{
         [TAB.TS]: sandboxIdTs,
         [TAB.JS]: sandboxIdJs,
       }}
+      toolbarId={toolbarId}
     >
       <Wrapper className="rounded-b-none border">
         <Resettable>
@@ -132,10 +152,9 @@ export async function Demo({ src }: DemoProps) {
           <Tabs.Content key={tab} value={tab}>
             <DynamicCodeBlock
               lang={tab}
-              code={(tab === TAB.TS ? tsx : jsx).replace("'use client';\n", '')}
               wrapper={{
                 className:
-                  'm-0 border-0 rounded-t-none group-data-[state=closed]/collapsible:opacity-80 transition-opacity',
+                  'm-0 border-0 rounded-t-none group-data-[state=closed]/collapsible:opacity-80 transition-opacity group-focus-within:!opacity-100',
               }}
             />
           </Tabs.Content>

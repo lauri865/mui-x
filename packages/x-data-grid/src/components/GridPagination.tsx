@@ -21,11 +21,12 @@ const defaultLabelDisplayedRows = ({
   count: number;
   estimated: number | undefined;
 }) => {
+  const minFrom = Math.min(from, count);
   if (!estimated) {
     return (
       <span>
         <strong className="font-medium">
-          {from}–{to}
+          {minFrom}–{to}
         </strong>{' '}
         <span className="text-grid-text/70">of {count !== -1 ? count : `more than ${to}`}</span>
       </span>
@@ -35,7 +36,7 @@ const defaultLabelDisplayedRows = ({
   return (
     <span>
       <strong className="font-medium">
-        {from}–{to}
+        {minFrom}–{to}
       </strong>{' '}
       of {count !== -1 ? count : estimateLabel}
     </span>
