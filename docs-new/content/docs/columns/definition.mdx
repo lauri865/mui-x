@@ -5,7 +5,37 @@ index: true
 preview: ColumnDefinition.tsx
 ---
 
-<Demo src="ColumnDefinition.tsx" />
+```tsx twoslash
+import React from 'react';
+import { DataGrid } from '@mui/x-data-grid';
+const rows = [{id: 1, name: 'John Doe'}];
+// ---cut---
+<DataGrid columns={[{ field: "id" }]} rows={rows} />
+//        ^^^^^^^
+```
+
+```tsx twoslash
+import React from 'react';
+const rows = [{id: 1, name: 'John Doe', joined_at: new Date()}];
+type RowModel = (typeof rows)[number];
+// ---cut---
+import { DataGrid, createColumns } from '@mui/x-data-grid';
+
+const props = createColumns<RowModel>((col)=>[
+  col.string({ field: "name", headerName: "Name", width: 150, pinned: "left" }),
+// @noErrors
+  col.d
+//     ^|
+]);
+
+
+
+
+
+<DataGrid rows={[]} {...props} />>
+```
+123
+<Demo src="ColumnDefinition.tsx" showPreview />
 
 ### Explore further column features
 
@@ -19,3 +49,13 @@ preview: ColumnDefinition.tsx
   "codeblock": {}
 }
 ```
+
+<AutoTypeTable path="../packages/x-data-grid/src/models/colDef/gridColDef.ts" name="GridColDef" />
+
+
+
+
+
+
+
+

@@ -21,17 +21,20 @@ export function LazyRunner({
   fallback: React.ReactNode;
   minHeight?: number;
 }) {
-  const { editedCode, reset, isPreview, tabInitialCode, preview, activeTabRef, toolbarId } =
-    useDemoContext();
-  const defferedCode = React.useDeferredValue(editedCode!);
-  const parsedCode = React.useMemo(() => {
-    return isPreview
-      ? tabInitialCode.replace(preview[activeTabRef.current]!, defferedCode)
-      : defferedCode;
-  }, [defferedCode, isPreview, tabInitialCode]);
+  const {
+    editedCode,
+    reset,
+    isPreview,
+    tabInitialCode,
+    preview,
+    activeTabRef,
+    toolbarId,
+    mergedCode,
+  } = useDemoContext();
+  const defferedCode = React.useDeferredValue(mergedCode);
 
   const { element, error } = useRunner({
-    code: parsedCode,
+    code: defferedCode,
     scope,
   });
 

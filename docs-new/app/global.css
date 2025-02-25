@@ -50,20 +50,43 @@
   --color-fd-primary: var(--ui-color);
 }
 
+.fd-twoslash-popover {
+  .twoslash-popup-code,
+  .fd-codeblock code,
+  .twoslash-popup-docs {
+    @apply !text-[12px];
+  }
+  pre {
+    @apply px-2.5 py-2;
+  }
+  .fd-codeblock {
+    @apply border-0 bg-transparent -m-2;
+  }
+}
+
+figure.twoslash .line:last-child:not(:has(*)) {
+  @apply hidden;
+}
+
 :root {
   --headless-color: hsl(250, 80%, 54%);
   --ui-color: hsl(220, 91%, 54%);
   --color-fd-primary: var(--color-blue-500);
 }
 
-html {
-  @apply scroll-pt-16;
-}
-body {
-  overscroll-behavior-y: none;
-  background-color: var(--color-fd-background);
-}
+@layer base {
+  html {
+    @apply scroll-pt-16;
+  }
+  body {
+    overscroll-behavior-y: none;
+    background-color: var(--color-fd-background);
+  }
 
+  kbd {
+    @apply font-sans text-[11px];
+  }
+}
 .dark {
   --headless-color: hsl(250 100% 80%);
   --ui-color: hsl(217 92% 76%);

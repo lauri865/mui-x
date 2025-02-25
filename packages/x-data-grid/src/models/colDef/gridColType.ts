@@ -6,9 +6,9 @@ export interface GridColumnTypes {
   dateTime: 'dateTime';
   boolean: 'boolean';
   singleSelect: 'singleSelect';
+  array: 'array';
   actions: 'actions';
   custom: 'custom';
-  array: 'array';
 }
 
 export type GridColType = GridColumnTypes[keyof GridColumnTypes];

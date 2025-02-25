@@ -1,4 +1,6 @@
-export const highlighterConfig = {
+import type { RehypeShikiOptions } from '@shikijs/rehype';
+
+export const highlighterConfig: RehypeShikiOptions = {
   themes: {
     light: 'github-light',
     dark: 'github-dark-default',

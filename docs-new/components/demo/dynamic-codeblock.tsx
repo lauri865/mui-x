@@ -43,14 +43,22 @@ export function DynamicCodeBlock({
     isExpanded,
     preview,
     activeTabRef,
+    mergedCode,
   } = useDemoContext();
 
   const initialCode = isPreview ? (preview[activeTabRef.current]! ?? '') : tabInitialCode;
+  const value = editedCode ?? initialCode;
+  const numberOfLines = value.split('\n').length ?? 1;
 
   const isFirstChange = React.useRef(true);
   const editorRef: React.ComponentProps<typeof Editor>['ref'] = React.useRef(null);
   const onCopy = () => {
-    navigator.clipboard.writeText(editedCode ?? initialCode);
+    navigator.clipboard.writeText(mergedCode);
+    const textarea = containerRef.current?.querySelector('textarea');
+    if (textarea) {
+      textarea.focus();
+      textarea.selectionStart = textarea.value.length;
+    }
   };
 
   const highlighter = React.useCallback(
@@ -120,14 +128,20 @@ export function DynamicCodeBlock({
     });
   }, []);
 
-  const handleBlur = React.useCallback(() => {
+  const handleBlur = React.useCallback((e) => {
     topRef.current = 0;
     window.removeEventListener('scroll', handleFocus);
   }, []);
 
   return (
     <>
-      <CopyButton className="absolute right-2 top-2 z-[2] backdrop-blur-md" onCopy={onCopy} />
+      <CopyButton
+        className={cn(
+          'absolute right-2 top-2 z-[2] backdrop-blur-md',
+          numberOfLines <= 1 && 'top-1/2 -translate-y-1/2',
+        )}
+        onCopy={onCopy}
+      />
       <div
         {...wrapper}
         className={cn(
@@ -140,7 +154,7 @@ export function DynamicCodeBlock({
           <Editor
             ref={editorRef}
             key={`${key}.${isPreview}`}
-            value={editedCode ?? initialCode}
+            value={value}
             onKeyDownCapture={handleKeyDown}
             onValueChange={setEditedCode}
             className="*:focus-visible:outline-0 *:selection:bg-fd-primary/20"

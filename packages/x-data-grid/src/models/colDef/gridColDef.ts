@@ -132,6 +132,7 @@ export interface GridBaseColDef<
   sortable?: boolean;
   /**
    * The order of the sorting sequence.
+   * @default ['asc', 'desc', null]
    */
   sortingOrder?: readonly GridSortDirection[];
   /**
@@ -145,16 +146,12 @@ export interface GridBaseColDef<
    */
   editable?: boolean;
   /**
-   * If `true`, the rows can be grouped based on this column values (pro-plan only).
-   * Only available in DataGridPremium.
-   * TODO: Use module augmentation to move it to `@mui/x-data-grid-premium` (need to modify how we handle column types default values).
+   * If `true`, the rows can be grouped based on this column values.
    * @default true
    */
   groupable?: boolean;
   /**
    * If `false`, the menu items for column pinning menu will not be rendered.
-   * Only available in DataGridPro.
-   * TODO: Use module augmentation to move it to `@mui/x-data-grid-pro` (need to modify how we handle column types default values).
    * @default true
    */
   pinnable?: boolean;
@@ -223,7 +220,11 @@ export interface GridBaseColDef<
    * @param {GridRenderCellParams<R, V, F>} params Object containing parameters for the renderer.
    * @returns {React.ReactNode} The element to be rendered.
    */
-  renderCell?: (params: GridRenderCellParams<R, V, F>, props?: RCP) => React.ReactNode;
+  renderCell?: (params: GridRenderCellParams<R, V, F>, renderCellProps?: RCP) => React.ReactNode;
+  /**
+   * Additional `props` passed to the `renderCell` function. Useful for custom cells. Not used by the default cell type primitives.
+   * @remarks `object` ^ `Record<string, any>`
+   */
   renderCellProps?: RCP;
   /**
    * Override the component rendered in edit cell mode for this column.
@@ -238,8 +239,8 @@ export interface GridBaseColDef<
    * @returns {GridEditCellProps | Promise<GridEditCellProps>} The new edit cell props.
    */
   preProcessEditCellProps?: (
-    params: GridPreProcessEditCellProps,
-  ) => GridEditCellProps | Promise<GridEditCellProps>;
+    params: GridPreProcessEditCellProps<V, R>,
+  ) => GridEditCellProps<V> | Promise<GridEditCellProps<V>>;
   /**
    * Class name added to the column header cell.
    */
@@ -300,12 +301,20 @@ export interface GridBaseColDef<
   colSpan?: number | GridColSpanFn<R, V, F>;
   /**
    * Example values that can be used by the grid to get more context about the column.
+   * @private
    */
   unstable_examples?: V[];
-
+  /**
+   * If `true`, the column is aggregable in the column header.
+   * If `false`, the column is only aggreble programmatically, if the list of aggregation functions is available.
+   * @default true
+   */
   aggregable?: boolean;
-  availableAggregationFunctions?: string[];
-  [GRID_USER_DEFINED_SPECIAL_COLUMN]?: boolean;
+  /**
+   * List of aggregation functions available for this column.
+   * Aggregation functions must be available in the `aggregationFunctions` prop of the `<DatagGrid />` component.
+   */
+  aggregationFunctions?: Array<string>;
   /**
    * If `true`, the column is not manageable by the column manager.
    * @default false

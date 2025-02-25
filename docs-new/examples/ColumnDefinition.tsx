@@ -15,9 +15,10 @@ const columns: GridColDef[] = [
 ];
 
 export default function Demo() {
+  // [!code word:columns]
   return (
     <div style={{ height: 400 }}>
-      <DataGrid rows={[]} columns={columns} />
+      <DataGrid columns={columns} />
     </div>
   );
 }

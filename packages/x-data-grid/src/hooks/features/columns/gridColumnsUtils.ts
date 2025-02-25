@@ -12,6 +12,7 @@ import { GridApiCommunity, GridPrivateApiCommunity } from '../../../models/api/g
 import {
   GRID_USER_DEFINED_SPECIAL_COLUMN,
   GridColDef,
+  GridColDefInternal,
   GridStateColDef,
 } from '../../../models/colDef/gridColDef';
 import { GridRowEntry } from '../../../models/gridRows';
@@ -302,7 +303,7 @@ export const applyInitialState = (
 };
 
 function getDefaultColTypeDef(type: GridColDef['type'], colDefParam: GridColDef) {
-  if (colDefParam[GRID_USER_DEFINED_SPECIAL_COLUMN]) {
+  if ((colDefParam as GridColDefInternal)[GRID_USER_DEFINED_SPECIAL_COLUMN]) {
     return {};
   }
   if (isSingleSelectColDef(colDefParam) && COLUMN_TYPES[colDefParam.editCell as GridColType]) {

@@ -1,4 +1,4 @@
-import { GridApiCommunity } from "./api/gridApiCommunity";
+import { GridApiCommunity } from './api/gridApiCommunity';
 import { GridRowId, GridTreeNode } from './gridRows';
 
 export type GridSortDirection = 'asc' | 'desc' | null | undefined;
@@ -38,4 +38,4 @@ export interface GridSortItem {
 /**
  * The model used for sorting the grid.
  */
-export type GridSortModel = GridSortItem[];
+export type GridSortModel = readonly GridSortItem[];

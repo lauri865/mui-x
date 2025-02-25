@@ -49,6 +49,12 @@ export const DemoProvider = (props: {
 
   const hasPreview = props.preview[activeTabRef.current] !== null;
   const tabInitialCode = props.code[activeTabRef.current].replace(/^[\s\n]*'use client';\n*/gm, '');
+  const mergedCode =
+    (hasPreview && !isExpanded
+      ? editedCode
+        ? tabInitialCode.replace(props.preview[activeTabRef.current]!, editedCode)
+        : undefined
+      : editedCode) ?? tabInitialCode;
   const context = React.useMemo(
     () => ({
       key,
@@ -85,8 +91,9 @@ export const DemoProvider = (props: {
       isPreview: hasPreview && !isExpanded,
       tabInitialCode,
       toolbarId: props.toolbarId,
+      mergedCode,
     }),
-    [key, props.codeSandboxIds, props.code, editedCode, isExpanded, hasPreview],
+    [key, props.codeSandboxIds, props.code, editedCode, isExpanded, hasPreview, mergedCode],
   );
 
   return (
@@ -139,15 +146,17 @@ export const DemoCollapsibleCodeBlock = (props: { children: React.ReactNode }) =
     return () => observer.disconnect();
   }, []);
 
+  const numberOfLines = editedCode?.split('\n').length ?? 1;
+
   return (
     <Collapsible open={isExpandable === false || isExpanded} onOpenChange={setIsExpanded} asChild>
       <div className="group @container relative border rounded-b-lg group/collapsible">
         <CollapsibleContent
           className={cn(
-            'overflow-hidden',
+            'peer overflow-hidden',
             '!animate-none',
             !isPreview &&
-              'peer data-[state=closed]:max-h-[150px] not-focus-within:data-[state=closed]:fade-bottom',
+              'data-[state=closed]:max-h-[150px] not-focus-within:data-[state=closed]:fade-bottom',
           )}
           forceMount
           onClick={() => {
@@ -162,7 +171,12 @@ export const DemoCollapsibleCodeBlock = (props: { children: React.ReactNode }) =
           <div ref={containerRef}>{props.children}</div>
         </CollapsibleContent>
 
-        <div className="flex items-center gap-1 absolute bottom-3 right-3 text-xs text-fd-foreground/50 select-none pointer-events-none group-data-[state=open]/collapsible:hidden rounded-full @max-md:hidden peer-focus-within:hidden">
+        <div
+          className={cn(
+            'flex items-center gap-1 absolute bottom-3 right-3 text-xs text-fd-foreground/50 select-none pointer-events-none peer-data-[state=open]/collapsible:hidden rounded-full @max-md:hidden peer-focus-within:hidden group-hover:-translate-x-8 transition-transform',
+            numberOfLines <= 1 && 'bottom-1/2 translate-y-1/2',
+          )}
+        >
           <LightbulbIcon className="size-3.5" /> Live edit the demo code
         </div>
 

@@ -12,8 +12,8 @@ export function getAvailableAggregations(
   const aggregationFunctions = apiRef.current.aggregationFunctions;
   const aggregationFunctionMethods = Object.keys(aggregationFunctions);
 
-  return colDef.availableAggregationFunctions
-    ? aggregationFunctionMethods.filter((fn) => colDef.availableAggregationFunctions!.includes(fn))
+  return colDef.aggregationFunctions
+    ? aggregationFunctionMethods.filter((fn) => colDef.aggregationFunctions!.includes(fn))
     : Object.entries(aggregationFunctions).reduce((acc, [name, fn]) => {
         if (fn.columnTypes?.includes(colDef.type!)) {
           acc.push(name);

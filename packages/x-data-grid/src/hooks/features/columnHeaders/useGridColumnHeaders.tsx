@@ -261,7 +261,7 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
         pinnedPosition,
         indexInSection,
         sectionLength,
-        rootProps.showCellVerticalBorder,
+        rootProps.showColumnVerticalBorder,
         gridHasFiller,
       );
 
@@ -451,7 +451,7 @@ export const useGridColumnHeaders = (props: UseGridColumnHeadersProps) => {
             pinnedPosition,
             indexInSection,
             visibleColumnGroupHeader.length,
-            rootProps.showCellVerticalBorder,
+            rootProps.showColumnVerticalBorder,
             gridHasFiller,
           )}
         />

@@ -19,6 +19,7 @@ export interface DemoContextValue {
   isPreview: boolean;
   tabInitialCode: string;
   toolbarId: string;
+  mergedCode: string;
 }
 
 export const DemoContext = React.createContext<DemoContextValue>(null!);

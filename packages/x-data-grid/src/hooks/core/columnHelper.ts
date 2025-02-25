@@ -7,6 +7,7 @@ import {
   GridActionsColDef,
   GridBaseColDef,
   GridColDef,
+  GridColDefInternal,
   GridSingleSelectColDef,
 } from '../../models/colDef/gridColDef';
 import { GridValidRowModel } from '../../models/gridRows';
@@ -18,12 +19,12 @@ export const defaultColDef = {
   checkboxSelection: {
     ...GRID_CHECKBOX_SELECTION_COL_DEF,
     [GRID_USER_DEFINED_SPECIAL_COLUMN]: true,
-  } as GridColDef,
+  } satisfies GridColDefInternal,
   group: {
     type: GRID_GROUPING_COLUMN_COL_DEF.type,
     field: GRID_GROUPING_COLUMN_COL_DEF.field,
     [GRID_USER_DEFINED_SPECIAL_COLUMN]: true,
-  } as GridColDef,
+  } satisfies GridColDefInternal,
   detailPanel: GRID_DETAIL_PANEL_COL_DEF,
 };
 
@@ -46,17 +47,19 @@ type DefaultColumnTypes<R extends GridValidRowModel> = {
   detailPanel: Omit<GridBaseColDef<R>, 'field' | 'aggregable' | 'editable' | 'groupable'>;
 };
 
-type DotSeparatedKeys<T> = T extends object
-  ?
-      | {
-          [K in Exclude<keyof T, keyof any[]> & string]: T[K] extends object
-            ? K | `${K}.${DotSeparatedKeys<T[K]>}`
-            : K;
-        }[Exclude<keyof T, keyof any[]> & string]
-      | 'actions'
-      | `custom_${string}`
-      | `calc_${string}`
-  : never;
+type DotSeparatedKeys<T> = T extends Date
+  ? never
+  : T extends object
+    ?
+        | {
+            [K in Exclude<keyof T, keyof any[]> & string]: T[K] extends object
+              ? K | `${K}.${DotSeparatedKeys<T[K]>}`
+              : K;
+          }[Exclude<keyof T, keyof any[]> & string]
+        | 'actions'
+        | `custom_${string}`
+        | `calc_${string}`
+    : never;
 
 type DefaultColumnType<R extends GridValidRowModel> = keyof DefaultColumnTypes<R>;
 
@@ -79,19 +82,27 @@ type MakeOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 type DefaultHelper<R extends GridValidRowModel> = {
   [K in DefaultColumnType<R>]: HasField<DefaultColumnTypes<R>[K], R> extends true
     ? (
-        colDef: Omit<DefaultColumnTypes<R>[K], keyof DefaultColumnTypes<R>[K]> &
-          AdditionalProps &
-          Field<DefaultColumnTypes<R>[K], R> & { type?: GridColDef['type'] } & Partial<
-            DefaultColumnTypes<R>[K]
-          >,
+        colDef: Prettify<
+          Omit<DefaultColumnTypes<R>[K], keyof DefaultColumnTypes<R>[K]> &
+            AdditionalProps &
+            Field<DefaultColumnTypes<R>[K], R> & { type?: GridColDef['type'] } & Partial<
+              DefaultColumnTypes<R>[K]
+            >
+        >,
       ) => GridColDef
     : (
-        colDef?: Omit<DefaultColumnTypes<R>[K], keyof DefaultColumnTypes<R>[K]> &
-          AdditionalProps &
-          Field<DefaultColumnTypes<R>[K], R> &
-          Partial<DefaultColumnTypes<R>[K]>,
+        colDef?: Prettify<
+          Omit<DefaultColumnTypes<R>[K], keyof DefaultColumnTypes<R>[K]> &
+            AdditionalProps &
+            Field<DefaultColumnTypes<R>[K], R> &
+            Partial<DefaultColumnTypes<R>[K]>
+        >,
       ) => GridColDef;
 };
+
+type Prettify<T> = {
+  [K in keyof T]: T[K];
+} & {};
 
 // Updated CustomHelper type to use the default type from extends if provided.
 type CustomHelper<
@@ -100,14 +111,18 @@ type CustomHelper<
 > = {
   [K in keyof C]: C[K] extends { extends: infer U extends DefaultColumnType<R> }
     ? (
-        colDef: Omit<Partial<DefaultColumnTypes<R>[U]>, 'field'> &
-          AdditionalProps &
-          Field<DefaultColumnTypes<R>[U], R>,
+        colDef: Prettify<
+          Omit<Partial<DefaultColumnTypes<R>[U]>, 'field'> &
+            AdditionalProps &
+            Field<DefaultColumnTypes<R>[U], R>
+        >,
       ) => GridColDef
     : (
-        colDef: Omit<Partial<GridColDef<R, any, any, C[K]['renderCellProps']>>, 'field'> &
-          AdditionalProps &
-          Field<C[K], R>,
+        colDef: Prettify<
+          Omit<Partial<GridColDef<R, any, any, C[K]['renderCellProps']>>, 'field'> &
+            AdditionalProps &
+            Field<C[K], R>
+        >,
       ) => GridColDef;
 };
 
@@ -146,8 +161,10 @@ export function createColumnHelper<
     // Now createColumns is generic over a new row type R2,
     // defaulting to the original R if not specified.
     createColumns: <R2 extends GridValidRowModel = R>(
-      // @ts-expect-error - Allow custom column types to extend default types.
-      callback: (c: DefaultHelper<R2> & CustomHelper<R2, C>) => (GridColDef & AdditionalProps)[],
+      callback: (
+        // @ts-expect-error - Allow custom column types to extend default types.
+        col: Prettify<DefaultHelper<R2> & CustomHelper<R2, C>>,
+      ) => Prettify<GridColDef & AdditionalProps>[],
       options: {
         autoFillMissingHeaders?: boolean;
       } = {
@@ -184,7 +201,7 @@ export function createColumnHelper<
           if (
             colDef.headerName == null &&
             options.autoFillMissingHeaders &&
-            !colDef[GRID_USER_DEFINED_SPECIAL_COLUMN]
+            !(colDef as GridColDefInternal)[GRID_USER_DEFINED_SPECIAL_COLUMN]
           ) {
             colDef.headerName = humanize(colDef.field);
           }
@@ -286,6 +303,7 @@ export function createColumnHelper<
         const baseWidth = Math.max(headerWidth, columnWidths.get(field) ?? defaultColumnWidth);
         columns.push(
           helper[type]({
+            // @ts-expect-error -
             field: field as any,
             headerName,
             width: clamp(baseWidth, minColumnWidth, maxColumnWidth),
@@ -326,6 +344,9 @@ export const columnHelper = createColumnHelper({
     type: 'array',
   },
 });
+
+export const createColumns = columnHelper.createColumns;
+export const inferColumns = columnHelper.inferFromData;
 
 type Row = {
   name: string;

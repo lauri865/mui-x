@@ -2,7 +2,11 @@ import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
 import { GRID_CHECKBOX_SELECTION_COL_DEF, GRID_CHECKBOX_SELECTION_FIELD } from '../../../colDef';
 import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
-import { GRID_USER_DEFINED_SPECIAL_COLUMN, GridColDef } from '../../../models/colDef/gridColDef';
+import {
+  GRID_USER_DEFINED_SPECIAL_COLUMN,
+  GridColDef,
+  GridColDefInternal,
+} from '../../../models/colDef/gridColDef';
 import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
 
@@ -12,9 +16,9 @@ export const useGridRowSelectionPreProcessors = (
 ) => {
   const updateSelectionColumn = React.useCallback<GridPipeProcessor<'hydrateColumns'>>(
     (columnsState) => {
-      const userDefinedCheckbox = columnsState.lookup[GRID_CHECKBOX_SELECTION_FIELD]?.[
-        GRID_USER_DEFINED_SPECIAL_COLUMN
-      ]
+      const userDefinedCheckbox = (
+        columnsState.lookup[GRID_CHECKBOX_SELECTION_FIELD] as GridColDefInternal
+      )?.[GRID_USER_DEFINED_SPECIAL_COLUMN]
         ? columnsState.lookup[GRID_CHECKBOX_SELECTION_FIELD]
         : undefined;
 

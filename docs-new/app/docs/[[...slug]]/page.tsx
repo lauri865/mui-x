@@ -34,7 +34,6 @@ export default async function Page(props: {
   params: Promise<{ slug: string[] }>;
 }): Promise<ReactElement> {
   const params = await props.params;
-  console.log('TEST', params.slug);
   const page = source.getPage(params.slug);
 
   if (!page) {
@@ -77,7 +76,7 @@ export default async function Page(props: {
             Tabs,
             Tab,
             Mermaid,
-            TypeTable,
+            TypeTable: (props) => <TypeTable {...props} className="!text-[10px]" />,
             AutoTypeTable,
             Accordion,
             Accordions,
@@ -88,8 +87,7 @@ export default async function Page(props: {
             blockquote: Callout as unknown as FC<ComponentProps<'blockquote'>>,
             APIPage: openapi.APIPage,
             DocsCategory: () => <DocsCategory page={page} from={source} />,
-            Demo: Demo,
-
+            Demo,
             ...(await import('@/content/docs/components/tabs.client')),
           }}
         />

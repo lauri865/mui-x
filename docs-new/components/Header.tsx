@@ -67,7 +67,7 @@ export function Header({ collapse }: { collapse?: boolean }) {
 
   return (
     <>
-      <div className="top-0 fixed backdrop-blur-sm h-4 inset-x-0" />
+      <div className="top-0 fixed backdrop-blur-sm h-4 inset-x-0 z-10" />
       <Navbar collapse={collapse}>
         <Title title={nav.title} url={nav.url} />
         {nav.children}

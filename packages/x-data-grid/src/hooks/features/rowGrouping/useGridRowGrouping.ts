@@ -5,7 +5,10 @@ import {
   GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD,
 } from '../../../colDef';
 import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
-import { GRID_USER_DEFINED_SPECIAL_COLUMN } from '../../../models/colDef/gridColDef';
+import {
+  GRID_USER_DEFINED_SPECIAL_COLUMN,
+  GridColDefInternal,
+} from '../../../models/colDef/gridColDef';
 import {
   GridGroupNode,
   GridLeafNode,
@@ -352,10 +355,9 @@ export const useGridRowGroupingPreProcessors = (
 
       if (!rowGroupingModel.length) {
         if (columns.lookup[GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD]) {
-          const userDefinedColDef =
-            columns.lookup[GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD]?.[
-              GRID_USER_DEFINED_SPECIAL_COLUMN
-            ];
+          const userDefinedColDef = (
+            columns.lookup[GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD] as GridColDefInternal
+          )?.[GRID_USER_DEFINED_SPECIAL_COLUMN];
 
           if (userDefinedColDef) {
             // keep userdefined column around to preserve ordering, but hide it from the UI
@@ -392,9 +394,9 @@ export const useGridRowGroupingPreProcessors = (
         );
 
       const hasGroupingCol = columns.lookup[GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD];
-      const userDefinedColDef = columns.lookup[GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD]?.[
-        GRID_USER_DEFINED_SPECIAL_COLUMN
-      ]
+      const userDefinedColDef = (
+        columns.lookup[GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD] as GridColDefInternal
+      )?.[GRID_USER_DEFINED_SPECIAL_COLUMN]
         ? columns.lookup[GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD]
         : undefined;
       const firstGroup = columns.lookup[rowGroupingModel[0]];

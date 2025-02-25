@@ -7,6 +7,9 @@ import { cn } from '../../lib/cn';
 import { GlowingEffect } from './glowing-effect';
 
 const props = columnHelper.createColumns<(typeof rows)[number]>((c) => [
+  c.string({
+    field: 'id',
+  }),
   c.detailPanel({
     pinned: 'left',
   }),
