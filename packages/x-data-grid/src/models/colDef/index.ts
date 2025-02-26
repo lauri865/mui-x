@@ -1,20 +1,22 @@
 // ColDef
 export type {
+  GetApplyQuickFilterFn,
+  GridActionsColDef,
+  GridActionsColDefOwnProps,
   GridAlignment,
-  ValueOptions,
-  GridKeyValue,
   GridColDef,
-  GridListColDef,
+  GridColSpanFn,
   GridColTypeDef,
   GridColumnsMeta,
+  GridKeyValue,
+  GridListColDef,
   GridSingleSelectColDef,
-  GridActionsColDef,
-  GetApplyQuickFilterFn,
-  GridValueGetter,
+  GridSingleSelectColDefOwnProps,
   GridValueFormatter,
-  GridValueSetter,
+  GridValueGetter,
   GridValueParser,
-  GridColSpanFn,
+  GridValueSetter,
+  ValueOptions,
 } from './gridColDef';
 
 // Other types

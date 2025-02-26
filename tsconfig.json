@@ -1,6 +1,15 @@
 {
   //"extends": "@mui/monorepo/tsconfig.json",
   "compilerOptions": {
+    "module": "esnext",
+    // aligning with Node18 recommendation: https://www.npmjs.com/package/@tsconfig/node18
+    "target": "es2022",
+    "moduleResolution": "bundler",
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "noErrorTruncation": false,
     "lib": ["dom", "dom.iterable", "esnext"],
 
     // Already tested with eslint

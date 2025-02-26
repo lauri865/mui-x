@@ -89,13 +89,13 @@ export async function generateDocumentation(
     overwrite: true,
   });
   const out: GeneratedDoc[] = [];
-
   for (const [k, d] of sourceFile.getExportedDeclarations()) {
     if (name && name !== k) continue;
 
     if (d.length > 1) console.warn(`export ${k} should not have more than one type declaration.`);
 
     out.push(await generate(project, k, d[0], options, sourceFile));
+    break;
   }
 
   return out;
@@ -119,7 +119,15 @@ export async function generate(
     .getSymbol()
     ?.compilerSymbol.getDocumentationComment(program.getTypeChecker().compilerObject);
 
-  const awaitedEntries = await Promise.all(
+  if (declaration.getType().isArray()) {
+    return {
+      name,
+      description: comment ? ts.displayPartsToString(comment) : '',
+      entries: [],
+    };
+  }
+
+  let awaitedEntries = await Promise.all(
     declaration
       .getType()
       .getProperties()
@@ -147,10 +155,6 @@ export async function generate(
 
         if (a.tags.required !== 'true' && b.tags.required === 'true') {
           return 1;
-        }
-
-        if (a.tags.required === 'true' && b.tags.required === 'true') {
-          return 2;
         }
 
         return a.name.localeCompare(b.name);
@@ -186,6 +190,13 @@ async function getDocEntry(
     .getNonNullableType()
     .getText(undefined, ts.TypeFormatFlags.UseAliasDefinedOutsideCurrentScope);
 
+  // Generics, e.g. `R`
+  if (subType.isTypeParameter()) {
+    typeName = subType
+      .getApparentType()
+      .getText(undefined, ts.TypeFormatFlags.UseAliasDefinedOutsideCurrentScope);
+  }
+
   if (subType.getAliasSymbol() && subType.getAliasTypeArguments().length === 0) {
     typeName = subType.getAliasSymbol()?.getEscapedName() ?? typeName;
   }
@@ -196,7 +207,11 @@ async function getDocEntry(
       .getUnionTypes()
       .map((t) => {
         const text = t.getText();
-        if (['null', 'undefined', 'number', 'string'].includes(text)) {
+        if (
+          ['null', 'undefined', 'number', 'string', 'boolean', 'date', 'false', 'true'].includes(
+            text,
+          )
+        ) {
           return text;
         }
         const literalValue = t.getLiteralValue();
@@ -207,7 +222,11 @@ async function getDocEntry(
         // If it's not a literal, resolve references
         const symbol = t.getSymbol();
         if (symbol) {
-          return symbol.getDeclarations()?.map((decl) => decl.getText()) || 'Unknown Type';
+          return symbol
+            .getDeclaredType()
+
+            .getText(undefined, ts.TypeFormatFlags.UseAliasDefinedOutsideCurrentScope);
+          /* return symbol.getDeclarations()?.map((decl) => decl.getText()) || 'Unknown Type'; */
         }
 
         return 'Unresolved Type';
@@ -290,7 +309,7 @@ async function getDocEntry(
                     return -1;
                   }
                   if (aRequired && bRequired) {
-                    return 2;
+                    return 0;
                   }
                   return a.localeCompare(b);
                 });
@@ -303,13 +322,28 @@ async function getDocEntry(
           }) || 'Unknown Type'
         }>`;
         typeName = typeName.replace('readonly ', '');
+
+        if (typeName === 'R[]') {
+          typeName =
+            symbol
+              .getDeclaredType()
+              .getApparentType()
+              .getText(undefined, ts.TypeFormatFlags.UseAliasDefinedOutsideCurrentScope) + '[]';
+        }
         if (Node.isInterfaceDeclaration(symbol.getDeclarations()?.[0])) {
           typeName = `interface ${typeName}`;
         }
       } else {
         const types = elementType
           .getUnionTypes()
-          .map((t) => t.getText())
+          .map((t) => {
+            if (t.isTypeParameter()) {
+              return t
+                .getApparentType()
+                .getText(undefined, ts.TypeFormatFlags.UseAliasDefinedOutsideCurrentScope);
+            }
+            return t.getText(undefined, ts.TypeFormatFlags.UseAliasDefinedOutsideCurrentScope);
+          })
           .filter((t) => t !== 'undefined');
 
         typeDescription = typeName;
@@ -320,17 +354,23 @@ async function getDocEntry(
 
   let link = '';
   // is function
-  if (subType.getNonNullableType().getCallSignatures().length > 0) {
+  const callSignatures = subType.getNonNullableType().getCallSignatures();
+  if (callSignatures.length > 0) {
     const aliasSymbol = subType.getNonNullableType().getAliasSymbol();
     if (!aliasSymbol) {
+      const fnType = callSignatures[0].getDeclaration().getText();
+      const fnForm =
+        `function ${prop.getName()}${typeName.startsWith('<') ? '' : ' '}${fnType}`.replace(
+          '=>',
+          ':',
+        );
       const notation = await prettier
-        .format(typeName, prettierConfig)
-        .then((formatted) => formatted.trim())
+        .format(fnForm, prettierConfig)
+        .then((formatted) => formatted.replace('FAKEVOID', 'void').trim())
         .catch(() => {
-          console.log("Couldn't format function type description");
-          return typeName;
+          return fnForm;
         });
-      typeDescription = `function ${prop.getName()} ${notation}`;
+      typeDescription = notation;
     } else {
       typeDescription = typeName;
     }
@@ -359,14 +399,18 @@ async function getDocEntry(
             (start != null ? `#L${start}` : '');
         } */
 
+        const fnForm =
+          `function ${prop.getName()}${delcarationText.startsWith('<') ? '' : ' '}${delcarationText}`.replace(
+            '=>',
+            ':',
+          );
         const notation = await prettier
-          .format(delcarationText, prettierConfig)
+          .format(fnForm, prettierConfig)
           .then((formatted) => formatted.trim())
           .catch(() => {
-            console.log("Couldn't format function declaration", delcarationText);
-            return delcarationText;
+            return fnForm;
           });
-        typeDescription += `\n---\nfunction ${prop.getName()} ${notation}`;
+        typeDescription += `\n---\n${fnForm}`;
       }
     }
   }
@@ -377,6 +421,14 @@ async function getDocEntry(
       typeName = remark;
       typeDescription = /\^\s?`(?<name>.+?)`/.exec(tags.remarks)?.[1];
     }
+  }
+
+  if (typeName.startsWith('{')) {
+    typeDescription = await prettier
+      .format(`interface Dummy ${typeName}`, prettierConfig)
+      .then((formatted) => formatted.replace('interface Dummy ', '').trim())
+      .catch(() => typeName);
+    typeName = `object`;
   }
 
   const entry: DocEntry = {

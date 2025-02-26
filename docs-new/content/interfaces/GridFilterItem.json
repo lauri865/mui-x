@@ -1,0 +1,43 @@
+[
+  {
+    "name": "GridFilterItem",
+    "description": "",
+    "entries": [
+      {
+        "name": "field",
+        "description": "The column from which we want to filter the rows.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "string",
+        "link": ""
+      },
+      {
+        "name": "conditions",
+        "description": "",
+        "tags": {
+          "required": "true"
+        },
+        "type": "GridFilterCondition[]",
+        "link": ""
+      },
+      {
+        "name": "id",
+        "description": "Must be unique.\nOnly useful when the model contains several items.",
+        "tags": {},
+        "type": "string | number",
+        "link": ""
+      },
+      {
+        "name": "logicOperator",
+        "description": "- `GridLogicOperator.And`: the row must pass all the filter items.\n- `GridLogicOperator.Or`: the row must pass at least on filter item.",
+        "tags": {
+          "default": "GridLogicOperator.And"
+        },
+        "type": "\"and\" | \"or\"",
+        "typeDescription": "type GridLogicOperator",
+        "link": ""
+      }
+    ]
+  }
+]

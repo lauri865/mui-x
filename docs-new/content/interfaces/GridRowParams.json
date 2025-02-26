@@ -1,0 +1,36 @@
+[
+  {
+    "name": "GridRowParams",
+    "description": "Object passed as parameter in the row callbacks.",
+    "entries": [
+      {
+        "name": "id",
+        "description": "The grid row id.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "string | number",
+        "typeDescription": "type GridRowId",
+        "link": ""
+      },
+      {
+        "name": "row",
+        "description": "The row model of the row that the current cell belongs to.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "R",
+        "link": ""
+      },
+      {
+        "name": "columns",
+        "description": "All grid columns.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "GridColDef[]",
+        "link": ""
+      }
+    ]
+  }
+]

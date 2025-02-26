@@ -1,0 +1,114 @@
+[
+  {
+    "name": "GridCellParams",
+    "description": "Object passed as parameter in the column [[GridColDef]] cell renderer.",
+    "entries": [
+      {
+        "name": "id",
+        "description": "The grid row id.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "string | number",
+        "typeDescription": "type GridRowId",
+        "link": ""
+      },
+      {
+        "name": "field",
+        "description": "The column field of the cell that triggered the event.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "string",
+        "link": ""
+      },
+      {
+        "name": "row",
+        "description": "The row model of the row that the current cell belongs to.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "R",
+        "link": ""
+      },
+      {
+        "name": "rowNode",
+        "description": "The node of the row that the current cell belongs to.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "N",
+        "link": ""
+      },
+      {
+        "name": "colDef",
+        "description": "The column of the row that the current cell belongs to.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "Unresolved Type | Unresolved Type | Unresolved Type",
+        "typeDescription": "type GridStateColDef",
+        "link": ""
+      },
+      {
+        "name": "cellMode",
+        "description": "The mode of the cell.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "\"edit\" | \"view\"",
+        "typeDescription": "type GridCellMode",
+        "link": ""
+      },
+      {
+        "name": "hasFocus",
+        "description": "If true, the cell is the active element.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "tabIndex",
+        "description": "the tabIndex value.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "\"0\" | \"-1\"",
+        "typeDescription": "0 | -1",
+        "link": ""
+      },
+      {
+        "name": "api",
+        "description": "GridApi that let you manipulate the grid.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "GridApiCommunity",
+        "link": ""
+      },
+      {
+        "name": "formattedValue",
+        "description": "The cell value formatted with the column valueFormatter.",
+        "tags": {},
+        "type": "NonNullable<F>",
+        "link": ""
+      },
+      {
+        "name": "isEditable",
+        "description": "If true, the cell is editable.",
+        "tags": {},
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "value",
+        "description": "The cell value.\nIf the column has `valueGetter`, use `params.row` to directly access the fields.",
+        "tags": {},
+        "type": "NonNullable<V>",
+        "link": ""
+      }
+    ]
+  }
+]

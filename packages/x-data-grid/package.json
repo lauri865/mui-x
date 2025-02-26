@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.26.7",
-    "@mui/utils": "^5.16.6 || ^6.0.0",
+    "@mui/utils": "^6.0.0 || ^7.0.0-alpha",
     "@mui/x-internals": "workspace:*",
     "@twgrid/x-data-grid-shadcn": "workspace:*",
     "clsx": "^2.1.1",
@@ -62,7 +62,7 @@
     "tailwindcss": "^4.0.0"
   },
   "devDependencies": {
-    "@mui/internal-test-utils": "^1.0.26",
+    "@mui/internal-test-utils": "^2.0.2",
     "@types/prop-types": "^15.7.14",
     "@types/use-sync-external-store": "^0.0.6",
     "react": "^19.0.0",

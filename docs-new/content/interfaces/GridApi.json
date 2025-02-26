@@ -1,0 +1,1429 @@
+[
+  {
+    "name": "GridApi",
+    "description": "The full grid API.",
+    "entries": [
+      {
+        "name": "subscribeEvent",
+        "description": "Registers a handler for an event.",
+        "tags": {
+          "param": "options Additional options for this listener.",
+          "returns": "A function to unsubscribe from this event.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function subscribeEvent <E extends GridEvents>(event: E, handler: GridEventListener<E>, options?: EventListenerOptions | undefined) => () => void",
+        "link": ""
+      },
+      {
+        "name": "publishEvent",
+        "description": "Emits an event.",
+        "tags": {
+          "param": "event The event object to pass forward.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "GridEventPublisher\n---\nfunction publishEvent <E extends GridEvents>(\n  ...params: GridEventPublisherArg<E, GridEventLookup[E]>\n) => void",
+        "link": ""
+      },
+      {
+        "name": "getRootProps",
+        "description": "Allows to access the root props outside of the React component.\nDo not use in React components - use the `useGridRootProps` hook instead.\nFine to use in e.g. useCallback to avoid unnecessary re-renders due to the context updates.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getRootProps () => DataGridProcessedProps<any>;",
+        "link": ""
+      },
+      {
+        "name": "setDensity",
+        "description": "Sets the density of the grid.",
+        "tags": {
+          "param": "density Can be: `\"compact\"`, `\"standard\"`, `\"comfortable\"`.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setDensity (density: GridDensity) => void",
+        "link": ""
+      },
+      {
+        "name": "getRootDimensions",
+        "description": "Returns the dimensions of the grid",
+        "tags": {
+          "returns": "The dimension information of the grid. If `null`, the grid is not ready yet.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getRootDimensions () => GridDimensions;",
+        "link": ""
+      },
+      {
+        "name": "getRowModels",
+        "description": "Gets the full set of rows as [[Map<GridRowId, GridRowModel>]].",
+        "tags": {
+          "returns": "The full set of rows.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getRowModels () => Map<GridRowId, GridValidRowModel>;",
+        "link": ""
+      },
+      {
+        "name": "getRowsCount",
+        "description": "Gets the total number of rows in the grid.",
+        "tags": {
+          "returns": "The number of rows.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getRowsCount () => number;",
+        "link": ""
+      },
+      {
+        "name": "getAllRowIds",
+        "description": "Gets the list of row ids.\nTODO rows v6: Rename or remove ?",
+        "tags": {
+          "returns": "A list of ids.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getAllRowIds () => GridRowId[]",
+        "link": ""
+      },
+      {
+        "name": "setLoading",
+        "description": "Sets the internal loading state.",
+        "tags": {
+          "param": "loading If `true` the loading indicator will be shown over the Data Grid.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setLoading (loading: boolean) => void",
+        "link": ""
+      },
+      {
+        "name": "setRows",
+        "description": "Sets a new set of rows.",
+        "tags": {
+          "param": "rows The new rows.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setRows (rows: GridValidRowModel[]) => void",
+        "link": ""
+      },
+      {
+        "name": "updateRows",
+        "description": "Allows to update, insert and delete rows.",
+        "tags": {
+          "param": "updates An array of rows with an `action` specifying what to do.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function updateRows (updates: GridRowModelUpdate[]) => void",
+        "link": ""
+      },
+      {
+        "name": "getRow",
+        "description": "Gets the row data with a given id.",
+        "tags": {
+          "param": "id The id of the row.",
+          "returns": "The row data.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getRow <R extends GridValidRowModel = any>(\n  id: GridRowId,\n) => R | null;",
+        "link": ""
+      },
+      {
+        "name": "getRowId",
+        "description": "Gets the ID of a row given its data.",
+        "tags": {
+          "param": "row The row data.",
+          "returns": "The id of the row.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getRowId <R extends GridValidRowModel = any>(\n  row: R,\n) => GridRowId;",
+        "link": ""
+      },
+      {
+        "name": "getRowNode",
+        "description": "Gets the row node from the internal tree structure.\nTODO rows v6: Rename `getTreeNode`",
+        "tags": {
+          "param": "id The id of the row.",
+          "returns": "The tree node.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getRowNode <N extends GridTreeNode>(\n  id: GridRowId,\n) => N | null;",
+        "link": ""
+      },
+      {
+        "name": "getRowIndexRelativeToVisibleRows",
+        "description": "Gets the index of a row relative to the rows that are reachable by scroll.",
+        "tags": {
+          "param": "id The row id.",
+          "returns": "The index of the row.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getRowIndexRelativeToVisibleRows (id: GridRowId) => number;",
+        "link": ""
+      },
+      {
+        "name": "unstable_replaceRows",
+        "description": "Replace a set of rows with new rows.",
+        "tags": {
+          "param": "newRows The new rows.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function unstable_replaceRows (firstRowToReplace: number, newRows: GridValidRowModel[]) => void",
+        "link": ""
+      },
+      {
+        "name": "resetRowHeights",
+        "description": "Forces the recalculation of the heights of all rows.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function resetRowHeights () => void",
+        "link": ""
+      },
+      {
+        "name": "getCellMode",
+        "description": "Gets the mode of a cell.",
+        "tags": {
+          "param": "field The field to get the mode.",
+          "returns": "Returns `\"edit\"` or `\"view\"`.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getCellMode (id: GridRowId, field: string) =>\n  GridCellMode;",
+        "link": ""
+      },
+      {
+        "name": "startCellEditMode",
+        "description": "Puts the cell corresponding to the given row id and field into edit mode.",
+        "tags": {
+          "param": "params The row id and field of the cell to edit.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function startCellEditMode (params: GridStartCellEditModeParams) => void",
+        "link": ""
+      },
+      {
+        "name": "stopCellEditMode",
+        "description": "Puts the cell corresponding to the given row id and field into view mode and updates the original row with the new value stored.\nIf `params.ignoreModifications` is `true` it will discard the modifications made.",
+        "tags": {
+          "param": "params The row id and field of the cell to stop editing.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function stopCellEditMode (params: GridStopCellEditModeParams) => void",
+        "link": ""
+      },
+      {
+        "name": "isCellEditable",
+        "description": "Controls if a cell is editable.",
+        "tags": {
+          "param": "params The cell params.",
+          "returns": "A boolean value determining if the cell is editable.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function isCellEditable (\n  params: GridCellParams<\n    any,\n    unknown,\n    unknown,\n    GridTreeNode\n  >,\n) => boolean;",
+        "link": ""
+      },
+      {
+        "name": "setEditCellValue",
+        "description": "Sets the value of the edit cell.\nCommonly used inside the edit cell component.",
+        "tags": {
+          "param": "event The event to pass forward.",
+          "returns": "A promise with the validation status.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setEditCellValue (params: GridEditCellValueParams, event?: TwgBaseEvent | undefined) => void | Promise<boolean>",
+        "link": ""
+      },
+      {
+        "name": "getRowWithUpdatedValues",
+        "description": "Returns the row with the values that were set by editing the cells.\nIn row editing, `field` is ignored and all fields are considered.",
+        "tags": {
+          "param": "field The field being edited.",
+          "returns": "The row with edited values.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getRowWithUpdatedValues (id: GridRowId, field: string) =>\n  GridValidRowModel;",
+        "link": ""
+      },
+      {
+        "name": "getRowMode",
+        "description": "Gets the mode of a row.",
+        "tags": {
+          "param": "id The id of the row.",
+          "returns": "Returns `\"edit\"` or `\"view\"`.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getRowMode (id: GridRowId) => GridRowMode;",
+        "link": ""
+      },
+      {
+        "name": "startRowEditMode",
+        "description": "Puts the row corresponding to the given id into edit mode.",
+        "tags": {
+          "param": "params The row id edit.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function startRowEditMode (params: GridStartRowEditModeParams) => void",
+        "link": ""
+      },
+      {
+        "name": "stopRowEditMode",
+        "description": "Puts the row corresponding to the given id and into view mode and updates the original row with the new values stored.\nIf `params.ignoreModifications` is `true` it will discard the modifications made.",
+        "tags": {
+          "param": "params The row id and field of the cell to stop editing.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function stopRowEditMode (params: GridStopRowEditModeParams) => void",
+        "link": ""
+      },
+      {
+        "name": "getCellValue",
+        "description": "Gets the value of a cell at the given `id` and `field`.",
+        "tags": {
+          "template": "V",
+          "param": "field The column field.",
+          "returns": "The cell value.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getCellValue <V extends unknown = any>(\n  id: GridRowId,\n  field: string,\n) => V;",
+        "link": ""
+      },
+      {
+        "name": "getCellElement",
+        "description": "Gets the [[GridCellParams]] object that is passed as argument in events.",
+        "tags": {
+          "param": "field The column field.",
+          "returns": "The cell params.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getCellElement (id: GridRowId, field: string) =>\n  HTMLDivElement | null;",
+        "link": ""
+      },
+      {
+        "name": "getCellParams",
+        "description": "Gets the [[GridCellParams]] object that is passed as argument in events.",
+        "tags": {
+          "param": "field The column field.",
+          "returns": "The cell params.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getCellParams <\n  R extends GridValidRowModel = any,\n  V = unknown,\n  F = V,\n  N extends GridTreeNode = GridTreeNode,\n>(\n  id: GridRowId,\n  field: string,\n) => GridCellParams<R, V, F, N>;",
+        "link": ""
+      },
+      {
+        "name": "getRowParams",
+        "description": "Gets the [[GridRowParams]] object that is passed as argument in events.",
+        "tags": {
+          "param": "field The column field.",
+          "returns": "The row params.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getRowParams (id: GridRowId) => GridRowParams<any>;",
+        "link": ""
+      },
+      {
+        "name": "getRowElement",
+        "description": "Gets the underlying DOM element for a row at the given `id`.",
+        "tags": {
+          "param": "id The id of the row.",
+          "returns": "The DOM element or `null`.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getRowElement (id: GridRowId) =>\n  HTMLDivElement | null;",
+        "link": ""
+      },
+      {
+        "name": "getColumnHeaderElement",
+        "description": "Gets the underlying DOM element for the column header with the given `field`.",
+        "tags": {
+          "param": "field The column field.",
+          "returns": "The DOM element or `null`.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getColumnHeaderElement (field: string) =>\n  HTMLDivElement | null;",
+        "link": ""
+      },
+      {
+        "name": "getColumnHeaderParams",
+        "description": "Gets the [[GridColumnHeaderParams]] object that is passed as argument in events.",
+        "tags": {
+          "param": "field The column field.",
+          "returns": "The cell params.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getColumnHeaderParams (field: string) =>\n  GridColumnHeaderParams<\n    GridValidRowModel,\n    any,\n    any\n  >;",
+        "link": ""
+      },
+      {
+        "name": "getColumn",
+        "description": "Returns the [[GridColDef]] for the given `field`.",
+        "tags": {
+          "param": "field The column field.",
+          "returns": "The [[GridStateColDef]].",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getColumn (field: string) => GridStateColDef;",
+        "link": ""
+      },
+      {
+        "name": "getAllColumns",
+        "description": "Returns an array of [[GridColDef]] containing all the column definitions.",
+        "tags": {
+          "returns": "An array of [[GridStateColDef]].",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getAllColumns () => GridStateColDef[]",
+        "link": ""
+      },
+      {
+        "name": "getVisibleColumns",
+        "description": "Returns the currently visible columns.",
+        "tags": {
+          "returns": "An array of [[GridStateColDef]].",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getVisibleColumns () => GridStateColDef[]",
+        "link": ""
+      },
+      {
+        "name": "getColumnIndex",
+        "description": "Returns the index position of a column. By default, only the visible columns are considered.\nPass `false` to `useVisibleColumns` to consider all columns.",
+        "tags": {
+          "param": "useVisibleColumns Determines if all columns or the visible ones should be considered. Default is `true`.",
+          "returns": "The index position.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getColumnIndex (\n  field: string,\n  useVisibleColumns?:\n    | boolean\n    | undefined,\n) => number;",
+        "link": ""
+      },
+      {
+        "name": "getColumnPosition",
+        "description": "Returns the left-position of a column relative to the inner border of the grid.",
+        "tags": {
+          "param": "field The column field.",
+          "returns": "The position in pixels.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getColumnPosition (field: string) => number;",
+        "link": ""
+      },
+      {
+        "name": "updateColumns",
+        "description": "Updates the definition of multiple columns at the same time.",
+        "tags": {
+          "param": "cols The new column [[GridColDef]] objects.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function updateColumns (cols: GridColDef[]) => void",
+        "link": ""
+      },
+      {
+        "name": "setColumnVisibilityModel",
+        "description": "Sets the column visibility model to the one given by `model`.",
+        "tags": {
+          "param": "model The new visible columns model.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setColumnVisibilityModel (model: GridColumnVisibilityModel) => void",
+        "link": ""
+      },
+      {
+        "name": "setColumnVisibility",
+        "description": "Changes the visibility of the column referred by `field`.",
+        "tags": {
+          "param": "isVisible Pass `true` to show the column, or `false` to hide it. Default is `false`",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setColumnVisibility (field: string, isVisible: boolean) => void",
+        "link": ""
+      },
+      {
+        "name": "setColumnWidth",
+        "description": "Updates the width of a column.",
+        "tags": {
+          "param": "width The new width.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setColumnWidth (field: string, width: number) => void",
+        "link": ""
+      },
+      {
+        "name": "getColumnIndexRelativeToVisibleColumns",
+        "description": "Gets the index of a column relative to the columns that are reachable by scroll.",
+        "tags": {
+          "param": "field The column field.",
+          "returns": "The index of the column.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getColumnIndexRelativeToVisibleColumns (field: string) => number;",
+        "link": ""
+      },
+      {
+        "name": "pinColumn",
+        "description": "",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function pinColumn (field: string, side: GridPinnedColumnPosition) => void",
+        "link": ""
+      },
+      {
+        "name": "unpinColumn",
+        "description": "",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function unpinColumn (field: string) => void",
+        "link": ""
+      },
+      {
+        "name": "isColumnPinned",
+        "description": "",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function isColumnPinned (field: string) => boolean;",
+        "link": ""
+      },
+      {
+        "name": "getColumnPinnedPosition",
+        "description": "",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getColumnPinnedPosition (field: string) =>\n  GridPinnedColumnPosition | null;",
+        "link": ""
+      },
+      {
+        "name": "setPinnedColumns",
+        "description": "",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setPinnedColumns (pinnedColumns: GridPinnedColumnFields) => void",
+        "link": ""
+      },
+      {
+        "name": "getPinnedColumns",
+        "description": "",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getPinnedColumns () => GridPinnedColumnFields;",
+        "link": ""
+      },
+      {
+        "name": "selectRow",
+        "description": "Change the selection state of a row.",
+        "tags": {
+          "param": "resetSelection Whether to reset the already selected rows or not. Default is `false`.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function selectRow (id: GridRowId, isSelected?: boolean | undefined, resetSelection?: boolean | undefined) => void",
+        "link": ""
+      },
+      {
+        "name": "isRowSelected",
+        "description": "Determines if a row is selected or not.",
+        "tags": {
+          "param": "id The id of the row.",
+          "returns": "A boolean indicating if the row is selected.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function isRowSelected (id: GridRowId) => boolean;",
+        "link": ""
+      },
+      {
+        "name": "isRowSelectable",
+        "description": "Determines if a row can be selected or not.",
+        "tags": {
+          "param": "id The id of the row.",
+          "returns": "A boolean indicating if the row can be selected.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function isRowSelectable (id: GridRowId) => boolean;",
+        "link": ""
+      },
+      {
+        "name": "getSelectedRows",
+        "description": "Returns an array of the selected rows.",
+        "tags": {
+          "returns": "A `Map` with the selected rows.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getSelectedRows () => Map<GridRowId, GridValidRowModel>;",
+        "link": ""
+      },
+      {
+        "name": "setRowSelectionModel",
+        "description": "Updates the selected rows to be those passed to the `rowIds` argument.\nAny row already selected will be unselected.",
+        "tags": {
+          "param": "rowIds The row ids to select.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setRowSelectionModel (rowIds: readonly GridRowId[]) => void",
+        "link": ""
+      },
+      {
+        "name": "getSortModel",
+        "description": "Returns the sort model currently applied to the grid.",
+        "tags": {
+          "returns": "The `GridSortModel`.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getSortModel () => GridSortModel;",
+        "link": ""
+      },
+      {
+        "name": "applySorting",
+        "description": "Applies the current sort model to the rows.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function applySorting () => void",
+        "link": ""
+      },
+      {
+        "name": "setSortModel",
+        "description": "Updates the sort model and triggers the sorting of rows.",
+        "tags": {
+          "param": "model The `GridSortModel` to be applied.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setSortModel (model: GridSortModel) => void",
+        "link": ""
+      },
+      {
+        "name": "sortColumn",
+        "description": "Sorts a column.",
+        "tags": {
+          "param": "allowMultipleSorting Whether to keep the existing [[GridSortItem]]. Default is `false`.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function sortColumn (field: string, direction?: GridSortDirection, allowMultipleSorting?: boolean | undefined) => void",
+        "link": ""
+      },
+      {
+        "name": "getSortedRows",
+        "description": "Returns all rows sorted according to the active sort model.",
+        "tags": {
+          "returns": "The sorted [[GridRowModel]] objects.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getSortedRows () => GridValidRowModel[]",
+        "link": ""
+      },
+      {
+        "name": "getSortedRowIds",
+        "description": "Returns all row ids sorted according to the active sort model.",
+        "tags": {
+          "returns": "The sorted [[GridRowId]] values.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getSortedRowIds () => GridRowId[]",
+        "link": ""
+      },
+      {
+        "name": "getRowIdFromRowIndex",
+        "description": "Gets the `GridRowId` of a row at a specific index.\nThe index is based on the sorted but unfiltered row list.",
+        "tags": {
+          "param": "index The index of the row",
+          "returns": "The `GridRowId` of the row.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getRowIdFromRowIndex (index: number) => GridRowId;",
+        "link": ""
+      },
+      {
+        "name": "setPage",
+        "description": "Sets the displayed page to the value given by `page`.",
+        "tags": {
+          "param": "page The new page number.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setPage (page: number) => void",
+        "link": ""
+      },
+      {
+        "name": "setPageSize",
+        "description": "Sets the number of displayed rows to the value given by `pageSize`.",
+        "tags": {
+          "param": "pageSize The new number of displayed rows.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setPageSize (pageSize: number) => void",
+        "link": ""
+      },
+      {
+        "name": "setPaginationModel",
+        "description": "Sets the `paginationModel` to a new value.",
+        "tags": {
+          "param": "model The new model value.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setPaginationModel (model: GridPaginationModel) => void",
+        "link": ""
+      },
+      {
+        "name": "setRowCount",
+        "description": "Sets the `rowCount` to a new value.",
+        "tags": {
+          "param": "rowCount The new row count value.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setRowCount (rowCount: number) => void",
+        "link": ""
+      },
+      {
+        "name": "setPaginationMeta",
+        "description": "Sets the `paginationMeta` to a new value.",
+        "tags": {
+          "param": "paginationMeta The new pagination meta value.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setPaginationMeta (paginationMeta: GridPaginationMeta) => void",
+        "link": ""
+      },
+      {
+        "name": "getDataAsCsv",
+        "description": "Returns the grid data as a CSV string.\nThis method is used internally by `exportDataAsCsv`.",
+        "tags": {
+          "param": "options The options to apply on the export.",
+          "returns": "The data in the CSV format.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getDataAsCsv (\n  options?:\n    | GridCsvExportOptions\n    | undefined,\n) => string;",
+        "link": ""
+      },
+      {
+        "name": "exportDataAsCsv",
+        "description": "Downloads and exports a CSV of the grid's data.",
+        "tags": {
+          "param": "options The options to apply on the export.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function exportDataAsCsv (options?: GridCsvExportOptions | undefined) => void",
+        "link": ""
+      },
+      {
+        "name": "setCellFocus",
+        "description": "Sets the focus to the cell at the given `id` and `field`.",
+        "tags": {
+          "param": "field The column field.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setCellFocus (id: GridRowId, field: string) => void",
+        "link": ""
+      },
+      {
+        "name": "setColumnHeaderFocus",
+        "description": "Sets the focus to the column header at the given `field`.",
+        "tags": {
+          "param": "event The event that triggers the action.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setColumnHeaderFocus (field: string, event?: TwgBaseEvent | undefined) => void",
+        "link": ""
+      },
+      {
+        "name": "setColumnHeaderFilterFocus",
+        "description": "Sets the focus to the column header filter at the given `field`.",
+        "tags": {
+          "param": "event The event that triggers the action.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setColumnHeaderFilterFocus (field: string, event?: TwgBaseEvent | undefined) => void",
+        "link": ""
+      },
+      {
+        "name": "showFilterPanel",
+        "description": "Shows the filter panel. If `targetColumnField` is given, a filter for this field is also added.",
+        "tags": {
+          "param": "labelId The unique button id",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function showFilterPanel (targetColumnField?: string | undefined, panelId?: string | undefined, labelId?: string | undefined) => void",
+        "link": ""
+      },
+      {
+        "name": "hideFilterPanel",
+        "description": "Hides the filter panel.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function hideFilterPanel () => void",
+        "link": ""
+      },
+      {
+        "name": "upsertFilterItem",
+        "description": "Updates or inserts a [[GridFilterItem]].",
+        "tags": {
+          "param": "item The filter to update.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function upsertFilterItem (item: GridFilterItem) => void",
+        "link": ""
+      },
+      {
+        "name": "upsertFilterItems",
+        "description": "Updates or inserts many [[GridFilterItem]].",
+        "tags": {
+          "param": "items The filters to update.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function upsertFilterItems (items: GridFilterItem[]) => void",
+        "link": ""
+      },
+      {
+        "name": "deleteFilterItem",
+        "description": "Deletes a [[GridFilterItem]].",
+        "tags": {
+          "param": "item The filter to delete.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function deleteFilterItem (item: GridFilterItem) => void",
+        "link": ""
+      },
+      {
+        "name": "setFilterLogicOperator",
+        "description": "Changes the [[GridLogicOperator]] used to connect the filters.",
+        "tags": {
+          "param": "operator The new logic operator. It can be: `\"and\"` or `\"or`\".",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setFilterLogicOperator (operator: GridLogicOperator) => void",
+        "link": ""
+      },
+      {
+        "name": "setFilterModel",
+        "description": "Sets the filter model to the one given by `model`.",
+        "tags": {
+          "param": "reason The reason for the model to have changed.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setFilterModel (model: GridFilterModel, reason?: \"upsertFilterItem\" | \"upsertFilterItems\" | \"deleteFilterItem\" | \"changeLogicOperator\" | \"restoreState\" | \"removeAllFilterItems\" | undefined) => void",
+        "link": ""
+      },
+      {
+        "name": "setQuickFilterValues",
+        "description": "Set the quick filter values to the one given by `values`",
+        "tags": {
+          "param": "values The list of element to quick filter",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setQuickFilterValues (values: any[]) => void",
+        "link": ""
+      },
+      {
+        "name": "ignoreDiacritics",
+        "description": "Returns the value of the `ignoreDiacritics` prop.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "getFilterState",
+        "description": "Returns the filter state for the given filter model without applying it to the Data Grid.",
+        "tags": {
+          "param": "filterModel The filter model to get the state for.",
+          "returns": "The filter state.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getFilterState (filterModel: GridFilterModel) =>\n  GridFilterState;",
+        "link": ""
+      },
+      {
+        "name": "showColumnMenu",
+        "description": "Display the column menu under the `field` column.",
+        "tags": {
+          "param": "field The column to display the menu.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function showColumnMenu (field: string) => void",
+        "link": ""
+      },
+      {
+        "name": "hideColumnMenu",
+        "description": "Hides the column menu that is open.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function hideColumnMenu () => void",
+        "link": ""
+      },
+      {
+        "name": "toggleColumnMenu",
+        "description": "Toggles the column menu under the `field` column.",
+        "tags": {
+          "param": "field The field name to toggle the column menu.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function toggleColumnMenu (field: string) => void",
+        "link": ""
+      },
+      {
+        "name": "showPreferences",
+        "description": "Displays the preferences panel. The `newValue` argument controls the content of the panel.",
+        "tags": {
+          "param": "labelId The unique button id",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function showPreferences (newValue: GridPreferencePanelsValue, panelId?: string | undefined, labelId?: string | undefined) => void",
+        "link": ""
+      },
+      {
+        "name": "hidePreferences",
+        "description": "Hides the preferences panel.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function hidePreferences () => void",
+        "link": ""
+      },
+      {
+        "name": "exportDataAsPrint",
+        "description": "Print the grid's data.",
+        "tags": {
+          "param": "options The options to apply on the export.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function exportDataAsPrint (options?: GridPrintExportOptions | undefined) => void",
+        "link": ""
+      },
+      {
+        "name": "unstable_setVirtualization",
+        "description": "Enable/disable virtualization.",
+        "tags": {
+          "param": "enabled The enabled value for virtualization",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function unstable_setVirtualization (enabled: boolean) => void",
+        "link": ""
+      },
+      {
+        "name": "unstable_setColumnVirtualization",
+        "description": "Enable/disable column virtualization.",
+        "tags": {
+          "param": "enabled The enabled value for column virtualization",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function unstable_setColumnVirtualization (enabled: boolean) => void",
+        "link": ""
+      },
+      {
+        "name": "getLocaleText",
+        "description": "Returns the translation for the `key`.",
+        "tags": {
+          "param": "key One of the keys in [[GridLocaleText]].",
+          "returns": "The translated value.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getLocaleText <T extends GridTranslationKeys>(\n  key: T,\n) => GridLocaleText[T];",
+        "link": ""
+      },
+      {
+        "name": "scroll",
+        "description": "Triggers the viewport to scroll to the given positions (in pixels).",
+        "tags": {
+          "param": "params An object containing the `left` or `top` position to scroll.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function scroll (params: Partial<GridScrollParams>) => void",
+        "link": ""
+      },
+      {
+        "name": "getScrollPosition",
+        "description": "Returns the current scroll position.",
+        "tags": {
+          "returns": "The scroll positions.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getScrollPosition () => GridScrollParams;",
+        "link": ""
+      },
+      {
+        "name": "scrollToIndexes",
+        "description": "Triggers the viewport to scroll to the cell at indexes given by `params`.\nReturns `true` if the grid had to scroll to reach the target.",
+        "tags": {
+          "param": "params The indexes where the cell is.",
+          "returns": "Returns `true` if the index was outside of the viewport and the grid had to scroll to reach the target.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function scrollToIndexes (\n  params: Partial<GridCellIndexCoordinates>,\n) => boolean;",
+        "link": ""
+      },
+      {
+        "name": "state",
+        "description": "Property that contains the whole state of the grid.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "GridStateCommunity",
+        "link": ""
+      },
+      {
+        "name": "exportState",
+        "description": "Generates a serializable object containing the exportable parts of the DataGrid state.\nThese values can then be passed to the `initialState` prop or injected using the `restoreState` method.",
+        "tags": {
+          "param": "params With all properties from [[GridExportStateParams]]",
+          "returns": "The exported state.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function exportState (\n  params?:\n    | GridExportStateParams\n    | undefined,\n) => GridInitialStateCommunity;",
+        "link": ""
+      },
+      {
+        "name": "restoreState",
+        "description": "Inject the given values into the state of the DataGrid.",
+        "tags": {
+          "param": "stateToRestore The exported state to restore.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function restoreState (stateToRestore: GridInitialStateCommunity) => void",
+        "link": ""
+      },
+      {
+        "name": "getColumnGroupPath",
+        "description": "Returns the id of the groups leading to the requested column.\nThe array is ordered by increasing depth (the last element is the direct parent of the column).",
+        "tags": {
+          "param": "field The field of of the column requested.",
+          "returns": "The id of the groups leading to the requested column.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getColumnGroupPath (field: string) => string[]",
+        "link": ""
+      },
+      {
+        "name": "getAllGroupDetails",
+        "description": "Returns the column group lookup.",
+        "tags": {
+          "returns": "The column group lookup.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getAllGroupDetails () => GridColumnGroupLookup;",
+        "link": ""
+      },
+      {
+        "name": "startHeaderFilterEditMode",
+        "description": "Puts the cell corresponding to the given row id and field into edit mode.",
+        "tags": {
+          "param": "field The field of the header filter to put in edit mode.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function startHeaderFilterEditMode (field: string) => void",
+        "link": ""
+      },
+      {
+        "name": "stopHeaderFilterEditMode",
+        "description": "Stops the edit mode for the current field.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function stopHeaderFilterEditMode () => void",
+        "link": ""
+      },
+      {
+        "name": "showHeaderFilterMenu",
+        "description": "Opens the header filter menu for the given field.",
+        "tags": {
+          "param": "field The field of the header filter to open menu for.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function showHeaderFilterMenu (field: string) => void",
+        "link": ""
+      },
+      {
+        "name": "hideHeaderFilterMenu",
+        "description": "Hides the header filter menu.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function hideHeaderFilterMenu () => void",
+        "link": ""
+      },
+      {
+        "name": "autosizeColumns",
+        "description": "Auto-size the columns of the grid based on the cells' content and the space available.",
+        "tags": {
+          "param": "options The autosizing options",
+          "returns": "A promise that resolves when autosizing is completed",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function autosizeColumns (\n  options?:\n    | GridAutosizeOptions\n    | undefined,\n) => Promise<void>;",
+        "link": ""
+      },
+      {
+        "name": "pinRow",
+        "description": "Pin the row at the specified index.",
+        "tags": {
+          "param": "position",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function pinRow (id: GridRowId, position: GridPinnedRowPosition) => void",
+        "link": ""
+      },
+      {
+        "name": "unpinRow",
+        "description": "Unpin the row at the specified index.",
+        "tags": {
+          "param": "id",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function unpinRow (id: GridRowId) => void",
+        "link": ""
+      },
+      {
+        "name": "unpinAllRows",
+        "description": "Unpin all the rows.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function unpinAllRows () => void",
+        "link": ""
+      },
+      {
+        "name": "isRowPinned",
+        "description": "Check if the row at the specified index is pinned.",
+        "tags": {
+          "param": "id",
+          "returns": "- Whether the row is pinned.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function isRowPinned (id: GridRowId) => boolean;",
+        "link": ""
+      },
+      {
+        "name": "getRowPinnedPosition",
+        "description": "Get the row's pinned position.",
+        "tags": {
+          "param": "id",
+          "returns": "- The row's pinned position.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getRowPinnedPosition (id: GridRowId) =>\n  GridPinnedRowPosition | null;",
+        "link": ""
+      },
+      {
+        "name": "getPinnedRows",
+        "description": "Get the pinned rows.",
+        "tags": {
+          "returns": "- The pinned rows.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getPinnedRows () => GridPinnedRowsModel;",
+        "link": ""
+      },
+      {
+        "name": "setPinnedRows",
+        "description": "Set the pinned rows.",
+        "tags": {
+          "param": "pinnedRows - The pinned rows to set.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setPinnedRows (pinnedRows: GridPinnedRowsModel) => void",
+        "link": ""
+      },
+      {
+        "name": "toggleDetailPanel",
+        "description": "",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function toggleDetailPanel (id: GridRowId) => void",
+        "link": ""
+      },
+      {
+        "name": "isDetailPanelExpanded",
+        "description": "",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function isDetailPanelExpanded (id: GridRowId) => boolean;",
+        "link": ""
+      },
+      {
+        "name": "getExpandedDetailPanels",
+        "description": "",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getExpandedDetailPanels () => GridExpandedRowIds;",
+        "link": ""
+      },
+      {
+        "name": "setExpandedDetailPanels",
+        "description": "",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setExpandedDetailPanels (model: GridExpandedRowIds) => void",
+        "link": ""
+      },
+      {
+        "name": "addRowGroupingCriteria",
+        "description": "",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function addRowGroupingCriteria (groupingCriteriaField: string, groupingIndex?: number | undefined) => void",
+        "link": ""
+      },
+      {
+        "name": "removeRowGroupingCriteria",
+        "description": "",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function removeRowGroupingCriteria (groupingCriteriaField: string) => void",
+        "link": ""
+      },
+      {
+        "name": "setRowGroupingCriteriaIndex",
+        "description": "",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setRowGroupingCriteriaIndex (groupingCriteriaField: string, groupingIndex: number) => void",
+        "link": ""
+      },
+      {
+        "name": "setRowGroupingModel",
+        "description": "",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setRowGroupingModel (model: GridRowGroupingModel) => void",
+        "link": ""
+      },
+      {
+        "name": "setDefaultGroupingExpansionDepth",
+        "description": "",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setDefaultGroupingExpansionDepth (depth: number) => void",
+        "link": ""
+      },
+      {
+        "name": "setAggregationModel",
+        "description": "",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setAggregationModel (model: GridAggregationModel) => void",
+        "link": ""
+      },
+      {
+        "name": "setColumnAggregation",
+        "description": "",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setColumnAggregation (field: string, aggregation: string | null) => void",
+        "link": ""
+      },
+      {
+        "name": "getColumnAggregation",
+        "description": "",
+        "tags": {
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getColumnAggregation (field: string) => { aggregation: string; function: GridAggregationFunction; } | null",
+        "link": ""
+      },
+      {
+        "name": "meta",
+        "description": "",
+        "tags": {
+          "required": "true"
+        },
+        "type": "GridMeta<GridValidRowModel>",
+        "link": ""
+      },
+      {
+        "name": "setColumnIndex",
+        "description": "Moves a column from its original position to the position given by `targetIndexPosition`.",
+        "tags": {
+          "param": "targetIndexPosition The new position (0-based).",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setColumnIndex (field: string, targetIndexPosition: number) => void",
+        "link": ""
+      },
+      {
+        "name": "selectRows",
+        "description": "Change the selection state of multiple rows.",
+        "tags": {
+          "param": "resetSelection Whether to reset the already selected rows or not. Default is `false`.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function selectRows (ids: GridRowId[], isSelected?: boolean | undefined, resetSelection?: boolean | undefined) => void",
+        "link": ""
+      },
+      {
+        "name": "selectRowRange",
+        "description": "Change the selection state of all the selectable rows in a range.",
+        "tags": {
+          "param": "resetSelection Whether to reset the selected rows outside of the range or not. Default is `false`.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function selectRowRange (range: { startId: GridRowId; endId: GridRowId; }, isSelected?: boolean | undefined, resetSelection?: boolean | undefined) => void",
+        "link": ""
+      },
+      {
+        "name": "setRowIndex",
+        "description": "Moves a row from its original position to the position given by `targetIndex`.",
+        "tags": {
+          "param": "targetIndex The new position (0-based).",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setRowIndex (rowId: GridRowId, targetIndex: number) => void",
+        "link": ""
+      },
+      {
+        "name": "getRowGroupChildren",
+        "description": "Gets the rows of a grouping criteria.\nOnly contains the rows provided to the grid, not the rows automatically generated by it.",
+        "tags": {
+          "param": "params Object containing parameters for the getter.",
+          "returns": "The id of each row in the grouping criteria.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function getRowGroupChildren (params: GridRowGroupChildrenGetterParams) => GridRowId[]",
+        "link": ""
+      },
+      {
+        "name": "setRowChildrenExpansion",
+        "description": "Expand or collapse a row children.",
+        "tags": {
+          "param": "isExpanded A boolean indicating if the row must be expanded or collapsed.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "function setRowChildrenExpansion (id: GridRowId, isExpanded: boolean) => void",
+        "link": ""
+      }
+    ]
+  }
+]

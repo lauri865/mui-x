@@ -1,0 +1,90 @@
+[
+  {
+    "name": "GridCsvExportOptions",
+    "description": "The options to apply on the CSV export.",
+    "entries": [
+      {
+        "name": "allColumns",
+        "description": "If `true`, the hidden columns will also be exported.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "delimiter",
+        "description": "The character used to separate fields.",
+        "tags": {
+          "default": "','"
+        },
+        "type": "string",
+        "link": ""
+      },
+      {
+        "name": "escapeFormulas",
+        "description": "If `false`, the formulas in the cells will not be escaped.\nIt is not recommended to disable this option as it exposes the user to potential CSV injection attacks.\nSee https://owasp.org/www-community/attacks/CSV_Injection for more information.",
+        "tags": {
+          "default": "true"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "fields",
+        "description": "The columns exported.\nThis should only be used if you want to restrict the columns exports.",
+        "tags": {},
+        "type": "string[]",
+        "link": ""
+      },
+      {
+        "name": "fileName",
+        "description": "The string used as the file name.",
+        "tags": {
+          "default": "document.title"
+        },
+        "type": "string",
+        "link": ""
+      },
+      {
+        "name": "getRowsToExport",
+        "description": "Function that returns the list of row ids to export on the order they should be exported.",
+        "tags": {
+          "param": "params With all properties from [[GridCsvGetRowsToExportParams]].",
+          "returns": "The list of row ids to export."
+        },
+        "type": "function",
+        "typeDescription": "function getRowsToExport (params: GridCsvGetRowsToExportParams<GridApiCommunity>) => GridRowId[]",
+        "link": ""
+      },
+      {
+        "name": "includeColumnGroupsHeaders",
+        "description": "If `true`, the CSV will include the column groups.",
+        "tags": {
+          "see": "See {@link https://mui.com/x/react-data-grid/column-groups/ column groups docs} for more details.",
+          "default": "true"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "includeHeaders",
+        "description": "If `true`, the CSV will include the column headers and column groups.\nUse `includeColumnGroupsHeaders` to control whether the column groups are included.",
+        "tags": {
+          "default": "true"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "utf8WithBom",
+        "description": "If `true`, the UTF-8 Byte Order Mark (BOM) prefixes the exported file.\nThis can allow Excel to automatically detect file encoding as UTF-8.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      }
+    ]
+  }
+]

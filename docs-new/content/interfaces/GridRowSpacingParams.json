@@ -1,0 +1,54 @@
+[
+  {
+    "name": "GridRowSpacingParams",
+    "description": "Object passed as parameter in the row `getRowSpacing` callback prop.",
+    "entries": [
+      {
+        "name": "id",
+        "description": "The row id.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "string | number",
+        "typeDescription": "type GridRowId",
+        "link": ""
+      },
+      {
+        "name": "model",
+        "description": "The row model.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "GridValidRowModel",
+        "link": ""
+      },
+      {
+        "name": "isFirstVisible",
+        "description": "Whether this row is the first visible or not.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "isLastVisible",
+        "description": "Whether this row is the last visible or not.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "indexRelativeToCurrentPage",
+        "description": "Index of the row in the current page.\nIf the pagination is disabled, it will be the index relative to all filtered rows.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "number",
+        "link": ""
+      }
+    ]
+  }
+]

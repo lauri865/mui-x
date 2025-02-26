@@ -6,6 +6,7 @@ import { GridContextProvider } from '../context/GridContextProvider';
 import { useGridRowAriaAttributes } from '../hooks/features/rows/useGridRowAriaAttributes';
 import { useGridAriaAttributes } from '../hooks/utils/useGridAriaAttributes';
 import { propValidatorsDataGrid, validateProps } from '../internals/utils/propValidation';
+import { GridColDef } from '../models';
 import { GridValidRowModel } from '../models/gridRows';
 import { DataGridProps } from '../models/props/DataGridProps';
 import { useDataGridComponent } from './useDataGridComponent';
@@ -46,7 +47,6 @@ interface DataGridComponent {
   <R extends GridValidRowModel = any>(
     props: DataGridProps<R> & React.RefAttributes<HTMLDivElement>,
   ): React.JSX.Element;
-  propTypes?: any;
 }
 
 /**
@@ -128,4 +128,10 @@ export const DataGrid = React.memo(DataGridRaw, (prev, props) => {
   }
 
   return true;
-}) as DataGridComponent;
+}) as unknown as DataGridComponent;
+
+export namespace DataGrid {
+  export type ColDef = GridColDef;
+  export type RowModel = GridValidRowModel;
+  export type Props<R extends GridValidRowModel = any> = DataGridProps<R>;
+}

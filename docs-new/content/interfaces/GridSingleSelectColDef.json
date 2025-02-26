@@ -1,0 +1,424 @@
+[
+  {
+    "name": "GridSingleSelectColDef",
+    "description": "Column Definition interface used for columns with the `singleSelect` type.",
+    "entries": [
+      {
+        "name": "editCell",
+        "description": "The type of the column.",
+        "tags": {
+          "default": "'singleSelect'",
+          "required": "true"
+        },
+        "type": "\"singleSelect\"",
+        "link": ""
+      },
+      {
+        "name": "editCellParams",
+        "description": "",
+        "tags": {
+          "required": "true"
+        },
+        "type": "{ valueOptions: ValueOptions[] | ((params: GridValueOptionsParams<R>) => ValueOptions[]); getOptionLabel?: ((value: ValueOptions) => string) | undefined; getOptionValue?: ((value: ValueOptions) => any) | undefined; optionLabelKey?: string | undefined; optionValueKey?: string | undefined; }",
+        "link": ""
+      },
+      {
+        "name": "field",
+        "description": "The unique identifier of the column. Used to map with [[GridRowModel]] values.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "string",
+        "link": ""
+      },
+      {
+        "name": "aggregable",
+        "description": "If `true`, the column is aggregable in the column header.\nIf `false`, the column is only aggreble programmatically, if the list of aggregation functions is available.",
+        "tags": {
+          "default": "true"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "aggregationFunctions",
+        "description": "List of aggregation functions available for this column.\nAggregation functions must be available in the `aggregationFunctions` prop of the `<DatagGrid />` component.",
+        "tags": {},
+        "type": "string[]",
+        "link": ""
+      },
+      {
+        "name": "align",
+        "description": "Align cell content.",
+        "tags": {},
+        "type": "\"left\" | \"right\" | \"center\"",
+        "typeDescription": "type GridAlignment",
+        "link": ""
+      },
+      {
+        "name": "cellClassName",
+        "description": "Class name added to cells in this column.",
+        "tags": {},
+        "type": "string | function",
+        "typeDescription": "type GridCellClassNamePropType<R, V>\n---\nstring | \nfunction cellClassName (\n  params: GridCellParams<R, V>,\n) => string",
+        "link": ""
+      },
+      {
+        "name": "colSpan",
+        "description": "Number of columns a cell should span.",
+        "tags": {
+          "default": "1"
+        },
+        "type": "number | function",
+        "typeDescription": "number | type GridColSpanFn<R, V, F>\n---\nnumber | \nfunction colSpan (\n  value: V,\n  row: R,\n  column: GridColDef<R, V, F>,\n  apiRef: RefObject<GridApiCommunity>,\n) => number | undefined",
+        "link": ""
+      },
+      {
+        "name": "description",
+        "description": "The tooltip text shown when the column header name is truncated.",
+        "tags": {},
+        "type": "string",
+        "link": ""
+      },
+      {
+        "name": "disableColumnManagement",
+        "description": "If `true`, the column is not manageable by the column manager.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "disableColumnMenu",
+        "description": "If `true`, the column menu is disabled for this column.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "disableExport",
+        "description": "If `true`, this column will not be included in exports.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "disableReorder",
+        "description": "If `true`, this column cannot be reordered.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "display",
+        "description": "Display mode for the cell:\n - 'text': For text-based cells (default)\n - 'flex': For cells with HTMLElement children",
+        "tags": {},
+        "type": "\"flex\" | \"text\"",
+        "link": ""
+      },
+      {
+        "name": "editable",
+        "description": "If `true`, the cells of the column are editable.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "filterable",
+        "description": "If `true`, the column is filterable.",
+        "tags": {
+          "default": "true"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "filterOperators",
+        "description": "Allows setting the filter operators for this column.",
+        "tags": {},
+        "type": "interface GridFilterOperator<R, V, F, any>[]",
+        "typeDescription": "Array<{\n  getApplyFilterFn: GetApplyFilterFn<R, V, F>,\n  value: string,\n  label?: string,\n  headerLabel?: string,\n  InputComponent?: React.JSXElementConstructor<I>,\n  InputComponentProps?: Partial<I>,\n  getValueAsString?: (value: GridFilterItem[\"value\"]) => string,\n  requiresFilterValue?: boolean\n}>",
+        "link": ""
+      },
+      {
+        "name": "flex",
+        "description": "The flex grow factor of the column. Must be a positive number.",
+        "tags": {},
+        "type": "number",
+        "link": ""
+      },
+      {
+        "name": "getApplyQuickFilterFn",
+        "description": "The callback that generates a filtering function for a given quick filter value.\nThis function can return `null` to skip filtering for this value and column.",
+        "tags": {
+          "param": "apiRef Deprecated: The API of the grid.",
+          "returns": "The function to call to check if a row pass this filter value or not."
+        },
+        "type": "function",
+        "typeDescription": "GetApplyQuickFilterFn<R, V>\n---\nfunction getApplyQuickFilterFn (\n  value: any,\n  colDef: GridStateColDef<R, V>,\n  apiRef: RefObject<GridApiCommunity>,\n) => null | GridApplyQuickFilter<R, V>;",
+        "link": ""
+      },
+      {
+        "name": "getSortComparator",
+        "description": "Provide an alternative comparator function for sorting.\nTakes precedence over `sortComparator`.",
+        "tags": {
+          "param": "sortDirection The direction of the sort.",
+          "returns": "The comparator function to use."
+        },
+        "type": "function",
+        "typeDescription": "function getSortComparator (sortDirection: GridSortDirection) =>\n  GridComparatorFn<V> | undefined;",
+        "link": ""
+      },
+      {
+        "name": "groupable",
+        "description": "If `true`, the rows can be grouped based on this column values.",
+        "tags": {
+          "default": "true"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "groupingValueGetter",
+        "description": "Function that returns a value to be used in grouping rows.",
+        "tags": {},
+        "type": "function",
+        "typeDescription": "GridValueGetter<R, V, F, any>\n---\nfunction groupingValueGetter (\n  value: TValue,\n  row: R,\n  column: GridColDef<R, V, F>,\n  apiRef: RefObject<GridApiCommunity>,\n) => V;",
+        "link": ""
+      },
+      {
+        "name": "headerAlign",
+        "description": "Align column header content.",
+        "tags": {},
+        "type": "\"left\" | \"right\" | \"center\"",
+        "typeDescription": "type GridAlignment",
+        "link": ""
+      },
+      {
+        "name": "headerClassName",
+        "description": "Class name added to the column header cell.",
+        "tags": {},
+        "type": "string | function",
+        "typeDescription": "type GridColumnHeaderClassNamePropType\n---\nstring | \nfunction headerClassName (params: GridColumnHeaderParams) => string",
+        "link": ""
+      },
+      {
+        "name": "headerName",
+        "description": "The title displayed in the column header cell.",
+        "tags": {},
+        "type": "string",
+        "link": ""
+      },
+      {
+        "name": "hideable",
+        "description": "If `false`, removes the option to hide this column.",
+        "tags": {
+          "default": "true"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "hideSortIcons",
+        "description": "Toggle the visibility of the sort icons.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "maxWidth",
+        "description": "The maximum width of the column in pixels.",
+        "tags": {
+          "default": "Infinity"
+        },
+        "type": "number",
+        "link": ""
+      },
+      {
+        "name": "minWidth",
+        "description": "The minimum width of the column in pixels.",
+        "tags": {
+          "default": "50"
+        },
+        "type": "number",
+        "link": ""
+      },
+      {
+        "name": "pinnable",
+        "description": "If `false`, the menu items for column pinning menu will not be rendered.",
+        "tags": {
+          "default": "true"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "preProcessEditCellProps",
+        "description": "Callback fired when the edit props of the cell changes.\nProcesses the props before being saved into the state.",
+        "tags": {
+          "param": "params Object containing parameters of the cell being edited.",
+          "returns": "The new edit cell props."
+        },
+        "type": "function",
+        "typeDescription": "function preProcessEditCellProps (\n  params: GridPreProcessEditCellProps<\n    V,\n    R\n  >,\n) =>\n  GridEditCellProps<V> |\n  Promise<GridEditCellProps<V>>;",
+        "link": ""
+      },
+      {
+        "name": "renderCell",
+        "description": "Override the component rendered as cell for this column.",
+        "tags": {
+          "template": "R, V, F",
+          "param": "params Object containing parameters for the renderer.",
+          "returns": "The element to be rendered."
+        },
+        "type": "function",
+        "typeDescription": "function renderCell (\n  params: GridRenderCellParams<\n    R,\n    V,\n    F,\n    GridTreeNodeWithRender\n  >,\n  renderCellProps?: RCP | undefined,\n) => ReactNode;",
+        "link": ""
+      },
+      {
+        "name": "renderCellProps",
+        "description": "Additional `props` passed to the `renderCell` function. Useful for custom cells. Not used by the default cell type primitives.",
+        "tags": {
+          "remarks": "`object` ^ `Record<string, any>`"
+        },
+        "type": "object",
+        "typeDescription": "Record<string, any>",
+        "link": ""
+      },
+      {
+        "name": "renderEditCell",
+        "description": "Override the component rendered in edit cell mode for this column.",
+        "tags": {
+          "param": "params Object containing parameters for the renderer.",
+          "returns": "The element to be rendered."
+        },
+        "type": "function",
+        "typeDescription": "function renderEditCell (\n  params: GridRenderEditCellParams<\n    R,\n    V,\n    F,\n    GridTreeNodeWithRender\n  >,\n) => ReactNode;",
+        "link": ""
+      },
+      {
+        "name": "renderHeader",
+        "description": "Override the component rendered in the column header cell.",
+        "tags": {
+          "template": "R, V, F",
+          "param": "params Object containing parameters for the renderer.",
+          "returns": "The element to be rendered."
+        },
+        "type": "function",
+        "typeDescription": "function renderHeader (\n  params: GridColumnHeaderParams<\n    R,\n    V,\n    F\n  >,\n) => ReactNode;",
+        "link": ""
+      },
+      {
+        "name": "resizable",
+        "description": "If `false`, disables resizing for this column.",
+        "tags": {
+          "default": "true"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "rowSpanValueGetter",
+        "description": "Function that returns a specific value to be used in row spanning.",
+        "tags": {},
+        "type": "function",
+        "typeDescription": "GridValueGetter<R, V, F, V | null | undefined>\n---\nfunction rowSpanValueGetter (\n  value: TValue,\n  row: R,\n  column: GridColDef<R, V, F>,\n  apiRef: RefObject<GridApiCommunity>,\n) => V;",
+        "link": ""
+      },
+      {
+        "name": "sortable",
+        "description": "If `false`, disables sorting for this column.",
+        "tags": {
+          "default": "true"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "sortComparator",
+        "description": "A comparator function used to sort rows.",
+        "tags": {},
+        "type": "function",
+        "typeDescription": "GridComparatorFn<V>\n---\nfunction sortComparator (\n  v1: V,\n  v2: V,\n  cellParams1: GridSortCellParams<V>,\n  cellParams2: GridSortCellParams<V>,\n) => number;",
+        "link": ""
+      },
+      {
+        "name": "sortingOrder",
+        "description": "The order of the sorting sequence.",
+        "tags": {
+          "default": "['asc', 'desc', null]"
+        },
+        "type": "Array<\"asc\" | \"desc\" | null>",
+        "typeDescription": "readonly GridSortDirection[]",
+        "link": ""
+      },
+      {
+        "name": "type",
+        "description": "The type of the column.",
+        "tags": {
+          "default": "'string'",
+          "see": "See {@link https://mui.com/x/react-data-grid/column-definition/#column-types column types docs} for more details."
+        },
+        "type": "\"string\" | \"number\" | \"boolean\" | \"singleSelect\" | \"date\" | \"dateString\" | \"dateTime\" | \"array\" | \"actions\" | \"custom\"",
+        "typeDescription": "type GridColType",
+        "link": ""
+      },
+      {
+        "name": "valueFormatter",
+        "description": "Formats the cell value before rendering.",
+        "tags": {},
+        "type": "function",
+        "typeDescription": "GridValueFormatter<R, V, F, V | null | undefined>\n---\nfunction valueFormatter (\n  value: TValue,\n  row: R,\n  column: GridColDef<R, V, F>,\n  apiRef: RefObject<GridApiCommunity>,\n) => F;",
+        "link": ""
+      },
+      {
+        "name": "valueGetter",
+        "description": "Function that returns specific data to render in the cell instead of using the field value.",
+        "tags": {},
+        "type": "function",
+        "typeDescription": "GridValueGetter<R, V, F, V | null | undefined>\n---\nfunction valueGetter (\n  value: TValue,\n  row: R,\n  column: GridColDef<R, V, F>,\n  apiRef: RefObject<GridApiCommunity>,\n) => V;",
+        "link": ""
+      },
+      {
+        "name": "valueParser",
+        "description": "Function that takes the user-entered value and converts it to a value used internally.",
+        "tags": {
+          "returns": "The converted value to use internally."
+        },
+        "type": "function",
+        "typeDescription": "GridValueParser<R, V, F>\n---\nfunction valueParser (\n  value: F | undefined,\n  row: R | undefined,\n  column: GridColDef<R, V, F>,\n  apiRef: RefObject<GridApiCommunity>,\n) => V;",
+        "link": ""
+      },
+      {
+        "name": "valueSetter",
+        "description": "Function that customizes how the entered value is stored in the row.\nOnly works with cell/row editing.",
+        "tags": {
+          "returns": "The row with the updated field."
+        },
+        "type": "function",
+        "typeDescription": "GridValueSetter<R, V, F>\n---\nfunction valueSetter (\n  value: V,\n  row: R,\n  column: GridColDef<R, V, F>,\n  apiRef: RefObject<GridApiCommunity>,\n) => R;",
+        "link": ""
+      },
+      {
+        "name": "width",
+        "description": "The width of the column in pixels.",
+        "tags": {
+          "default": "100"
+        },
+        "type": "number",
+        "link": ""
+      }
+    ]
+  }
+]

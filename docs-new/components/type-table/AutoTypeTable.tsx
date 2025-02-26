@@ -45,6 +45,8 @@ export interface AutoTypeTableProps {
    */
   type?: string;
 
+  showRequired?: boolean;
+
   options?: GenerateDocumentationOptions;
 }
 
@@ -69,6 +71,7 @@ export async function AutoTypeTableBase({
   path,
   name,
   type,
+  showRequired,
   options = {},
 }: AutoTypeTableProps): Promise<React.ReactElement> {
   let typeName = name;
@@ -86,6 +89,10 @@ export async function AutoTypeTableBase({
   }
 
   const output = await generateDocumentation(path ?? 'temp.ts', typeName, content, options);
+
+  const hideDefault = !output.some((item) =>
+    item.entries.some((entry) => entry.tags.default || entry.tags.defaultValue),
+  );
 
   if (name && output.length === 0)
     throw new Error(`${name} in ${path ?? 'empty file'} doesn't exist`);
@@ -132,7 +139,14 @@ export async function AutoTypeTableBase({
             ] as const,
         );
 
-        return <TypeTable key={item.name} type={Object.fromEntries(await Promise.all(entries))} />;
+        return (
+          <TypeTable
+            key={item.name}
+            type={Object.fromEntries(await Promise.all(entries))}
+            showRequired={showRequired}
+            hideDefault={hideDefault}
+          />
+        );
       })}
     </>
   );

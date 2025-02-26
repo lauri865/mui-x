@@ -1,3 +1,5 @@
+export type * from '../hooks/features/aggregation/gridAggregationInterfaces';
+export type * from '../hooks/features/rowGrouping/gridRowGroupingInterfaces';
 export * from './api';
 export * from './baseEvent';
 export * from './colDef';
@@ -22,7 +24,12 @@ export * from './gridRows';
 export * from './gridRowSelectionModel';
 export type { GridSlotsComponent } from './gridSlotsComponent';
 export * from './gridSlotsComponentsProps';
-export * from './gridSortModel';
+export type {
+  GridComparatorFn,
+  GridSortCellParams,
+  GridSortDirection,
+  GridSortModel,
+} from './gridSortModel';
 export * from './logger';
 export * from './params';
 

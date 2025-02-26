@@ -1,0 +1,63 @@
+[
+  {
+    "name": "GridRowClassNameParams",
+    "description": "Object passed as parameter in the row `getRowClassName` callback prop.",
+    "entries": [
+      {
+        "name": "id",
+        "description": "The grid row id.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "string | number",
+        "typeDescription": "type GridRowId",
+        "link": ""
+      },
+      {
+        "name": "row",
+        "description": "The row model of the row that the current cell belongs to.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "R",
+        "link": ""
+      },
+      {
+        "name": "columns",
+        "description": "All grid columns.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "GridColDef[]",
+        "link": ""
+      },
+      {
+        "name": "isFirstVisible",
+        "description": "Whether this row is the first visible or not.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "isLastVisible",
+        "description": "Whether this row is the last visible or not.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "indexRelativeToCurrentPage",
+        "description": "Index of the row in the current page.\nIf the pagination is disabled, it will be the index relative to all filtered rows.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "number",
+        "link": ""
+      }
+    ]
+  }
+]

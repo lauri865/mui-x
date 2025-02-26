@@ -1,5 +1,8 @@
 import * as React from 'react';
+import { GridApiCommunity } from '../api/gridApiCommunity';
+import type { GridStateColDef } from '../colDef/gridColDef';
 import { GridCellMode } from '../gridCell';
+import { GridEditCellProps } from '../gridEditRowModel';
 import {
   GridRowId,
   GridRowModel,
@@ -7,9 +10,6 @@ import {
   GridTreeNodeWithRender,
   GridValidRowModel,
 } from '../gridRows';
-import type { GridStateColDef } from '../colDef/gridColDef';
-import { GridEditCellProps } from '../gridEditRowModel';
-import { GridApiCommunity } from '../api/gridApiCommunity';
 
 /**
  * Object passed as parameter in the column [[GridColDef]] cell renderer.
@@ -32,11 +32,11 @@ export interface GridCellParams<
    * The cell value.
    * If the column has `valueGetter`, use `params.row` to directly access the fields.
    */
-  value?: V | undefined;
+  value: V | undefined;
   /**
    * The cell value formatted with the column valueFormatter.
    */
-  formattedValue?: F | undefined;
+  formattedValue: F | undefined;
   /**
    * The row model of the row that the current cell belongs to.
    */
@@ -52,7 +52,7 @@ export interface GridCellParams<
   /**
    * If true, the cell is editable.
    */
-  isEditable?: boolean;
+  isEditable: boolean;
   /**
    * The mode of the cell.
    */

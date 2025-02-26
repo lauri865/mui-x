@@ -1,0 +1,95 @@
+[
+  {
+    "name": "GridPrintExportOptions",
+    "description": "The options to apply on the Print export.",
+    "entries": [
+      {
+        "name": "allColumns",
+        "description": "If `true`, the hidden columns will also be exported.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "bodyClassName",
+        "description": "One or more classes passed to the print window.",
+        "tags": {},
+        "type": "string",
+        "link": ""
+      },
+      {
+        "name": "copyStyles",
+        "description": "If `false`, all <style> and <link type=\"stylesheet\" /> tags from the <head> will not be copied\nto the print window.",
+        "tags": {
+          "default": "true"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "fields",
+        "description": "The columns exported.\nThis should only be used if you want to restrict the columns exports.",
+        "tags": {},
+        "type": "string[]",
+        "link": ""
+      },
+      {
+        "name": "fileName",
+        "description": "The value to be used as the print window title.",
+        "tags": {
+          "default": "The title of the page."
+        },
+        "type": "string",
+        "link": ""
+      },
+      {
+        "name": "getRowsToExport",
+        "description": "Function that returns the list of row ids to export in the order they should be exported.",
+        "tags": {
+          "param": "params With all properties from [[GridPrintGetRowsToExportParams]].",
+          "returns": "The list of row ids to export."
+        },
+        "type": "function",
+        "typeDescription": "function getRowsToExport (params: GridPrintGetRowsToExportParams<GridApiCommunity>) => GridRowId[]",
+        "link": ""
+      },
+      {
+        "name": "hideFooter",
+        "description": "If `true`, the footer is removed for when printing.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "hideToolbar",
+        "description": "If `true`, the toolbar is removed for when printing.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "includeCheckboxes",
+        "description": "If `true`, the selection checkboxes will be included when printing.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "pageStyle",
+        "description": "Provide Print specific styles to the print window.",
+        "tags": {},
+        "type": "string | function",
+        "typeDescription": "string | (() => string)\n---\nstring | \nfunction pageStyle () => string",
+        "link": ""
+      }
+    ]
+  }
+]

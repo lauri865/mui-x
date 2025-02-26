@@ -1,0 +1,56 @@
+[
+  {
+    "name": "GridFilterModel",
+    "description": "Model describing the filters to apply to the grid.",
+    "entries": [
+      {
+        "name": "items",
+        "description": "",
+        "tags": {
+          "default": "[]",
+          "required": "true"
+        },
+        "type": "GridFilterItem[]",
+        "link": ""
+      },
+      {
+        "name": "logicOperator",
+        "description": "- `GridLogicOperator.And`: the row must pass all the filter items.\n- `GridLogicOperator.Or`: the row must pass at least on filter item.",
+        "tags": {
+          "default": "GridLogicOperator.And"
+        },
+        "type": "\"and\" | \"or\"",
+        "typeDescription": "type GridLogicOperator",
+        "link": ""
+      },
+      {
+        "name": "quickFilterExcludeHiddenColumns",
+        "description": "If `false`, the quick filter will also consider cell values from hidden columns.",
+        "tags": {
+          "default": "true"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "quickFilterLogicOperator",
+        "description": "- `GridLogicOperator.And`: the row must pass all the values.\n- `GridLogicOperator.Or`: the row must pass at least one value.",
+        "tags": {
+          "default": "GridLogicOperator.And"
+        },
+        "type": "\"and\" | \"or\"",
+        "typeDescription": "type GridLogicOperator",
+        "link": ""
+      },
+      {
+        "name": "quickFilterValues",
+        "description": "values used to quick filter rows",
+        "tags": {
+          "default": "[]"
+        },
+        "type": "any[]",
+        "link": ""
+      }
+    ]
+  }
+]

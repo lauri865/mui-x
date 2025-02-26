@@ -1,0 +1,78 @@
+[
+  {
+    "name": "GridFilterOperator",
+    "description": "Filter operator definition interface.",
+    "entries": [
+      {
+        "name": "value",
+        "description": "The name of the filter operator.\nIt will be matched with the `operator` property of the filter items.",
+        "tags": {
+          "required": "true"
+        },
+        "type": "string",
+        "link": ""
+      },
+      {
+        "name": "getApplyFilterFn",
+        "description": "The callback that generates a filtering function for a given filter item and column.\nThis function can return `null` to skip filtering for this item and column.",
+        "tags": {
+          "param": "column The column from which we want to filter the rows.",
+          "returns": "The function to call to check if a row pass this filter item or not.",
+          "required": "true"
+        },
+        "type": "function",
+        "typeDescription": "GetApplyFilterFn<R, V, F>\n---\nfunction getApplyFilterFn (\n  filterItem: GridFilterCondition,\n  column: GridColDef<R, V, F>,\n) => null | ApplyFilterFn<R, V, F>;",
+        "link": ""
+      },
+      {
+        "name": "getValueAsString",
+        "description": "Converts the value of a filter item to a human-readable form.",
+        "tags": {
+          "param": "value The filter item value.",
+          "returns": "The value formatted to be displayed in the UI of filter button tooltip."
+        },
+        "type": "function",
+        "typeDescription": "function getValueAsString (value: any) => string;",
+        "link": ""
+      },
+      {
+        "name": "headerLabel",
+        "description": "The label of the filter shown in header filter row.",
+        "tags": {},
+        "type": "string",
+        "link": ""
+      },
+      {
+        "name": "InputComponent",
+        "description": "The input component to render in the filter panel for this filter operator.",
+        "tags": {},
+        "type": "function | new(props: P) => Component<any, any>",
+        "typeDescription": "type JSXElementConstructor<I>\n---\nfunction InputComponent (\n            props: P,\n        ) => ReactNode | Promise<ReactNode>\n | new(props: P) => Component<any, any>",
+        "link": ""
+      },
+      {
+        "name": "InputComponentProps",
+        "description": "The props to pass to the input component in the filter panel for this filter operator.",
+        "tags": {},
+        "type": "Partial<I>",
+        "link": ""
+      },
+      {
+        "name": "label",
+        "description": "The label of the filter operator.",
+        "tags": {},
+        "type": "string",
+        "link": ""
+      },
+      {
+        "name": "requiresFilterValue",
+        "description": "If `false`, filter operator doesn't require user-entered value to work.\nUsually should be set to `false` for filter operators that don't have `InputComponent` (for example `isEmpty`)",
+        "tags": {
+          "default": "true"
+        },
+        "type": "boolean",
+        "link": ""
+      }
+    ]
+  }
+]

@@ -1,0 +1,1292 @@
+[
+  {
+    "name": "DataGridProps",
+    "description": "The props users can give to the Data Grid component.",
+    "entries": [
+      {
+        "name": "columns",
+        "description": "Set of columns of type [[GridColDef]][].",
+        "tags": {
+          "required": "true"
+        },
+        "type": "Array<import(\"/Users/laurilehtmaa/dev/mui-x/packages/x-data-grid/src/models/colDef/gridColDef\").GridActionsColDef<R, any, any, never> | import(\"/Users/laurilehtmaa/dev/mui-x/packages/x-data-grid/src/models/colDef/gridColDef\").GridBaseColDef<R, any, any, never> | import(\"/Users/laurilehtmaa/dev/mui-x/packages/x-data-grid/src/models/colDef/gridColDef\").GridSingleSelectColDef<R, any, any, never>>",
+        "typeDescription": "readonly GridColDef<R>[]",
+        "link": ""
+      },
+      {
+        "name": "aggregationFunctions",
+        "description": "",
+        "tags": {},
+        "type": "Record<string, GridAggregationFunction>",
+        "link": ""
+      },
+      {
+        "name": "aggregationModel",
+        "description": "",
+        "tags": {},
+        "type": "GridAggregationModel",
+        "link": ""
+      },
+      {
+        "name": "apiRef",
+        "description": "The ref object that allows Data Grid manipulation. Can be instantiated with `useGridApiRef()`.",
+        "tags": {},
+        "type": "RefObject<GridApiCommunity | null>",
+        "link": ""
+      },
+      {
+        "name": "aria-label",
+        "description": "The label of the Data Grid.",
+        "tags": {},
+        "type": "string",
+        "link": ""
+      },
+      {
+        "name": "aria-labelledby",
+        "description": "The id of the element containing a label for the Data Grid.",
+        "tags": {},
+        "type": "string",
+        "link": ""
+      },
+      {
+        "name": "autoFocus",
+        "description": "",
+        "tags": {},
+        "type": "string | Unresolved Type",
+        "typeDescription": "string | true",
+        "link": ""
+      },
+      {
+        "name": "autoHeight",
+        "description": "If `true`, the Data Grid height is dynamic and follows the number of rows in the Data Grid.",
+        "tags": {
+          "default": "false",
+          "deprecated": "Use flex parent container instead: https://mui.com/x/react-data-grid/layout/#flex-parent-container",
+          "example": "<div style={{ display: 'flex', flexDirection: 'column' }}>\n  <DataGrid />\n</div>"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "autoPageSize",
+        "description": "If `true`, the pageSize is calculated according to the container size and the max number of rows to avoid rendering a vertical scroll bar.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "autosizeOnMount",
+        "description": "If `true`, columns are autosized after the datagrid is mounted.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "autosizeOptions",
+        "description": "The options for autosize when user-initiated.",
+        "tags": {},
+        "type": "GridAutosizeOptions",
+        "link": ""
+      },
+      {
+        "name": "cellModesModel",
+        "description": "Controls the modes of the cells.",
+        "tags": {},
+        "type": "GridCellModesModel",
+        "link": ""
+      },
+      {
+        "name": "checkboxSelection",
+        "description": "If `true`, the Data Grid will display an extra column with checkboxes for selecting rows.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "checkboxSelectionVisibleOnly",
+        "description": "If `true`, the \"Select All\" header checkbox selects only the rows on the current page. To be used in combination with `checkboxSelection`.\nIt only works if the pagination is enabled.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "className",
+        "description": "",
+        "tags": {},
+        "type": "string",
+        "link": ""
+      },
+      {
+        "name": "clipboardCopyCellDelimiter",
+        "description": "The character used to separate cell values when copying to the clipboard.",
+        "tags": {
+          "default": "'\\t'"
+        },
+        "type": "string",
+        "link": ""
+      },
+      {
+        "name": "columnBufferPx",
+        "description": "Column region in pixels to render before/after the viewport",
+        "tags": {
+          "default": "150"
+        },
+        "type": "number",
+        "link": ""
+      },
+      {
+        "name": "columnGroupHeaderHeight",
+        "description": "Sets the height in pixels of the column group headers in the Data Grid.\nInherits the `columnHeaderHeight` value if not set.",
+        "tags": {},
+        "type": "number",
+        "link": ""
+      },
+      {
+        "name": "columnGroupingModel",
+        "description": "",
+        "tags": {},
+        "type": "GridColumnGroupingModel",
+        "link": ""
+      },
+      {
+        "name": "columnHeaderHeight",
+        "description": "Sets the height in pixel of the column headers in the Data Grid.",
+        "tags": {
+          "default": "56"
+        },
+        "type": "number",
+        "link": ""
+      },
+      {
+        "name": "columnVisibilityModel",
+        "description": "Set the column visibility model of the Data Grid.\nIf defined, the Data Grid will ignore the `hide` property in [[GridColDef]].",
+        "tags": {},
+        "type": "GridColumnVisibilityModel",
+        "link": ""
+      },
+      {
+        "name": "defaultGroupingExpansionDepth",
+        "description": "",
+        "tags": {},
+        "type": "number",
+        "link": ""
+      },
+      {
+        "name": "density",
+        "description": "Set the density of the Data Grid.",
+        "tags": {
+          "default": "\"standard\""
+        },
+        "type": "\"compact\" | \"standard\" | \"comfortable\"",
+        "typeDescription": "type GridDensity",
+        "link": ""
+      },
+      {
+        "name": "dependencies",
+        "description": "List of dependencies (similar to React.useEffect/useMemo dependency array) to watch for changes to force the data grid props to refresh; by default listens to rows and all controlled props.\nAnything defined here should ideally be memoized to prevent performance issues. For things (especially functions) that don't need to be synchronised with the grid state, useEventCallback (`react-use-event-hook`) could be used to provide stable reference that can depend on up-to-date external state.",
+        "tags": {},
+        "type": "any[]",
+        "link": ""
+      },
+      {
+        "name": "detailPanelExpandedRowIds",
+        "description": "",
+        "tags": {},
+        "type": "GridExpandedRowIds",
+        "link": ""
+      },
+      {
+        "name": "disableAutoMemo",
+        "description": "Disables automatic memoization of the Data Grid props – it's now your duty to take care of the memoization yourself.",
+        "tags": {},
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "disableAutosize",
+        "description": "If `true`, column autosizing on header separator double-click is disabled.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "disableColumnFilter",
+        "description": "If `true`, column filters are disabled.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "disableColumnMenu",
+        "description": "If `true`, the column menu is disabled.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "disableColumnReorder",
+        "description": "If `true`, reordering columns is disabled.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "disableColumnResize",
+        "description": "If `true`, resizing columns is disabled.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "disableColumnSelector",
+        "description": "If `true`, hiding/showing columns is disabled.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "disableColumnSorting",
+        "description": "If `true`, the column sorting feature will be disabled.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "disableDensitySelector",
+        "description": "If `true`, the density selector is disabled.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "disableEval",
+        "description": "If `true`, `eval()` is not used for performance optimization.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "disableMultipleColumnsFiltering",
+        "description": "If `true`, filtering with multiple columns is disabled.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "disableMultipleColumnsSorting",
+        "description": "If `true`, the sorting with multiple columns is disabled.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "disableMultipleRowSelection",
+        "description": "If `true`, multiple selection using the Ctrl/CMD or Shift key is disabled.\nThe MIT DataGrid will ignore this prop, unless `checkboxSelection` is enabled.",
+        "tags": {
+          "default": "false (`!props.checkboxSelection` for MIT Data Grid)"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "disableRowSelectionOnClick",
+        "description": "If `true`, the selection on click on a row or cell is disabled.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "disableVirtualization",
+        "description": "If `true`, the virtualization is disabled.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "editMode",
+        "description": "Controls whether to use the cell or row editing.",
+        "tags": {
+          "default": "\"cell\""
+        },
+        "type": "\"cell\" | \"row\"",
+        "typeDescription": "type GridEditMode",
+        "link": ""
+      },
+      {
+        "name": "estimatedRowCount",
+        "description": "Use if the actual rowCount is not known upfront, but an estimation is available.\nIf some rows have children (for instance in the tree data), this number represents the amount of top level rows.\nApplicable only with `paginationMode=\"server\"` and when `rowCount=\"-1\"`",
+        "tags": {},
+        "type": "number",
+        "link": ""
+      },
+      {
+        "name": "experimentalFeatures",
+        "description": "Unstable features, breaking changes might be introduced.\nFor each feature, if the flag is not explicitly set to `true`, the feature will be fully disabled and any property / method call will not have any effect.",
+        "tags": {},
+        "type": "Partial<GridExperimentalFeatures>",
+        "link": ""
+      },
+      {
+        "name": "filterDebounceMs",
+        "description": "The milliseconds delay to wait after a keystroke before triggering filtering.",
+        "tags": {
+          "default": "150"
+        },
+        "type": "number",
+        "link": ""
+      },
+      {
+        "name": "filterMode",
+        "description": "Filtering can be processed on the server or client-side.\nSet it to 'server' if you would like to handle filtering on the server-side.",
+        "tags": {
+          "default": "\"client\""
+        },
+        "type": "\"client\" | \"server\"",
+        "typeDescription": "type GridFeatureMode",
+        "link": ""
+      },
+      {
+        "name": "filterModel",
+        "description": "Set the filter model of the Data Grid.",
+        "tags": {},
+        "type": "GridFilterModel",
+        "link": ""
+      },
+      {
+        "name": "getCellClassName",
+        "description": "Function that applies CSS classes dynamically on cells.",
+        "tags": {
+          "param": "params With all properties from [[GridCellParams]].",
+          "returns": "The CSS class to apply to the cell."
+        },
+        "type": "function",
+        "typeDescription": "function getCellClassName (\n  params: GridCellParams<\n    any,\n    R,\n    R,\n    GridTreeNode\n  >,\n) => string;",
+        "link": ""
+      },
+      {
+        "name": "getDetailPanelContent",
+        "description": "Function that returns the element to render in row detail.",
+        "tags": {
+          "param": "params With all properties from [[GridRowParams]].",
+          "returns": "The row detail element."
+        },
+        "type": "function",
+        "typeDescription": "function getDetailPanelContent (params: GridRowParams<R>) => ReactNode;",
+        "link": ""
+      },
+      {
+        "name": "getEstimatedRowHeight",
+        "description": "Function that returns the estimated height for a row.\nOnly works if dynamic row height is used.\nOnce the row height is measured this value is discarded.",
+        "tags": {
+          "param": "params With all properties from [[GridRowHeightParams]].",
+          "returns": "The estimated row height value. If `null` or `undefined` then the default row height, based on the density, is applied."
+        },
+        "type": "function",
+        "typeDescription": "function getEstimatedRowHeight (params: GridRowHeightParams) =>\n  number | null;",
+        "link": ""
+      },
+      {
+        "name": "getRowClassName",
+        "description": "Function that applies CSS classes dynamically on rows.",
+        "tags": {
+          "param": "params With all properties from [[GridRowClassNameParams]].",
+          "returns": "The CSS class to apply to the row."
+        },
+        "type": "function",
+        "typeDescription": "function getRowClassName (params: GridRowClassNameParams<R>) =>\n  string;",
+        "link": ""
+      },
+      {
+        "name": "getRowHeight",
+        "description": "Function that sets the row height per row.",
+        "tags": {
+          "param": "params With all properties from [[GridRowHeightParams]].",
+          "returns": "The row height value. If `null` or `undefined` then the default row height is applied. If \"auto\" then the row height is calculated based on the content."
+        },
+        "type": "function",
+        "typeDescription": "function getRowHeight (params: GridRowHeightParams) =>\n  GridRowHeightReturnValue;",
+        "link": ""
+      },
+      {
+        "name": "getRowId",
+        "description": "Return the id of a given [[GridRowModel]].",
+        "tags": {},
+        "type": "function",
+        "typeDescription": "GridRowIdGetter<R>\n---\nfunction getRowId (row: R) => GridRowId;",
+        "link": ""
+      },
+      {
+        "name": "getRowSpacing",
+        "description": "Function that allows to specify the spacing between rows.",
+        "tags": {
+          "param": "params With all properties from [[GridRowSpacingParams]].",
+          "returns": "The row spacing values."
+        },
+        "type": "function",
+        "typeDescription": "function getRowSpacing (params: GridRowSpacingParams) =>\n  GridRowSpacing;",
+        "link": ""
+      },
+      {
+        "name": "hideFooter",
+        "description": "If `true`, the footer component is hidden.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "hideFooterPagination",
+        "description": "If `true`, the pagination component in the footer is hidden.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "hideFooterRowCount",
+        "description": "If `true`, the row count in the footer is hidden.\nIt has no effect if the pagination is enabled.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "hideFooterSelectedRowCount",
+        "description": "If `true`, the selected row count in the footer is hidden.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "ignoreDiacritics",
+        "description": "If `true`, the diacritics (accents) are ignored when filtering or quick filtering.\nE.g. when filter value is `cafe`, the rows with `café` will be visible.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "ignoreValueFormatterDuringExport",
+        "description": "If `true`, the Data Grid will not use `valueFormatter` when exporting to CSV or copying to clipboard.\nIf an object is provided, you can choose to ignore the `valueFormatter` for CSV export or clipboard export.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "Unresolved Type | Unresolved Type | {\n        csvExport?: boolean;\n        clipboardExport?: boolean;\n      }",
+        "typeDescription": "boolean | { csvExport?: boolean | undefined; clipboardExport?: boolean | undefined; }",
+        "link": ""
+      },
+      {
+        "name": "initialState",
+        "description": "The initial state of the DataGrid.\nThe data in it will be set in the state on initialization but will not be controlled.\nIf one of the data in `initialState` is also being controlled, then the control state wins.",
+        "tags": {},
+        "type": "GridInitialStateCommunity",
+        "link": ""
+      },
+      {
+        "name": "isCellEditable",
+        "description": "Callback fired when a cell is rendered, returns true if the cell is editable.",
+        "tags": {
+          "param": "params With all properties from [[GridCellParams]].",
+          "returns": "A boolean indicating if the cell is editable."
+        },
+        "type": "function",
+        "typeDescription": "function isCellEditable (\n  params: GridCellParams<\n    any,\n    R,\n    R,\n    GridTreeNode\n  >,\n) => boolean;",
+        "link": ""
+      },
+      {
+        "name": "isGroupExpandedByDefault",
+        "description": "",
+        "tags": {},
+        "type": "function",
+        "typeDescription": "function isGroupExpandedByDefault (node: GridGroupNode) => boolean;",
+        "link": ""
+      },
+      {
+        "name": "isRowSelectable",
+        "description": "Determines if a row can be selected.",
+        "tags": {
+          "param": "params With all properties from [[GridRowParams]].",
+          "returns": "A boolean indicating if the row is selectable."
+        },
+        "type": "function",
+        "typeDescription": "function isRowSelectable (params: GridRowParams<R>) => boolean;",
+        "link": ""
+      },
+      {
+        "name": "keepColumnPositionIfDraggedOutside",
+        "description": "If `true`, moving the mouse pointer outside the Data Grid before releasing the mouse button\nin a column re-order action will not cause the column to jump back to its original position.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "keepNonExistentRowsSelected",
+        "description": "If `true`, the selection model will retain selected rows that do not exist.\nUseful when using server side pagination and row selections need to be retained\nwhen changing pages.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "loading",
+        "description": "If `true`, a loading overlay is displayed.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "localeText",
+        "description": "Set the locale text of the Data Grid.\nYou can find all the translation keys supported in [the source](https://github.com/mui/mui-x/blob/HEAD/packages/x-data-grid/src/constants/localeTextConstants.ts) in the GitHub repository.",
+        "tags": {},
+        "type": "Partial<GridLocaleText>",
+        "link": ""
+      },
+      {
+        "name": "logger",
+        "description": "Pass a custom logger in the components that implements the [[Logger]] interface.",
+        "tags": {
+          "default": "console"
+        },
+        "type": "Logger",
+        "link": ""
+      },
+      {
+        "name": "logLevel",
+        "description": "Allows to pass the logging level or false to turn off logging.",
+        "tags": {
+          "default": "\"error\" (\"warn\" in dev mode)"
+        },
+        "type": "Unresolved Type | \"debug\" | \"info\" | \"warn\" | \"error\"",
+        "typeDescription": "false | keyof Logger",
+        "link": ""
+      },
+      {
+        "name": "meta",
+        "description": "",
+        "tags": {},
+        "type": "GridMeta<R>",
+        "link": ""
+      },
+      {
+        "name": "onAggregationModelChange",
+        "description": "",
+        "tags": {},
+        "type": "function",
+        "typeDescription": "function onAggregationModelChange (model: GridAggregationModel, detail: GridCallbackDetails<any>) => void",
+        "link": ""
+      },
+      {
+        "name": "onCellClick",
+        "description": "Callback fired when any cell is clicked.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "GridEventListener<\"cellClick\">\n---\nfunction onCellClick (\n  params: GridEventLookup[E] extends { params: any } ? GridEventLookup[E]['params'] : undefined,\n  event: GridEventLookup[E] extends { event: TwgBaseEvent }\n    ? TwgEvent<GridEventLookup[E]['event']>\n    : TwgEvent<{}>,\n  details: GridCallbackDetails,\n) => void",
+        "link": ""
+      },
+      {
+        "name": "onCellDoubleClick",
+        "description": "Callback fired when a double click event comes from a cell element.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "GridEventListener<\"cellDoubleClick\">\n---\nfunction onCellDoubleClick (\n  params: GridEventLookup[E] extends { params: any } ? GridEventLookup[E]['params'] : undefined,\n  event: GridEventLookup[E] extends { event: TwgBaseEvent }\n    ? TwgEvent<GridEventLookup[E]['event']>\n    : TwgEvent<{}>,\n  details: GridCallbackDetails,\n) => void",
+        "link": ""
+      },
+      {
+        "name": "onCellEditStart",
+        "description": "Callback fired when the cell turns to edit mode.",
+        "tags": {
+          "param": "event The event that caused this prop to be called."
+        },
+        "type": "function",
+        "typeDescription": "GridEventListener<\"cellEditStart\">\n---\nfunction onCellEditStart (\n  params: GridEventLookup[E] extends { params: any } ? GridEventLookup[E]['params'] : undefined,\n  event: GridEventLookup[E] extends { event: TwgBaseEvent }\n    ? TwgEvent<GridEventLookup[E]['event']>\n    : TwgEvent<{}>,\n  details: GridCallbackDetails,\n) => void",
+        "link": ""
+      },
+      {
+        "name": "onCellEditStop",
+        "description": "Callback fired when the cell turns to view mode.",
+        "tags": {
+          "param": "event The event that caused this prop to be called."
+        },
+        "type": "function",
+        "typeDescription": "GridEventListener<\"cellEditStop\">\n---\nfunction onCellEditStop (\n  params: GridEventLookup[E] extends { params: any } ? GridEventLookup[E]['params'] : undefined,\n  event: GridEventLookup[E] extends { event: TwgBaseEvent }\n    ? TwgEvent<GridEventLookup[E]['event']>\n    : TwgEvent<{}>,\n  details: GridCallbackDetails,\n) => void",
+        "link": ""
+      },
+      {
+        "name": "onCellKeyDown",
+        "description": "Callback fired when a keydown event comes from a cell element.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "GridEventListener<\"cellKeyDown\">\n---\nfunction onCellKeyDown (\n  params: GridEventLookup[E] extends { params: any } ? GridEventLookup[E]['params'] : undefined,\n  event: GridEventLookup[E] extends { event: TwgBaseEvent }\n    ? TwgEvent<GridEventLookup[E]['event']>\n    : TwgEvent<{}>,\n  details: GridCallbackDetails,\n) => void",
+        "link": ""
+      },
+      {
+        "name": "onCellModesModelChange",
+        "description": "Callback fired when the `cellModesModel` prop changes.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "function onCellModesModelChange (cellModesModel: GridCellModesModel, details: GridCallbackDetails<any>) => void",
+        "link": ""
+      },
+      {
+        "name": "onClipboardCopy",
+        "description": "Callback called when the data is copied to the clipboard.",
+        "tags": {
+          "param": "data The data copied to the clipboard."
+        },
+        "type": "function",
+        "typeDescription": "GridEventListener<\"clipboardCopy\">\n---\nfunction onClipboardCopy (\n  params: GridEventLookup[E] extends { params: any } ? GridEventLookup[E]['params'] : undefined,\n  event: GridEventLookup[E] extends { event: TwgBaseEvent }\n    ? TwgEvent<GridEventLookup[E]['event']>\n    : TwgEvent<{}>,\n  details: GridCallbackDetails,\n) => void",
+        "link": ""
+      },
+      {
+        "name": "onColumnHeaderClick",
+        "description": "Callback fired when a click event comes from a column header element.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "GridEventListener<\"columnHeaderClick\">\n---\nfunction onColumnHeaderClick (\n  params: GridEventLookup[E] extends { params: any } ? GridEventLookup[E]['params'] : undefined,\n  event: GridEventLookup[E] extends { event: TwgBaseEvent }\n    ? TwgEvent<GridEventLookup[E]['event']>\n    : TwgEvent<{}>,\n  details: GridCallbackDetails,\n) => void",
+        "link": ""
+      },
+      {
+        "name": "onColumnHeaderContextMenu",
+        "description": "Callback fired when a contextmenu event comes from a column header element.",
+        "tags": {
+          "param": "event The event object."
+        },
+        "type": "function",
+        "typeDescription": "GridEventListener<\"columnHeaderContextMenu\">\n---\nfunction onColumnHeaderContextMenu (\n  params: GridEventLookup[E] extends { params: any } ? GridEventLookup[E]['params'] : undefined,\n  event: GridEventLookup[E] extends { event: TwgBaseEvent }\n    ? TwgEvent<GridEventLookup[E]['event']>\n    : TwgEvent<{}>,\n  details: GridCallbackDetails,\n) => void",
+        "link": ""
+      },
+      {
+        "name": "onColumnHeaderDoubleClick",
+        "description": "Callback fired when a double click event comes from a column header element.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "GridEventListener<\"columnHeaderDoubleClick\">\n---\nfunction onColumnHeaderDoubleClick (\n  params: GridEventLookup[E] extends { params: any } ? GridEventLookup[E]['params'] : undefined,\n  event: GridEventLookup[E] extends { event: TwgBaseEvent }\n    ? TwgEvent<GridEventLookup[E]['event']>\n    : TwgEvent<{}>,\n  details: GridCallbackDetails,\n) => void",
+        "link": ""
+      },
+      {
+        "name": "onColumnHeaderEnter",
+        "description": "Callback fired when a mouse enter event comes from a column header element.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "GridEventListener<\"columnHeaderEnter\">\n---\nfunction onColumnHeaderEnter (\n  params: GridEventLookup[E] extends { params: any } ? GridEventLookup[E]['params'] : undefined,\n  event: GridEventLookup[E] extends { event: TwgBaseEvent }\n    ? TwgEvent<GridEventLookup[E]['event']>\n    : TwgEvent<{}>,\n  details: GridCallbackDetails,\n) => void",
+        "link": ""
+      },
+      {
+        "name": "onColumnHeaderLeave",
+        "description": "Callback fired when a mouse leave event comes from a column header element.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "GridEventListener<\"columnHeaderLeave\">\n---\nfunction onColumnHeaderLeave (\n  params: GridEventLookup[E] extends { params: any } ? GridEventLookup[E]['params'] : undefined,\n  event: GridEventLookup[E] extends { event: TwgBaseEvent }\n    ? TwgEvent<GridEventLookup[E]['event']>\n    : TwgEvent<{}>,\n  details: GridCallbackDetails,\n) => void",
+        "link": ""
+      },
+      {
+        "name": "onColumnHeaderOut",
+        "description": "Callback fired when a mouseout event comes from a column header element.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "GridEventListener<\"columnHeaderOut\">\n---\nfunction onColumnHeaderOut (\n  params: GridEventLookup[E] extends { params: any } ? GridEventLookup[E]['params'] : undefined,\n  event: GridEventLookup[E] extends { event: TwgBaseEvent }\n    ? TwgEvent<GridEventLookup[E]['event']>\n    : TwgEvent<{}>,\n  details: GridCallbackDetails,\n) => void",
+        "link": ""
+      },
+      {
+        "name": "onColumnHeaderOver",
+        "description": "Callback fired when a mouseover event comes from a column header element.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "GridEventListener<\"columnHeaderOver\">\n---\nfunction onColumnHeaderOver (\n  params: GridEventLookup[E] extends { params: any } ? GridEventLookup[E]['params'] : undefined,\n  event: GridEventLookup[E] extends { event: TwgBaseEvent }\n    ? TwgEvent<GridEventLookup[E]['event']>\n    : TwgEvent<{}>,\n  details: GridCallbackDetails,\n) => void",
+        "link": ""
+      },
+      {
+        "name": "onColumnOrderChange",
+        "description": "Callback fired when a column is reordered.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "GridEventListener<\"columnOrderChange\">\n---\nfunction onColumnOrderChange (\n  params: GridEventLookup[E] extends { params: any } ? GridEventLookup[E]['params'] : undefined,\n  event: GridEventLookup[E] extends { event: TwgBaseEvent }\n    ? TwgEvent<GridEventLookup[E]['event']>\n    : TwgEvent<{}>,\n  details: GridCallbackDetails,\n) => void",
+        "link": ""
+      },
+      {
+        "name": "onColumnResize",
+        "description": "Callback fired while a column is being resized.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "GridEventListener<\"columnResize\">\n---\nfunction onColumnResize (\n  params: GridEventLookup[E] extends { params: any } ? GridEventLookup[E]['params'] : undefined,\n  event: GridEventLookup[E] extends { event: TwgBaseEvent }\n    ? TwgEvent<GridEventLookup[E]['event']>\n    : TwgEvent<{}>,\n  details: GridCallbackDetails,\n) => void",
+        "link": ""
+      },
+      {
+        "name": "onColumnVisibilityModelChange",
+        "description": "Callback fired when the column visibility model changes.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "function onColumnVisibilityModelChange (model: GridColumnVisibilityModel, details: GridCallbackDetails<any>) => void",
+        "link": ""
+      },
+      {
+        "name": "onColumnWidthChange",
+        "description": "Callback fired when the width of a column is changed.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "GridEventListener<\"columnWidthChange\">\n---\nfunction onColumnWidthChange (\n  params: GridEventLookup[E] extends { params: any } ? GridEventLookup[E]['params'] : undefined,\n  event: GridEventLookup[E] extends { event: TwgBaseEvent }\n    ? TwgEvent<GridEventLookup[E]['event']>\n    : TwgEvent<{}>,\n  details: GridCallbackDetails,\n) => void",
+        "link": ""
+      },
+      {
+        "name": "onDensityChange",
+        "description": "Callback fired when the density changes.",
+        "tags": {
+          "param": "density New density value."
+        },
+        "type": "function",
+        "typeDescription": "function onDensityChange (density: GridDensity) => void",
+        "link": ""
+      },
+      {
+        "name": "onFilterModelChange",
+        "description": "Callback fired when the Filter model changes before the filters are applied.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "function onFilterModelChange (model: GridFilterModel, details: GridCallbackDetails<\"filter\">) => void",
+        "link": ""
+      },
+      {
+        "name": "onMenuClose",
+        "description": "Callback fired when the menu is closed.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "GridEventListener<\"menuClose\">\n---\nfunction onMenuClose (\n  params: GridEventLookup[E] extends { params: any } ? GridEventLookup[E]['params'] : undefined,\n  event: GridEventLookup[E] extends { event: TwgBaseEvent }\n    ? TwgEvent<GridEventLookup[E]['event']>\n    : TwgEvent<{}>,\n  details: GridCallbackDetails,\n) => void",
+        "link": ""
+      },
+      {
+        "name": "onMenuOpen",
+        "description": "Callback fired when the menu is opened.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "GridEventListener<\"menuOpen\">\n---\nfunction onMenuOpen (\n  params: GridEventLookup[E] extends { params: any } ? GridEventLookup[E]['params'] : undefined,\n  event: GridEventLookup[E] extends { event: TwgBaseEvent }\n    ? TwgEvent<GridEventLookup[E]['event']>\n    : TwgEvent<{}>,\n  details: GridCallbackDetails,\n) => void",
+        "link": ""
+      },
+      {
+        "name": "onPaginationMetaChange",
+        "description": "Callback fired when the pagination meta has changed.",
+        "tags": {
+          "param": "paginationMeta Updated pagination meta."
+        },
+        "type": "function",
+        "typeDescription": "function onPaginationMetaChange (paginationMeta: GridPaginationMeta) => void",
+        "link": ""
+      },
+      {
+        "name": "onPaginationModelChange",
+        "description": "Callback fired when the pagination model has changed.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "function onPaginationModelChange (model: GridPaginationModel, details: GridCallbackDetails<\"pagination\">) => void",
+        "link": ""
+      },
+      {
+        "name": "onPreferencePanelClose",
+        "description": "Callback fired when the preferences panel is closed.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "GridEventListener<\"preferencePanelClose\">\n---\nfunction onPreferencePanelClose (\n  params: GridEventLookup[E] extends { params: any } ? GridEventLookup[E]['params'] : undefined,\n  event: GridEventLookup[E] extends { event: TwgBaseEvent }\n    ? TwgEvent<GridEventLookup[E]['event']>\n    : TwgEvent<{}>,\n  details: GridCallbackDetails,\n) => void",
+        "link": ""
+      },
+      {
+        "name": "onPreferencePanelOpen",
+        "description": "Callback fired when the preferences panel is opened.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "GridEventListener<\"preferencePanelOpen\">\n---\nfunction onPreferencePanelOpen (\n  params: GridEventLookup[E] extends { params: any } ? GridEventLookup[E]['params'] : undefined,\n  event: GridEventLookup[E] extends { event: TwgBaseEvent }\n    ? TwgEvent<GridEventLookup[E]['event']>\n    : TwgEvent<{}>,\n  details: GridCallbackDetails,\n) => void",
+        "link": ""
+      },
+      {
+        "name": "onProcessRowUpdateError",
+        "description": "Callback called when `processRowUpdate` throws an error or rejects.",
+        "tags": {
+          "param": "error The error thrown."
+        },
+        "type": "function",
+        "typeDescription": "function onProcessRowUpdateError (error: any) => void",
+        "link": ""
+      },
+      {
+        "name": "onResize",
+        "description": "Callback fired when the Data Grid is resized.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "GridEventListener<\"debouncedResize\">\n---\nfunction onResize (\n  params: GridEventLookup[E] extends { params: any } ? GridEventLookup[E]['params'] : undefined,\n  event: GridEventLookup[E] extends { event: TwgBaseEvent }\n    ? TwgEvent<GridEventLookup[E]['event']>\n    : TwgEvent<{}>,\n  details: GridCallbackDetails,\n) => void",
+        "link": ""
+      },
+      {
+        "name": "onRowClick",
+        "description": "Callback fired when a row is clicked.\nNot called if the target clicked is an interactive element added by the built-in columns.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "GridEventListener<\"rowClick\">\n---\nfunction onRowClick (\n  params: GridEventLookup[E] extends { params: any } ? GridEventLookup[E]['params'] : undefined,\n  event: GridEventLookup[E] extends { event: TwgBaseEvent }\n    ? TwgEvent<GridEventLookup[E]['event']>\n    : TwgEvent<{}>,\n  details: GridCallbackDetails,\n) => void",
+        "link": ""
+      },
+      {
+        "name": "onRowCountChange",
+        "description": "Callback fired when the row count has changed.",
+        "tags": {
+          "param": "count Updated row count."
+        },
+        "type": "function",
+        "typeDescription": "function onRowCountChange (count: number) => void",
+        "link": ""
+      },
+      {
+        "name": "onRowDoubleClick",
+        "description": "Callback fired when a double click event comes from a row container element.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "GridEventListener<\"rowDoubleClick\">\n---\nfunction onRowDoubleClick (\n  params: GridEventLookup[E] extends { params: any } ? GridEventLookup[E]['params'] : undefined,\n  event: GridEventLookup[E] extends { event: TwgBaseEvent }\n    ? TwgEvent<GridEventLookup[E]['event']>\n    : TwgEvent<{}>,\n  details: GridCallbackDetails,\n) => void",
+        "link": ""
+      },
+      {
+        "name": "onRowEditStart",
+        "description": "Callback fired when the row turns to edit mode.",
+        "tags": {
+          "param": "event The event that caused this prop to be called."
+        },
+        "type": "function",
+        "typeDescription": "GridEventListener<\"rowEditStart\">\n---\nfunction onRowEditStart (\n  params: GridEventLookup[E] extends { params: any } ? GridEventLookup[E]['params'] : undefined,\n  event: GridEventLookup[E] extends { event: TwgBaseEvent }\n    ? TwgEvent<GridEventLookup[E]['event']>\n    : TwgEvent<{}>,\n  details: GridCallbackDetails,\n) => void",
+        "link": ""
+      },
+      {
+        "name": "onRowEditStop",
+        "description": "Callback fired when the row turns to view mode.",
+        "tags": {
+          "param": "event The event that caused this prop to be called."
+        },
+        "type": "function",
+        "typeDescription": "GridEventListener<\"rowEditStop\">\n---\nfunction onRowEditStop (\n  params: GridEventLookup[E] extends { params: any } ? GridEventLookup[E]['params'] : undefined,\n  event: GridEventLookup[E] extends { event: TwgBaseEvent }\n    ? TwgEvent<GridEventLookup[E]['event']>\n    : TwgEvent<{}>,\n  details: GridCallbackDetails,\n) => void",
+        "link": ""
+      },
+      {
+        "name": "onRowGroupingModelChange",
+        "description": "",
+        "tags": {},
+        "type": "function",
+        "typeDescription": "function onRowGroupingModelChange (model: GridRowGroupingModel, details: GridCallbackDetails<any>) => void",
+        "link": ""
+      },
+      {
+        "name": "onRowModesModelChange",
+        "description": "Callback fired when the `rowModesModel` prop changes.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "function onRowModesModelChange (rowModesModel: GridRowModesModel, details: GridCallbackDetails<any>) => void",
+        "link": ""
+      },
+      {
+        "name": "onRowSelectionModelChange",
+        "description": "Callback fired when the selection state of one or multiple rows changes.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "function onRowSelectionModelChange (rowSelectionModel: GridRowSelectionModel, details: GridCallbackDetails<any>) => void",
+        "link": ""
+      },
+      {
+        "name": "onRowsScrollEnd",
+        "description": "",
+        "tags": {},
+        "type": "function",
+        "typeDescription": "InfiniteLoaderOnRowsScrollEnd\n---\nfunction onRowsScrollEnd (\n  params: InfiniteLoaderPayload,\n  detail: {\n    setSkeletonRowCount: (\n      count: number,\n    ) => void;\n  },\n) =>\n  Promise<void | GridRowModel<any>[]>;",
+        "link": ""
+      },
+      {
+        "name": "onSortModelChange",
+        "description": "Callback fired when the sort model changes before a column is sorted.",
+        "tags": {
+          "param": "details Additional details for this callback."
+        },
+        "type": "function",
+        "typeDescription": "function onSortModelChange (model: GridSortModel, details: GridCallbackDetails<any>) => void",
+        "link": ""
+      },
+      {
+        "name": "pageSizeOptions",
+        "description": "Select the pageSize dynamically using the component UI.",
+        "tags": {
+          "default": "[25, 50, 100]"
+        },
+        "type": "Array<number | { value: number; label: string; }>",
+        "typeDescription": "readonly (number | { value: number; label: string; })[]",
+        "link": ""
+      },
+      {
+        "name": "pagination",
+        "description": "If `true`, pagination is enabled.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "paginationMeta",
+        "description": "The extra information about the pagination state of the Data Grid.\nOnly applicable with `paginationMode=\"server\"`.",
+        "tags": {},
+        "type": "GridPaginationMeta",
+        "link": ""
+      },
+      {
+        "name": "paginationMode",
+        "description": "Pagination can be processed on the server or client-side.\nSet it to 'client' if you would like to handle the pagination on the client-side.\nSet it to 'server' if you would like to handle the pagination on the server-side.",
+        "tags": {
+          "default": "\"client\""
+        },
+        "type": "\"client\" | \"server\"",
+        "typeDescription": "type GridFeatureMode",
+        "link": ""
+      },
+      {
+        "name": "paginationModel",
+        "description": "The pagination model of type [[GridPaginationModel]] which refers to current `page` and `pageSize`.",
+        "tags": {},
+        "type": "GridPaginationModel",
+        "link": ""
+      },
+      {
+        "name": "pinnedColumns",
+        "description": "",
+        "tags": {},
+        "type": "GridPinnedColumnFields",
+        "link": ""
+      },
+      {
+        "name": "pinnedRows",
+        "description": "",
+        "tags": {},
+        "type": "GridPinnedRowsModel",
+        "link": ""
+      },
+      {
+        "name": "processRowUpdate",
+        "description": "Callback called before updating a row with new values in the row and cell editing.",
+        "tags": {
+          "template": "R",
+          "param": "params Additional parameters.",
+          "returns": "The final values to update the row."
+        },
+        "type": "function",
+        "typeDescription": "function processRowUpdate (\n  newRow: R,\n  oldRow: R,\n  params: { rowId: GridRowId },\n) => R | Promise<R>;",
+        "link": ""
+      },
+      {
+        "name": "refreshKey",
+        "description": "A string to force data grid props to refresh",
+        "tags": {},
+        "type": "string",
+        "link": ""
+      },
+      {
+        "name": "resizeThrottleMs",
+        "description": "The milliseconds throttle delay for resizing the grid.",
+        "tags": {
+          "default": "60"
+        },
+        "type": "number",
+        "link": ""
+      },
+      {
+        "name": "rowBufferPx",
+        "description": "Row region in pixels to render before/after the viewport",
+        "tags": {
+          "default": "150"
+        },
+        "type": "number",
+        "link": ""
+      },
+      {
+        "name": "rowCount",
+        "description": "Set the total number of rows, if it is different from the length of the value `rows` prop.\nIf some rows have children (for instance in the tree data), this number represents the amount of top level rows.\nOnly works with `paginationMode=\"server\"`, ignored when `paginationMode=\"client\"`.",
+        "tags": {},
+        "type": "number",
+        "link": ""
+      },
+      {
+        "name": "rowGroupingModel",
+        "description": "",
+        "tags": {},
+        "type": "GridRowGroupingModel",
+        "link": ""
+      },
+      {
+        "name": "rowHeight",
+        "description": "Sets the height in pixel of a row in the Data Grid.",
+        "tags": {
+          "default": "52"
+        },
+        "type": "number",
+        "link": ""
+      },
+      {
+        "name": "rowModesModel",
+        "description": "Controls the modes of the rows.",
+        "tags": {},
+        "type": "GridRowModesModel",
+        "link": ""
+      },
+      {
+        "name": "rows",
+        "description": "Set of rows of type [[GridRowsProp]].",
+        "tags": {
+          "default": "[]"
+        },
+        "type": "R[]",
+        "typeDescription": "Array<R extends GridValidRowModel = any>",
+        "link": ""
+      },
+      {
+        "name": "rowSelection",
+        "description": "If `false`, the row selection mode is disabled.",
+        "tags": {
+          "default": "true"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "rowSelectionModel",
+        "description": "Sets the row selection model of the Data Grid.",
+        "tags": {},
+        "type": "string | number | interface ReadonlyArray<T>{readonly length:number;toString():string;toLocaleString():string;concat(...items:ConcatArray<T>[]):T[];concat(...items:(T|ConcatArray<T>)[]):T[];join(separator?:string):string;slice(start?:number,end?:number):T[];indexOf(searchElement:T,fromIndex?:number):number;lastIndexOf(searchElement:T,fromIndex?:number):number;every<S extends T>(predicate:(value:T,index:number,array:readonly T[])=>value is S,thisArg?:any):this is readonly S[];every(predicate:(value:T,index:number,array:readonly T[])=>unknown,thisArg?:any):boolean;some(predicate:(value:T,index:number,array:readonly T[])=>unknown,thisArg?:any):boolean;forEach(callbackfn:(value:T,index:number,array:readonly T[])=>void,thisArg?:any):void;map<U>(callbackfn:(value:T,index:number,array:readonly T[])=>U,thisArg?:any):U[];filter<S extends T>(predicate:(value:T,index:number,array:readonly T[])=>value is S,thisArg?:any):S[];filter(predicate:(value:T,index:number,array:readonly T[])=>unknown,thisArg?:any):T[];reduce(callbackfn:(previousValue:T,currentValue:T,currentIndex:number,array:readonly T[])=>T):T;reduce(callbackfn:(previousValue:T,currentValue:T,currentIndex:number,array:readonly T[])=>T,initialValue:T):T;reduce<U>(callbackfn:(previousValue:U,currentValue:T,currentIndex:number,array:readonly T[])=>U,initialValue:U):U;reduceRight(callbackfn:(previousValue:T,currentValue:T,currentIndex:number,array:readonly T[])=>T):T;reduceRight(callbackfn:(previousValue:T,currentValue:T,currentIndex:number,array:readonly T[])=>T,initialValue:T):T;reduceRight<U>(callbackfn:(previousValue:U,currentValue:T,currentIndex:number,array:readonly T[])=>U,initialValue:U):U;readonly[n:number]:T;} | interface ReadonlyArray<T>{find<S extends T>(predicate:(value:T,index:number,obj:readonly T[])=>value is S,thisArg?:any):S|undefined;find(predicate:(value:T,index:number,obj:readonly T[])=>unknown,thisArg?:any):T|undefined;findIndex(predicate:(value:T,index:number,obj:readonly T[])=>unknown,thisArg?:any):number;toLocaleString(locales:string|string[],options?:Intl.NumberFormatOptions&Intl.DateTimeFormatOptions):string;} | interface ReadonlyArray<T>{[Symbol.iterator]():ArrayIterator<T>;entries():ArrayIterator<[number,T]>;keys():ArrayIterator<number>;values():ArrayIterator<T>;} | interface ReadonlyArray<T>{readonly[Symbol.unscopables]:{[K in keyof readonly any[]]?:boolean;};} | interface ReadonlyArray<T>{includes(searchElement:T,fromIndex?:number):boolean;} | interface ReadonlyArray<T>{flatMap<U,This=undefined>(callback:(this:This,value:T,index:number,array:T[])=>U|ReadonlyArray<U>,thisArg?:This,):U[];flat<A,D extends number=1>(this:A,depth?:D,):FlatArray<A,D>[];} | interface ReadonlyArray<T>{at(index:number):T|undefined;} | interface ReadonlyArray<T>{findLast<S extends T>(predicate:(value:T,index:number,array:readonly T[])=>value is S,thisArg?:any,):S|undefined;findLast(predicate:(value:T,index:number,array:readonly T[])=>unknown,thisArg?:any,):T|undefined;findLastIndex(predicate:(value:T,index:number,array:readonly T[])=>unknown,thisArg?:any,):number;toReversed():T[];toSorted(compareFn?:(a:T,b:T)=>number):T[];toSpliced(start:number,deleteCount:number,...items:T[]):T[];toSpliced(start:number,deleteCount?:number):T[];with(index:number,value:T):T[];} | interface ReadonlyArray<T> extends RelativeIndexable<T> {}",
+        "typeDescription": "type GridInputRowSelectionModel",
+        "link": ""
+      },
+      {
+        "name": "rowSelectionPropagation",
+        "description": "When `rowSelectionPropagation.descendants` is set to `true`.\n- Selecting a parent selects all its filtered descendants automatically.\n- Deselecting a parent row deselects all its filtered descendants automatically.\n\nWhen `rowSelectionPropagation.parents` is set to `true`\n- Selecting all the filtered descendants of a parent selects the parent automatically.\n- Deselecting a descendant of a selected parent deselects the parent automatically.\n\nWorks with tree data and row grouping on the client-side only.",
+        "tags": {
+          "default": "{ parents: true, descendants: true }"
+        },
+        "type": "GridRowSelectionPropagation",
+        "link": ""
+      },
+      {
+        "name": "rowSpacingType",
+        "description": "Sets the type of space between rows added by `getRowSpacing`.",
+        "tags": {
+          "default": "\"margin\""
+        },
+        "type": "\"margin\" | \"border\"",
+        "link": ""
+      },
+      {
+        "name": "rowSpanning",
+        "description": "If `true`, the Data Grid will auto span the cells over the rows having the same value.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "scrollbarSize",
+        "description": "Override the height/width of the Data Grid inner scrollbar.",
+        "tags": {},
+        "type": "number",
+        "link": ""
+      },
+      {
+        "name": "scrollEndThreshold",
+        "description": "",
+        "tags": {},
+        "type": "number",
+        "link": ""
+      },
+      {
+        "name": "showCellVerticalBorder",
+        "description": "If `true`, vertical borders will be displayed between cells.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "showColumnVerticalBorder",
+        "description": "If `true`, vertical borders will be displayed between column header items.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "showGrandTotals",
+        "description": "",
+        "tags": {},
+        "type": "boolean",
+        "link": ""
+      },
+      {
+        "name": "slotProps",
+        "description": "Overridable components props dynamically passed to the component at rendering.",
+        "tags": {},
+        "type": "Partial<{ baseChip: Partial<BaseChipPropsOverrides>; baseBadge: Partial<BadgeProps & BaseBadgePropsOverrides>; ... 39 more ...; root: Partial<...>; }>",
+        "link": ""
+      },
+      {
+        "name": "slots",
+        "description": "Overridable components.",
+        "tags": {},
+        "type": "Partial<GridSlotsComponent>",
+        "link": ""
+      },
+      {
+        "name": "sortingMode",
+        "description": "Sorting can be processed on the server or client-side.\nSet it to 'client' if you would like to handle sorting on the client-side.\nSet it to 'server' if you would like to handle sorting on the server-side.",
+        "tags": {
+          "default": "\"client\""
+        },
+        "type": "\"client\" | \"server\"",
+        "typeDescription": "type GridFeatureMode",
+        "link": ""
+      },
+      {
+        "name": "sortingOrder",
+        "description": "The order of the sorting sequence.",
+        "tags": {
+          "default": "['asc', 'desc', null]"
+        },
+        "type": "Array<\"asc\" | \"desc\" | null>",
+        "typeDescription": "readonly GridSortDirection[]",
+        "link": ""
+      },
+      {
+        "name": "sortModel",
+        "description": "Set the sort model of the Data Grid.",
+        "tags": {},
+        "type": "interface GridSortModel",
+        "typeDescription": "Array<{\n  field: string,\n  sort: \"asc\" | \"desc\"\n}>",
+        "link": ""
+      },
+      {
+        "name": "style",
+        "description": "",
+        "tags": {},
+        "type": "CSSProperties",
+        "link": ""
+      },
+      {
+        "name": "theme",
+        "description": "",
+        "tags": {},
+        "type": "{ root: { base: string; autoHeight: string; noScrollbar: string; }; main: { base: string; scroller: string; skeleton: string; }; panelAnchor: { base: string; }; autosizing: { columnHeaderTitleContent: string; cell: string; groupingCell: string; treeDataGroupingCell: string; }; ... 16 more ...; pagination: { ...; }; }",
+        "link": ""
+      },
+      {
+        "name": "throttleRowsMs",
+        "description": "If positive, the Data Grid will throttle updates coming from `apiRef.current.updateRows` and `apiRef.current.setRows`.\nIt can be useful if you have a high update rate but do not want to do heavy work like filtering / sorting or rendering on each  individual update.",
+        "tags": {
+          "default": "0"
+        },
+        "type": "number",
+        "link": ""
+      },
+      {
+        "name": "virtualizeColumnsWithAutoRowHeight",
+        "description": "If `true`, the Data Grid enables column virtualization when `getRowHeight` is set to `() => 'auto'`.\nBy default, column virtualization is disabled when dynamic row height is enabled to measure the row height correctly.\nFor datasets with a large number of columns, this can cause performance issues.\nThe downside of enabling this prop is that the row height will be estimated based the cells that are currently rendered, which can cause row height change when scrolling horizontally.",
+        "tags": {
+          "default": "false"
+        },
+        "type": "boolean",
+        "link": ""
+      }
+    ]
+  }
+]

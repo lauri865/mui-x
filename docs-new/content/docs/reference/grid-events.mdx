@@ -1,0 +1,31 @@
+---
+title: GridEvents
+description: GridEvents Interface reference documentation.
+icon: Braces
+---
+
+## Overview
+
+```tsx twoslash
+import * as React from 'react';
+import {useGridApiContext} from '@mui/x-data-grid';
+// @noErrors
+const apiRef = {} as ReturnType<typeof useGridApiContext>;
+// ---cut---
+import { useGridApiEventHandler } from '@mui/x-data-grid';
+
+useGridApiEventHandler(apiRef, 'columnHeaderClick', (params) => {
+  console.log('Clicked on cell': params.field);
+});
+
+// Alternatively – needs to be unsubscribed manually on effect cleanup
+React.useEffect(() => apiRef.current.subscribeEvent(
+  'rowClick',
+  handleRowClick,
+), []);
+```
+
+<AutoTypeTable
+  path="../packages/x-data-grid/src/index.ts" name="GridEventLookup"
+  interface={true}
+/>

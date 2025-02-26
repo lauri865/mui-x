@@ -190,7 +190,7 @@ export interface DataGridPropsWithDefaultValues<R extends GridValidRowModel = an
   /**
    * If `true`, multiple selection using the Ctrl/CMD or Shift key is disabled.
    * The MIT DataGrid will ignore this prop, unless `checkboxSelection` is enabled.
-   * @default false (`!props.checkboxSelection` for MIT Data Grid)
+   * @default false
    */
   disableMultipleRowSelection: boolean;
   /**
@@ -416,8 +416,10 @@ export interface DataGridPropsWithDefaultValues<R extends GridValidRowModel = an
   rowSelectionPropagation: GridRowSelectionPropagation;
 
   defaultGroupingExpansionDepth: number;
-  theme?: typeof theme;
+  theme?: Theme;
 }
+
+type Theme = typeof theme;
 
 interface CommonProps {
   className?: string;

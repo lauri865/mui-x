@@ -50,15 +50,23 @@ const code = cva(
   },
 );
 
-export function TypeTable({ type }: { type: Record<string, ObjectType> }) {
+export function TypeTable({
+  type,
+  showRequired,
+  hideDefault,
+}: {
+  type: Record<string, ObjectType>;
+  showRequired?: boolean;
+  hideDefault?: boolean;
+}) {
   return (
     <div className="prose my-6 overflow-auto prose-no-margin">
       <table className="whitespace-pre-wrap text-[12px] text-fd-muted-foreground table-auto">
         <thead>
           <tr className="*:py-1.5">
-            <th>Prop</th>
+            <th className="w-[30%]">Prop</th>
             <th>Type</th>
-            <th>Default</th>
+            {!hideDefault && <th>Default</th>}
           </tr>
         </thead>
         <tbody>
@@ -72,7 +80,7 @@ export function TypeTable({ type }: { type: Record<string, ObjectType> }) {
                   </code>
                   {value.description ? (
                     <Info>
-                      {value.required ? (
+                      {value.required && showRequired ? (
                         <div className="font-medium text-fd-foreground -mb-2"> * Required</div>
                       ) : null}
 
@@ -98,9 +106,11 @@ export function TypeTable({ type }: { type: Record<string, ObjectType> }) {
                   ) : null}
                 </div>
               </td>
-              <td className="whitespace-nowrap">
-                {value.default ? <code className={code()}>{value.default}</code> : <span>-</span>}
-              </td>
+              {!hideDefault && (
+                <td className="whitespace-nowrap">
+                  {value.default ? <code className={code()}>{value.default}</code> : <span>-</span>}
+                </td>
+              )}
             </tr>
           ))}
         </tbody>

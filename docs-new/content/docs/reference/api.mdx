@@ -1,0 +1,29 @@
+---
+title: API
+description: GridApi Interface reference documentation.
+icon: Braces
+---
+
+## Overview
+
+```tsx twoslash
+import * as React from 'react';
+import {useGridApiRef, DataGrid} from '@mui/x-data-grid';
+// ---cut---
+const apiRef = useGridApiRef();
+// @noErrors
+apiRef.current?.up
+//                ^|
+
+
+
+
+
+
+return <DataGrid apiRef={apiRef} columns={[{field: "1"}]} />;
+```
+
+<AutoTypeTable
+  path="../packages/x-data-grid/src/index.ts" name="GridApi"
+  hideDefault
+/>

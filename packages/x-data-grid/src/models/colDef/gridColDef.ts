@@ -211,6 +211,7 @@ export interface GridBaseColDef<
    * Display mode for the cell:
    *  - 'text': For text-based cells (default)
    *  - 'flex': For cells with HTMLElement children
+   * @default 'text'
    */
   display?: 'text' | 'flex';
   /**
@@ -322,13 +323,12 @@ export interface GridBaseColDef<
   disableColumnManagement?: boolean;
 }
 
-/**
- * Column Definition interface used for columns with the `actions` type.
- * @demos
- *   - [Special column properties](/x/react-data-grid/column-definition/#special-properties)
- */
-export interface GridActionsColDef<R extends GridValidRowModel = any, V = any, F = V, RCP = never>
-  extends GridBaseColDef<R, V, F, RCP> {
+export interface GridActionsColDefOwnProps<
+  R extends GridValidRowModel = any,
+  V = any,
+  F = V,
+  RCP = never,
+> {
   /**
    * The type of the column.
    * @default 'actions'
@@ -352,16 +352,20 @@ export interface GridActionsColDef<R extends GridValidRowModel = any, V = any, F
 }
 
 /**
- * Column Definition interface used for columns with the `singleSelect` type.
+ * Column Definition interface used for columns with the `actions` type.
  * @demos
  *   - [Special column properties](/x/react-data-grid/column-definition/#special-properties)
  */
-export interface GridSingleSelectColDef<
+export interface GridActionsColDef<R extends GridValidRowModel = any, V = any, F = V, RCP = never>
+  extends Omit<GridBaseColDef<R, V, F, RCP>, 'type'>,
+    GridActionsColDefOwnProps<R, V, F, RCP> {}
+
+export interface GridSingleSelectColDefOwnProps<
   R extends GridValidRowModel = any,
   V = any,
   F = V,
   RCP = never,
-> extends Omit<GridBaseColDef<R, V, F, RCP>, 'editCell' | 'editCellParams'> {
+> {
   /**
    * The type of the column.
    * @default 'singleSelect'
@@ -400,6 +404,19 @@ export interface GridSingleSelectColDef<
     optionValueKey?: string;
   };
 }
+
+/**
+ * Column Definition interface used for columns with the `singleSelect` type.
+ * @demos
+ *   - [Special column properties](/x/react-data-grid/column-definition/#special-properties)
+ */
+export interface GridSingleSelectColDef<
+  R extends GridValidRowModel = any,
+  V = any,
+  F = V,
+  RCP = never,
+> extends Omit<GridBaseColDef<R, V, F, RCP>, 'editCell' | 'editCellParams'>,
+    GridSingleSelectColDefOwnProps<R, V, F, RCP> {}
 
 /**
  * Column Definition interface.
