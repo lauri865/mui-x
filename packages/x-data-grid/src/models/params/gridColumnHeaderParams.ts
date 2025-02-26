@@ -1,4 +1,4 @@
-import { GridApiCommunity } from '../api/gridApiCommunity';
+import { GridApi } from '../api/gridApiCommunity';
 import type { GridStateColDef } from '../colDef/gridColDef';
 import { GridValidRowModel } from '../gridRows';
 
@@ -21,5 +21,5 @@ export interface GridColumnHeaderParams<
   /**
    * GridApi that let you manipulate the grid.
    */
-  api: GridApiCommunity;
+  api: GridApi;
 }

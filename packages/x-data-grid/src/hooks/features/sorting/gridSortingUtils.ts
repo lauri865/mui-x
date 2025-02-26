@@ -1,7 +1,7 @@
 import { RefObject } from '@mui/x-internals/types';
 import { warnOnce } from '@mui/x-internals/warning';
 import type { GridRowId, GridTreeNode } from '../../../models';
-import { GridApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridApi } from '../../../models/api/gridApiCommunity';
 import {
   GridComparatorFn,
   GridSortCellParams,
@@ -9,7 +9,7 @@ import {
   GridSortItem,
   GridSortModel,
 } from '../../../models/gridSortModel';
-import { GridStateCommunity } from '../../../models/gridStateCommunity';
+import { GridState } from '../../../models/gridStateCommunity';
 import { GridSortingModelApplier } from './gridSortingState';
 
 type GridSortingFieldComparator = {
@@ -41,7 +41,7 @@ export const sanitizeSortModel = (model: GridSortModel, disableMultipleColumnsSo
 
 export const mergeStateWithSortModel =
   (sortModel: GridSortModel, disableMultipleColumnsSorting: boolean) =>
-  (state: GridStateCommunity): GridStateCommunity => ({
+  (state: GridState): GridState => ({
     ...state,
     sorting: {
       ...state.sorting,
@@ -54,12 +54,12 @@ const isDesc = (direction: GridSortDirection) => direction === 'desc';
 /**
  * Transform an item of the sorting model into a method comparing two rows.
  * @param {GridSortItem} sortItem The sort item we want to apply.
- * @param {RefObject<GridApiCommunity>} apiRef The API of the grid.
+ * @param {RefObject<GridApi>} apiRef The API of the grid.
  * @returns {GridParsedSortItem | null} The parsed sort item. Returns `null` is the sort item is not valid.
  */
 const parseSortItem = (
   sortItem: GridSortItem,
-  apiRef: RefObject<GridApiCommunity>,
+  apiRef: RefObject<GridApi>,
 ): GridParsedSortItem | null => {
   const column = apiRef.current.getColumn(sortItem.field);
   if (!column || sortItem.sort === null) {
@@ -129,12 +129,12 @@ const compareRows = (
 /**
  * Generates a method to easily sort a list of rows according to the current sort model.
  * @param {GridSortModel} sortModel The model with which we want to sort the rows.
- * @param {RefObject<GridApiCommunity>} apiRef The API of the grid.
+ * @param {RefObject<GridApi>} apiRef The API of the grid.
  * @returns {GridSortingModelApplier | null} A method that generates a list of sorted row ids from a list of rows according to the current sort model. If `null`, we consider that the rows should remain in the order there were provided.
  */
 export const buildAggregatedSortingApplier = (
   sortModel: GridSortModel,
-  apiRef: RefObject<GridApiCommunity>,
+  apiRef: RefObject<GridApi>,
 ): GridSortingModelApplier | null => {
   const comparatorList = sortModel
     .map((item) => parseSortItem(item, apiRef))

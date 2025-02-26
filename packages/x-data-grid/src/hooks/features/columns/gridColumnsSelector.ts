@@ -1,4 +1,4 @@
-import { GridStateCommunity } from '../../../models/gridStateCommunity';
+import { GridState } from '../../../models/gridStateCommunity';
 import { createSelector, createSelectorMemoized } from '../../../utils/createSelector';
 import { roundToDecimalPlaces } from '../../../utils/roundToDecimalPlaces';
 import {
@@ -11,7 +11,7 @@ import {
  * Get the columns state
  * @category Columns
  */
-export const gridColumnsStateSelector = (state: GridStateCommunity) => state.columns;
+export const gridColumnsStateSelector = (state: GridState) => state.columns;
 
 /**
  * Get an array of column fields in the order rendered on screen.
@@ -75,10 +75,9 @@ export const gridVisibleColumnFieldsSelector = createSelectorMemoized(
  * Get the visible pinned columns model.
  * @category Visible Columns
  */
-export const gridPinnedColumnsSelector = (state: GridStateCommunity) => state.pinnedColumns.model;
+export const gridPinnedColumnsSelector = (state: GridState) => state.pinnedColumns.model;
 
-export const gridVisiblePinnedColumnsSelector = (state: GridStateCommunity) =>
-  state.pinnedColumns.visible;
+export const gridVisiblePinnedColumnsSelector = (state: GridState) => state.pinnedColumns.visible;
 
 /**
  * Get the visible pinned columns.

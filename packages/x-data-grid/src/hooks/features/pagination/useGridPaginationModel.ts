@@ -1,6 +1,6 @@
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import { GridEventListener } from '../../../models/events';
 import { GridPaginationModel } from '../../../models/gridPaginationProps';
 import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
@@ -56,7 +56,7 @@ export const getDerivedPaginationModel = (
  * @requires useGridDimensions (event) - can be after
  */
 export const useGridPaginationModel = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<
     DataGridProcessedProps,
     | 'paginationModel'

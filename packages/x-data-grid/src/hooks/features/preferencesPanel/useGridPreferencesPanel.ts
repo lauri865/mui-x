@@ -1,7 +1,7 @@
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
 import { GridEventListener } from '../../../models';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import { GridPreferencesPanelApi } from '../../../models/api/gridPreferencesPanelApi';
 import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
@@ -23,7 +23,7 @@ export const preferencePanelStateInitializer: GridStateInitializer<
  * TODO: Add a single `setPreferencePanel` method to avoid multiple `setState`
  */
 export const useGridPreferencesPanel = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<DataGridProcessedProps, 'initialState'>,
 ): void => {
   const logger = useGridLogger(apiRef, 'useGridPreferencesPanel');

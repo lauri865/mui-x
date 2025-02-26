@@ -1,6 +1,6 @@
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { isCopyShortcut } from '../../../utils/keyboardUtils';
 import { useGridApiOptionHandler } from '../../utils';
@@ -60,7 +60,7 @@ function hasNativeSelection(element: HTMLInputElement) {
  * @requires useGridSelection (method)
  */
 export const useGridClipboard = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<
     DataGridProcessedProps,
     'ignoreValueFormatterDuringExport' | 'onClipboardCopy' | 'clipboardCopyCellDelimiter'

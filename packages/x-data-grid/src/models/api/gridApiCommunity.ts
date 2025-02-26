@@ -1,4 +1,4 @@
-import type { GridInitialStateCommunity, GridStateCommunity } from '../gridStateCommunity';
+import type { GridInitialState, GridState } from '../gridStateCommunity';
 import type { DataGridProcessedProps } from '../props/DataGridProps';
 import type { GridApiCommon, GridPrivateOnlyApiCommon } from './gridApiCommon';
 import type { GridColumnReorderApi, GridColumnReorderApiInternal } from './gridColumnApi';
@@ -8,13 +8,13 @@ import { GridRowMultiSelectionApi } from './gridRowSelectionApi';
 /**
  * The api of Data Grid.
  */
-export interface GridApiCommunity
-  extends GridApiCommon<GridStateCommunity, GridInitialStateCommunity>,
+export interface GridApi
+  extends GridApiCommon<GridState, GridInitialState>,
     GridColumnReorderApi,
     GridRowMultiSelectionApi,
     GridRowProApi {}
 
-export interface GridPrivateApiCommunity
-  extends Omit<GridApiCommunity, 'setColumnIndex'>,
-    GridPrivateOnlyApiCommon<GridApiCommunity, GridPrivateApiCommunity, DataGridProcessedProps>,
+export interface GridPrivateApi
+  extends Omit<GridApi, 'setColumnIndex'>,
+    GridPrivateOnlyApiCommon<GridApi, GridPrivateApi, DataGridProcessedProps>,
     GridColumnReorderApiInternal {}

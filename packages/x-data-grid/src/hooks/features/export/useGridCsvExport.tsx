@@ -1,16 +1,16 @@
-import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
-import { useGridApiMethod } from '../../utils/useGridApiMethod';
+import * as React from 'react';
+import { GridCsvExportMenuItem, GridExportDisplayOptions } from '../../../components/toolbar';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import { GridCsvExportApi } from '../../../models/api/gridCsvExportApi';
 import { GridCsvExportOptions } from '../../../models/gridExport';
-import { useGridLogger } from '../../utils/useGridLogger';
-import { exportAs } from '../../../utils/exportAs';
-import { buildCSV } from './serializers/csvSerializer';
-import { getColumnsToExport, defaultGetRowsToExport } from './utils';
-import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
-import { GridExportDisplayOptions, GridCsvExportMenuItem } from '../../../components/toolbar';
 import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
+import { exportAs } from '../../../utils/exportAs';
+import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
+import { useGridApiMethod } from '../../utils/useGridApiMethod';
+import { useGridLogger } from '../../utils/useGridLogger';
+import { buildCSV } from './serializers/csvSerializer';
+import { defaultGetRowsToExport, getColumnsToExport } from './utils';
 
 /**
  * @requires useGridColumns (state)
@@ -20,7 +20,7 @@ import type { DataGridProcessedProps } from '../../../models/props/DataGridProps
  * @requires useGridParamsApi (method)
  */
 export const useGridCsvExport = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<DataGridProcessedProps, 'ignoreValueFormatterDuringExport'>,
 ): void => {
   const logger = useGridLogger(apiRef, 'useGridCsvExport');

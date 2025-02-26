@@ -1,6 +1,6 @@
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
 import { useGridApiMethod, useGridLogger } from '../../utils';
@@ -8,7 +8,7 @@ import { GridPaginationMetaApi } from './gridPaginationInterfaces';
 import { gridPaginationMetaSelector } from './gridPaginationSelector';
 
 export const useGridPaginationMeta = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<
     DataGridProcessedProps,
     'paginationMeta' | 'initialState' | 'paginationMode' | 'onPaginationMetaChange'

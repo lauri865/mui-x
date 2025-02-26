@@ -2,7 +2,7 @@ import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
 import { RefObject } from '@mui/x-internals/types';
 import { warnOnce } from '@mui/x-internals/warning';
 import * as React from 'react';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import type { GridListColDef } from '../../../models/colDef/gridColDef';
 import { GridEventListener } from '../../../models/events';
 import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
@@ -22,7 +22,7 @@ export const listViewStateInitializer: GridStateInitializer<
 });
 
 export function useGridListView(
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<DataGridProcessedProps, 'unstable_listView' | 'unstable_listColumn'>,
 ) {
   /*
@@ -85,6 +85,6 @@ export function useGridListView(
   }, [props.unstable_listView, props.unstable_listColumn]);
 }
 
-function getListColumnWidth(apiRef: RefObject<GridPrivateApiCommunity>) {
+function getListColumnWidth(apiRef: RefObject<GridPrivateApi>) {
   return gridDimensionsSelector(apiRef.current.state).viewportInnerSize.width;
 }

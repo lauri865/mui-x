@@ -7,7 +7,7 @@ import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
 import { GridColumnHeaderSeparatorSides } from '../../../components/columnHeaders/GridColumnHeaderSeparator';
 import { gridClasses } from '../../../constants/gridClasses';
-import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import type { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import type { GridStateColDef } from '../../../models/colDef/gridColDef';
 import { CursorCoordinates } from '../../../models/cursorCoordinates';
 import type { GridEventListener } from '../../../models/events/gridEventListener';
@@ -128,7 +128,7 @@ function preventClick(event: MouseEvent) {
  * Checker that returns a promise that resolves when the column virtualization
  * is disabled. Needs to be async to force out of the event loop.
  */
-async function isColumnVirtualizationDisabledNow(apiRef: RefObject<GridPrivateApiCommunity>) {
+async function isColumnVirtualizationDisabledNow(apiRef: RefObject<GridPrivateApi>) {
   if (gridVirtualizationColumnEnabledSelector(apiRef) === false) {
     return true;
   }
@@ -162,7 +162,7 @@ function excludeOutliers(inputValues: number[], factor: number) {
 }
 
 function extractColumnWidths(
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   options: AutosizeOptionsRequired,
   columns: GridStateColDef[],
 ) {
@@ -234,7 +234,7 @@ function createResizeRefs() {
  * TODO: improve experience for last column
  */
 export const useGridColumnResize = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<
     DataGridProcessedProps,
     | 'autosizeOptions'

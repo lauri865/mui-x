@@ -1,8 +1,8 @@
 import { GridRowId } from '../../../models/gridRows';
-import { GridStateCommunity } from '../../../models/gridStateCommunity';
+import { GridState } from '../../../models/gridStateCommunity';
 import { createSelector } from '../../../utils/createSelector';
 
-export const gridDetailPanelExpandedRowIdsSelector = (state: GridStateCommunity) =>
+export const gridDetailPanelExpandedRowIdsSelector = (state: GridState) =>
   state.detailPanel.expandedRowIds;
 
 export const gridDetailPanelIsExpandedForRowIdSelector = createSelector(

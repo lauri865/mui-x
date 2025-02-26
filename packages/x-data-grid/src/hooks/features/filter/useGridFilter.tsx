@@ -2,11 +2,11 @@ import { unstable_useEnhancedEffect as useEnhancedEffect } from '@mui/utils';
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
 import { lruMemoize } from 'reselect';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import { GridFilterApi } from '../../../models/api/gridFilterApi';
 import { GridEventListener } from '../../../models/events';
 import { GridRowId } from '../../../models/gridRows';
-import { GridStateCommunity } from '../../../models/gridStateCommunity';
+import { GridState } from '../../../models/gridStateCommunity';
 import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { isDeepEqual } from '../../../utils/utils';
 import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
@@ -56,10 +56,7 @@ const getVisibleRowsLookup: GridStrategyProcessor<'visibleRowsLookupCreation'> =
   return params.filteredRowsLookup;
 };
 
-function getVisibleRowsLookupState(
-  apiRef: RefObject<GridPrivateApiCommunity>,
-  state: GridStateCommunity,
-) {
+function getVisibleRowsLookupState(apiRef: RefObject<GridPrivateApi>, state: GridState) {
   return apiRef.current.applyStrategyProcessor('visibleRowsLookupCreation', {
     tree: state.rows.tree,
     filteredRowsLookup: state.filter.filteredRowsLookup,
@@ -76,7 +73,7 @@ function createMemoizedValues() {
  * @requires useGridRows (event)
  */
 export const useGridFilter = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<
     DataGridProcessedProps,
     | 'rows'

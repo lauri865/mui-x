@@ -1,4 +1,4 @@
-import { GridApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridApi } from '../../../models/api/gridApiCommunity';
 import type { GridCallbackDetails } from '../../../models/api/gridCallbackDetails';
 import type { GridColDef, GridValueFormatter } from '../../../models/colDef';
 import type { GridRowId, GridTreeNode, GridValidRowModel } from '../../../models/gridRows';
@@ -73,7 +73,7 @@ export type GridAggregationFunction =
 
 export interface GridAggregationApplierParams {
   field: GridColDef['field'];
-  api: GridApiCommunity;
+  api: GridApi;
 }
 
 export type GridAggregationModel = {

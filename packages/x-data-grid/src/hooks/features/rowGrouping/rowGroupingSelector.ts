@@ -1,8 +1,8 @@
-import { GridStateCommunity } from '../../../models/gridStateCommunity';
+import { GridState } from '../../../models/gridStateCommunity';
 import { createSelector } from '../../../utils/createSelector';
 import { gridColumnLookupSelector } from '../columns';
 
-export const gridRowGroupingModelSelector = (state: GridStateCommunity) => state.rowGrouping.model;
+export const gridRowGroupingModelSelector = (state: GridState) => state.rowGrouping.model;
 
 export const gridFilteredRowGroupingModel = createSelector(
   gridColumnLookupSelector,
@@ -12,5 +12,5 @@ export const gridFilteredRowGroupingModel = createSelector(
   },
 );
 
-export const gridRowGroupingDefaultExpansionDepthSelector = (state: GridStateCommunity) =>
+export const gridRowGroupingDefaultExpansionDepthSelector = (state: GridState) =>
   state.rowGrouping.defaultExpansionDepth;

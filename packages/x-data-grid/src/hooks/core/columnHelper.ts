@@ -11,7 +11,7 @@ import {
   GridSingleSelectColDef,
 } from '../../models/colDef/gridColDef';
 import { GridValidRowModel } from '../../models/gridRows';
-import { GridInitialStateCommunity as GridInitialState } from '../../models/gridStateCommunity';
+import { GridInitialState } from '../../models/gridStateCommunity';
 import { get } from '../features/columns/get';
 
 export const defaultColDef = {

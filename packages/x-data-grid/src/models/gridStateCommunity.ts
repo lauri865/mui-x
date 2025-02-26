@@ -33,7 +33,7 @@ import {
 } from '../hooks/features/rowPinning/rowPinningInterfaces';
 import type { GridRowsMetaState } from '../hooks/features/rows/gridRowsMetaState';
 import type { GridRowSpanningState } from '../hooks/features/rows/useGridRowSpanning';
-import { GridCellCoordinates } from "./gridCell";
+import { GridCellCoordinates } from './gridCell';
 import type { GridEditingState } from './gridEditRowModel';
 import { GridHeaderFilteringState } from './gridHeaderFilteringModel';
 import type { GridRowSelectionModel } from './gridRowSelectionModel';
@@ -41,7 +41,7 @@ import type { GridRowSelectionModel } from './gridRowSelectionModel';
 /**
  * The state of Data Grid.
  */
-export interface GridStateCommunity {
+export interface GridState {
   isRtl: boolean;
   dimensions: GridDimensionsState;
   rows: GridRowsState;
@@ -74,7 +74,7 @@ export interface GridStateCommunity {
 /**
  * The initial state of Data Grid.
  */
-export interface GridInitialStateCommunity {
+export interface GridInitialState {
   pagination?: GridPaginationInitialState;
   sorting?: GridSortingInitialState;
   filter?: GridFilterInitialState;

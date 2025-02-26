@@ -9,7 +9,7 @@ import {
 } from '../../../models';
 import { GridGetRowsParams, GridGetRowsResponse } from '../../../models/gridDataSource';
 import { GridRowEntry, GridRowId } from '../../../models/gridRows';
-import { GridInitialStateCommunity } from '../../../models/gridStateCommunity';
+import { GridInitialState } from '../../../models/gridStateCommunity';
 import {
   GridHydrateColumnsValue,
   GridPinnedColumnPosition,
@@ -30,7 +30,7 @@ export interface GridPipeProcessingLookup {
     value: Array<string>;
     context: GridColDef;
   };
-  exportState: { value: GridInitialStateCommunity; context: GridExportStateParams };
+  exportState: { value: GridInitialState; context: GridExportStateParams };
   getRowsParams: { value: Partial<GridGetRowsParams> };
   getCellParams: { value: GridCellParams<any, any, any, any> };
   hydrateColumns: {
@@ -47,7 +47,7 @@ export interface GridPipeProcessingLookup {
   preferencePanel: { value: React.ReactNode; context: GridPreferencePanelsValue };
   restoreState: {
     value: GridRestoreStatePreProcessingValue;
-    context: GridRestoreStatePreProcessingContext<GridInitialStateCommunity>;
+    context: GridRestoreStatePreProcessingContext<GridInitialState>;
   };
   rowHeight: { value: HeightEntry; context: GridRowEntry };
   scrollToIndexes: {

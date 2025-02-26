@@ -1,15 +1,95 @@
 /// <reference types="react/experimental" />
-import { highlight } from 'fumadocs-core/highlight';
-import { getProject, renderMarkdownToHast } from 'fumadocs-typescript';
+import sourceConfig from '@/source.config';
+import { type MDXOptions } from '@fumadocs/mdx-remote';
+import { evaluate, UseMdxComponents } from '@mdx-js/mdx';
+import { rehypeCode, remarkGfm } from 'fumadocs-core/mdx-plugins';
+import { getProject } from 'fumadocs-typescript';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
-import { type Jsx, toJsxRuntime } from 'hast-util-to-jsx-runtime';
+import { type Jsx } from 'hast-util-to-jsx-runtime';
+import Link from 'next/link';
 import fs from 'node:fs/promises';
+import * as React from 'react';
 import * as runtime from 'react/jsx-runtime';
+import rehypeReact from 'rehype-react';
+import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
 import 'server-only';
-import { ShikiTransformer } from 'shiki';
-import { highlighterConfig } from '../../lib/constants';
+import { unified } from 'unified';
+import { cn } from '../../lib/cn';
 import { generateDocumentation, type GenerateDocumentationOptions } from './generate';
 import { TypeTable } from './TypeTable';
+
+const remarkPlugins = (sourceConfig.mdxOptions as MDXOptions).remarkPlugins ?? [];
+const baseRehypePlugins = [
+  [rehypeCode, (sourceConfig.mdxOptions as MDXOptions).rehypeCodeOptions],
+] as any;
+const rehypePlugins = (sourceConfig.mdxOptions as MDXOptions).rehypePlugins ?? [];
+
+const compileToReact = async (code: string, components: ReturnType<UseMdxComponents> = {}) => {
+  if (!code) return null;
+  try {
+    const file = await unified()
+      .use(remarkParse)
+      .use(remarkGfm)
+      .use(
+        typeof remarkPlugins === 'function'
+          ? [...remarkPlugins([])].filter(Boolean)
+          : [...remarkPlugins].filter(Boolean),
+      )
+      .use(remarkRehype)
+
+      .use(
+        typeof rehypePlugins === 'function'
+          ? rehypePlugins([[rehypeCode, (sourceConfig.mdxOptions as MDXOptions).rehypeCodeOptions]])
+          : [...baseRehypePlugins, ...rehypePlugins],
+      )
+      .use(rehypeReact, {
+        ...runtime,
+        components: {
+          ...defaultMdxComponents,
+          Link,
+          hr: () => <hr />,
+          ...components,
+        },
+      })
+      .process(escapeMarkdown(code));
+
+    return file.result;
+  } catch (error) {
+    console.log('error', error, 'code', code);
+  }
+  return null;
+};
+
+const compileToReact2 = async (code: string, components: ReturnType<UseMdxComponents> = {}) => {
+  if (!code) return null;
+  try {
+    const { default: Content } = await evaluate(escapeMarkdown(code), {
+      Fragment: runtime.Fragment,
+      jsx: runtime.jsx as Jsx,
+      jsxs: runtime.jsxs as Jsx,
+      useMDXComponents: () => ({
+        ...defaultMdxComponents,
+        Link,
+        hr: () => <hr />,
+        ...components,
+      }),
+      remarkPlugins:
+        typeof remarkPlugins === 'function'
+          ? [...remarkPlugins([])].filter(Boolean)
+          : [...remarkPlugins].filter(Boolean),
+      rehypePlugins:
+        typeof rehypePlugins === 'function'
+          ? rehypePlugins([[rehypeCode, (sourceConfig.mdxOptions as MDXOptions).rehypeCodeOptions]])
+          : [...baseRehypePlugins, ...rehypePlugins],
+    });
+
+    return <Content />;
+  } catch (error) {
+    console.log('error', error, 'code', code);
+  }
+  return null;
+};
 
 export interface AutoTypeTableProps {
   /**
@@ -62,6 +142,13 @@ export function createTypeTable(options: GenerateDocumentationOptions = {}): {
   };
 }
 
+const inlineCodeComponents: ReturnType<UseMdxComponents> = {
+  code: ({ children }) => <code className="nd-copy-ignore not-prose">{children}</code>,
+  pre: ({ children, className }) => (
+    <pre className={cn('nd-copy-ignore not-prose whitespace-pre-wrap', className)}>{children}</pre>
+  ),
+};
+
 /**
  * **Server Component Only**
  *
@@ -77,6 +164,7 @@ export async function AutoTypeTableBase({
   let typeName = name;
   let content = '';
 
+  console.time('generate');
   if (path) {
     content = (await fs.readFile(path)).toString();
   }
@@ -89,6 +177,7 @@ export async function AutoTypeTableBase({
   }
 
   const output = await generateDocumentation(path ?? 'temp.ts', typeName, content, options);
+  console.timeEnd('generate');
 
   const hideDefault = !output.some((item) =>
     item.entries.some((entry) => entry.tags.default || entry.tags.defaultValue),
@@ -97,90 +186,97 @@ export async function AutoTypeTableBase({
   if (name && output.length === 0)
     throw new Error(`${name} in ${path ?? 'empty file'} doesn't exist`);
 
-  return (
-    <>
-      {output.map(async (item) => {
-        const entries = item.entries.map(
-          async (entry) =>
-            [
-              entry.name,
-              {
-                type: await highlight(entry.type, {
-                  lang: 'ts',
-                  ...highlighterConfig,
-                  components: {
-                    code: ({ children }) => (
-                      <code className="nd-copy-ignore not-prose">{children}</code>
-                    ),
-                  },
-                }),
-                typeDescription: entry.typeDescription
-                  ? await highlight(entry.typeDescription, {
-                      lang: 'ts',
-                      ...highlighterConfig,
-                      components: {
-                        code: ({ children }) => (
-                          <code className="nd-copy-ignore not-prose whitespace-pre-wrap">
-                            {children}
-                          </code>
-                        ),
-                        hr: () => <hr />,
-                      },
-                      transformers: [createMarkdownTransformer()],
-                    })
-                  : undefined,
-                description: await renderMarkdown(entry.description),
-                default: entry.tags.default || entry.tags.defaultValue,
-                required: entry.tags.required === 'true',
-                typeDescriptionLink: entry.link
-                  ? `https://github.com/mui/mui-x/blob/master${entry.link}`
-                  : undefined,
-              },
-            ] as const,
-        );
-
-        return (
-          <TypeTable
-            key={item.name}
-            type={Object.fromEntries(await Promise.all(entries))}
-            showRequired={showRequired}
-            hideDefault={hideDefault}
-          />
-        );
-      })}
-    </>
-  );
-}
-
-async function renderMarkdown(md: string): Promise<React.ReactElement> {
-  return toJsxRuntime(await renderMarkdownToHast(md.replace(/\n/g, '\n\n')), {
-    Fragment: runtime.Fragment,
-    jsx: runtime.jsx as Jsx,
-    jsxs: runtime.jsxs as Jsx,
-    components: { ...defaultMdxComponents, img: undefined },
-  });
-}
-
-export function createMarkdownTransformer(): ShikiTransformer {
-  return {
-    name: 'rehype-code:markdown',
-    line(hast) {
-      hast.children = hast.children.map((node) => {
-        if (node.type === 'element' && Array.isArray(node.children)) {
-          node.children = node.children.map((child) => {
-            if (child.type === 'text' && child.value === '---') {
-              return {
-                type: 'element',
-                tagName: 'hr',
-                properties: {},
-                children: [],
-              };
-            }
-            return child;
-          });
-        }
-        return node;
+  console.time('render');
+  const table = await Promise.all(
+    output.map(async (item) => {
+      const entries = item.entries.map(async (entry) => {
+        const [type, typeDescription, description] = await Promise.all([
+          await compileToReact('```tsx\n' + entry.type + '\n```', inlineCodeComponents),
+          entry.typeDescription
+            ? await compileToReact(
+                entry.typeDescription.includes('---')
+                  ? entry.typeDescription
+                      .split('\n---\n')
+                      .map((line, index) => {
+                        if (line.startsWith('Returns'))
+                          return line.replace('Returns:', '**Returns:**');
+                        return `\`\`\`ts\n${line}\n\`\`\``;
+                      })
+                      .join('\n---\n')
+                  : `\`\`\`ts\n${entry.typeDescription}\n\`\`\``,
+                inlineCodeComponents,
+              )
+            : undefined,
+          await compileToReact(entry.description),
+        ]);
+        return [
+          entry.name,
+          {
+            type,
+            typeDescription,
+            description,
+            default: entry.tags.default || entry.tags.defaultValue,
+            required: entry.tags.required === 'true',
+            typeDescriptionLink: entry.link
+              ? `https://github.com/twgrid/react/blob/master${entry.link}`
+              : undefined,
+          },
+        ] as const;
       });
-    },
-  };
+
+      return (
+        <TypeTable
+          key={item.name}
+          type={Object.fromEntries(await Promise.all(entries))}
+          showRequired={showRequired}
+          hideDefault={hideDefault}
+        />
+      );
+    }),
+  );
+  console.timeEnd('render');
+
+  return <>{table}</>;
+}
+
+function escapeMarkdown(markdown: string) {
+  let inMultiLineCodeBlock = false;
+  let inInlineCodeBlock = false;
+
+  return markdown
+    .split('\n')
+    .map((line) => {
+      // Toggle multi-line code block state
+      if (line.trim().startsWith('```')) {
+        inMultiLineCodeBlock = !inMultiLineCodeBlock;
+        return line;
+      }
+
+      // Process each character in the line
+      let result = '';
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+
+        // Toggle inline code block state
+        if (char === '`' && !inMultiLineCodeBlock) {
+          inInlineCodeBlock = !inInlineCodeBlock;
+          result += char;
+          continue;
+        }
+
+        // Replace angle brackets only outside code blocks
+        if (!inMultiLineCodeBlock && !inInlineCodeBlock) {
+          if (char === '<') result += '&lt;';
+          else if (char === '>') result += '&gt;';
+          else if (char === '{') result += '&#123;';
+          else if (char === '}') result += '&#125;';
+          else result += char;
+        } else {
+          result += char; // Leave code blocks untouched
+        }
+      }
+
+      return result;
+    })
+    .join('\n');
 }

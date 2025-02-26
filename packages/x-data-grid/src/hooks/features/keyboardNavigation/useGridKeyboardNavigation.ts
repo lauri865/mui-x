@@ -6,7 +6,7 @@ import { gridClasses } from '../../../constants/gridClasses';
 import { GRID_TREE_DATA_GROUPING_FIELD } from '../../../internals/constants';
 import { isGroupingColumn } from '../../../internals/utils/gridRowGroupingUtils';
 import { GridRowId } from '../../../models';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import { GridEventListener } from '../../../models/events';
 import { GridCellModes } from '../../../models/gridEditRowModel';
 import { GridCellParams } from '../../../models/params/gridCellParams';
@@ -42,7 +42,7 @@ import { findNonRowSpannedCell, getLeftColumnIndex, getRightColumnIndex } from '
  * @requires useGridColumnSpanning (method) - can be after
  */
 export const useGridKeyboardNavigation = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<
     DataGridProcessedProps,
     | 'pagination'

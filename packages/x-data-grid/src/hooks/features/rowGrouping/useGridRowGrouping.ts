@@ -4,7 +4,7 @@ import {
   GRID_GROUPING_COLUMN_COL_DEF,
   GRID_ROW_GROUPING_SINGLE_GROUPING_FIELD,
 } from '../../../colDef';
-import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import type { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import {
   GRID_USER_DEFINED_SPECIAL_COLUMN,
   GridColDefInternal,
@@ -71,7 +71,7 @@ export const rowGroupingStateInitializer: GridStateInitializer<
 };
 
 export const useGridRowGrouping = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<
     DataGridProcessedProps,
     'rowGroupingModel' | 'onRowGroupingModelChange' | 'defaultGroupingExpansionDepth'
@@ -228,7 +228,7 @@ export const useGridRowGrouping = (
 };
 
 export const useGridRowGroupingPreProcessors = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<DataGridProcessedProps, 'isGroupExpandedByDefault'>,
 ) => {
   const createRowTree = React.useCallback<GridStrategyProcessor<'rowTreeCreation'>>(
@@ -730,7 +730,7 @@ export const useGridRowGroupingPreProcessors = (
   useGridRegisterPipeProcessor(apiRef, 'hydrateColumns', addGroupingColumn);
 };
 
-function setStrategyAvailability(apiRef: RefObject<GridPrivateApiCommunity>) {
+function setStrategyAvailability(apiRef: RefObject<GridPrivateApi>) {
   const isActive = () => gridFilteredRowGroupingModel(apiRef).length > 0;
   apiRef.current.setStrategyAvailability('rowTree', ROW_GROUPING_STRATEGY, isActive);
   return isActive;

@@ -1,10 +1,10 @@
 import { GridRowEntry, GridValidRowModel } from '../../../models/gridRows';
-import { GridStateCommunity } from '../../../models/gridStateCommunity';
+import { GridState } from '../../../models/gridStateCommunity';
 import { createSelector, createSelectorMemoized } from '../../../utils/createSelector';
 
-export const gridPinnedRowsModelSelector = (state: GridStateCommunity) => state.pinnedRows;
+export const gridPinnedRowsModelSelector = (state: GridState) => state.pinnedRows;
 
-const gridRowsLookupSelector = (state: GridStateCommunity) => state.rows.dataRowIdToModelLookup;
+const gridRowsLookupSelector = (state: GridState) => state.rows.dataRowIdToModelLookup;
 
 export const gridVisiblePinnedRowsSelector = createSelectorMemoized(
   gridRowsLookupSelector,

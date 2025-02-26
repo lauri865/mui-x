@@ -3,14 +3,14 @@ import * as React from 'react';
 import { GridApiContext } from '../components/GridApiContext';
 import { GridConfigurationContext } from '../components/GridConfigurationContext';
 import { GridPrivateApiContext } from '../hooks/utils/useGridPrivateApiContext';
-import { GridPrivateApiCommunity } from '../models/api/gridApiCommunity';
+import { GridPrivateApi } from '../models/api/gridApiCommunity';
 import { GridConfiguration } from '../models/configuration/gridConfiguration';
 import { theme } from '../theme';
 import { GridRootPropsContext } from './GridRootPropsContext';
 import { GridThemeContext } from './GridThemeContext';
 
 type GridContextProviderProps = {
-  privateApiRef: RefObject<GridPrivateApiCommunity>;
+  privateApiRef: RefObject<GridPrivateApi>;
   configuration: GridConfiguration;
   props: {};
   children: React.ReactNode;

@@ -1,3 +1,3 @@
-import { GridStateCommunity } from '../../../models/gridStateCommunity';
+import { GridState } from '../../../models/gridStateCommunity';
 
-export const gridDimensionsSelector = (state: GridStateCommunity) => state.dimensions;
+export const gridDimensionsSelector = (state: GridState) => state.dimensions;

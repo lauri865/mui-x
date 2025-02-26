@@ -1,10 +1,10 @@
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import { GridColumnApi, GridColumnReorderApi } from '../../../models/api/gridColumnApi';
 import type { GridStateColDef } from '../../../models/colDef/gridColDef';
 import { GridEventListener } from '../../../models/events';
-import { GridStateCommunity } from '../../../models/gridStateCommunity';
+import { GridState } from '../../../models/gridStateCommunity';
 import { GridColumnOrderChangeParams } from '../../../models/params/gridColumnOrderChangeParams';
 import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import {
@@ -62,7 +62,7 @@ export const columnsStateInitializer: GridStateInitializer<
  * TODO: Impossible priority - useGridParamsApi also needs to be after useGridColumns
  */
 export function useGridColumns(
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<
     DataGridProcessedProps,
     | 'initialState'
@@ -464,7 +464,7 @@ export function useGridColumns(
 }
 
 function mergeColumnsState(columnsState: GridColumnsState) {
-  return (state: GridStateCommunity): GridStateCommunity => ({
+  return (state: GridState): GridState => ({
     ...state,
     columns: columnsState,
   });

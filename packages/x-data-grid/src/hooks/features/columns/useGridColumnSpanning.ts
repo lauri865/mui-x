@@ -1,15 +1,15 @@
-import * as React from 'react';
 import { RefObject } from '@mui/x-internals/types';
-import { useGridApiMethod } from '../../utils/useGridApiMethod';
-import { GridColumnIndex, GridCellColSpanInfo } from '../../../models/gridColumnSpanning';
-import { GridRowId } from '../../../models/gridRows';
+import * as React from 'react';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import {
   GridColumnSpanningApi,
   GridColumnSpanningPrivateApi,
 } from '../../../models/api/gridColumnSpanning';
-import { useGridApiEventHandler } from '../../utils/useGridApiEventHandler';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
 import { GridStateColDef } from '../../../models/colDef/gridColDef';
+import { GridCellColSpanInfo, GridColumnIndex } from '../../../models/gridColumnSpanning';
+import { GridRowId } from '../../../models/gridRows';
+import { useGridApiEventHandler } from '../../utils/useGridApiEventHandler';
+import { useGridApiMethod } from '../../utils/useGridApiMethod';
 
 type ColSpanLookup = Record<GridRowId, Record<GridColumnIndex, GridCellColSpanInfo>>;
 
@@ -17,7 +17,7 @@ type ColSpanLookup = Record<GridRowId, Record<GridColumnIndex, GridCellColSpanIn
  * @requires useGridColumns (method, event)
  * @requires useGridParamsApi (method)
  */
-export const useGridColumnSpanning = (apiRef: RefObject<GridPrivateApiCommunity>) => {
+export const useGridColumnSpanning = (apiRef: RefObject<GridPrivateApi>) => {
   const lookup = React.useRef<ColSpanLookup>({});
 
   const getCellColSpanInfo: GridColumnSpanningApi['unstable_getCellColSpanInfo'] = (
@@ -68,7 +68,7 @@ export const useGridColumnSpanning = (apiRef: RefObject<GridPrivateApiCommunity>
 };
 
 function calculateCellColSpan(params: {
-  apiRef: RefObject<GridPrivateApiCommunity>;
+  apiRef: RefObject<GridPrivateApi>;
   lookup: ColSpanLookup;
   columnIndex: number;
   rowId: GridRowId;

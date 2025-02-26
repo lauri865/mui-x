@@ -1,8 +1,8 @@
 import { GridControlStateItem } from '../controlStateItem';
 import { GridControlledStateEventLookup, GridControlledStateReasonLookup } from '../events';
-import { GridStateCommunity } from '../gridStateCommunity';
+import { GridState } from '../gridStateCommunity';
 
-export interface GridStateApi<State extends GridStateCommunity> {
+export interface GridStateApi<State extends GridState> {
   /**
    * Property that contains the whole state of the grid.
    */
@@ -20,7 +20,7 @@ export interface GridStateApi<State extends GridStateCommunity> {
   ) => boolean;
 }
 
-export interface GridStatePrivateApi<State extends GridStateCommunity> {
+export interface GridStatePrivateApi<State extends GridState> {
   /**
    * Updates a single sub-state.
    * Publishes the `xxxChange` event and calls the `onXXXChange` prop.

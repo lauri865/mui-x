@@ -1,6 +1,6 @@
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
-import type { GridApiCommunity } from './api/gridApiCommunity';
+import type { GridApi } from './api/gridApiCommunity';
 import type { GridColDef } from './colDef/gridColDef';
 import type { GridFilterInputValueProps } from './gridFilterInputComponent';
 import { GridFilterCondition, GridFilterItem } from './gridFilterItem';
@@ -10,7 +10,7 @@ type ApplyFilterFn<R extends GridValidRowModel = any, V = any, F = V> = (
   value: V,
   row: R,
   column: GridColDef<R, V, F>,
-  apiRef: RefObject<GridApiCommunity>,
+  apiRef: RefObject<GridApi>,
 ) => boolean;
 
 export type GetApplyFilterFn<R extends GridValidRowModel = any, V = any, F = V> = (
@@ -60,10 +60,10 @@ export interface GridFilterOperator<
   InputComponentProps?: Partial<I>;
   /**
    * Converts the value of a filter item to a human-readable form.
-   * @param {GridFilterItem['value']} value The filter item value.
+   * @param {GridFilterCondition['value']} value The filter item value.
    * @returns {string} The value formatted to be displayed in the UI of filter button tooltip.
    */
-  getValueAsString?: (value: GridFilterItem['value']) => string;
+  getValueAsString?: (value: GridFilterCondition['value']) => string;
   /**
    * If `false`, filter operator doesn't require user-entered value to work.
    * Usually should be set to `false` for filter operators that don't have `InputComponent` (for example `isEmpty`)

@@ -9,7 +9,7 @@ import {
   GridRowId,
   GridValidRowModel,
 } from '../../../models';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
 import {
@@ -58,7 +58,7 @@ export const gridAggregationStateInitializer: GridStateInitializer<
 };
 
 export const useGridAggregation = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<
     DataGridProcessedProps,
     'aggregationModel' | 'onAggregationModelChange' | 'aggregationFunctions'
@@ -375,7 +375,7 @@ export const useGridAggregation = (
 };
 
 export const useGridAggregationPreProcessors = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: DataGridProcessedProps,
 ) => {
   const addTotalsRow = React.useCallback<GridPipeProcessor<'hydrateRows'>>(

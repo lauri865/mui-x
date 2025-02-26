@@ -1,6 +1,6 @@
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import { GridParamsApi, GridParamsPrivateApi } from '../../../models/api/gridParamsApi';
 import { GridCellParams } from '../../../models/params/gridCellParams';
 import { GridRowParams } from '../../../models/params/gridRowParams';
@@ -24,10 +24,7 @@ export class MissingRowIdError extends Error {}
  * TODO: Impossible priority - useGridEditing also needs to be after useGridParamsApi
  * TODO: Impossible priority - useGridFocus also needs to be after useGridParamsApi
  */
-export function useGridParamsApi(
-  apiRef: RefObject<GridPrivateApiCommunity>,
-  props: DataGridProcessedProps,
-) {
+export function useGridParamsApi(apiRef: RefObject<GridPrivateApi>, props: DataGridProcessedProps) {
   const getColumnHeaderParams = React.useCallback<GridParamsApi['getColumnHeaderParams']>(
     (field) => ({
       field,

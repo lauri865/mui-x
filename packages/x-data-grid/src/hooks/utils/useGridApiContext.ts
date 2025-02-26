@@ -2,9 +2,9 @@ import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
 import { GridApiContext } from '../../components/GridApiContext';
 import { GridApiCommon } from '../../models/api/gridApiCommon';
-import { GridApiCommunity } from '../../models/api/gridApiCommunity';
+import { GridApi } from '../../models/api/gridApiCommunity';
 
-export function useGridApiContext<Api extends GridApiCommon = GridApiCommunity>(): RefObject<Api> {
+export function useGridApiContext<Api extends GridApiCommon = GridApi>(): RefObject<Api> {
   const apiRef = React.useContext(GridApiContext);
 
   if (apiRef === undefined) {

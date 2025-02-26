@@ -1,7 +1,7 @@
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
 import { GRID_CHECKBOX_SELECTION_COL_DEF, GRID_CHECKBOX_SELECTION_FIELD } from '../../../colDef';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import {
   GRID_USER_DEFINED_SPECIAL_COLUMN,
   GridColDef,
@@ -11,7 +11,7 @@ import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
 
 export const useGridRowSelectionPreProcessors = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: DataGridProcessedProps,
 ) => {
   const updateSelectionColumn = React.useCallback<GridPipeProcessor<'hydrateColumns'>>(

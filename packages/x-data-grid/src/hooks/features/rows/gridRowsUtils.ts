@@ -12,7 +12,7 @@ import {
   GridSkeletonRowNode,
   GridTreeNode,
 } from '../../../models';
-import { GridApiCommunity, GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridApi, GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import {
   GridRowIdToModelLookup,
@@ -128,7 +128,7 @@ export const getRowsStateFromCache = ({
   GridRowTreeCreationParams,
   'previousTree' | 'previousTreeDepths' | 'previousGroupsToFetch'
 > & {
-  apiRef: RefObject<GridPrivateApiCommunity>;
+  apiRef: RefObject<GridPrivateApi>;
   rowCountProp: number | undefined;
   loadingProp: boolean | undefined;
 }): GridRowsState => {
@@ -369,7 +369,7 @@ export const updateCacheWithNewRows = ({
 export const minimalContentHeight = 'var(--DataGrid-overlayHeight, calc(var(--height) * 2))';
 
 export function computeRowsUpdates(
-  apiRef: RefObject<GridApiCommunity>,
+  apiRef: RefObject<GridApi>,
   updates: GridRowModelUpdate[],
   getRowId: DataGridProcessedProps['getRowId'],
 ) {

@@ -84,17 +84,14 @@ import {
   virtualizationStateInitializer,
 } from '../hooks/features/virtualization';
 import { useGridInitializeState } from '../hooks/utils/useGridInitializeState';
-import { GridApiCommunity, GridPrivateApiCommunity } from '../models/api/gridApiCommunity';
+import { GridApi, GridPrivateApi } from '../models/api/gridApiCommunity';
 import { DataGridProcessedProps } from '../models/props/DataGridProps';
 
 export const useDataGridComponent = (
-  inputApiRef: RefObject<GridApiCommunity | null> | undefined,
+  inputApiRef: RefObject<GridApi | null> | undefined,
   props: DataGridProcessedProps,
 ) => {
-  const apiRef = useGridInitialization<GridPrivateApiCommunity, GridApiCommunity>(
-    inputApiRef,
-    props,
-  );
+  const apiRef = useGridInitialization<GridPrivateApi, GridApi>(inputApiRef, props);
 
   /**
    * Register all pre-processors called during state initialization here.

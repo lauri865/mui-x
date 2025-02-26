@@ -1,9 +1,9 @@
 import { RefObject } from '@mui/x-internals/types';
+import { GridApi } from '../models/api/gridApiCommunity';
+import { GridState } from '../models/gridStateCommunity';
 import { createSelector } from './createSelector';
-import { GridStateCommunity } from '../models/gridStateCommunity';
-import { GridApiCommunity } from '../models/api/gridApiCommunity';
 
-interface GridCustomState extends GridStateCommunity {
+interface GridCustomState extends GridState {
   customKey: { customKeyBis: number };
 }
 
@@ -15,29 +15,29 @@ createSelector(
 
 createSelector(
   // @ts-expect-error Missing combiner function
-  (state: GridStateCommunity) => state.columns.orderedFields,
-  (state: GridStateCommunity) => state.columns.lookup,
+  (state: GridState) => state.columns.orderedFields,
+  (state: GridState) => state.columns.lookup,
 );
 
 createSelector(
-  (state: GridStateCommunity) => state.columns.orderedFields,
+  (state: GridState) => state.columns.orderedFields,
   (fields) => fields,
   // @ts-expect-error Wrong state value
 )(null);
 
 createSelector(
-  (state: GridStateCommunity) => state.columns.orderedFields,
+  (state: GridState) => state.columns.orderedFields,
   (fields) => fields,
-)({} as RefObject<GridApiCommunity>);
+)({} as RefObject<GridApi>);
 
 createSelector(
-  (state: GridStateCommunity) => state.columns.orderedFields,
+  (state: GridState) => state.columns.orderedFields,
   (fields) => fields,
-)({} as GridStateCommunity, undefined, { id: 1 });
+)({} as GridState, undefined, { id: 1 });
 
 createSelector(
   // @ts-expect-error Wrong state key
-  (state: GridStateCommunity) => state.customKey,
+  (state: GridState) => state.customKey,
   (customKey) => customKey.custmKeyBis,
 );
 

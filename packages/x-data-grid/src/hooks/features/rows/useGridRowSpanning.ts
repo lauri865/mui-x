@@ -4,7 +4,7 @@ import * as React from 'react';
 import { GRID_CHECKBOX_SELECTION_FIELD } from '../../../colDef/gridCheckboxSelectionColDef';
 import { GRID_DETAIL_PANEL_TOGGLE_FIELD } from '../../../colDef/gridDetailPanelColDef';
 import { GridRenderContext } from '../../../models';
-import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import type { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import type { GridColDef } from '../../../models/colDef';
 import type { GridRowEntry, GridRowId, GridValidRowModel } from '../../../models/gridRows';
 import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
@@ -46,7 +46,7 @@ const skippedFields = new Set([
 const DEFAULT_ROWS_TO_PROCESS = 20;
 
 const computeRowSpanningState = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   colDefs: GridColDef[],
   visibleRows: GridRowEntry<GridValidRowModel>[],
   range: RowRange,
@@ -163,7 +163,7 @@ const computeRowSpanningState = (
 
 const getInitialRangeToProcess = (
   props: Pick<DataGridProcessedProps, 'pagination'>,
-  apiRef: React.RefObject<GridPrivateApiCommunity>,
+  apiRef: React.RefObject<GridPrivateApi>,
 ) => {
   const rowCount = gridDataRowIdsSelector(apiRef).length;
 
@@ -245,7 +245,7 @@ export const rowSpanningStateInitializer: GridStateInitializer = (state, props, 
 };
 
 export const useGridRowSpanning = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<DataGridProcessedProps, 'rowSpanning' | 'pagination' | 'paginationMode'>,
 ): void => {
   const processedRange = useLazyRef<RowRange, void>(() => {

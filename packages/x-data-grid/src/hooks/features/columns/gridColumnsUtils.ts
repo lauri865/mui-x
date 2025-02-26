@@ -8,7 +8,7 @@ import {
 import { isSingleSelectColDef } from '../../../components/panel/filterPanel/filterPanelUtils';
 import { GridColType } from '../../../models';
 import { GridApiCommon } from '../../../models/api/gridApiCommon';
-import { GridApiCommunity, GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridApi, GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import {
   GRID_USER_DEFINED_SPECIAL_COLUMN,
   GridColDef,
@@ -329,7 +329,7 @@ export const createColumnsState = ({
   columnVisibilityModel?: GridColumnVisibilityModel;
   keepOnlyColumnsToUpsert: boolean;
   force?: boolean;
-  apiRef: RefObject<GridPrivateApiCommunity>;
+  apiRef: RefObject<GridPrivateApi>;
 }) => {
   const isInsideStateInitializer = !apiRef.current.state.columns;
 
@@ -476,7 +476,7 @@ export function getFirstNonSpannedColumnToRender({
 }
 
 export function getTotalHeaderHeight(
-  apiRef: RefObject<GridApiCommunity>,
+  apiRef: RefObject<GridApi>,
   props: Pick<
     DataGridProcessedProps,
     'columnHeaderHeight' | 'headerFilterHeight' | 'unstable_listView' | 'columnGroupHeaderHeight'

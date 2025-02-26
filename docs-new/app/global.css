@@ -56,6 +56,10 @@
   .twoslash-popup-docs {
     @apply !text-[12px];
   }
+  pre,
+  code {
+    @apply !text-[12px];
+  }
   pre {
     @apply px-2.5 py-2;
   }
@@ -85,6 +89,37 @@ figure.twoslash .line:last-child:not(:has(*)) {
 
   kbd {
     @apply font-sans text-[11px];
+  }
+
+  a.twg-autolink {
+    & {
+      @apply hover:bg-fd-primary/20 transition-all rounded-[2px] hover:ring-1 ring-fd-primary/50 ring-offset-1 ring-offset-[#cbd9f4];
+      animation: flashHighlight 1s !important;
+
+      code &,
+      .prose code & {
+        @apply !underline-offset-5 hover:underline-offset-3 ring-offset-3;
+      }
+
+      code:has(> &:first-child):has(> &:last-child) {
+        @apply !bg-fd-primary/20 !border-fd-primary/50;
+        .twg-autolink {
+          @apply !no-underline;
+        }
+      }
+    }
+  }
+
+  @keyframes flashHighlight {
+    0% {
+      background-color: transparent;
+    }
+    50% {
+      background-color: #cbd9f4;
+    }
+    100% {
+      background-color: transparent;
+    }
   }
 }
 .dark {

@@ -1,7 +1,7 @@
+import { GridState } from '../../../models/gridStateCommunity';
 import { createSelector, createSelectorMemoized } from '../../../utils/createSelector';
-import { GridStateCommunity } from '../../../models/gridStateCommunity';
 
-const gridRowsStateSelector = (state: GridStateCommunity) => state.rows;
+const gridRowsStateSelector = (state: GridState) => state.rows;
 
 export const gridRowCountSelector = createSelector(
   gridRowsStateSelector,

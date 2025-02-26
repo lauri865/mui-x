@@ -12,7 +12,7 @@ import { GridRowGroupingModel } from '../../hooks/features/rowGrouping';
 import { GridPinnedRowsModel } from '../../hooks/features/rowPinning/rowPinningInterfaces';
 import { theme } from '../../theme';
 import { GridCallbackDetails, GridLocaleText } from '../api';
-import { GridApiCommunity } from '../api/gridApiCommunity';
+import { GridApi } from '../api/gridApiCommunity';
 import { GridCellModesModel, GridRowModesModel } from '../api/gridEditingApi';
 import type { GridColDef, GridListColDef } from '../colDef/gridColDef';
 import { GridEventListener } from '../events';
@@ -36,7 +36,7 @@ import { GridInputRowSelectionModel, GridRowSelectionModel } from '../gridRowSel
 import { GridSlotsComponent } from '../gridSlotsComponent';
 import { GridSlotsComponentsProps } from '../gridSlotsComponentsProps';
 import { GridSortDirection, GridSortModel } from '../gridSortModel';
-import { GridInitialStateCommunity } from '../gridStateCommunity';
+import { GridInitialState } from '../gridStateCommunity';
 import { Logger } from '../logger';
 import {
   GridRowClassNameParams,
@@ -435,7 +435,7 @@ export interface DataGridPropsWithoutDefaultValue<R extends GridValidRowModel = 
   /**
    * The ref object that allows Data Grid manipulation. Can be instantiated with `useGridApiRef()`.
    */
-  apiRef?: RefObject<GridApiCommunity | null>;
+  apiRef?: RefObject<GridApi | null>;
   /**
    * A string to force data grid props to refresh
    */
@@ -808,7 +808,7 @@ export interface DataGridPropsWithoutDefaultValue<R extends GridValidRowModel = 
    * The data in it will be set in the state on initialization but will not be controlled.
    * If one of the data in `initialState` is also being controlled, then the control state wins.
    */
-  initialState?: GridInitialStateCommunity;
+  initialState?: GridInitialState;
   /**
    * Overridable components props dynamically passed to the component at rendering.
    */
@@ -871,6 +871,10 @@ export interface DataGridPropsWithoutDefaultValue<R extends GridValidRowModel = 
   rowGroupingModel?: GridRowGroupingModel;
   isGroupExpandedByDefault?: (node: GridGroupNode) => boolean;
   onRowGroupingModelChange?: (model: GridRowGroupingModel, details: GridCallbackDetails) => void;
+  /**
+   * Custom context to be passed to the `DataGrid`
+   * Useful to pass custom functions and metadata to be used in cells, e.g. a function to delete a row, navigation functions, etc.
+   */
   meta?: GridMeta<R>;
 }
 

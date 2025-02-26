@@ -4,7 +4,7 @@ import { GRID_ACTIONS_COLUMN_TYPE, GRID_CHECKBOX_SELECTION_COL_DEF } from '../..
 import { GRID_DETAIL_PANEL_TOGGLE_FIELD } from '../../../colDef/gridDetailPanelColDef';
 import { gridClasses } from '../../../constants/gridClasses';
 import { GridRowSelectionModel } from '../../../models';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import {
   GridRowMultiSelectionApi,
   GridRowSelectionApi,
@@ -74,7 +74,7 @@ export const rowSelectionStateInitializer: GridStateInitializer<
  * @requires useGridKeyboardNavigation (`cellKeyDown` event must first be consumed by it)
  */
 export const useGridRowSelection = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<
     DataGridProcessedProps,
     | 'checkboxSelection'

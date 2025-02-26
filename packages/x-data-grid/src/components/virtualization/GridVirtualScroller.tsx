@@ -13,7 +13,7 @@ import { useGridVirtualScroller } from '../../hooks/features/virtualization/useG
 import { useGridApiContext } from '../../hooks/utils/useGridApiContext';
 import { useGridRootProps } from '../../hooks/utils/useGridRootProps';
 import { useGridSelector } from '../../hooks/utils/useGridSelector';
-import { GridStateCommunity } from '../../models/gridStateCommunity';
+import { GridState } from '../../models/gridStateCommunity';
 import { GridContextMenu } from '../contextMenu/GridContextMenu';
 import { GridDragDrop } from '../dragdrop/GridDragDrop';
 import { GridHeaders } from '../GridHeaders';
@@ -25,7 +25,7 @@ import { GridVirtualScrollerContent as Content } from './GridVirtualScrollerCont
 import { GridVirtualScrollerFiller as SpaceFiller } from './GridVirtualScrollerFiller';
 import { GridVirtualScrollerRenderZone as RenderZone } from './GridVirtualScrollerRenderZone';
 
-const hasPinnedRightSelector = (state: GridStateCommunity) => state.dimensions.rightPinnedWidth > 0;
+const hasPinnedRightSelector = (state: GridState) => state.dimensions.rightPinnedWidth > 0;
 
 export interface GridVirtualScrollerProps {
   children?: React.ReactNode;

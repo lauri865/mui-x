@@ -10,11 +10,11 @@ import type { ReactNode } from 'react';
 export function Info({ children }: { children: ReactNode }): ReactNode {
   return (
     <Popover>
-      <PopoverTrigger>
-        <InfoIcon className="size-4" />
+      <PopoverTrigger className="group">
+        <InfoIcon className="size-4 rounded-full group-data-[state=open]:[&_circle]:stroke-fd-primary ring-fd-primary group-data-[state=open]:text-fd-primary" />
       </PopoverTrigger>
       <PopoverContent className="prose max-h-[400px] min-w-[220px] max-w-[400px] overflow-auto text-sm prose-no-margin">
-        <pre className="whitespace-pre-wrap py-0 text-[12px] **:my-0 [&_code]:text-[12px] [&_li]:leading-[1.3] flex flex-col gap-y-2 [&_hr]:mt-1.5 [&_hr]:-mb-3 [&_hr]:-mx-2">
+        <pre className="whitespace-pre-wrap py-0 text-[12px] **:my-0 [&_code]:text-[12px] [&_li]:leading-[1.3] flex flex-col gap-y-2 [&_hr]:mt-0 [&_hr]:-mx-2">
           {children}
         </pre>
       </PopoverContent>

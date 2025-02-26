@@ -1,6 +1,6 @@
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import {
   GridHeaderFilteringApi,
   GridHeaderFilteringPrivateApi,
@@ -25,7 +25,7 @@ export const headerFilteringStateInitializer: GridStateInitializer = (
 });
 
 export const useGridHeaderFiltering = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<DataGridProcessedProps, 'signature' | 'headerFilters'>,
 ) => {
   const logger = useGridLogger(apiRef, 'useGridHeaderFiltering');

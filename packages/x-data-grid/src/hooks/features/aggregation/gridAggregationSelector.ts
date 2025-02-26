@@ -1,6 +1,5 @@
-import { GridStateCommunity } from '../../../models/gridStateCommunity';
+import { GridState } from '../../../models/gridStateCommunity';
 
-export const gridAggregationModelSelector = (state: GridStateCommunity) => state.aggregation.model;
+export const gridAggregationModelSelector = (state: GridState) => state.aggregation.model;
 
-export const gridAggregationLookupSelector = (state: GridStateCommunity) =>
-  state.aggregation.lookup;
+export const gridAggregationLookupSelector = (state: GridState) => state.aggregation.lookup;

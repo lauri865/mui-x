@@ -5,7 +5,7 @@ import {
 import { RefObject } from '@mui/x-internals/types';
 import { warnOnce } from '@mui/x-internals/warning';
 import * as React from 'react';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import {
   GridCellEditingApi,
   GridCellEditingPrivateApi,
@@ -43,7 +43,7 @@ import { gridEditRowsStateSelector } from './gridEditingSelectors';
 import { getDefaultCellValue } from './utils';
 
 export const useGridCellEditing = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<
     DataGridProcessedProps,
     | 'editMode'

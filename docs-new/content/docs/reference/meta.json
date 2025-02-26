@@ -1,10 +1,11 @@
 {
   "title": "Reference",
   "pages": [
-    "datagrid",
+    "data-grid",
     "api",
     "...",
-    "!filteritem",
+    "!filter-item",
+    "!filter-condition",
     "!actions-col-def",
     "!single-select-col-def",
     "!list-col-def"

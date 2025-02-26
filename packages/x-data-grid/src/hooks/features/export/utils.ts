@@ -1,6 +1,6 @@
 import { RefObject } from '@mui/x-internals/types';
 import { GridRowId } from '../../../models';
-import { GridApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridApi } from '../../../models/api/gridApiCommunity';
 import { GridStateColDef } from '../../../models/colDef/gridColDef';
 import { GridCsvGetRowsToExportParams, GridExportOptions } from '../../../models/gridExport';
 import { gridColumnDefinitionsSelector, gridVisibleColumnDefinitionsSelector } from '../columns';
@@ -10,7 +10,7 @@ interface GridGetColumnsToExportParams {
   /**
    * The API of the grid.
    */
-  apiRef: RefObject<GridApiCommunity>;
+  apiRef: RefObject<GridApi>;
   options: GridExportOptions;
 }
 

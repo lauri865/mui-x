@@ -1,7 +1,7 @@
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
 import { GridPrivateApiCommon } from '../../models/api/gridApiCommon';
-import { GridPrivateApiCommunity } from '../../models/api/gridApiCommunity';
+import { GridPrivateApi } from '../../models/api/gridApiCommunity';
 import { DataGridProcessedProps } from '../../models/props/DataGridProps';
 
 type DeepPartial<T> = {
@@ -10,7 +10,7 @@ type DeepPartial<T> = {
 
 export type GridStateInitializer<
   P extends Partial<DataGridProcessedProps> = DataGridProcessedProps,
-  PrivateApi extends GridPrivateApiCommon = GridPrivateApiCommunity,
+  PrivateApi extends GridPrivateApiCommon = GridPrivateApi,
 > = (
   state: DeepPartial<PrivateApi['state']>,
   props: P,
@@ -19,7 +19,7 @@ export type GridStateInitializer<
 
 export const useGridInitializeState = <
   P extends Partial<DataGridProcessedProps>,
-  PrivateApi extends GridPrivateApiCommon = GridPrivateApiCommunity,
+  PrivateApi extends GridPrivateApiCommon = GridPrivateApi,
 >(
   initializer: GridStateInitializer<P, PrivateApi>,
   privateApiRef: RefObject<PrivateApi>,

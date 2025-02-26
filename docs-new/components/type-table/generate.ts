@@ -119,14 +119,6 @@ export async function generate(
     .getSymbol()
     ?.compilerSymbol.getDocumentationComment(program.getTypeChecker().compilerObject);
 
-  if (declaration.getType().isArray()) {
-    return {
-      name,
-      description: comment ? ts.displayPartsToString(comment) : '',
-      entries: [],
-    };
-  }
-
   let awaitedEntries = await Promise.all(
     declaration
       .getType()
@@ -176,6 +168,11 @@ async function getDocEntry(
   }
 
   const subType = program.getTypeChecker().getTypeOfSymbolAtLocation(prop, context.declaration);
+
+  if (subType.isNever()) {
+    return;
+  }
+
   const tags = Object.fromEntries(
     prop.getJsDocTags().map((tag) => [tag.getName(), ts.displayPartsToString(tag.getText())]),
   );
@@ -222,14 +219,16 @@ async function getDocEntry(
         // If it's not a literal, resolve references
         const symbol = t.getSymbol();
         if (symbol) {
+          const declarations = symbol.getDeclarations();
+          if (declarations?.length === 1) {
+            return declarations[0].getText().trim();
+          }
           return symbol
             .getDeclaredType()
-
             .getText(undefined, ts.TypeFormatFlags.UseAliasDefinedOutsideCurrentScope);
-          /* return symbol.getDeclarations()?.map((decl) => decl.getText()) || 'Unknown Type'; */
         }
 
-        return 'Unresolved Type';
+        return 'undefined';
       })
       .filter((t) => t !== 'undefined');
     if (types.length > 1) {
@@ -281,7 +280,10 @@ async function getDocEntry(
     }
   }
 
-  if (subType.getNonNullableType().isReadonlyArray()) {
+  if (
+    subType.getNonNullableType().isReadonlyArray() ||
+    subType.getNonNullableType().getAliasSymbol()?.getDeclaredType().isArray()
+  ) {
     const elementType = subType.getNonNullableType().getTypeArguments()[0];
     if (elementType.getLiteralValue() !== undefined) {
       // do nothing
@@ -346,8 +348,7 @@ async function getDocEntry(
           })
           .filter((t) => t !== 'undefined');
 
-        typeDescription = typeName;
-        typeName = `Array<${types.sort().join(' | ')}>`;
+        typeDescription = `Array<${types.sort().join(' | ') || 'any'}>`;
       }
     }
   }
@@ -410,7 +411,53 @@ async function getDocEntry(
           .catch(() => {
             return fnForm;
           });
-        typeDescription += `\n---\n${fnForm}`;
+        typeDescription += `\n---\n${notation}`;
+      }
+    }
+
+    if (typeName === 'function') {
+      if (tags.returns) {
+        typeDescription += `\n---\nReturns: ${tags.returns.replace(/^\s*\-\s*/, '')}`;
+      }
+    }
+  }
+
+  if (typeName.startsWith('{')) {
+    typeDescription = await prettier
+      .format(`interface Dummy ${typeName}`, prettierConfig)
+      .then((formatted) => formatted.replace('interface Dummy ', '').trim())
+      .catch(() => typeName);
+    typeName = `object`;
+  }
+
+  if (!typeDescription && subType.getNonNullableType().isInterface()) {
+    typeName = `interface ${typeName}`;
+    typeDescription =
+      subType.getNonNullableType().getAliasSymbol()?.getDeclarations()[0]?.getText() ??
+      subType.getNonNullableType().getSymbol()?.getDeclarations()[0]?.getText();
+  }
+
+  if (
+    !typeDescription &&
+    !typeName.startsWith('Record<') &&
+    subType.getNonNullableType().getAliasSymbol()
+  ) {
+    let alias = subType.getNonNullableType().getAliasSymbol();
+    if (typeName.startsWith('Partial<')) {
+      alias = subType.getNonNullableType().getTypeArguments()[0]?.getSymbol();
+      typeDescription = subType
+        .getNonNullableType()
+        .getAliasTypeArguments()[0]
+        .getSymbol()
+        ?.getDeclarations()[0]
+        ?.getText();
+    } else {
+      typeDescription = alias
+        ?.getDeclarations()[0]
+        ?.getText()
+        ?.replace(/^export /, '');
+      if (typeDescription) {
+        typeName = `type ${typeName}`;
       }
     }
   }
@@ -423,19 +470,13 @@ async function getDocEntry(
     }
   }
 
-  if (typeName.startsWith('{')) {
-    typeDescription = await prettier
-      .format(`interface Dummy ${typeName}`, prettierConfig)
-      .then((formatted) => formatted.replace('interface Dummy ', '').trim())
-      .catch(() => typeName);
-    typeName = `object`;
-  }
-
   const entry: DocEntry = {
     name: prop.getName(),
-    description: ts.displayPartsToString(
-      prop.compilerSymbol.getDocumentationComment(program.getTypeChecker().compilerObject),
-    ),
+    description: ts
+      .displayPartsToString(
+        prop.compilerSymbol.getDocumentationComment(program.getTypeChecker().compilerObject),
+      )
+      ?.replace(/\[\[(.*?)\]\]/g, '$1'),
     tags,
     type: typeName,
     typeDescription,

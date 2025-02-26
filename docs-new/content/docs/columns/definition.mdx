@@ -5,6 +5,15 @@ index: true
 preview: ColumnDefinition.tsx
 ---
 
+```tsx
+function valueParser (
+  value: F | undefined,
+  row: R | undefined,
+  column: GridColDef<R, V, F>,
+  apiRef: RefObject<GridApi>,
+) : V
+```
+
 ```tsx twoslash
 import React from 'react';
 import { DataGrid } from '@mui/x-data-grid';

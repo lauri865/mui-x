@@ -1,8 +1,8 @@
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
-import { useRtl } from "../utils/useRtl";
 import { GridPrivateApiCommon } from '../../models/api/gridApiCommon';
-import { GridStateCommunity } from '../../models/gridStateCommunity';
+import { GridState } from '../../models/gridStateCommunity';
+import { useRtl } from '../utils/useRtl';
 
 export const useGridIsRtl = (apiRef: RefObject<GridPrivateApiCommon>): void => {
   const isRtl = useRtl();
@@ -16,7 +16,7 @@ export const useGridIsRtl = (apiRef: RefObject<GridPrivateApiCommon>): void => {
     if (isFirstEffect.current) {
       isFirstEffect.current = false;
     } else {
-      apiRef.current.setState((state: GridStateCommunity) => ({ ...state, isRtl }));
+      apiRef.current.setState((state: GridState) => ({ ...state, isRtl }));
     }
   }, [apiRef, isRtl]);
 };

@@ -1,5 +1,5 @@
 import { GridRowId } from '../../../models/gridRows';
-import { GridStateCommunity } from '../../../models/gridStateCommunity';
+import { GridState } from '../../../models/gridStateCommunity';
 import { createSelector, createSelectorMemoized } from '../../../utils/createSelector';
 import {
   gridExpandedSortedRowEntriesSelector,
@@ -15,7 +15,7 @@ const ALL_RESULTS_PAGE_VALUE = -1;
  * @category Pagination
  * @ignore - do not document.
  */
-export const gridPaginationSelector = (state: GridStateCommunity) => state.pagination;
+export const gridPaginationSelector = (state: GridState) => state.pagination;
 
 /**
  * @category Pagination

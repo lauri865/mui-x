@@ -13,10 +13,11 @@ import {
   metaSchema,
 } from 'fumadocs-mdx/config';
 import { transformerTwoslash } from 'fumadocs-twoslash';
-import rehypeKatex from 'rehype-katex';
+import remarkGithub, { defaultBuildUrl, Options } from 'remark-github';
 import remarkMath from 'remark-math';
 import { z } from 'zod';
 import { highlighterConfig } from './lib/constants';
+import { rehypeReplaceTokens } from './plugins/rehype-replace';
 
 export const docs = defineDocs({
   docs: {
@@ -81,7 +82,16 @@ export default defineConfig({
       [remarkInstall, { persist: { id: 'package-manager' } }],
       [remarkDocGen, { generators: [fileGenerator()] }],
       remarkTypeScriptToJavaScript,
+      [
+        remarkGithub,
+        {
+          repository: 'facebook/react',
+          buildUrl(values) {
+            return values.type === 'mention' ? false : defaultBuildUrl(values);
+          },
+        } as Options,
+      ],
     ],
-    rehypePlugins: (v) => [rehypeKatex, ...v],
+    rehypePlugins: (v) => [...v, rehypeReplaceTokens],
   },
 });

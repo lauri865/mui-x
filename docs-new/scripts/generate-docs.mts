@@ -1,40 +1,7 @@
 import { existsSync } from 'fs';
 import { readFile, writeFile } from 'fs/promises';
 import { generateDocumentation } from '../components/type-table/generate';
-
-function slugifyInterfaceName(name: string): string {
-  return name
-    .replace(/([a-z])([A-Z])/g, '$1-$2') // Convert camelCase to kebab-case
-    .replace(/[_\s]+/g, '-') // Replace underscores/spaces with dashes
-    .toLowerCase();
-}
-
-const components = ['DataGrid'];
-const interfaces = [
-  'GridApi',
-  // Cols
-  'GridColDef',
-  'GridSingleSelectColDef',
-  'GridActionsColDef',
-  'GridListColDef',
-  // Rendering
-  'GridCellParams',
-  'GridRowParams',
-  'GridRowClassNameParams',
-  'GridRowSpacingParams',
-  // RowGrouping
-  'GridRowGroupingModel',
-  // Filtering
-  'GridFilterModel',
-  'GridFilterItem',
-  'GridFilterOperator',
-  // Aggregation
-  'GridAggregationFunction',
-  // Exporting
-  'GridExportStateParams',
-  'GridCsvExportOptions',
-  'GridPrintExportOptions',
-];
+import { components, interfaces, slugifyInterfaceName } from '../lib/public-interfaces.js';
 
 function generateMdxContent(name: string, typeName: string, isComponent: boolean) {
   return `---
@@ -57,7 +24,7 @@ export async function generateDocs() {
   const publicExports = [...components, ...interfaces];
 
   for (const exportItem of publicExports) {
-    const name = slugifyInterfaceName(exportItem.replace(/^Grid/, ''));
+    const name = slugifyInterfaceName(exportItem);
     const filePath = `${outDir}/${name}.mdx`;
 
     if (existsSync(filePath)) {

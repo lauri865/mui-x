@@ -1,6 +1,6 @@
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import { GridColumnGroupingApi } from '../../../models/api/gridColumnGroupingApi';
 import { GridEventListener } from '../../../models/events';
 import {
@@ -93,7 +93,7 @@ export const columnGroupsStateInitializer: GridStateInitializer<
  * @requires useGridParamsApi (method)
  */
 export const useGridColumnGrouping = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<DataGridProcessedProps, 'columnGroupingModel'>,
 ) => {
   /**

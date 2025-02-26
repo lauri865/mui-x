@@ -177,7 +177,7 @@ export { isCopyShortcut, isNavigationKey, isPasteShortcut } from '../utils/keybo
 export * from '../utils/rtlFlipSide';
 export * from '../utils/utils';
 
-export type { GridApiCommunity } from '../models/api/gridApiCommunity';
+export type { GridApi as GridApiCommunity } from '../models/api/gridApiCommunity';
 export type { GridApiCaches } from '../models/gridApiCaches';
 
 export { serializeCellValue } from '../hooks/features/export/serializers/csvSerializer';

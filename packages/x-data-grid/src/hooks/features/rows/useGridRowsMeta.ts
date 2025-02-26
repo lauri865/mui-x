@@ -2,7 +2,7 @@ import { unstable_useEnhancedEffect as useEnhancedEffect } from '@mui/utils';
 import useLazyRef from '@mui/utils/useLazyRef';
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import { GridRowsMetaApi, GridRowsMetaPrivateApi } from '../../../models/api/gridRowsMetaApi';
 import { GridRowEntry } from '../../../models/gridRows';
 import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
@@ -53,7 +53,7 @@ export const rowsMetaStateInitializer: GridStateInitializer = (state, props, api
  * @requires useGridPage (method)
  */
 export const useGridRowsMeta = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<
     DataGridProcessedProps,
     | 'getRowHeight'

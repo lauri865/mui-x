@@ -1,8 +1,8 @@
 import { RefObject } from '@mui/x-internals/types';
-import { gridFilteredSortedRowIdsSelector } from '../filter/gridFilterSelector';
 import { GridColDef, GridRowId } from '../../../models';
+import { GridApi } from '../../../models/api/gridApiCommunity';
+import { gridFilteredSortedRowIdsSelector } from '../filter/gridFilterSelector';
 import { gridRowSpanningHiddenCellsSelector } from '../rows/gridRowSpanningSelectors';
-import { GridApiCommunity } from '../../../models/api/gridApiCommunity';
 
 export const getLeftColumnIndex = ({
   currentColIndex,
@@ -51,7 +51,7 @@ export const getRightColumnIndex = ({
 };
 
 export function findNonRowSpannedCell(
-  apiRef: RefObject<GridApiCommunity>,
+  apiRef: RefObject<GridApi>,
   rowId: GridRowId,
   field: GridColDef['field'],
   rowSpanScanDirection: 'up' | 'down',

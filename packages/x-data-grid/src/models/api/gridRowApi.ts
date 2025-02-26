@@ -1,9 +1,9 @@
 import {
-  GridRowModel,
   GridRowId,
+  GridRowModel,
   GridRowModelUpdate,
-  GridValidRowModel,
   GridTreeNode,
+  GridValidRowModel,
 } from '../gridRows';
 
 export interface GridRowGroupChildrenGetterParams {
@@ -44,7 +44,6 @@ export interface GridRowApi {
   getRowsCount: () => number;
   /**
    * Gets the list of row ids.
-   * TODO rows v6: Rename or remove ?
    * @returns {GridRowId[]} A list of ids.
    */
   getAllRowIds: () => GridRowId[];

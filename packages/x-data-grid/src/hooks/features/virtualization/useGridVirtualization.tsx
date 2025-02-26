@@ -1,7 +1,7 @@
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
 import { GridRenderContext } from '../../../models';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { useGridApiMethod } from '../../utils/useGridApiMethod';
 import { GridStateInitializer } from '../../utils/useGridInitializeState';
@@ -52,10 +52,7 @@ export const virtualizationStateInitializer: GridStateInitializer<RootProps> = (
   };
 };
 
-export function useGridVirtualization(
-  apiRef: RefObject<GridPrivateApiCommunity>,
-  props: RootProps,
-): void {
+export function useGridVirtualization(apiRef: RefObject<GridPrivateApi>, props: RootProps): void {
   /*
    * API METHODS
    */

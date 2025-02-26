@@ -1,6 +1,6 @@
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
-import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import type { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import { GridRowId } from '../../../models/gridRows';
 import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { useGridApiMethod } from '../../utils/useGridApiMethod';
@@ -36,7 +36,7 @@ export const rowPinningStateInitializer: GridStateInitializer<
 };
 
 export const useGridRowPinning = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<DataGridProcessedProps, 'pinnedRows'>,
 ) => {
   const pinRow = React.useCallback(

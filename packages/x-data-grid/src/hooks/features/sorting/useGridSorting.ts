@@ -1,7 +1,7 @@
 import { unstable_useEnhancedEffect as useEnhancedEffect } from '@mui/utils';
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import { GridSortApi } from '../../../models/api/gridSortApi';
 import { GridColDef } from '../../../models/colDef/gridColDef';
 import { GridEventListener } from '../../../models/events';
@@ -53,7 +53,7 @@ export const sortingStateInitializer: GridStateInitializer<
  * @requires useGridColumns (event)
  */
 export const useGridSorting = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<
     DataGridProcessedProps,
     | 'initialState'

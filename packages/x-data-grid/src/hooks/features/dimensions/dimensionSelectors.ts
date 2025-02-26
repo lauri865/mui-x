@@ -1,36 +1,34 @@
-import { GridStateCommunity } from '../../../models/gridStateCommunity';
+import { GridState } from '../../../models/gridStateCommunity';
 
-export const gridRowHeightSelector = (state: GridStateCommunity) => state.dimensions.rowHeight;
+export const gridRowHeightSelector = (state: GridState) => state.dimensions.rowHeight;
 
-export const gridDimensionsColumnsTotalWidthSelector = (state: GridStateCommunity) =>
+export const gridDimensionsColumnsTotalWidthSelector = (state: GridState) =>
   state.dimensions.columnsTotalWidth;
 
-export const gridContentHeightSelector = (state: GridStateCommunity) =>
-  state.dimensions.contentSize.height;
+export const gridContentHeightSelector = (state: GridState) => state.dimensions.contentSize.height;
 
-export const gridHasScrollXSelector = (state: GridStateCommunity) => state.dimensions.hasScrollX;
+export const gridHasScrollXSelector = (state: GridState) => state.dimensions.hasScrollX;
 
-export const gridHasScrollYSelector = (state: GridStateCommunity) => state.dimensions.hasScrollY;
+export const gridHasScrollYSelector = (state: GridState) => state.dimensions.hasScrollY;
 
-export const gridHasFillerSelector = (state: GridStateCommunity) =>
+export const gridHasFillerSelector = (state: GridState) =>
   state.dimensions.columnsTotalWidth < state.dimensions.viewportOuterSize.width;
 
-export const gridHeaderHeightSelector = (state: GridStateCommunity) =>
-  state.dimensions.headerHeight;
+export const gridHeaderHeightSelector = (state: GridState) => state.dimensions.headerHeight;
 
-export const gridGroupHeaderHeightSelector = (state: GridStateCommunity) =>
+export const gridGroupHeaderHeightSelector = (state: GridState) =>
   state.dimensions.groupHeaderHeight;
 
-export const gridHeaderFilterHeightSelector = (state: GridStateCommunity) =>
+export const gridHeaderFilterHeightSelector = (state: GridState) =>
   state.dimensions.headerFilterHeight;
 
-export const gridVerticalScrollbarWidthSelector = (state: GridStateCommunity) =>
+export const gridVerticalScrollbarWidthSelector = (state: GridState) =>
   state.dimensions.hasScrollY ? state.dimensions.scrollbarSize : 0;
 
-export const gridHorizontalScrollbarHeightSelector = (state: GridStateCommunity) =>
+export const gridHorizontalScrollbarHeightSelector = (state: GridState) =>
   state.dimensions.hasScrollX ? state.dimensions.scrollbarSize : 0;
 
-export const gridHasBottomFillerSelector = (state: GridStateCommunity) => {
+export const gridHasBottomFillerSelector = (state: GridState) => {
   const height = state.dimensions.hasScrollX ? state.dimensions.scrollbarSize : 0;
   const needsLastRowBorder =
     state.dimensions.viewportOuterSize.height - state.dimensions.minimumSize.height > 0;

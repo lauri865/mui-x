@@ -3,7 +3,7 @@ import { Wrapper } from '@/components/preview/wrapper';
 import { AutoTypeTable } from '@/components/type-table';
 import { createMetadata } from '@/lib/metadata';
 import { metadataImage } from '@/lib/metadata-image';
-import { openapi, source } from '@/lib/source';
+import { source } from '@/lib/source';
 import { Mermaid } from '@theguild/remark-mermaid/mermaid';
 import { Popup, PopupContent, PopupTrigger } from 'fumadocs-twoslash/ui';
 import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
@@ -14,6 +14,7 @@ import { TypeTable } from 'fumadocs-ui/components/type-table';
 import defaultComponents from 'fumadocs-ui/mdx';
 import { DocsBody, DocsCategory, DocsDescription, DocsPage, DocsTitle } from 'fumadocs-ui/page';
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { type ComponentProps, type FC, type ReactElement, type ReactNode } from 'react';
 import { Demo } from '../../../components/Demo';
@@ -70,13 +71,14 @@ export default async function Page(props: {
         <Mdx
           components={{
             ...defaultComponents,
+            Link,
             Popup,
             PopupContent,
             PopupTrigger,
             Tabs,
             Tab,
             Mermaid,
-            TypeTable: (props) => <TypeTable {...props} className="!text-[10px]" />,
+            TypeTable,
             AutoTypeTable,
             Accordion,
             Accordions,
@@ -85,7 +87,6 @@ export default async function Page(props: {
             Folder,
             Files,
             blockquote: Callout as unknown as FC<ComponentProps<'blockquote'>>,
-            APIPage: openapi.APIPage,
             DocsCategory: () => <DocsCategory page={page} from={source} />,
             Demo,
             ...(await import('@/content/docs/components/tabs.client')),

@@ -1,7 +1,7 @@
+import { GridState } from '../../../models/gridStateCommunity';
 import { createSelector } from '../../../utils/createSelector';
-import { GridStateCommunity } from '../../../models/gridStateCommunity';
 
-const gridRowSpanningStateSelector = (state: GridStateCommunity) => state.rowSpanning;
+const gridRowSpanningStateSelector = (state: GridState) => state.rowSpanning;
 
 export const gridRowSpanningHiddenCellsSelector = createSelector(
   gridRowSpanningStateSelector,

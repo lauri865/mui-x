@@ -1,7 +1,7 @@
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
 import type { GridApiCommon } from './api/gridApiCommon';
-import type { GridApiCommunity } from './api/gridApiCommunity';
+import type { GridApi } from './api/gridApiCommunity';
 import { GridFilterCondition, GridFilterItem } from './gridFilterItem';
 
 export type GridFilterInputSlotProps = {
@@ -12,7 +12,7 @@ export type GridFilterInputSlotProps = {
 
 export type GridFilterInputValueProps<
   T extends GridFilterInputSlotProps = GridFilterInputSlotProps,
-  Api extends GridApiCommon = GridApiCommunity,
+  Api extends GridApiCommon = GridApi,
 > = {
   item: GridFilterCondition;
   filter: GridFilterItem;

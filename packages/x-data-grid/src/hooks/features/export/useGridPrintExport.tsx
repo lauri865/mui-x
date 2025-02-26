@@ -4,11 +4,11 @@ import * as React from 'react';
 import { GRID_CHECKBOX_SELECTION_COL_DEF } from '../../../colDef/gridCheckboxSelectionColDef';
 import { GridExportDisplayOptions, GridPrintExportMenuItem } from '../../../components/toolbar';
 import { gridClasses } from '../../../constants/gridClasses';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import { GridPrintExportApi } from '../../../models/api/gridPrintExportApi';
 import { GridPrintExportOptions } from '../../../models/gridExport';
 import { GridValidRowModel } from '../../../models/gridRows';
-import { GridInitialStateCommunity, GridStateCommunity } from '../../../models/gridStateCommunity';
+import { GridInitialState, GridState } from '../../../models/gridStateCommunity';
 import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
 import { useGridApiMethod } from '../../utils/useGridApiMethod';
@@ -62,16 +62,16 @@ function buildPrintWindow(title?: string): HTMLIFrameElement {
  * @requires useGridParamsApi (method)
  */
 export const useGridPrintExport = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<DataGridProcessedProps, 'pagination' | 'columnHeaderHeight' | 'headerFilterHeight'>,
 ): void => {
   const hasRootReference = apiRef.current.rootElementRef.current !== null;
   const logger = useGridLogger(apiRef, 'useGridPrintExport');
   const doc = React.useRef<Document | null>(null);
-  const previousGridState = React.useRef<GridInitialStateCommunity | null>(null);
+  const previousGridState = React.useRef<GridInitialState | null>(null);
   const previousColumnVisibility = React.useRef<{ [key: string]: boolean }>({});
   const previousRows = React.useRef<GridValidRowModel[]>([]);
-  const previousVirtualizationState = React.useRef<GridStateCommunity['virtualization']>(null);
+  const previousVirtualizationState = React.useRef<GridState['virtualization']>(null);
 
   React.useEffect(() => {
     doc.current = ownerDocument(apiRef.current.rootElementRef!.current!);

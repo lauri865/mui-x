@@ -1,6 +1,6 @@
-import { createSelector } from '../../../utils/createSelector';
-import { GridStateCommunity } from '../../../models/gridStateCommunity';
 import { GridDensity } from '../../../models/gridDensity';
+import { GridState } from '../../../models/gridStateCommunity';
+import { createSelector } from '../../../utils/createSelector';
 
 export const COMPACT_DENSITY_FACTOR = 0.7;
 export const COMFORTABLE_DENSITY_FACTOR = 1.3;
@@ -11,7 +11,7 @@ const DENSITY_FACTORS: Record<GridDensity, number> = {
   standard: 1,
 };
 
-export const gridDensitySelector = (state: GridStateCommunity) => state.density;
+export const gridDensitySelector = (state: GridState) => state.density;
 
 export const gridDensityFactorSelector = createSelector(
   gridDensitySelector,

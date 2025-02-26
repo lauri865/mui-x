@@ -4,6 +4,40 @@ description: GridFilterModel Interface reference documentation.
 icon: Braces
 ---
 
+Example of a filter model with multiple conditions and logic operators – matches a `person` with the name `John` or `Jane` and `age` greater than or equal to 18:
+```ts twoslash
+  import { GridFilterModel, GridLogicOperator } from '@mui/x-data-grid';
+  // ---cut---
+  const filterModel: GridFilterModel = {
+    logicOperator: 'and',
+    items: [
+      {
+        field: 'name',
+        logicOperator: 'and',
+        conditions: [
+          { 
+            operator: 'equals',
+            value: 'John',
+          },
+          {
+            operator: 'equals',
+            value: 'Jane',
+          },
+        ],
+      },
+      {
+        field: 'age',
+        conditions: [
+          {
+            operator: '>=',
+            value: 18,
+          },
+        ],
+      },
+    ],
+  };
+```
+
 ## GridFilterModel
 
 <AutoTypeTable
@@ -15,5 +49,11 @@ icon: Braces
 ### GridFilterItem
 <AutoTypeTable
   path="../packages/x-data-grid/src/index.ts" name="GridFilterItem"
+  interface={true}
+/>
+
+### GridFilterCondition
+<AutoTypeTable
+  path="../packages/x-data-grid/src/index.ts" name="GridFilterCondition"
   interface={true}
 />

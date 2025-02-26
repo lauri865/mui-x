@@ -1,12 +1,12 @@
-import { createSelector, createSelectorMemoized } from '../../../utils/createSelector';
+import type { GridState } from '../../../models/gridStateCommunity';
 import type { GridColumnsRenderContext } from '../../../models/params/gridScrollParams';
-import type { GridStateCommunity } from '../../../models/gridStateCommunity';
+import { createSelector, createSelectorMemoized } from '../../../utils/createSelector';
 
 /**
  * Get the columns state
  * @category Virtualization
  */
-export const gridVirtualizationSelector = (state: GridStateCommunity) => state.virtualization;
+export const gridVirtualizationSelector = (state: GridState) => state.virtualization;
 
 /**
  * Get the enabled state for virtualization
@@ -53,8 +53,8 @@ export const gridRenderContextSelector = createSelector(
  * @ignore - do not document.
  */
 export const gridRenderContextColumnsSelector = createSelectorMemoized(
-  (state: GridStateCommunity) => state.virtualization.renderContext.firstColumnIndex,
-  (state: GridStateCommunity) => state.virtualization.renderContext.lastColumnIndex,
+  (state: GridState) => state.virtualization.renderContext.firstColumnIndex,
+  (state: GridState) => state.virtualization.renderContext.lastColumnIndex,
   (firstColumnIndex, lastColumnIndex): GridColumnsRenderContext => ({
     firstColumnIndex,
     lastColumnIndex,

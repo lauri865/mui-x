@@ -6,7 +6,7 @@ import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
 import { gridClasses } from '../../../constants/gridClasses';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import { GridFocusApi, GridFocusPrivateApi } from '../../../models/api/gridFocusApi';
 import { GridEventListener, GridEventLookup } from '../../../models/events';
 import { GridCellCoordinates } from '../../../models/gridCell';
@@ -48,7 +48,7 @@ export const focusStateInitializer: GridStateInitializer = (state, props) => {
  * @requires useGridEditing (event)
  */
 export const useGridFocus = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<DataGridProcessedProps, 'autoFocus' | 'pagination' | 'paginationMode'>,
 ): void => {
   const logger = useGridLogger(apiRef, 'useGridFocus');

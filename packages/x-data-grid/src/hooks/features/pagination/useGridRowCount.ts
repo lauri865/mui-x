@@ -1,8 +1,8 @@
 import useLazyRef from '@mui/utils/useLazyRef';
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
-import { GridStateCommunity } from '../../../models/gridStateCommunity';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
+import { GridState } from '../../../models/gridStateCommunity';
 import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
 import {
@@ -18,11 +18,10 @@ import {
   gridPaginationRowCountSelector,
 } from './gridPaginationSelector';
 
-const isLastPageSelector = (state: GridStateCommunity) =>
-  state.pagination.meta.hasNextPage === false;
+const isLastPageSelector = (state: GridState) => state.pagination.meta.hasNextPage === false;
 
 export const useGridRowCount = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<
     DataGridProcessedProps,
     'rowCount' | 'initialState' | 'paginationMode' | 'onRowCountChange'

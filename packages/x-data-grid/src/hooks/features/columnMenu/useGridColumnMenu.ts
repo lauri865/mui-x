@@ -1,7 +1,7 @@
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
 import { GridColumnMenuApi } from '../../../models';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import { useGridApiEventHandler, useGridApiMethod, useGridLogger } from '../../utils';
 import { GridStateInitializer } from '../../utils/useGridInitializeState';
 import {
@@ -20,7 +20,7 @@ export const columnMenuStateInitializer: GridStateInitializer = (state) => ({
  * @requires useGridColumnResize (event)
  * @requires useGridInfiniteLoader (event)
  */
-export const useGridColumnMenu = (apiRef: RefObject<GridPrivateApiCommunity>): void => {
+export const useGridColumnMenu = (apiRef: RefObject<GridPrivateApi>): void => {
   const logger = useGridLogger(apiRef, 'useGridColumnMenu');
 
   /**

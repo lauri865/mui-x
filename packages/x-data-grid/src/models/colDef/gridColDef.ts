@@ -1,7 +1,7 @@
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
 import { GridActionsCellItemProps } from '../../components/cell/GridActionsCellItem';
-import { GridApiCommunity } from '../api/gridApiCommunity';
+import { GridApi } from '../api/gridApiCommunity';
 import { GridCellClassNamePropType } from '../gridCellClass';
 import { GridColumnHeaderClassNamePropType } from '../gridColumnHeaderClass';
 import { GridEditCellProps } from '../gridEditRowModel';
@@ -36,13 +36,13 @@ export type GridApplyQuickFilter<R extends GridValidRowModel = GridValidRowModel
   value: V,
   row: R,
   column: GridColDef,
-  apiRef: RefObject<GridApiCommunity>,
+  apiRef: RefObject<GridApi>,
 ) => boolean;
 
 export type GetApplyQuickFilterFn<R extends GridValidRowModel = GridValidRowModel, V = any> = (
   value: any,
   colDef: GridStateColDef<R, V>,
-  apiRef: RefObject<GridApiCommunity>,
+  apiRef: RefObject<GridApi>,
 ) => null | GridApplyQuickFilter<R, V>;
 
 export type GridValueGetter<
@@ -50,34 +50,34 @@ export type GridValueGetter<
   V = any,
   F = V,
   TValue = V | undefined | null,
-> = (value: TValue, row: R, column: GridColDef<R, V, F>, apiRef: RefObject<GridApiCommunity>) => V;
+> = (value: TValue, row: R, column: GridColDef<R, V, F>, apiRef: RefObject<GridApi>) => V;
 
 export type GridValueFormatter<
   R extends GridValidRowModel = GridValidRowModel,
   V = any,
   F = V,
   TValue = V | undefined | null,
-> = (value: TValue, row: R, column: GridColDef<R, V, F>, apiRef: RefObject<GridApiCommunity>) => F;
+> = (value: TValue, row: R, column: GridColDef<R, V, F>, apiRef: RefObject<GridApi>) => F;
 
 export type GridValueSetter<R extends GridValidRowModel = GridValidRowModel, V = any, F = V> = (
   value: V,
   row: R,
   column: GridColDef<R, V, F>,
-  apiRef: RefObject<GridApiCommunity>,
+  apiRef: RefObject<GridApi>,
 ) => R;
 
 export type GridValueParser<R extends GridValidRowModel = GridValidRowModel, V = any, F = V> = (
   value: F | undefined,
   row: R | undefined,
   column: GridColDef<R, V, F>,
-  apiRef: RefObject<GridApiCommunity>,
+  apiRef: RefObject<GridApi>,
 ) => V;
 
 export type GridColSpanFn<R extends GridValidRowModel = GridValidRowModel, V = any, F = V> = (
   value: V,
   row: R,
   column: GridColDef<R, V, F>,
-  apiRef: RefObject<GridApiCommunity>,
+  apiRef: RefObject<GridApi>,
 ) => number | undefined;
 
 /**
@@ -209,8 +209,8 @@ export interface GridBaseColDef<
   cellClassName?: GridCellClassNamePropType<R, V>;
   /**
    * Display mode for the cell:
-   *  - 'text': For text-based cells (default)
-   *  - 'flex': For cells with HTMLElement children
+   *  - `text`: For text-based cells (default)
+   *  - `flex`: For cells with HTMLElement children
    * @default 'text'
    */
   display?: 'text' | 'flex';
@@ -281,7 +281,7 @@ export interface GridBaseColDef<
    * This function can return `null` to skip filtering for this value and column.
    * @param {any} value The value with which we want to filter the column.
    * @param {GridStateColDef} colDef The column from which we want to filter the rows.
-   * @param {RefObject<GridApiCommunity>} apiRef Deprecated: The API of the grid.
+   * @param {RefObject<GridApi>} apiRef Deprecated: The API of the grid.
    * @returns {null | GridApplyQuickFilter} The function to call to check if a row pass this filter value or not.
    */
   getApplyQuickFilterFn?: GetApplyQuickFilterFn<R, V>;
@@ -342,7 +342,7 @@ export interface GridActionsColDefOwnProps<
   getActions: (
     params: GridRowParams<R>,
     helpers: {
-      api: GridApiCommunity;
+      api: GridApi;
       Button: GridBaseSlots['baseButton'];
       IconButton: GridBaseSlots['baseIconButton'];
       MenuItem: GridBaseSlots['baseDropdownMenu']['Item'];

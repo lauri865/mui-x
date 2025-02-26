@@ -4,7 +4,7 @@ import {
   GRID_DETAIL_PANEL_COL_DEF,
   GRID_DETAIL_PANEL_TOGGLE_FIELD,
 } from '../../../colDef/gridDetailPanelColDef';
-import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import type { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import { GridRowId } from '../../../models/gridRows';
 import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
@@ -37,7 +37,7 @@ export const detailPanelStateInitializer: GridStateInitializer<
 };
 
 export const useGridDetailPanel = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<DataGridProcessedProps, 'detailPanelExpandedRowIds' | 'getDetailPanelContent'>,
 ) => {
   const heights = React.useRef(new Map<GridRowId, number>());
@@ -174,7 +174,7 @@ export const useGridDetailPanel = (
 };
 
 export const useGridDetailPanelPreProcessors = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<DataGridProcessedProps, 'getDetailPanelContent'>,
 ) => {
   const isEnabled = props.getDetailPanelContent !== undefined;

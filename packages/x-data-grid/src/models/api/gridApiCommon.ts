@@ -16,7 +16,6 @@ import { GridRowGroupingApi } from '../../hooks/features/rowGrouping';
 import { GridRowPinningApi } from '../../hooks/features/rowPinning/rowPinningInterfaces';
 import type { GridStatePersistenceApi } from '../../hooks/features/statePersistence';
 import { GridMetaApi } from '../gridMeta';
-import type { GridInitialStateCommunity, GridStateCommunity } from '../gridStateCommunity';
 import type { DataGridProcessedProps } from '../props/DataGridProps';
 import { GridColumnApi } from './gridColumnApi';
 import { GridColumnGroupingApi } from './gridColumnGroupingApi';
@@ -43,8 +42,8 @@ import { GridStateApi, GridStatePrivateApi } from './gridStateApi';
 import { GridVirtualizationApi, GridVirtualizationPrivateApi } from './gridVirtualizationApi';
 
 export interface GridApiCommon<
-  GridState extends GridStateCommunity = any,
-  GridInitialState extends GridInitialStateCommunity = any,
+  GridState extends GridState = any,
+  GridInitialState extends GridInitialState = any,
 > extends GridCoreApi,
     GridPipeProcessingApi,
     GridDensityApi,

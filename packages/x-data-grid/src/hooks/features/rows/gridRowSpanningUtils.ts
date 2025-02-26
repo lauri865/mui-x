@@ -1,8 +1,8 @@
 import { RefObject } from '@mui/x-internals/types';
 import type { GridRenderContext } from '../../../models';
-import type { GridValidRowModel } from '../../../models/gridRows';
+import type { GridApi } from '../../../models/api/gridApiCommunity';
 import type { GridColDef } from '../../../models/colDef';
-import type { GridApiCommunity } from '../../../models/api/gridApiCommunity';
+import type { GridValidRowModel } from '../../../models/gridRows';
 import type { RowRange } from './useGridRowSpanning';
 
 export function getUnprocessedRange(testRange: RowRange, processedRange: RowRange) {
@@ -50,7 +50,7 @@ export function isRowRangeUpdated(range1: RowRange, range2: RowRange) {
 export const getCellValue = (
   row: GridValidRowModel,
   colDef: GridColDef,
-  apiRef: RefObject<GridApiCommunity>,
+  apiRef: RefObject<GridApi>,
 ) => {
   if (!row) {
     return null;

@@ -1,12 +1,12 @@
 import { GridEditMode, GridEditModes } from '../../../models/gridEditRowModel';
 import { GridRowId } from '../../../models/gridRows';
-import { GridStateCommunity } from '../../../models/gridStateCommunity';
+import { GridState } from '../../../models/gridStateCommunity';
 import { createSelector } from '../../../utils/createSelector';
 
 /**
  * Select the row editing state.
  */
-export const gridEditRowsStateSelector = (state: GridStateCommunity) => state.editRows;
+export const gridEditRowsStateSelector = (state: GridState) => state.editRows;
 
 export const gridRowIsEditingSelector = createSelector(
   gridEditRowsStateSelector,

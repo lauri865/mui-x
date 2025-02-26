@@ -1,8 +1,7 @@
+import { GridState } from '../../../models/gridStateCommunity';
 import { createSelector } from '../../../utils/createSelector';
-import { GridStateCommunity } from '../../../models/gridStateCommunity';
 
-export const gridHeaderFilteringStateSelector = (state: GridStateCommunity) =>
-  state.headerFiltering;
+export const gridHeaderFilteringStateSelector = (state: GridState) => state.headerFiltering;
 
 export const gridHeaderFilteringEnabledSelector = createSelector(
   gridHeaderFilteringStateSelector,

@@ -15,9 +15,9 @@ import {
   type GridRenderContext,
   type GridRowEntry,
 } from '../../../models';
-import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import type { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import { GridInfiniteLoaderPrivateApi } from '../../../models/api/gridInfiniteLoaderApi';
-import { GridStateCommunity } from '../../../models/gridStateCommunity';
+import { GridState } from '../../../models/gridStateCommunity';
 import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { isJSDOM } from '../../../utils/isJSDOM';
 import * as platform from '../../../utils/platform';
@@ -67,9 +67,7 @@ import { EMPTY_RENDER_CONTEXT } from './useGridVirtualization';
 
 const MINIMUM_COLUMN_WIDTH = 50;
 
-interface PrivateApiWithInfiniteLoader
-  extends GridPrivateApiCommunity,
-    GridInfiniteLoaderPrivateApi {}
+interface PrivateApiWithInfiniteLoader extends GridPrivateApi, GridInfiniteLoaderPrivateApi {}
 
 export type VirtualScroller = ReturnType<typeof useGridVirtualScroller>;
 
@@ -773,7 +771,7 @@ export const useGridVirtualScroller = () => {
 type RenderContextInputs = {
   enabledForRows: boolean;
   enabledForColumns: boolean;
-  apiRef: RefObject<GridPrivateApiCommunity>;
+  apiRef: RefObject<GridPrivateApi>;
   autoHeight: boolean;
   rowBufferPx: number;
   columnBufferPx: number;
@@ -795,7 +793,7 @@ type RenderContextInputs = {
 };
 
 // dimension selectors
-function needsHorizontalScrollbarSelector(state: GridStateCommunity) {
+function needsHorizontalScrollbarSelector(state: GridState) {
   return (
     state.dimensions.viewportOuterSize.width > 0 &&
     state.dimensions.columnsTotalWidth > state.dimensions.viewportOuterSize.width
@@ -803,7 +801,7 @@ function needsHorizontalScrollbarSelector(state: GridStateCommunity) {
 }
 
 function inputsSelector(
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   rootProps: ReturnType<typeof useGridRootProps>,
   enabledForRows: boolean,
   enabledForColumns: boolean,

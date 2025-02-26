@@ -1,7 +1,7 @@
 import { GridColDef } from '../colDef';
 import { GridStateColDef } from '../colDef/gridColDef';
 import { GridCellMode } from '../gridCell';
-import { GridValidRowModel, GridRowId, GridTreeNode, GridRowModel } from '../gridRows';
+import { GridRowId, GridRowModel, GridTreeNode, GridValidRowModel } from '../gridRows';
 import { GridCellParams } from '../params/gridCellParams';
 import { GridColumnHeaderParams } from '../params/gridColumnHeaderParams';
 import { GridRowParams } from '../params/gridRowParams';
@@ -39,7 +39,7 @@ export interface GridParamsApi {
    * Gets the [[GridCellParams]] object that is passed as argument in events.
    * @param {GridRowId} id The id of the row.
    * @param {string} field The column field.
-   * @returns {GridCellParams} The cell params.
+   * @returns {HTMLDivElement} The cell element.
    */
   getCellElement: (id: GridRowId, field: string) => HTMLDivElement | null;
   /**

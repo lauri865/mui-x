@@ -8,7 +8,7 @@ import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
 import { DATA_GRID_PROPS_DEFAULT_VALUES } from '../../../constants/dataGridPropsDefaultValues';
 import { ElementSize } from '../../../models';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import { GridEventListener } from '../../../models/events';
 import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { isJSDOM } from '../../../utils/isJSDOM';
@@ -102,7 +102,7 @@ export const dimensionsStateInitializer: GridStateInitializer<RootProps> = (
   };
 };
 
-export function useGridDimensions(apiRef: RefObject<GridPrivateApiCommunity>, props: RootProps) {
+export function useGridDimensions(apiRef: RefObject<GridPrivateApi>, props: RootProps) {
   const logger = useGridLogger(apiRef, 'useResizeContainer');
   const errorShown = React.useRef(false);
   const rootDimensionsRef = React.useRef(EMPTY_SIZE);
@@ -391,7 +391,7 @@ function setCSSVariables(root: HTMLElement, dimensions: GridDimensions) {
 
 function getStaticDimensions(
   props: RootProps,
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   density: number,
   pinnedColumnns: ReturnType<typeof gridVisiblePinnedColumnDefinitionsSelector>,
 ) {

@@ -1,14 +1,14 @@
 import { RefObject } from '@mui/x-internals/types';
-import { GridApiCommunity } from '../../../models/api/gridApiCommunity';
-import { useGridApiOptionHandler } from '../../utils/useGridApiEventHandler';
+import { GridApi } from '../../../models/api/gridApiCommunity';
 import { DataGridProcessedProps } from '../../../models/props/DataGridProps';
+import { useGridApiOptionHandler } from '../../utils/useGridApiEventHandler';
 
 /**
  * @requires useGridFocus (event) - can be after, async only
  * @requires useGridColumns (event) - can be after, async only
  */
 export function useGridEvents(
-  apiRef: RefObject<GridApiCommunity>,
+  apiRef: RefObject<GridApi>,
   props: Pick<
     DataGridProcessedProps,
     | 'onColumnHeaderClick'

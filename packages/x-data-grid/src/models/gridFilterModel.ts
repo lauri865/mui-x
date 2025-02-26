@@ -7,6 +7,7 @@ import { GridFilterItem, GridLogicOperator } from './gridFilterItem';
  */
 export interface GridFilterModel {
   /**
+   * Array of filter items of type `GridFilterItem`
    * @default []
    */
   items: GridFilterItem[];
@@ -15,7 +16,7 @@ export interface GridFilterModel {
    * - `GridLogicOperator.Or`: the row must pass at least on filter item.
    * @default GridLogicOperator.And
    */
-  logicOperator?: GridLogicOperator;
+  logicOperator?: 'and' | 'or';
   /**
    * values used to quick filter rows
    * @default []

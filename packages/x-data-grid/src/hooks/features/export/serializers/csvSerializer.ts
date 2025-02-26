@@ -2,7 +2,7 @@ import { RefObject } from '@mui/x-internals/types';
 import { warnOnce } from '@mui/x-internals/warning';
 import { GRID_CHECKBOX_SELECTION_COL_DEF } from '../../../../colDef';
 import type { GridColumnGroup, GridCsvExportOptions, GridRowId } from '../../../../models';
-import type { GridApiCommunity } from '../../../../models/api/gridApiCommunity';
+import type { GridApi } from '../../../../models/api/gridApiCommunity';
 import type { GridStateColDef } from '../../../../models/colDef/gridColDef';
 import type { GridCellParams } from '../../../../models/params/gridCellParams';
 
@@ -143,7 +143,7 @@ interface BuildCSVOptions {
     >
   >;
   ignoreValueFormatter: boolean;
-  apiRef: RefObject<GridApiCommunity>;
+  apiRef: RefObject<GridApi>;
 }
 
 export function buildCSV(options: BuildCSVOptions): string {

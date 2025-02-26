@@ -1,7 +1,7 @@
 import { isObjectEmpty } from '@mui/x-internals/isObjectEmpty';
 import { GridFilterItem } from '../../../models/gridFilterItem';
 import { GridRowId } from '../../../models/gridRows';
-import { GridStateCommunity } from '../../../models/gridStateCommunity';
+import { GridState } from '../../../models/gridStateCommunity';
 import { createSelector, createSelectorMemoized } from '../../../utils/createSelector';
 import { GRID_ROOT_FOOTER_ID } from '../aggregation/useGridAggregation';
 import { gridColumnLookupSelector } from '../columns/gridColumnsSelector';
@@ -15,7 +15,7 @@ import { gridSortedRowEntriesSelector } from '../sorting/gridSortingSelector';
 /**
  * @category Filtering
  */
-const gridFilterStateSelector = (state: GridStateCommunity) => state.filter;
+const gridFilterStateSelector = (state: GridState) => state.filter;
 
 /**
  * Get the current filter model.
@@ -39,7 +39,7 @@ export const gridQuickFilterValuesSelector = createSelector(
  * @category Visible rows
  * @ignore - do not document.
  */
-const visibleRowsLookupSelector = (state: GridStateCommunity) => state.visibleRowsLookup;
+const visibleRowsLookupSelector = (state: GridState) => state.visibleRowsLookup;
 export const gridVisibleRowsLookupSelector = createSelectorMemoized(
   visibleRowsLookupSelector,
   gridPinnedRowsModelSelector,

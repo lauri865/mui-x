@@ -1,3 +1,3 @@
-import { GridStateCommunity } from '../../../models/gridStateCommunity';
+import { GridState } from '../../../models/gridStateCommunity';
 
-export const gridRowsMetaSelector = (state: GridStateCommunity) => state.rowsMeta;
+export const gridRowsMetaSelector = (state: GridState) => state.rowsMeta;

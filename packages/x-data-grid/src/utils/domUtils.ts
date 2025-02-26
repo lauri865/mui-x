@@ -1,5 +1,5 @@
 import { gridClasses } from '../constants/gridClasses';
-import type { GridPrivateApiCommunity } from '../models/api/gridApiCommunity';
+import type { GridPrivateApi } from '../models/api/gridApiCommunity';
 import type { GridRowId } from '../models/gridRows';
 
 export function isOverflown(element: Element): boolean {
@@ -85,7 +85,7 @@ export function findGroupHeaderElementsFromField(elem: Element, field: string): 
   );
 }
 
-export function findGridCellElementsFromCol(col: HTMLElement, api: GridPrivateApiCommunity) {
+export function findGridCellElementsFromCol(col: HTMLElement, api: GridPrivateApi) {
   const root = findParentElementFromClassName(col, gridClasses.root);
   if (!root) {
     throw new Error('TWGrid: The root element is not found.');
@@ -123,7 +123,7 @@ export function findGridCellElementsFromCol(col: HTMLElement, api: GridPrivateAp
   return cells;
 }
 
-export function findGridElement(api: GridPrivateApiCommunity, klass: keyof typeof gridClasses) {
+export function findGridElement(api: GridPrivateApi, klass: keyof typeof gridClasses) {
   return api.rootElementRef.current!.querySelector(`.${gridClasses[klass]}`)! as HTMLElement;
 }
 
@@ -133,7 +133,7 @@ const findPinnedCells = ({
   position,
   filterFn,
 }: {
-  api: GridPrivateApiCommunity;
+  api: GridPrivateApi;
   colIndex: number | null;
   position: 'left' | 'right';
   filterFn: (colIndex: number) => boolean;
@@ -161,11 +161,7 @@ const findPinnedCells = ({
   return cells;
 };
 
-export function findLeftPinnedCellsAfterCol(
-  api: GridPrivateApiCommunity,
-  col: HTMLElement,
-  isRtl: boolean,
-) {
+export function findLeftPinnedCellsAfterCol(api: GridPrivateApi, col: HTMLElement, isRtl: boolean) {
   const colIndex = parseCellColIndex(col);
   return findPinnedCells({
     api,
@@ -176,7 +172,7 @@ export function findLeftPinnedCellsAfterCol(
 }
 
 export function findRightPinnedCellsBeforeCol(
-  api: GridPrivateApiCommunity,
+  api: GridPrivateApi,
   col: HTMLElement,
   isRtl: boolean,
 ) {
@@ -195,7 +191,7 @@ const findPinnedHeaders = ({
   position,
   filterFn,
 }: {
-  api: GridPrivateApiCommunity;
+  api: GridPrivateApi;
   colIndex: number | null;
   position: 'left' | 'right';
   filterFn: (colIndex: number, element: Element) => boolean;
@@ -219,7 +215,7 @@ const findPinnedHeaders = ({
 };
 
 export function findLeftPinnedHeadersAfterCol(
-  api: GridPrivateApiCommunity,
+  api: GridPrivateApi,
   col: HTMLElement,
   isRtl: boolean,
 ) {
@@ -233,7 +229,7 @@ export function findLeftPinnedHeadersAfterCol(
 }
 
 export function findRightPinnedHeadersBeforeCol(
-  api: GridPrivateApiCommunity,
+  api: GridPrivateApi,
   col: HTMLElement,
   isRtl: boolean,
 ) {
@@ -251,14 +247,14 @@ export function findRightPinnedHeadersBeforeCol(
   });
 }
 
-export function findGridHeader(api: GridPrivateApiCommunity, field: string) {
+export function findGridHeader(api: GridPrivateApi, field: string) {
   const headers = api.columnHeadersContainerRef!.current!;
   return headers.querySelector(
     `:scope > div > [data-field="${escapeOperandAttributeSelector(field)}"][role="columnheader"]`,
   );
 }
 
-export function findGridCells(api: GridPrivateApiCommunity, field: string) {
+export function findGridCells(api: GridPrivateApi, field: string) {
   const container = api.virtualScrollerRef!.current!;
   return Array.from(
     container.querySelectorAll(
@@ -267,7 +263,7 @@ export function findGridCells(api: GridPrivateApiCommunity, field: string) {
   );
 }
 
-function queryRows(api: GridPrivateApiCommunity) {
+function queryRows(api: GridPrivateApi) {
   return api.virtualScrollerRef.current!.querySelectorAll(
     // Use > to ignore rows from nested Data Grids (for example in detail panel)
     `:scope > div > div > .${gridClasses.row}`,

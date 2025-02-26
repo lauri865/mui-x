@@ -1,8 +1,8 @@
-import { GridFilterModel } from '../gridFilterModel';
-import { GridFilterItem, GridLogicOperator } from '../gridFilterItem';
 import { GridControlledStateReasonLookup } from '../events';
+import { GridFilterItem, GridLogicOperator } from '../gridFilterItem';
+import { GridFilterModel } from '../gridFilterModel';
+import { GridState } from '../gridStateCommunity';
 import type { DataGridProcessedProps } from '../props/DataGridProps';
-import { GridStateCommunity } from '../gridStateCommunity';
 
 /**
  * The filter API interface that is available in the grid [[apiRef]].
@@ -65,7 +65,7 @@ export interface GridFilterApi {
   /**
    * Returns the filter state for the given filter model without applying it to the Data Grid.
    * @param {GridFilterModel} filterModel The filter model to get the state for.
-   * @returns {GridStateCommunity['filter']} The filter state.
+   * @returns {GridState['filter']} The filter state.
    */
-  getFilterState: (filterModel: GridFilterModel) => GridStateCommunity['filter'];
+  getFilterState: (filterModel: GridFilterModel) => GridState['filter'];
 }

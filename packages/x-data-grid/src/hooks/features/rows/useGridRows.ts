@@ -2,7 +2,7 @@ import useLazyRef from '@mui/utils/useLazyRef';
 import { isObjectEmpty } from '@mui/x-internals/isObjectEmpty';
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
-import { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import { GridRowApi, GridRowProApi, GridRowProPrivateApi } from '../../../models/api/gridRowApi';
 import { GridEventListener } from '../../../models/events';
 import { GridGroupNode, GridLeafNode, GridRowId } from '../../../models/gridRows';
@@ -65,7 +65,7 @@ export const rowsStateInitializer: GridStateInitializer<
 };
 
 export const useGridRows = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<
     DataGridProcessedProps,
     | 'rows'

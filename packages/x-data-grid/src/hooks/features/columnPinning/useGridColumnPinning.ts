@@ -1,6 +1,6 @@
 import { RefObject } from '@mui/x-internals/types';
 import * as React from 'react';
-import type { GridPrivateApiCommunity } from '../../../models/api/gridApiCommunity';
+import type { GridPrivateApi } from '../../../models/api/gridApiCommunity';
 import type { DataGridProcessedProps } from '../../../models/props/DataGridProps';
 import { gridIsRtlSelector } from '../../core/gridCoreSelector';
 import { GridPipeProcessor, useGridRegisterPipeProcessor } from '../../core/pipeProcessing';
@@ -36,7 +36,7 @@ export const columnPinningStateInitializer: GridStateInitializer<
 };
 
 export const useGridColumnPinning = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   props: Pick<DataGridProcessedProps, 'pinnedColumns'>,
 ) => {
   const positionBeforePinning = React.useRef<Map<string, number>>(new Map());
@@ -189,7 +189,7 @@ function keepVisiblePinnedColumns(
 }
 
 export const useGridColumnPinningPreProcessors = (
-  apiRef: RefObject<GridPrivateApiCommunity>,
+  apiRef: RefObject<GridPrivateApi>,
   _: Pick<DataGridProcessedProps, 'pinnedColumns'>,
 ) => {
   const hydratePinnedColumns = React.useCallback<GridPipeProcessor<'hydrateColumns'>>(
